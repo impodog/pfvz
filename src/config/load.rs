@@ -9,25 +9,40 @@ impl Plugin for ConfigLoadPlugin {
     }
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct ConfigProgramFramerate(pub f32);
-
-impl Default for ConfigProgramFramerate {
-    fn default() -> Self {
-        Self(30.0)
-    }
+macro_rules! configuration {
+    ($name: ident, $type: ty, $value: expr) => {
+        #[derive(Serialize, Deserialize)]
+        pub struct $name(pub $type);
+        impl Default for $name {
+            fn default() -> Self {
+                Self($value)
+            }
+        }
+    };
 }
 
+configuration!(ConfigProgramFramerate, f32, 30.0);
+configuration!(ConfigProgramLossRate, (u32, u32), (1, 3));
 #[derive(Default, Serialize, Deserialize)]
 pub struct ConfigProgram {
-    #[serde(default)]
     pub framerate: ConfigProgramFramerate,
+    pub loss_rate: ConfigProgramLossRate,
+}
+
+configuration!(ConfigGameRuleSunValue, u32, 25);
+configuration!(ConfigGameRuleDamage, f32, 1.0);
+configuration!(ConfigGameRuleSpeed, f32, 1.0);
+#[derive(Default, Serialize, Deserialize)]
+pub struct ConfigGameRule {
+    pub sun_value: ConfigGameRuleSunValue,
+    pub damage: ConfigGameRuleDamage,
+    pub speed: ConfigGameRuleSpeed,
 }
 
 #[derive(Resource, Default, Serialize, Deserialize)]
 pub struct Config {
-    #[serde(default)]
     pub program: ConfigProgram,
+    pub gamerule: ConfigGameRule,
 }
 
 fn load_config(mut commands: Commands) {

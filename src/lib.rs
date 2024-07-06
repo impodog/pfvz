@@ -1,10 +1,20 @@
+pub mod assets;
 pub mod config;
+pub mod game;
 pub mod info;
 mod prelude;
+pub mod sprite;
 
 pub fn start_pfvz() {
     use prelude::*;
     let mut app = App::new();
-    app.add_plugins((DefaultPlugins, config::ConfigPlugin, info::InfoPlugin));
+    app.add_plugins((
+        DefaultPlugins,
+        assets::AssetsPlugin,
+        config::ConfigPlugin,
+        game::GamePlugin,
+        info::InfoPlugin,
+        sprite::SpritePlugin,
+    ));
     app.run();
 }

@@ -9,6 +9,7 @@ impl Plugin for ConfigPlugin {
             window::ConfigWindowPlugin,
             camera::ConfigCameraPlugin,
             load::ConfigLoadPlugin,
+            program::ConfigProgramPlugin,
         ));
     }
 }
