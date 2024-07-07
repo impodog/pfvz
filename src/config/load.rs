@@ -32,11 +32,13 @@ pub struct ConfigProgram {
 configuration!(ConfigGameRuleSunValue, u32, 25);
 configuration!(ConfigGameRuleDamage, f32, 1.0);
 configuration!(ConfigGameRuleSpeed, f32, 1.0);
+configuration!(ConfigGameRuleGravity, f32, 1.0);
 #[derive(Default, Serialize, Deserialize)]
 pub struct ConfigGameRule {
     pub sun_value: ConfigGameRuleSunValue,
     pub damage: ConfigGameRuleDamage,
     pub speed: ConfigGameRuleSpeed,
+    pub gravity: ConfigGameRuleGravity,
 }
 
 #[derive(Resource, Default, Serialize, Deserialize)]

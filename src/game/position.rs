@@ -13,7 +13,8 @@ impl Plugin for GamePositionPlugin {
         );
         app.add_systems(
             PostUpdate,
-            (update_transform,).run_if(in_state(info::GlobalStates::Play)),
+            (update_transform, update_position, update_velocity)
+                .run_if(in_state(info::GlobalStates::Play)),
         );
     }
 }
@@ -45,6 +46,17 @@ pub struct HitBox {
     pub height: f32,
 }
 
+#[derive(Component, Default, Debug, Clone, Copy)]
+pub struct Velocity {
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
+    pub r: f32,
+}
+
+#[derive(Component, Default, Debug, Clone, Copy)]
+pub struct Gravity;
+
 #[derive(Resource, Default, Debug)]
 pub struct Collision {
     map: HashMap<Entity, BTreeSet<Entity>>,
@@ -70,6 +82,21 @@ fn update_transform(display: Res<Display>, mut q_pos: Query<(&Position, &mut Tra
         transform.translation.y = pos.y * display.ratio;
         transform.translation.z = pos.z * display.ratio;
         transform.rotation = Quat::from_rotation_z(pos.r);
+    });
+}
+
+fn update_position(config: Res<config::Config>, mut q_pos: Query<(&Velocity, &mut Position)>) {
+    q_pos.par_iter_mut().for_each(|(vel, mut pos)| {
+        pos.x += vel.x * config.gamerule.speed.0;
+        pos.y += vel.y * config.gamerule.speed.0;
+        pos.z += vel.z * config.gamerule.speed.0;
+        pos.r += vel.r * config.gamerule.speed.0;
+    });
+}
+
+fn update_velocity(config: Res<config::Config>, mut q_vel: Query<&mut Velocity, With<Gravity>>) {
+    q_vel.par_iter_mut().for_each(|mut vel| {
+        vel.z += config.gamerule.gravity.0 * config.gamerule.speed.0;
     });
 }
 
