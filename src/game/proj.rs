@@ -14,9 +14,9 @@ impl Plugin for GameProjPlugin {
 }
 
 #[derive(Debug, Clone)]
-pub struct ProjectileInfo {
-    pub instant: bool,
-    pub damage: u32,
+pub struct ProjectileShared {
+    pub anim: Arc<sprite::FrameArr>,
+    pub hitbox: game::HitBox,
 }
 
 #[derive(Event, Debug, Clone)]
@@ -26,7 +26,8 @@ pub enum ProjectileAction {
 
 #[derive(Component, Debug, Clone)]
 pub struct Projectile {
-    pub info: Arc<ProjectileInfo>,
+    pub damage: u32,
+    pub instant: bool,
 }
 
 fn test_plant_proj_zombie(
@@ -44,7 +45,7 @@ fn test_plant_proj_zombie(
                     e_proj.send(ProjectileAction::Damage(entity));
                     e_creature.send(game::CreatureAction::Damage(
                         entity,
-                        multiply!(proj.info.damage, config.gamerule.damage.0),
+                        multiply!(proj.damage, config.gamerule.damage.0),
                     ));
                 }
             });
@@ -64,7 +65,7 @@ fn test_zombie_proj_plant(
             set.iter().for_each(|plant| {
                 if let Ok(()) = q_plant.get(*plant) {
                     e_proj.send(ProjectileAction::Damage(entity));
-                    e_creature.send(game::CreatureAction::Damage(entity, proj.info.damage));
+                    e_creature.send(game::CreatureAction::Damage(entity, proj.damage));
                 }
             });
         }

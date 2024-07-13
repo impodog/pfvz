@@ -12,10 +12,13 @@ impl Plugin for InfoMousePlugin {
 #[derive(Resource, Default, Debug, Clone, Copy)]
 pub struct CursorInfo {
     pos: Vec2,
+    pub x: f32,
+    pub y: f32,
 }
 
 fn update_cursor_info(
     mut cursor: ResMut<CursorInfo>,
+    display: Res<game::Display>,
     q_window: Query<&Window>,
     q_camera: Query<(&Camera, &GlobalTransform), With<config::MainCamera>>,
 ) {
@@ -28,5 +31,7 @@ fn update_cursor_info(
         .map(|ray| ray.origin.truncate())
     {
         cursor.pos = world_position;
+        cursor.x = cursor.pos.x / display.ratio;
+        cursor.y = cursor.pos.y / display.ratio;
     }
 }

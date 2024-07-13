@@ -17,16 +17,16 @@ impl Plugin for GameCreaturePlugin {
 pub struct Creature(pub Id);
 
 #[derive(Debug, Clone)]
-pub struct CreatureFun {
+pub struct CreatureInfo {
     pub spawn: SystemId<game::Position>,
-    pub die: SystemId,
+    pub die: SystemId<Entity>,
     pub update: SystemId<Entity>,
     pub damage: SystemId<(Entity, u32)>,
     pub cost: u32,
 }
 
-#[derive(Resource, Default, Debug)]
-pub struct CreatureTypes(pub HashMap<Id, CreatureFun>);
+#[derive(Resource, Default, Debug, Deref, DerefMut)]
+pub struct CreatureTypes(pub HashMap<Id, CreatureInfo>);
 
 #[derive(Event, Debug, Clone)]
 pub enum CreatureAction {
@@ -44,7 +44,7 @@ fn creature_action(
     e_action.read().for_each(|action| {
         let ok = match action {
             CreatureAction::Spawn(id, pos) => {
-                if let Some(fun) = types.0.get(id) {
+                if let Some(fun) = types.get(id) {
                     commands.run_system_with_input(fun.spawn, *pos);
                     true
                 } else {
@@ -52,24 +52,24 @@ fn creature_action(
                 }
             }
             CreatureAction::Die(entity) => {
-                if let Some(fun) = q_creature
+                if let Some(info) = q_creature
                     .get(*entity)
                     .ok()
-                    .and_then(|creature| types.0.get(&creature.0))
+                    .and_then(|creature| types.get(&creature.0))
                 {
-                    commands.run_system(fun.die);
+                    commands.run_system_with_input(info.die, *entity);
                     true
                 } else {
                     false
                 }
             }
             CreatureAction::Damage(entity, damage) => {
-                if let Some(fun) = q_creature
+                if let Some(info) = q_creature
                     .get(*entity)
                     .ok()
-                    .and_then(|creature| types.0.get(&creature.0))
+                    .and_then(|creature| types.get(&creature.0))
                 {
-                    commands.run_system_with_input(fun.damage, (*entity, *damage));
+                    commands.run_system_with_input(info.damage, (*entity, *damage));
                     true
                 } else {
                     false
@@ -89,9 +89,9 @@ fn creature_update(
 ) {
     let commands_vec = Arc::new(RwLock::new(Vec::new()));
     q_creature.par_iter().for_each(|(entity, creature)| {
-        if let Some(fun) = types.0.get(&creature.0) {
+        if let Some(info) = types.get(&creature.0) {
             commands_vec.write().unwrap().push(
-                bevy::ecs::system::RunSystemWithInput::new_with_input(fun.update, entity),
+                bevy::ecs::system::RunSystemWithInput::new_with_input(info.update, entity),
             );
         }
     });

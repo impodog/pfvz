@@ -8,6 +8,7 @@ impl Plugin for AssetsSpritesPlugin {
     }
 }
 
+/// Load an animation from directory
 fn load_animation(server: Res<AssetServer>, base: &str, delta: Duration) -> sprite::FrameArr {
     let mut i = 1;
     let mut frames = Vec::new();
@@ -27,6 +28,26 @@ fn load_animation(server: Res<AssetServer>, base: &str, delta: Duration) -> spri
 #[derive(Resource)]
 pub struct SpriteChunks {
     pub pvfz: Handle<Image>,
+    pub background: Handle<Image>,
+    pub slot: Handle<Image>,
+}
+
+fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
+    let chunks = SpriteChunks {
+        pvfz: server.load("sprites/chunks/pfvz.png"),
+        background: server.load("sprites/chunks/background.png"),
+        slot: server.load("sprites/chunks/slot.png"),
+    };
+    commands.spawn(SpriteBundle {
+        sprite: Sprite {
+            custom_size: Some(Vec2::new(LOGICAL_WIDTH, LOGICAL_HEIGHT)),
+            color: Color::LinearRgba(LinearRgba::new(1.0, 1.0, 1.0, 0.02)),
+            ..Default::default()
+        },
+        texture: chunks.background.clone(),
+        ..Default::default()
+    });
+    commands.insert_resource(chunks);
 }
 
 #[derive(Resource)]
@@ -54,13 +75,6 @@ impl SpriteLayouts {
             level::LayoutKind::Day => &self.day,
         }
     }
-}
-
-fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
-    let chunks = SpriteChunks {
-        pvfz: server.load("sprites/chunks/pfvz.png"),
-    };
-    commands.insert_resource(chunks);
 }
 
 fn init_layouts(mut commands: Commands, server: Res<AssetServer>) {

@@ -7,6 +7,7 @@ impl Plugin for LevelLoadPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<LevelEvent>();
         app.add_systems(PreUpdate, (load_level,));
+        // NOTE: This is for game testing
         #[cfg(debug_assertions)]
         app.add_systems(PostStartup, |mut e_level: EventWriter<LevelEvent>| {
             e_level.send(LevelEvent { stage: 1, level: 1 });
@@ -28,10 +29,14 @@ pub enum LayoutKind {
     Day,
 }
 impl LayoutKind {
-    pub fn size(&self) -> (usize, usize) {
+    pub const fn size(&self) -> (usize, usize) {
         match self {
             Self::Day => (9, 5),
         }
+    }
+
+    pub const fn lane_size(&self) -> usize {
+        self.size().0
     }
 }
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Copy)]

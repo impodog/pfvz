@@ -45,6 +45,11 @@ pub struct HitBox {
     pub width: f32,
     pub height: f32,
 }
+impl From<&HitBox> for Vec2 {
+    fn from(value: &HitBox) -> Self {
+        Self::new(value.width, value.height)
+    }
+}
 
 #[derive(Component, Default, Debug, Clone, Copy)]
 pub struct Velocity {

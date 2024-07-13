@@ -1,10 +1,14 @@
 pub mod assets;
+pub mod compn;
 pub mod config;
 pub mod game;
 pub mod info;
 pub mod level;
+pub mod plants;
 mod prelude;
+pub mod save;
 pub mod sprite;
+pub mod zombies;
 
 pub fn start_pfvz() {
     use prelude::*;
@@ -17,6 +21,10 @@ pub fn start_pfvz() {
         info::InfoPlugin,
         sprite::SpritePlugin,
         level::LevelPlugin,
+        save::SavePlugin,
+        plants::PlantsPlugin,
+        zombies::ZombiesPlugin,
+        compn::CompnPlugin,
     ));
     app.run();
 }
