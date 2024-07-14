@@ -50,6 +50,11 @@ impl From<&HitBox> for Vec2 {
         Self::new(value.width, value.height)
     }
 }
+impl HitBox {
+    pub fn new(width: f32, height: f32) -> Self {
+        Self { width, height }
+    }
+}
 
 #[derive(Component, Default, Debug, Clone, Copy)]
 pub struct Velocity {
@@ -81,7 +86,10 @@ pub struct Display {
     pub ratio: f32,
 }
 
-fn update_transform(display: Res<Display>, mut q_pos: Query<(&Position, &mut Transform)>) {
+fn update_transform(
+    display: Res<Display>,
+    mut q_pos: Query<(&Position, &mut Transform), Changed<Position>>,
+) {
     q_pos.par_iter_mut().for_each(|(pos, mut transform)| {
         transform.translation.x = pos.x * display.ratio;
         transform.translation.y = pos.y * display.ratio;
@@ -102,6 +110,12 @@ fn update_position(config: Res<config::Config>, mut q_pos: Query<(&Velocity, &mu
 fn update_velocity(config: Res<config::Config>, mut q_vel: Query<&mut Velocity, With<Gravity>>) {
     q_vel.par_iter_mut().for_each(|mut vel| {
         vel.z += config.gamerule.gravity.0 * config.gamerule.speed.0;
+    });
+}
+
+fn update_sprite(display: Res<Display>, mut q_pos: Query<(&HitBox, &mut Sprite), Changed<HitBox>>) {
+    q_pos.par_iter_mut().for_each(|(hitbox, mut sprite)| {
+        sprite.custom_size = Some(Vec2::from(hitbox) * display.ratio);
     });
 }
 

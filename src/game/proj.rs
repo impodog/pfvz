@@ -45,7 +45,7 @@ fn test_plant_proj_zombie(
                     e_proj.send(ProjectileAction::Damage(entity));
                     e_creature.send(game::CreatureAction::Damage(
                         entity,
-                        multiply!(proj.damage, config.gamerule.damage.0),
+                        multiply_uf!(proj.damage, config.gamerule.damage.0),
                     ));
                 }
             });

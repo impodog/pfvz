@@ -4,17 +4,23 @@ pub(super) struct ShooterPlugin;
 
 impl Plugin for ShooterPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(PreUpdate, (add_shooter_impl, shooter_work));
+        app.add_systems(
+            PreUpdate,
+            (add_shooter_impl, shooter_work).run_if(in_state(info::GlobalStates::Play)),
+        );
     }
 }
 
 // Anything that uses this shoots projectile of their ally
-#[derive(Component, Debug, Clone)]
-pub struct Shooter {
+#[derive(Debug, Clone)]
+pub struct ShooterShared {
     interval: Duration,
+    vel: game::Velocity,
     proj: game::Projectile,
     shared: Arc<game::ProjectileShared>,
 }
+#[derive(Component, Debug, Clone, Deref)]
+pub struct Shooter(pub ShooterShared);
 
 #[derive(Component, Debug, Clone)]
 struct ShooterImpl {
@@ -52,13 +58,8 @@ fn shooter_work(
                     sprite::Animation::new(shooter.shared.anim.clone()),
                     shooter.shared.hitbox,
                     shooter.proj.clone(),
-                    SpriteBundle {
-                        sprite: Sprite {
-                            custom_size: Some((&shooter.shared.hitbox).into()),
-                            ..Default::default()
-                        },
-                        ..Default::default()
-                    },
+                    shooter.vel,
+                    SpriteBundle::default(),
                 ));
                 // Determines whether the projectile is plant(default) or zombie
                 if q_zombie.get(entity).is_ok() {

@@ -4,17 +4,17 @@ pub(super) struct AssetsSpritesPlugin;
 
 impl Plugin for AssetsSpritesPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, (init_chunks, init_layouts));
+        app.add_systems(Startup, (init_chunks, init_layouts, init_plants));
     }
 }
 
 /// Load an animation from directory
-fn load_animation(server: Res<AssetServer>, base: &str, delta: Duration) -> sprite::FrameArr {
+fn load_animation(server: &Res<AssetServer>, base: &str, delta: Duration) -> Arc<sprite::FrameArr> {
     let mut i = 1;
     let mut frames = Vec::new();
     loop {
-        let path = format!("{}{}.png", base, i);
-        if std::fs::exists(&path).unwrap_or(false) {
+        let path = format!("{}/{}.png", base, i);
+        if std::fs::exists(format!("assets/{}", path)).unwrap_or(false) {
             let image: Handle<Image> = server.load(path);
             frames.push(image);
             i += 1;
@@ -22,7 +22,13 @@ fn load_animation(server: Res<AssetServer>, base: &str, delta: Duration) -> spri
             break;
         }
     }
-    sprite::FrameArr { frames, delta }
+    if i <= 1 {
+        error!(
+            "Frame array is empty when loading {:?}. This will crash!",
+            base
+        );
+    }
+    Arc::new(sprite::FrameArr { frames, delta })
 }
 
 #[derive(Resource)]
@@ -82,4 +88,22 @@ fn init_layouts(mut commands: Commands, server: Res<AssetServer>) {
         day: SpriteLayout::load(&server, "sprites/layouts/day"),
     };
     commands.insert_resource(layouts);
+}
+
+#[derive(Resource)]
+pub struct SpritePlants {
+    pub pea: Arc<sprite::FrameArr>,
+    pub peashooter: Arc<sprite::FrameArr>,
+}
+
+fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
+    let plants = SpritePlants {
+        pea: load_animation(&server, "sprites/plants/pea", Duration::from_millis(20)),
+        peashooter: load_animation(
+            &server,
+            "sprites/plants/peashooter",
+            Duration::from_millis(30),
+        ),
+    };
+    commands.insert_resource(plants);
 }
