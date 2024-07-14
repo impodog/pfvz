@@ -27,6 +27,19 @@ pub struct Position {
     pub r: f32,
 }
 impl Position {
+    pub fn new(x: f32, y: f32, z: f32, r: f32) -> Self {
+        Self { x, y, z, r }
+    }
+
+    pub fn new_xy(x: f32, y: f32) -> Self {
+        Self {
+            x,
+            y,
+            z: 0.0,
+            r: 0.0,
+        }
+    }
+
     pub fn x_i32(&self) -> i32 {
         self.x as i32
     }
@@ -62,6 +75,11 @@ pub struct Velocity {
     pub y: f32,
     pub z: f32,
     pub r: f32,
+}
+impl Velocity {
+    pub fn new(x: f32, y: f32, z: f32, r: f32) -> Self {
+        Self { x, y, z, r }
+    }
 }
 
 #[derive(Component, Default, Debug, Clone, Copy)]

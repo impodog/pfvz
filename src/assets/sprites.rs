@@ -98,11 +98,11 @@ pub struct SpritePlants {
 
 fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
     let plants = SpritePlants {
-        pea: load_animation(&server, "sprites/plants/pea", Duration::from_millis(20)),
+        pea: load_animation(&server, "sprites/plants/pea", Duration::from_millis(50)),
         peashooter: load_animation(
             &server,
             "sprites/plants/peashooter",
-            Duration::from_millis(30),
+            Duration::from_millis(100),
         ),
     };
     commands.insert_resource(plants);

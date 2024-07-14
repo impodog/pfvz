@@ -9,6 +9,7 @@ pub(crate) use std::time::Duration;
 
 // Positive ids for zombies, negative for plants/fungi
 pub type Id = i32;
+pub const PEASHOOTER: Id = -1;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;

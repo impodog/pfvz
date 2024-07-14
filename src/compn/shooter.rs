@@ -14,13 +14,13 @@ impl Plugin for ShooterPlugin {
 // Anything that uses this shoots projectile of their ally
 #[derive(Debug, Clone)]
 pub struct ShooterShared {
-    interval: Duration,
-    vel: game::Velocity,
-    proj: game::Projectile,
-    shared: Arc<game::ProjectileShared>,
+    pub interval: Duration,
+    pub vel: game::Velocity,
+    pub proj: game::Projectile,
+    pub shared: Arc<game::ProjectileShared>,
 }
 #[derive(Component, Debug, Clone, Deref)]
-pub struct Shooter(pub ShooterShared);
+pub struct Shooter(pub Arc<ShooterShared>);
 
 #[derive(Component, Debug, Clone)]
 struct ShooterImpl {

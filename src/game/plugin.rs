@@ -13,6 +13,7 @@ impl Plugin for GamePlugin {
             proj::GameProjPlugin,
             zombie::GameZombiePlugin,
             spawn::GameSpawnPlugin,
+            player::GamePlayerPlugin,
         ));
     }
 }

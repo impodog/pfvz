@@ -32,6 +32,7 @@ fn spawn_layout(
             commands.spawn((
                 SpriteBundle {
                     texture: sp_layout.get(&layout).grass[picture].clone(),
+                    transform: Transform::from_xyz(0.0, 0.0, -1437.0),
                     sprite: Sprite {
                         custom_size: Some(Vec2::new(display.ratio, display.ratio)),
                         ..Default::default()
