@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-pub(super) struct ShooterPlugin;
+pub struct ShooterPlugin;
 
 impl Plugin for ShooterPlugin {
     fn build(&self, app: &mut App) {
@@ -17,6 +17,7 @@ pub struct ShooterShared {
     pub interval: Duration,
     pub vel: game::Velocity,
     pub proj: game::Projectile,
+    pub require_zombie: bool,
     pub shared: Arc<game::ProjectileShared>,
 }
 #[derive(Component, Debug, Clone, Deref)]
@@ -47,12 +48,25 @@ fn shooter_work(
     time: Res<Time>,
     mut q_shooter: Query<(Entity, &Shooter, &mut ShooterImpl, &game::Position)>,
     q_zombie: Query<(), With<game::Zombie>>,
+    q_zpos: Query<&game::Position, With<game::Zombie>>,
 ) {
     q_shooter
         .iter_mut()
         .for_each(|(entity, shooter, mut work, pos)| {
             work.timer.tick(time.delta());
             if work.timer.just_finished() {
+                if shooter.require_zombie {
+                    let mut ok = false;
+                    for zpos in q_zpos.iter() {
+                        if pos.same_y(zpos) && zpos.x >= pos.x {
+                            ok = true;
+                            break;
+                        }
+                    }
+                    if !ok {
+                        return;
+                    }
+                }
                 let mut commands = commands.spawn((
                     *pos,
                     sprite::Animation::new(shooter.shared.anim.clone()),

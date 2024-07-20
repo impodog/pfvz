@@ -1,0 +1,5 @@
+[peashooter]
+velocity = { x = 1.0, y = 0.0, z = 0.0, r = 0.0 }
+interval = 2000
+self_box = { width = 1.0, height = 1.0 }
+pea_box = { width = 0.5, height = 0.5 }

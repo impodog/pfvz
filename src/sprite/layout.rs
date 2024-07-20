@@ -8,6 +8,28 @@ impl Plugin for SpriteLayoutPlugin {
     }
 }
 
+#[derive(Debug, Clone, Copy, Deref, DerefMut)]
+pub struct SlotIndex(pub usize);
+impl SlotIndex {
+    pub fn from_position(pos: game::Position, ratio: f32) -> Option<Self> {
+        let x = (pos.x + LOGICAL_WIDTH / ratio / 2.0) / SLOT_SIZE.x;
+        let y_mid = LOGICAL_HEIGHT / ratio / 2.0 - SLOT_SIZE.y / 2.0;
+        if pos.y >= y_mid - SLOT_SIZE.y / 2.0 && pos.y <= y_mid + SLOT_SIZE.y / 2.0 {
+            Some(Self(x.min(0.0) as usize))
+        } else {
+            None
+        }
+    }
+
+    pub fn into_position(self, ratio: f32) -> game::Position {
+        game::Position {
+            x: -LOGICAL_WIDTH / ratio / 2.0 + self.0 as f32 * SLOT_SIZE.x,
+            y: LOGICAL_HEIGHT / ratio / 2.0 - SLOT_SIZE.y,
+            ..Default::default()
+        }
+    }
+}
+
 fn spawn_layout(
     mut commands: Commands,
     sp_chunks: Res<assets::SpriteChunks>,
@@ -44,11 +66,7 @@ fn spawn_layout(
         }
     }
     for pos in 1..=save.slots.0 {
-        let pos = game::Position {
-            x: -LOGICAL_WIDTH / display.ratio / 2.0 + pos as f32 * SLOT_SIZE.x,
-            y: LOGICAL_HEIGHT / display.ratio / 2.0 - SLOT_SIZE.y,
-            ..Default::default()
-        };
+        let pos = SlotIndex(pos).into_position(display.ratio);
         commands.spawn((
             SpriteBundle {
                 texture: sp_chunks.slot.clone(),

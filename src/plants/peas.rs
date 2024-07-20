@@ -8,8 +8,8 @@ impl Plugin for PlantsPeaPlugin {
         app.add_systems(PostStartup, (init_config,));
         *peashooter_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_peashooter),
-            die: app.register_system(plants::default::die),
-            damage: app.register_system(plants::default::damage),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
         });
         #[cfg(debug_assertions)]
         app.add_systems(
@@ -19,7 +19,7 @@ impl Plugin for PlantsPeaPlugin {
                     *b = true;
                     action.send(game::CreatureAction::Spawn(
                         PEASHOOTER,
-                        game::Position::new_xy(1.0, 1.0),
+                        game::Position::new_xy(0.0, 1.0),
                     ));
                 }
             },
@@ -50,11 +50,12 @@ fn spawn_peashooter(
 fn init_config(
     mut commands: Commands,
     plants: Res<assets::SpritePlants>,
+    factors: Res<plants::PlantFactors>,
     mut map: ResMut<game::CreatureMap>,
 ) {
     let pea = Arc::new(game::ProjectileShared {
         anim: plants.pea.clone(),
-        hitbox: game::HitBox::new(0.5, 0.5),
+        hitbox: factors.peashooter.pea_box,
     });
     commands.insert_resource(ProjectilePea(pea.clone()));
     {
@@ -65,6 +66,7 @@ fn init_config(
                 damage: 20,
                 instant: true,
             },
+            require_zombie: true,
             shared: pea.clone(),
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {

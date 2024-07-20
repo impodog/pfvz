@@ -1,0 +1,4 @@
+[basic]
+velocity = { x = -0.1, y = 0.0, z = 0.0, r = 0.0 }
+self_box = { width = 0.5, height = 1.0 }
+arm_box = { width = 0.1, height = 0.3 }

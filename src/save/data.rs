@@ -15,6 +15,7 @@ configuration!(SaveMoney, i32, 0);
 #[derive(Serialize, Deserialize, Resource, Debug, Default, Clone)]
 pub struct Save {
     pub slots: SaveSlots,
+    pub selection: game::Selection,
     pub money: SaveMoney,
 }
 

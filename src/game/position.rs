@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use serde::{Deserialize, Serialize};
 use std::collections::{BTreeSet, HashMap};
 
 pub(super) struct GamePositionPlugin;
@@ -13,13 +14,18 @@ impl Plugin for GamePositionPlugin {
         );
         app.add_systems(
             PostUpdate,
-            (update_transform, update_position, update_velocity)
+            (
+                update_transform,
+                update_position,
+                update_velocity,
+                update_sprite,
+            )
                 .run_if(in_state(info::GlobalStates::Play)),
         );
     }
 }
 
-#[derive(Component, Default, Debug, Clone, Copy)]
+#[derive(Component, Serialize, Deserialize, Default, Debug, Clone, Copy)]
 pub struct Position {
     pub x: f32,
     pub y: f32,
@@ -51,9 +57,13 @@ impl Position {
     pub fn z_i32(&self) -> i32 {
         self.z as i32
     }
+
+    pub fn same_y(&self, rhs: &Position) -> bool {
+        self.y_i32() == rhs.y_i32()
+    }
 }
 
-#[derive(Component, Default, Debug, Clone, Copy)]
+#[derive(Component, Serialize, Deserialize, Default, Debug, Clone, Copy)]
 pub struct HitBox {
     pub width: f32,
     pub height: f32,
@@ -69,7 +79,7 @@ impl HitBox {
     }
 }
 
-#[derive(Component, Default, Debug, Clone, Copy)]
+#[derive(Component, Serialize, Deserialize, Default, Debug, Clone, Copy)]
 pub struct Velocity {
     pub x: f32,
     pub y: f32,

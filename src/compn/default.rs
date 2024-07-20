@@ -1,10 +1,10 @@
 use crate::prelude::*;
 
-pub(super) fn die(In(entity): In<Entity>, mut commands: Commands) {
+pub(crate) fn die(In(entity): In<Entity>, mut commands: Commands) {
     commands.entity(entity).despawn_recursive();
 }
 
-pub(super) fn damage(
+pub(crate) fn damage(
     In((entity, damage)): In<(Entity, u32)>,
     mut q_health: Query<&mut game::Health>,
 ) {
