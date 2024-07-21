@@ -11,7 +11,7 @@ impl Plugin for GamePlayerPlugin {
         );
         app.add_systems(PostStartup, (init_highlighter,));
         app.add_systems(
-            Update,
+            PostUpdate,
             (update_highlight, update_select, update_sun)
                 .run_if(in_state(info::GlobalStates::Play)),
         );
@@ -64,7 +64,8 @@ fn init_highlighter(mut commands: Commands, chunks: Res<assets::SpriteChunks>) {
 
 fn init_player_status(mut commands: Commands, level: Res<level::Level>) {
     commands.insert_resource(Sun(level.config.sun));
-    commands.insert_resource(Selection::default());
+    // NOTE: The selection is initialized in level load. See it for details
+    // commands.insert_resource(Selection::default());
     commands.insert_resource(Selecting::default());
 }
 
@@ -72,16 +73,18 @@ fn show_selection(
     mut commands: Commands,
     sel: Res<Selection>,
     map: Res<game::CreatureMap>,
+    font: Res<assets::DefaultFont>,
     display: Res<game::Display>,
     q_sel: Query<Entity, With<SelectionMarker>>,
 ) {
-    if sel.is_changed() {
-        q_sel.iter().for_each(|entity| {
-            commands.entity(entity).despawn_recursive();
-        });
-        for (i, id) in sel.iter().enumerate() {
-            if let Some(creature) = map.get(id) {
-                commands.spawn((
+    info!("selection is {:?}", sel);
+    q_sel.iter().for_each(|entity| {
+        commands.entity(entity).despawn_recursive();
+    });
+    for (i, id) in sel.iter().enumerate() {
+        if let Some(creature) = map.get(id) {
+            let parent = commands
+                .spawn((
                     SelectionMarker,
                     SpriteBundle {
                         texture: creature
@@ -90,6 +93,7 @@ fn show_selection(
                             .first()
                             .expect("Empty animation!")
                             .clone(),
+                        transform: Transform::from_xyz(0.0, 0.0, 14.37 + 1.0),
                         sprite: Sprite {
                             custom_size: Some(SLOT_SIZE * display.ratio),
                             ..Default::default()
@@ -97,10 +101,26 @@ fn show_selection(
                         ..Default::default()
                     },
                     sprite::SlotIndex(i).into_position(display.ratio),
-                ));
-            } else {
-                warn!("Selected non-existing id: {}", id);
-            }
+                ))
+                .id();
+            commands
+                .spawn((
+                    game::Position::new(0.0, -0.25, 0.0, 0.0),
+                    Text2dBundle {
+                        text: Text::from_section(
+                            format!("{}", creature.cost),
+                            TextStyle {
+                                font: font.0.clone(),
+                                font_size: 30.0,
+                                color: Color::LinearRgba(LinearRgba::new(0.1, 1.0, 1.0, 0.5)),
+                            },
+                        ),
+                        ..Default::default()
+                    },
+                ))
+                .set_parent(parent);
+        } else {
+            warn!("Attempting to show non-existing id in slots bar: {}", id);
         }
     }
 }
@@ -131,13 +151,11 @@ fn update_select(
         if let Some(index) = sprite::SlotIndex::from_position(cursor.pos, display.ratio) {
             if index.0 < save.slots.0 {
                 selecting.0 = index.0;
-                info!("Selecting {}", selecting.0);
-            } else {
-                selecting.0 = usize::MAX;
             }
-        } else {
-            selecting.0 = usize::MAX;
         }
+        // When clicked left key on non-slot positions, do nothing
+        // It may seem weird, but this avoids setting it too early so that planter cannot read the
+        // selected index
     } else if cursor.right {
         selecting.0 = usize::MAX;
     }

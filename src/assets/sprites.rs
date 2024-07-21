@@ -46,6 +46,8 @@ pub struct SpriteChunks {
     pub background: Handle<Image>,
     pub slot: Handle<Image>,
     pub highlight: Handle<Image>,
+    pub final_wave: Handle<Image>,
+    pub alert: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -99,6 +101,8 @@ fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         background: server.load("sprites/chunks/background.png"),
         slot: server.load("sprites/chunks/slot.png"),
         highlight: server.load("sprites/chunks/highlight.png"),
+        final_wave: server.load("sprites/chunks/final.png"),
+        alert: server.load("sprites/chunks/alert.png"),
     };
     commands.spawn(SpriteBundle {
         sprite: Sprite {

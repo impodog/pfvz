@@ -4,9 +4,24 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct Wave {
     pub points: u32,
+    pub wait: f32,
     pub big: bool,
+    /// These zombies will be spawned at highest priority (no points cost)
     pub fixed: Vec<(Id, usize)>,
-    pub avail: Vec<(Id, usize)>,
+    /// If there are spare points, spawn these by equal chance
+    pub avail: Vec<Id>,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum TileFeature {
+    Grass,
+    Dirt,
+}
+impl TileFeature {
+    pub fn compat(&self, creature: &game::Creature) -> bool {
+        // TODO: Add compatible checks
+        true
+    }
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Copy)]
@@ -44,12 +59,19 @@ impl LayoutKind {
         usize::MAX
     }
 
+    pub fn get_tile(&self, x: usize, y: usize) -> TileFeature {
+        match self {
+            Self::Day => TileFeature::Grass,
+        }
+    }
+
     fn is_sun_spawn(&self) -> bool {
         match self {
             Self::Day => true,
         }
     }
 }
+
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Copy)]
 pub enum GameKind {
     #[default]
@@ -62,6 +84,7 @@ impl GameKind {
         }
     }
 }
+
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub enum SelectionArr {
     #[default]
@@ -69,6 +92,19 @@ pub enum SelectionArr {
     Few(Vec<Id>),
     All(Vec<Id>),
 }
+impl SelectionArr {
+    pub fn modify(&self, selection: &mut game::Selection) {
+        match self {
+            Self::Any => {
+                selection.0.clear();
+            }
+            Self::Few(ids) | Self::All(ids) => {
+                selection.0 = ids.clone();
+            }
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct LevelConfig {
     pub layout: LayoutKind,

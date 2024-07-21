@@ -47,6 +47,15 @@ impl Position {
         }
     }
 
+    pub fn regularize(&self) -> Self {
+        Self {
+            x: self.x.round(),
+            y: self.y.round(),
+            z: self.z.round(),
+            r: self.r,
+        }
+    }
+
     pub fn x_i32(&self) -> i32 {
         self.x as i32
     }
@@ -57,6 +66,11 @@ impl Position {
 
     pub fn z_i32(&self) -> i32 {
         self.z as i32
+    }
+
+    pub fn to_usize_pos(&self) -> (usize, usize) {
+        let pos = self.regularize();
+        (pos.x as usize, pos.y as usize)
     }
 
     pub fn same_y(&self, rhs: &Position) -> bool {

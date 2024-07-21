@@ -11,16 +11,6 @@ impl Plugin for ZombiesBasicPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
-
-        #[cfg(debug_assertions)]
-        app.add_systems(
-            Update,
-            (
-                debug_spawn_system!(BASIC_ZOMBIE, 4.0, 0.0),
-                debug_spawn_system!(BASIC_ZOMBIE, 3.0, 0.0),
-                debug_spawn_system!(BASIC_ZOMBIE, 2.0, 0.0),
-            ),
-        );
     }
 }
 

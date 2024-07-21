@@ -24,6 +24,7 @@ fn load_level(
     mut commands: Commands,
     mut e_level: EventReader<LevelEvent>,
     mut state: ResMut<NextState<info::GlobalStates>>,
+    mut selection: ResMut<game::Selection>,
 ) {
     if let Some(level) = e_level.read().last() {
         let path = format!("assets/levels/{}/{}.toml", level.stage, level.level);
@@ -34,8 +35,8 @@ fn load_level(
                     let ratio = (LOGICAL_WIDTH / size.0 as f32).min(LOGICAL_HEIGHT / size.1 as f32)
                         * 2.0
                         / 3.0;
+                    level.config.selection.modify(selection.as_mut());
                     commands.insert_resource(level);
-                    commands.insert_resource(level::Room::default());
                     commands.insert_resource(game::Display { ratio });
                     state.set(info::GlobalStates::Play);
                     info!("Loaded level and starting Play state");

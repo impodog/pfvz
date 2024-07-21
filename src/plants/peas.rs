@@ -11,9 +11,6 @@ impl Plugin for PlantsPeaPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
-
-        #[cfg(debug_assertions)]
-        app.add_systems(Update, debug_spawn_system!(PEASHOOTER, -4.0, 0.0));
     }
 }
 
