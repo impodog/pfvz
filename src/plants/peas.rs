@@ -11,19 +11,9 @@ impl Plugin for PlantsPeaPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
+
         #[cfg(debug_assertions)]
-        app.add_systems(
-            Update,
-            |mut action: EventWriter<game::CreatureAction>, mut b: Local<bool>| {
-                if !*b {
-                    *b = true;
-                    action.send(game::CreatureAction::Spawn(
-                        PEASHOOTER,
-                        game::Position::new_xy(0.0, 1.0),
-                    ));
-                }
-            },
-        );
+        app.add_systems(Update, debug_spawn_system!(PEASHOOTER, 0.0, 0.0));
     }
 }
 
@@ -34,15 +24,19 @@ game_conf!(systems peashooter_systems);
 fn spawn_peashooter(
     In(pos): In<game::Position>,
     mut commands: Commands,
+    factors: Res<plants::PlantFactors>,
     map: Res<game::CreatureMap>,
     shooter: Res<PeashooterShooter>,
 ) {
     let creature = map.get(&PEASHOOTER).unwrap();
     commands.spawn((
+        game::Plant,
+        creature.clone(),
         pos,
         sprite::Animation::new(creature.anim.clone()),
         creature.hitbox,
         compn::Shooter(shooter.0.clone()),
+        game::Health::from(factors.peashooter.health),
         SpriteBundle::default(),
     ));
 }
@@ -60,10 +54,10 @@ fn init_config(
     commands.insert_resource(ProjectilePea(pea.clone()));
     {
         commands.insert_resource(PeashooterShooter(Arc::new(compn::ShooterShared {
-            interval: Duration::from_millis(2000),
-            vel: game::Velocity::new(0.05, 0.0, 0.0, 2.0),
+            interval: Duration::from_millis(factors.peashooter.interval),
+            velocity: factors.peashooter.velocity,
             proj: game::Projectile {
-                damage: 20,
+                damage: factors.peashooter.damage,
                 instant: true,
             },
             require_zombie: true,
@@ -75,8 +69,8 @@ fn init_config(
                 .unwrap()
                 .expect("systems are not initialized"),
             anim: plants.peashooter.clone(),
-            cost: 100,
-            hitbox: game::HitBox::new(1.0, 1.0),
+            cost: factors.peashooter.cost,
+            hitbox: factors.peashooter.self_box,
         }));
         map.insert(PEASHOOTER, creature);
     }

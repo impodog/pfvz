@@ -28,7 +28,7 @@ impl Health {
             self.hp -= value;
         } else {
             self.hp = 0;
-            self.remain = self.remain.wrapping_sub(value);
+            self.remain = self.remain.saturating_sub(value);
         }
     }
 
@@ -45,6 +45,21 @@ impl Health {
         self.stack.push(value);
     }
 }
+impl From<u32> for Health {
+    fn from(value: u32) -> Self {
+        Self::new(value, 0)
+    }
+}
+impl From<(u32, u32)> for Health {
+    fn from(value: (u32, u32)) -> Self {
+        Self::new(value.0, value.1)
+    }
+}
+impl std::fmt::Display for Health {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}+{}", self.hp, self.remain)
+    }
+}
 
 #[derive(Component, Debug, Clone)]
 pub struct Armor {
@@ -56,7 +71,7 @@ impl Armor {
     }
 
     pub fn decr(&mut self, value: u32) {
-        self.hp = self.hp.wrapping_sub(value);
+        self.hp = self.hp.saturating_sub(value);
     }
 }
 
@@ -79,18 +94,24 @@ fn armor_delete(mut commands: Commands, q_armor: Query<(Entity, &Armor)>) {
     });
 }
 
-fn health_decr(mut q_health: Query<(&mut Health, &Children)>, q_armor: Query<&mut Armor>) {
+fn health_decr(
+    mut q_health: Query<(Entity, &mut Health)>,
+    q_children: Query<&Children>,
+    q_armor: Query<&mut Armor>,
+) {
     let q_armor = RwLock::new(q_armor);
-    q_health.par_iter_mut().for_each(|(mut health, children)| {
+    q_health.par_iter_mut().for_each(|(entity, mut health)| {
         if !health.stack.is_empty() {
             let mut sum = 0;
             for hp in health.stack.drain(..) {
                 let mut ok = false;
-                for entity in children.iter() {
-                    if let Ok(mut armor) = q_armor.write().unwrap().get_mut(*entity) {
-                        armor.decr(hp);
-                        ok = true;
-                        break;
+                if let Ok(children) = q_children.get(entity) {
+                    for entity in children.iter() {
+                        if let Ok(mut armor) = q_armor.write().unwrap().get_mut(*entity) {
+                            armor.decr(hp);
+                            ok = true;
+                            break;
+                        }
                     }
                 }
                 if !ok {

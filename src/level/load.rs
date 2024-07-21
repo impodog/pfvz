@@ -38,6 +38,20 @@ impl LayoutKind {
     pub const fn lane_size(&self) -> usize {
         self.size().0
     }
+
+    /// This returns a index applicable to `PlantLayout`, or usize::MAX if conversion is not
+    /// possible
+    pub fn position_to_index(&self, pos: &game::Position) -> usize {
+        let size = self.size();
+        let x = pos.x_i32() + (size.0 as i32 / 2);
+        let y = pos.y_i32() + (size.1 as i32 / 2);
+        if let Ok(x) = usize::try_from(x) {
+            if let Ok(y) = usize::try_from(y) {
+                return y * size.0 + x;
+            }
+        }
+        usize::MAX
+    }
 }
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Copy)]
 pub enum GameKind {

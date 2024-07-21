@@ -15,7 +15,7 @@ impl Plugin for ShooterPlugin {
 #[derive(Debug, Clone)]
 pub struct ShooterShared {
     pub interval: Duration,
-    pub vel: game::Velocity,
+    pub velocity: game::Velocity,
     pub proj: game::Projectile,
     pub require_zombie: bool,
     pub shared: Arc<game::ProjectileShared>,
@@ -46,13 +46,19 @@ fn add_shooter_impl(mut commands: Commands, q_shooter: Query<(Entity, &Shooter),
 fn shooter_work(
     mut commands: Commands,
     time: Res<Time>,
-    mut q_shooter: Query<(Entity, &Shooter, &mut ShooterImpl, &game::Position)>,
+    mut q_shooter: Query<(
+        Entity,
+        &Shooter,
+        &mut ShooterImpl,
+        &game::Position,
+        &Transform,
+    )>,
     q_zombie: Query<(), With<game::Zombie>>,
     q_zpos: Query<&game::Position, With<game::Zombie>>,
 ) {
     q_shooter
         .iter_mut()
-        .for_each(|(entity, shooter, mut work, pos)| {
+        .for_each(|(entity, shooter, mut work, pos, transform)| {
             work.timer.tick(time.delta());
             if work.timer.just_finished() {
                 if shooter.require_zombie {
@@ -72,8 +78,11 @@ fn shooter_work(
                     sprite::Animation::new(shooter.shared.anim.clone()),
                     shooter.shared.hitbox,
                     shooter.proj.clone(),
-                    shooter.vel,
-                    SpriteBundle::default(),
+                    shooter.velocity,
+                    SpriteBundle {
+                        transform: Transform::from_xyz(0.0, 0.0, transform.translation.z),
+                        ..Default::default()
+                    },
                 ));
                 // Determines whether the projectile is plant(default) or zombie
                 if q_zombie.get(entity).is_ok() {

@@ -76,7 +76,7 @@ fn creature_action(
             }
         };
         if !ok {
-            warn!("Unable to execute creature action: {:?}", action);
+            error!("Unable to execute creature action: {:?}", action);
         }
     });
 }

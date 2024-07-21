@@ -155,22 +155,15 @@ fn update_collision(
     let map = Arc::new(RwLock::new(HashMap::new()));
     q_pos.par_iter().for_each(|(entity, pos, hitbox)| {
         let mut rng = rand::thread_rng();
-        let ok = if !collision.map.contains_key(&entity) {
-            rng.gen_ratio(config.program.loss_rate.0 .0, config.program.loss_rate.0 .1)
-        } else {
-            rng.gen_ratio(
-                config.program.loss_rate.0 .0 / 2,
-                config.program.loss_rate.0 .1,
-            )
-        };
+        let ok = rng.gen_ratio(config.program.loss_rate.0 .0, config.program.loss_rate.0 .1);
         if ok {
             let set = q_pos
                 .iter()
                 .filter_map(|(sub_entity, sub_pos, sub_hitbox)| {
                     if sub_entity == entity
                         || (pos.y_i32() != sub_pos.y_i32())
-                        || (pos.x - sub_pos.x).abs() <= (hitbox.width + sub_hitbox.width) / 2.0
-                        || (pos.z - sub_pos.z).abs() <= (hitbox.height + sub_hitbox.height) / 2.0
+                        || (pos.x - sub_pos.x).abs() >= (hitbox.width + sub_hitbox.width) / 2.0
+                        || (pos.z - sub_pos.z).abs() >= (hitbox.height + sub_hitbox.height) / 2.0
                     {
                         None
                     } else {
@@ -181,6 +174,15 @@ fn update_collision(
             map.write().unwrap().insert(entity, set);
         }
     });
+    let mut to_remove = Vec::new();
+    for (k, v) in map.read().unwrap().iter() {
+        if v.is_empty() {
+            to_remove.push(*k);
+        }
+    }
+    for k in to_remove.into_iter() {
+        map.write().unwrap().remove(&k);
+    }
     let map = Arc::into_inner(map).unwrap();
     let map = RwLock::into_inner(map).unwrap();
     let _ = std::mem::replace(&mut collision.map, map);

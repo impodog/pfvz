@@ -1,7 +1,7 @@
+mod basic;
 mod factors;
 mod plugin;
-mod zombie;
 
+pub use basic::*;
 pub use factors::*;
 pub use plugin::*;
-pub use zombie::*;

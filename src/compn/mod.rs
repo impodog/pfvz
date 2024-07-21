@@ -7,3 +7,4 @@ mod walker;
 pub use plugin::*;
 pub use proj::*;
 pub use shooter::*;
+pub use walker::*;

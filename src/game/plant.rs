@@ -5,7 +5,7 @@ pub(super) struct GamePlantPlugin;
 impl Plugin for GamePlantPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<PlantLayout>();
-        app.add_systems(PostUpdate, (scan_plants,));
+        app.add_systems(PostUpdate, (scan_plants, add_plants));
         app.add_systems(OnEnter(info::GlobalStates::Play), (renew_layout,));
     }
 }
@@ -19,6 +19,7 @@ pub struct PlantRelevant;
 #[derive(Resource, Default, Debug)]
 pub struct PlantLayout {
     pub plants: Vec<RwLock<Vec<Entity>>>,
+    in_layout: RwLock<BTreeSet<Entity>>,
 }
 impl PlantLayout {
     pub fn clear(&mut self, size: usize) {
@@ -47,8 +48,30 @@ fn scan_plants(plants: Res<PlantLayout>, q_plant: Query<&Plant>) {
         if !remove.is_empty() {
             let mut lane = lane.write().unwrap();
             for i in remove.drain(..).rev() {
-                lane.swap_remove(i);
+                let entity = lane.swap_remove(i);
+                plants.in_layout.write().unwrap().remove(&entity);
             }
         }
     }
+}
+fn add_plants(
+    plants: Res<PlantLayout>,
+    q_plant: Query<(Entity, &game::Position), Added<Plant>>,
+    level: Res<level::Level>,
+) {
+    q_plant.par_iter().for_each(|(entity, pos)| {
+        if !plants.in_layout.read().unwrap().contains(&entity) {
+            info!("Added plants at {:?}", pos);
+            plants.in_layout.write().unwrap().insert(entity);
+            let i = level.config.layout.position_to_index(pos);
+            if let Some(plants) = plants.plants.get(i) {
+                plants.write().unwrap().push(entity);
+            } else {
+                error!(
+                    "Plant at {:?} is outside the bounds and will not be monitored",
+                    pos
+                );
+            }
+        }
+    });
 }

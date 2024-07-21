@@ -11,14 +11,19 @@ impl Plugin for FactorsPlugin {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BasicZombie {
-    velocity: game::Velocity,
-    self_box: game::HitBox,
-    arm_box: game::HitBox,
+    pub velocity: game::Velocity,
+    pub self_box: game::HitBox,
+    pub arm_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub arm_health: u32,
+    pub damage: u32,
+    pub interval: u64,
+    pub cost: u32,
 }
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
-    basic: BasicZombie,
+    pub basic: BasicZombie,
 }
 
 fn init_factors(mut commands: Commands) {

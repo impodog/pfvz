@@ -12,9 +12,12 @@ impl Plugin for FactorsPlugin {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Peashooter {
     pub velocity: game::Velocity,
-    pub interval: u64,
     pub self_box: game::HitBox,
     pub pea_box: game::HitBox,
+    pub health: u32,
+    pub damage: u32,
+    pub interval: u64,
+    pub cost: u32,
 }
 
 #[derive(Debug, Resource, Serialize, Deserialize)]

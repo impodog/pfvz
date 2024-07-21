@@ -36,19 +36,21 @@ fn test_plant_proj_zombie(
     mut e_proj: EventWriter<ProjectileAction>,
     mut e_creature: EventWriter<game::CreatureAction>,
     q_proj: Query<(Entity, &Projectile), With<game::PlantRelevant>>,
-    q_zombie: Query<(), With<game::Zombie>>,
+    q_zombie: Query<Entity, With<game::Zombie>>,
 ) {
     q_proj.iter().for_each(|(entity, proj)| {
         if let Some(set) = collision.get(&entity) {
-            set.iter().for_each(|zombie| {
-                if let Ok(()) = q_zombie.get(*zombie) {
+            for zombie in set.iter() {
+                if let Ok(zombie_entity) = q_zombie.get(*zombie) {
                     e_proj.send(ProjectileAction::Damage(entity));
                     e_creature.send(game::CreatureAction::Damage(
-                        entity,
+                        zombie_entity,
                         multiply_uf!(proj.damage, config.gamerule.damage.0),
                     ));
+                    // This prevents multiple damages
+                    break;
                 }
-            });
+            }
         }
     });
 }
@@ -58,14 +60,14 @@ fn test_zombie_proj_plant(
     mut e_proj: EventWriter<ProjectileAction>,
     mut e_creature: EventWriter<game::CreatureAction>,
     q_proj: Query<(Entity, &Projectile), With<game::ZombieRelevant>>,
-    q_plant: Query<(), With<game::Creature>>,
+    q_plant: Query<Entity, With<game::Plant>>,
 ) {
     q_proj.iter().for_each(|(entity, proj)| {
         if let Some(set) = collision.get(&entity) {
             set.iter().for_each(|plant| {
-                if let Ok(()) = q_plant.get(*plant) {
+                if let Ok(plant_entity) = q_plant.get(*plant) {
                     e_proj.send(ProjectileAction::Damage(entity));
-                    e_creature.send(game::CreatureAction::Damage(entity, proj.damage));
+                    e_creature.send(game::CreatureAction::Damage(plant_entity, proj.damage));
                 }
             });
         }
