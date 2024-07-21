@@ -12,10 +12,11 @@ impl Plugin for SpriteLayoutPlugin {
 pub struct SlotIndex(pub usize);
 impl SlotIndex {
     pub fn from_position(pos: game::Position, ratio: f32) -> Option<Self> {
-        let x = (pos.x + LOGICAL_WIDTH / ratio / 2.0) / SLOT_SIZE.x;
-        let y_mid = LOGICAL_HEIGHT / ratio / 2.0 - SLOT_SIZE.y / 2.0;
+        let x = (pos.x + LOGICAL_WIDTH / ratio / 2.0 - 1.0) / SLOT_SIZE.x;
+        let x = (x + 0.5) as usize;
+        let y_mid = LOGICAL_HEIGHT / ratio / 2.0 - SLOT_SIZE.y;
         if pos.y >= y_mid - SLOT_SIZE.y / 2.0 && pos.y <= y_mid + SLOT_SIZE.y / 2.0 {
-            Some(Self(x.min(0.0) as usize))
+            Some(SlotIndex(x))
         } else {
             None
         }
@@ -23,7 +24,7 @@ impl SlotIndex {
 
     pub fn into_position(self, ratio: f32) -> game::Position {
         game::Position {
-            x: -LOGICAL_WIDTH / ratio / 2.0 + self.0 as f32 * SLOT_SIZE.x,
+            x: -LOGICAL_WIDTH / ratio / 2.0 + (self.0 as f32) * SLOT_SIZE.x + 1.0,
             y: LOGICAL_HEIGHT / ratio / 2.0 - SLOT_SIZE.y,
             ..Default::default()
         }
@@ -54,9 +55,10 @@ fn spawn_layout(
             commands.spawn((
                 SpriteBundle {
                     texture: sp_layout.get(&layout).grass[picture].clone(),
-                    transform: Transform::from_xyz(0.0, 0.0, -1437.0),
+                    transform: Transform::from_xyz(0.0, 0.0, -14.37),
                     sprite: Sprite {
                         custom_size: Some(Vec2::new(display.ratio, display.ratio)),
+                        color: Color::LinearRgba(LinearRgba::new(1.0, 1.0, 1.0, 0.5)),
                         ..Default::default()
                     },
                     ..Default::default()
@@ -65,13 +67,13 @@ fn spawn_layout(
             ));
         }
     }
-    for pos in 1..=save.slots.0 {
+    for pos in 0..save.slots.0 {
         let pos = SlotIndex(pos).into_position(display.ratio);
         commands.spawn((
             SpriteBundle {
                 texture: sp_chunks.slot.clone(),
                 transform: Transform {
-                    translation: Vec3::new(0.0, 0.0, 1437.0),
+                    translation: Vec3::new(0.0, 0.0, 14.37),
                     ..Default::default()
                 },
                 sprite: Sprite {

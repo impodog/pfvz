@@ -5,6 +5,10 @@ pub struct PlantsPlugin;
 
 impl Plugin for PlantsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((peas::PlantsPeaPlugin, factors::FactorsPlugin));
+        app.add_plugins((
+            planter::PlantsPlanterPlugin,
+            peas::PlantsPeaPlugin,
+            factors::PlantsFactorsPlugin,
+        ));
     }
 }

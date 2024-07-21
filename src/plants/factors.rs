@@ -1,9 +1,9 @@
 use crate::prelude::*;
 use serde::{Deserialize, Serialize};
 
-pub(super) struct FactorsPlugin;
+pub(super) struct PlantsFactorsPlugin;
 
-impl Plugin for FactorsPlugin {
+impl Plugin for PlantsFactorsPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(PreStartup, (init_factors,));
     }
@@ -11,7 +11,7 @@ impl Plugin for FactorsPlugin {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Peashooter {
-    pub velocity: game::Velocity,
+    pub velocity: game::VelocityX,
     pub self_box: game::HitBox,
     pub pea_box: game::HitBox,
     pub health: u32,

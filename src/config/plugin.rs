@@ -10,6 +10,7 @@ impl Plugin for ConfigPlugin {
             camera::ConfigCameraPlugin,
             load::ConfigLoadPlugin,
             program::ConfigProgramPlugin,
+            util::ConfigUtilPlugin,
         ));
     }
 }

@@ -28,7 +28,7 @@ impl Health {
             self.hp -= value;
         } else {
             self.hp = 0;
-            self.remain = self.remain.saturating_sub(value);
+            self.remain = self.remain.saturating_sub(value - self.hp);
         }
     }
 
@@ -38,6 +38,10 @@ impl Health {
 
     pub fn is0(&self) -> bool {
         self.hp == 0 && self.remain == 0
+    }
+
+    pub fn is_dying(&self) -> bool {
+        self.hp == 0
     }
 
     // This decreases the armors first(if any)

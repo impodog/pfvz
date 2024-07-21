@@ -1,8 +1,8 @@
 use crate::prelude::*;
 
-pub struct WalkerPlugin;
+pub struct CompnWalkerPlugin;
 
-impl Plugin for WalkerPlugin {
+impl Plugin for CompnWalkerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             PreUpdate,
@@ -66,7 +66,7 @@ fn walker_deal_damage(
     mut q_walker: Query<(&mut WalkerImpl, &mut game::Velocity, &Walker)>,
     q_plant: Query<(), With<game::Plant>>,
     mut action: EventWriter<game::CreatureAction>,
-    time: Res<Time>,
+    time: Res<config::FrameTime>,
 ) {
     // NOTE: This is not parallel! Fix?
     q_walker

@@ -29,6 +29,12 @@ impl Animation {
             begin: std::time::SystemTime::now(),
         }
     }
+
+    pub fn replace(&mut self, frames: Arc<FrameArr>) {
+        self.frames = frames;
+        self.cursor = 0;
+        self.begin = std::time::SystemTime::now();
+    }
 }
 
 fn update_animation(mut q_anim: Query<(&mut Animation, &mut Handle<Image>)>) {

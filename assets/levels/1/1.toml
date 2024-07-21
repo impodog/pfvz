@@ -1,6 +1,8 @@
 [config]
 layout = "Day"
 game = "Adventure"
+selection = "Any"
+sun = 150
 [[waves]]
 points = 50
 big = false

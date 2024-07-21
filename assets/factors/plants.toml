@@ -1,8 +1,8 @@
 [peashooter]
-velocity = { x = 0.1, y = 0.0, z = 0.0, r = 0.0 }
+velocity = 0.08
 self_box = { width = 1.0, height = 1.0 }
 pea_box = { width = 0.3, height = 0.3 }
 health = 200
 damage = 20
-interval = 2000
+interval = 3000
 cost = 100

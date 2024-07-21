@@ -6,7 +6,13 @@ impl Plugin for AssetsSpritesPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Startup,
-            (init_chunks, init_layouts, init_plants, init_zombies),
+            (
+                init_chunks,
+                init_layouts,
+                init_plants,
+                init_zombies,
+                init_items,
+            ),
         );
     }
 }
@@ -39,6 +45,7 @@ pub struct SpriteChunks {
     pub pvfz: Handle<Image>,
     pub background: Handle<Image>,
     pub slot: Handle<Image>,
+    pub highlight: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -77,7 +84,13 @@ pub struct SpritePlants {
 #[derive(Resource)]
 pub struct SpriteZombies {
     pub basic: Arc<sprite::FrameArr>,
+    pub basic_dying: Arc<sprite::FrameArr>,
     pub arm: Arc<sprite::FrameArr>,
+}
+
+#[derive(Resource)]
+pub struct SpriteItems {
+    pub sun: Arc<sprite::FrameArr>,
 }
 
 fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
@@ -85,6 +98,7 @@ fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         pvfz: server.load("sprites/chunks/pfvz.png"),
         background: server.load("sprites/chunks/background.png"),
         slot: server.load("sprites/chunks/slot.png"),
+        highlight: server.load("sprites/chunks/highlight.png"),
     };
     commands.spawn(SpriteBundle {
         sprite: Sprite {
@@ -119,8 +133,20 @@ fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
 
 fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
     let zombies = SpriteZombies {
-        basic: load_animation(&server, "sprites/zombies/basic", Duration::from_millis(200)),
-        arm: load_animation(&server, "sprites/zombies/arm", Duration::from_millis(200)),
+        basic: load_animation(&server, "sprites/zombies/basic", Duration::from_millis(400)),
+        basic_dying: load_animation(
+            &server,
+            "sprites/zombies/basic_dying",
+            Duration::from_millis(400),
+        ),
+        arm: load_animation(&server, "sprites/zombies/arm", Duration::from_millis(400)),
     };
     commands.insert_resource(zombies);
+}
+
+fn init_items(mut commands: Commands, server: Res<AssetServer>) {
+    let items = SpriteItems {
+        sun: load_animation(&server, "sprites/items/sun", Duration::from_millis(100)),
+    };
+    commands.insert_resource(items);
 }

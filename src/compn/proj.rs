@@ -30,7 +30,7 @@ fn proj_action(
             }
         };
         if !ok {
-            error!("Unable to execute projectile action: {:?}", action);
+            warn!("Unable to execute projectile action: {:?}", action);
         }
     });
 }

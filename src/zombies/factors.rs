@@ -1,9 +1,9 @@
 use crate::prelude::*;
 use serde::{Deserialize, Serialize};
 
-pub(super) struct FactorsPlugin;
+pub(super) struct ZombiesFactorsPlugin;
 
-impl Plugin for FactorsPlugin {
+impl Plugin for ZombiesFactorsPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(PreStartup, (init_factors,));
     }
@@ -11,7 +11,7 @@ impl Plugin for FactorsPlugin {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BasicZombie {
-    pub velocity: game::Velocity,
+    pub velocity: game::VelocityXRange,
     pub self_box: game::HitBox,
     pub arm_box: game::HitBox,
     pub self_health: (u32, u32),

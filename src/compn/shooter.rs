@@ -1,8 +1,8 @@
 use crate::prelude::*;
 
-pub struct ShooterPlugin;
+pub struct CompnShooterPlugin;
 
-impl Plugin for ShooterPlugin {
+impl Plugin for CompnShooterPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             PreUpdate,
@@ -45,7 +45,7 @@ fn add_shooter_impl(mut commands: Commands, q_shooter: Query<(Entity, &Shooter),
 
 fn shooter_work(
     mut commands: Commands,
-    time: Res<Time>,
+    time: Res<config::FrameTime>,
     mut q_shooter: Query<(
         Entity,
         &Shooter,

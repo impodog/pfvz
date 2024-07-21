@@ -1,6 +1,6 @@
 [program]
 framerate = 30.0
-loss_rate = [1, 3]
+loss_rate = [2, 5]
 [gamerule]
 sun_value = 25
 damage = 1.0

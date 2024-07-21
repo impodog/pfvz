@@ -1,0 +1,5 @@
+[sun]
+velocity = { x = 0.0, y = 0.0, z = -0.01, r = 0.0 }
+self_box = { width = 0.5, height = 0.5 }
+height = 7.0
+interval = 15000

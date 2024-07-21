@@ -12,6 +12,7 @@ impl Plugin for GamePositionPlugin {
             PreUpdate,
             (update_collision,).run_if(in_state(info::GlobalStates::Play)),
         );
+        app.add_systems(Update, (remove_outbound,));
         app.add_systems(
             PostUpdate,
             (
@@ -120,8 +121,7 @@ fn update_transform(
 ) {
     q_pos.par_iter_mut().for_each(|(pos, mut transform)| {
         transform.translation.x = pos.x * display.ratio;
-        transform.translation.y = pos.y * display.ratio;
-        transform.translation.z = pos.z * display.ratio;
+        transform.translation.y = (pos.y + pos.z) * display.ratio;
         transform.rotation = Quat::from_rotation_z(pos.r);
     });
 }
@@ -186,4 +186,18 @@ fn update_collision(
     let map = Arc::into_inner(map).unwrap();
     let map = RwLock::into_inner(map).unwrap();
     let _ = std::mem::replace(&mut collision.map, map);
+}
+
+fn remove_outbound(
+    mut commands: Commands,
+    display: Res<Display>,
+    q_pos: Query<(Entity, &Position), Changed<Position>>,
+) {
+    q_pos.iter().for_each(|(entity, pos)| {
+        let x = pos.x * display.ratio;
+        let y = pos.y * display.ratio;
+        if x < -LOGICAL_WIDTH || x > LOGICAL_WIDTH || y < -LOGICAL_HEIGHT || y > LOGICAL_HEIGHT {
+            commands.entity(entity).despawn_recursive();
+        }
+    });
 }

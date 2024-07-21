@@ -13,7 +13,7 @@ impl Plugin for PlantsPeaPlugin {
         });
 
         #[cfg(debug_assertions)]
-        app.add_systems(Update, debug_spawn_system!(PEASHOOTER, 0.0, 0.0));
+        app.add_systems(Update, debug_spawn_system!(PEASHOOTER, -4.0, 0.0));
     }
 }
 
@@ -55,7 +55,7 @@ fn init_config(
     {
         commands.insert_resource(PeashooterShooter(Arc::new(compn::ShooterShared {
             interval: Duration::from_millis(factors.peashooter.interval),
-            velocity: factors.peashooter.velocity,
+            velocity: factors.peashooter.velocity.into(),
             proj: game::Projectile {
                 damage: factors.peashooter.damage,
                 instant: true,

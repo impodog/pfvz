@@ -1,7 +1,9 @@
+mod config;
 mod load;
 mod plugin;
 mod room;
 
+pub use config::*;
 pub use load::*;
 pub use plugin::*;
 pub use room::*;

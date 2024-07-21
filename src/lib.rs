@@ -1,4 +1,5 @@
 pub mod assets;
+pub mod collectible;
 pub mod compn;
 pub mod config;
 pub mod game;
@@ -16,6 +17,7 @@ pub fn start_pfvz() {
     app.add_plugins((
         DefaultPlugins,
         assets::AssetsPlugin,
+        collectible::CollectiblePlugin,
         config::ConfigPlugin,
         game::GamePlugin,
         info::InfoPlugin,

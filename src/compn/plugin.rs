@@ -6,9 +6,10 @@ pub struct CompnPlugin;
 impl Plugin for CompnPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
-            shooter::ShooterPlugin,
+            shooter::CompnShooterPlugin,
             proj::CompnProjPlugin,
-            walker::WalkerPlugin,
+            walker::CompnWalkerPlugin,
+            dying::CompnDyingPlugin,
         ));
     }
 }

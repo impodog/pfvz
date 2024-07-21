@@ -61,7 +61,6 @@ fn add_plants(
 ) {
     q_plant.par_iter().for_each(|(entity, pos)| {
         if !plants.in_layout.read().unwrap().contains(&entity) {
-            info!("Added plants at {:?}", pos);
             plants.in_layout.write().unwrap().insert(entity);
             let i = level.config.layout.position_to_index(pos);
             if let Some(plants) = plants.plants.get(i) {

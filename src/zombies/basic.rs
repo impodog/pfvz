@@ -13,7 +13,14 @@ impl Plugin for ZombiesBasicPlugin {
         });
 
         #[cfg(debug_assertions)]
-        app.add_systems(Update, debug_spawn_system!(BASIC_ZOMBIE, 2.0, 0.0));
+        app.add_systems(
+            Update,
+            (
+                debug_spawn_system!(BASIC_ZOMBIE, 4.0, 0.0),
+                debug_spawn_system!(BASIC_ZOMBIE, 3.0, 0.0),
+                debug_spawn_system!(BASIC_ZOMBIE, 2.0, 0.0),
+            ),
+        );
     }
 }
 
@@ -34,8 +41,9 @@ fn spawn_basic_zombie(
             game::Zombie,
             creature.clone(),
             pos,
-            factors.basic.velocity,
+            game::Velocity::from(factors.basic.velocity),
             sprite::Animation::new(creature.anim.clone()),
+            compn::Dying::new(zombies.basic_dying.clone()),
             creature.hitbox,
             compn::Walker(walker.0.clone()),
             game::Health::from(factors.basic.self_health),
@@ -44,7 +52,8 @@ fn spawn_basic_zombie(
         .id();
     commands
         .spawn((
-            game::Position::new_xy(0.0, 0.0),
+            game::Position::new_xy(0.1, 0.0),
+            factors.basic.arm_box,
             sprite::Animation::new(zombies.arm.clone()),
             game::Armor::new(factors.basic.arm_health),
             SpriteBundle {

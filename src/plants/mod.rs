@@ -1,5 +1,6 @@
 mod factors;
 mod peas;
+mod planter;
 mod plugin;
 
 pub use factors::*;
