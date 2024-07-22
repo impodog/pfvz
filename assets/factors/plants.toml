@@ -4,5 +4,6 @@ self_box = { width = 1.0, height = 1.0 }
 pea_box = { width = 0.3, height = 0.3 }
 health = 200
 damage = 20
-interval = 3000
+interval = 3.0
+cooldown = 10.0
 cost = 100

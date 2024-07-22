@@ -4,15 +4,21 @@ pub(super) struct LevelBannersPlugin;
 
 impl Plugin for LevelBannersPlugin {
     fn build(&self, app: &mut App) {
+        app.add_systems(Update, (banner_work,));
         app.add_systems(
             Update,
-            (banner_work, spawn_wave_banners).run_if(in_state(info::GlobalStates::Play)),
+            (spawn_wave_banners,).run_if(in_state(info::GlobalStates::Play)),
         );
     }
 }
 
 #[derive(Component, Debug, Clone, Deref, DerefMut)]
 pub struct Banner(Timer);
+impl Banner {
+    pub fn new(duration: Duration) -> Self {
+        Self(Timer::new(duration, TimerMode::Once))
+    }
+}
 
 fn banner_work(
     mut commands: Commands,
@@ -38,7 +44,7 @@ fn spawn_wave_banners(
         if wave == level.waves.len() - 1 {
             commands.spawn((
                 game::Position::new_xy(0.0, 0.0),
-                Banner(Timer::new(Duration::from_secs(2), TimerMode::Once)),
+                Banner::new(Duration::from_millis(4000)),
                 SpriteBundle {
                     texture: chunks.final_wave.clone(),
                     ..Default::default()
@@ -47,7 +53,7 @@ fn spawn_wave_banners(
         } else if level.waves[wave].big {
             commands.spawn((
                 game::Position::new_xy(0.0, 0.0),
-                Banner(Timer::new(Duration::from_secs(2), TimerMode::Once)),
+                Banner::new(Duration::from_millis(4000)),
                 SpriteBundle {
                     texture: chunks.alert.clone(),
                     ..Default::default()

@@ -7,9 +7,18 @@ impl Plugin for GamePlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             OnEnter(info::GlobalStates::Play),
-            (init_player_status, show_selection, init_sun),
+            (
+                init_player_status,
+                show_selection,
+                init_sun,
+                init_highlighter,
+            ),
         );
-        app.add_systems(PostStartup, (init_highlighter,));
+        app.add_systems(
+            Update,
+            (update_cooldown, update_cooldown_rect, spawn_cooldown_rect)
+                .run_if(in_state(info::GlobalStates::Play)),
+        );
         app.add_systems(
             PostUpdate,
             (update_highlight, update_select, update_sun)
@@ -29,6 +38,24 @@ pub struct Selection(pub Vec<Id>);
 
 #[derive(Resource, Debug, Clone, Copy, Deref, DerefMut)]
 pub struct Selecting(pub usize);
+
+#[derive(Resource, Default, Debug, Clone)]
+pub struct SelectionCooldown(pub Vec<Timer>);
+impl SelectionCooldown {
+    pub fn get(&mut self, index: usize) -> &mut Timer {
+        if self.0.len() < index + 1 {
+            self.0.resize_with(index + 1, Default::default);
+        }
+        self.0.get_mut(index).unwrap()
+    }
+
+    pub fn get_option(&self, index: usize) -> Option<&Timer> {
+        self.0.get(index)
+    }
+}
+
+#[derive(Component, Debug, Clone)]
+pub struct SelectionCooldownIndex(usize);
 
 impl Default for Selecting {
     fn default() -> Self {
@@ -67,6 +94,7 @@ fn init_player_status(mut commands: Commands, level: Res<level::Level>) {
     // NOTE: The selection is initialized in level load. See it for details
     // commands.insert_resource(Selection::default());
     commands.insert_resource(Selecting::default());
+    commands.insert_resource(SelectionCooldown::default());
 }
 
 fn show_selection(
@@ -77,7 +105,6 @@ fn show_selection(
     display: Res<game::Display>,
     q_sel: Query<Entity, With<SelectionMarker>>,
 ) {
-    info!("selection is {:?}", sel);
     q_sel.iter().for_each(|entity| {
         commands.entity(entity).despawn_recursive();
     });
@@ -123,6 +150,68 @@ fn show_selection(
             warn!("Attempting to show non-existing id in slots bar: {}", id);
         }
     }
+}
+
+fn update_cooldown(mut cooldown: ResMut<SelectionCooldown>, time: Res<config::FrameTime>) {
+    for timer in cooldown.0.iter_mut() {
+        timer.tick(time.delta());
+    }
+}
+
+fn update_cooldown_rect(
+    mut commands: Commands,
+    cooldown: Res<SelectionCooldown>,
+    mut q_cooldown: Query<(Entity, &SelectionCooldownIndex, &mut Sprite)>,
+    display: Res<game::Display>,
+) {
+    q_cooldown
+        .iter_mut()
+        .for_each(|(entity, index, mut sprite)| {
+            if let Some(timer) = cooldown.get_option(index.0) {
+                if timer.finished() {
+                    commands.entity(entity).despawn_recursive();
+                } else {
+                    let mut size = SLOT_SIZE * display.ratio;
+                    size.y *= 1.0 - timer.elapsed().as_secs_f32() / timer.duration().as_secs_f32();
+                    sprite.custom_size = Some(size);
+                }
+            }
+        });
+}
+
+fn spawn_cooldown_rect(
+    mut commands: Commands,
+    mut planter: EventReader<plants::PlanterEvent>,
+    mut cooldown: ResMut<SelectionCooldown>,
+    chunks: Res<assets::SpriteChunks>,
+    display: Res<game::Display>,
+    map: Res<game::CreatureMap>,
+) {
+    planter.read().for_each(|planter| {
+        let mut pos = sprite::SlotIndex(planter.index).into_position(display.ratio);
+        pos.x -= SLOT_SIZE.x / 2.0;
+        pos.y -= SLOT_SIZE.y / 2.0;
+        commands.spawn((
+            pos,
+            SelectionCooldownIndex(planter.index),
+            SpriteBundle {
+                texture: chunks.cooldown.clone(),
+                transform: Transform::from_xyz(0.0, 0.0, 14.37 + 2.0),
+                sprite: Sprite {
+                    anchor: bevy::sprite::Anchor::BottomLeft,
+                    color: Color::LinearRgba(LinearRgba::new(1.0, 1.0, 1.0, 0.9)),
+                    ..Default::default()
+                },
+                ..Default::default()
+            },
+        ));
+        if let Some(creature) = map.get(&planter.id) {
+            *cooldown.get(planter.index) =
+                Timer::new(Duration::from_secs_f32(creature.cooldown), TimerMode::Once);
+        } else {
+            warn!("Cannot determine cooldown for creature id {}", planter.id);
+        }
+    });
 }
 
 fn update_highlight(

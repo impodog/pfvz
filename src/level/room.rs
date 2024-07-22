@@ -18,6 +18,7 @@ pub struct RoomStatus {
     pub cursor: usize,
     pub timer: Timer,
     pub min_timer: Timer,
+    pub fin: bool,
 }
 impl Default for RoomStatus {
     fn default() -> Self {
@@ -25,6 +26,7 @@ impl Default for RoomStatus {
             cursor: 0,
             timer: Timer::default(),
             min_timer: Timer::new(Duration::from_millis(1000), TimerMode::Once),
+            fin: false,
         }
     }
 }
@@ -54,6 +56,10 @@ fn update_room(
         status.timer = Timer::from_seconds(level.waves[status.cursor].wait, TimerMode::Once);
         status.min_timer.reset();
         status.cursor += 1;
+
+        if status.cursor >= level.waves.len() {
+            status.fin = true;
+        }
     }
 }
 

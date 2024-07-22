@@ -17,7 +17,8 @@ pub struct BasicZombie {
     pub self_health: (u32, u32),
     pub arm_health: u32,
     pub damage: u32,
-    pub interval: u64,
+    pub interval: f32,
+    pub cooldown: f32,
     pub cost: u32,
 }
 

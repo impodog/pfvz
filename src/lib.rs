@@ -1,3 +1,5 @@
+#![feature(is_none_or)]
+
 pub mod assets;
 pub mod collectible;
 pub mod compn;
@@ -5,6 +7,7 @@ pub mod config;
 pub mod game;
 pub mod info;
 pub mod level;
+pub mod lose;
 pub mod plants;
 mod prelude;
 pub mod save;
@@ -27,6 +30,7 @@ pub fn start_pfvz() {
         plants::PlantsPlugin,
         zombies::ZombiesPlugin,
         compn::CompnPlugin,
+        lose::LosePlugin,
     ));
     app.run();
 }

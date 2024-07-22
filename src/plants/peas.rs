@@ -51,7 +51,7 @@ fn init_config(
     commands.insert_resource(ProjectilePea(pea.clone()));
     {
         commands.insert_resource(PeashooterShooter(Arc::new(compn::ShooterShared {
-            interval: Duration::from_millis(factors.peashooter.interval),
+            interval: Duration::from_secs_f32(factors.peashooter.interval),
             velocity: factors.peashooter.velocity.into(),
             proj: game::Projectile {
                 damage: factors.peashooter.damage,
@@ -67,6 +67,7 @@ fn init_config(
                 .expect("systems are not initialized"),
             anim: plants.peashooter.clone(),
             cost: factors.peashooter.cost,
+            cooldown: factors.peashooter.cooldown,
             hitbox: factors.peashooter.self_box,
         }));
         map.insert(PEASHOOTER, creature);

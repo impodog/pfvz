@@ -61,7 +61,7 @@ fn init_config(
     mut map: ResMut<game::CreatureMap>,
 ) {
     commands.insert_resource(BasicZombieWalker(Arc::new(compn::WalkerShared {
-        interval: Duration::from_millis(factors.basic.interval),
+        interval: Duration::from_secs_f32(factors.basic.interval),
         damage: factors.basic.damage,
     })));
     {
@@ -72,6 +72,7 @@ fn init_config(
                 .expect("systems are not initialized"),
             anim: zombies.basic.clone(),
             cost: factors.basic.cost,
+            cooldown: factors.basic.cooldown,
             hitbox: factors.basic.self_box,
         }));
         map.insert(BASIC_ZOMBIE, creature);

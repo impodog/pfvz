@@ -5,5 +5,6 @@ arm_box = { width = 0.2, height = 0.6 }
 self_health = [100, 70]
 arm_health = 100
 damage = 20
-interval = 300
+interval = 0.3
+cooldown = 1.0
 cost = 50

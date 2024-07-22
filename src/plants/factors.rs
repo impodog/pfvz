@@ -16,7 +16,8 @@ pub struct Peashooter {
     pub pea_box: game::HitBox,
     pub health: u32,
     pub damage: u32,
-    pub interval: u64,
+    pub interval: f32,
+    pub cooldown: f32,
     pub cost: u32,
 }
 

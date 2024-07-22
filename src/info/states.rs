@@ -14,5 +14,5 @@ pub enum GlobalStates {
     Title,
     Menu,
     Play,
-    Lost,
+    Lose,
 }

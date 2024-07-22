@@ -5,13 +5,13 @@ selection = { "All" = [-1] }
 sun = 150
 [[waves]]
 points = 0
-wait = 20.0
+wait = 30.0
 big = false
 fixed = [[1, 1]]
 avail = [1]
 [[waves]]
 points = 0
-wait = 30.0
+wait = 40.0
 big = false
 fixed = [[1, 2]]
 avail = [1]

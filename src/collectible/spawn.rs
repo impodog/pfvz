@@ -5,7 +5,10 @@ pub(super) struct CollectibleSpawnPlugin;
 impl Plugin for CollectibleSpawnPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(PostStartup, (init_timer,));
-        app.add_systems(Update, (spawn_sun,));
+        app.add_systems(
+            Update,
+            (spawn_sun,).run_if(in_state(info::GlobalStates::Play)),
+        );
     }
 }
 
