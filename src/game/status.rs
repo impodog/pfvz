@@ -74,8 +74,10 @@ impl Armor {
         Self { hp }
     }
 
-    pub fn decr(&mut self, value: u32) {
+    pub fn decr(&mut self, value: u32) -> u32 {
+        let overflow = value.saturating_sub(self.hp);
         self.hp = self.hp.saturating_sub(value);
+        overflow
     }
 }
 
@@ -112,7 +114,7 @@ fn health_decr(
                 if let Ok(children) = q_children.get(entity) {
                     for entity in children.iter() {
                         if let Ok(mut armor) = q_armor.write().unwrap().get_mut(*entity) {
-                            armor.decr(hp);
+                            sum += armor.decr(hp);
                             ok = true;
                             break;
                         }

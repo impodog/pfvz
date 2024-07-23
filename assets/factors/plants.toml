@@ -2,8 +2,25 @@
 velocity = 0.08
 self_box = { width = 1.0, height = 1.0 }
 pea_box = { width = 0.3, height = 0.3 }
-health = 200
+health = 300
 damage = 20
 interval = 3.0
 cooldown = 10.0
 cost = 100
+[sunflower]
+velocity = { x = [-0.05, 0.05], y = [-0.03, 0.03], z = 0.1, r = 0.1 }
+self_box = { width = 1.0, height = 1.0 }
+health = 300
+interval = 20.0
+cooldown = 10.0
+cost = 50
+multiplier = 1.0
+[cherry_bomb]
+self_box = { width = 1.0, height = 1.0 }
+boom_box = { width = 2.5, height = 2.5 }
+health = 4000
+damage = 1800
+cooldown = 60.0
+countdown = 1.5
+animation_time = 3.0
+cost = 150

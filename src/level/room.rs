@@ -86,7 +86,7 @@ fn spawn_zombies(
     next_wave.read().for_each(|wave| {
         let wave = wave.0;
         let size = level.config.layout.size();
-        let mut chances = vec![5usize; size.1];
+        let mut chances = vec![3usize; size.1];
         let mut sum = chances.iter().fold(0, |prev, cur| prev + *cur);
         let mut points = level.waves[wave].points;
         for (id, times) in &level.waves[wave].fixed {

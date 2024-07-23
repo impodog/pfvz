@@ -21,3 +21,21 @@ impl From<VelocityXRange> for game::Velocity {
         )
     }
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub struct VelocityAny {
+    pub x: (f32, f32),
+    pub y: (f32, f32),
+    pub z: f32,
+    pub r: f32,
+}
+impl From<VelocityAny> for game::Velocity {
+    fn from(value: VelocityAny) -> Self {
+        Self::new(
+            rand::thread_rng().gen_range(value.x.0..=value.x.1),
+            rand::thread_rng().gen_range(value.y.0..=value.y.1),
+            value.z,
+            value.r,
+        )
+    }
+}

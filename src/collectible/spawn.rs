@@ -17,7 +17,7 @@ struct SunTimer(Timer);
 
 fn init_timer(mut commands: Commands, factors: Res<collectible::ItemFactors>) {
     commands.insert_resource(SunTimer(Timer::new(
-        Duration::from_millis(factors.sun.interval),
+        Duration::from_secs_f32(factors.sun.interval),
         TimerMode::Repeating,
     )));
 }
@@ -42,13 +42,7 @@ fn spawn_sun(
         commands.spawn((
             pos,
             collectible::Collectible::Sun(1.0),
-            factors.sun.self_box,
             factors.sun.velocity,
-            sprite::Animation::new(items.sun.clone()),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 14.37 - 1.0),
-                ..Default::default()
-            },
         ));
     }
 }

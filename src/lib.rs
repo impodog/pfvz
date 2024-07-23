@@ -1,5 +1,3 @@
-#![feature(is_none_or)]
-
 pub mod assets;
 pub mod collectible;
 pub mod compn;

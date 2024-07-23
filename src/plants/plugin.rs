@@ -8,6 +8,8 @@ impl Plugin for PlantsPlugin {
         app.add_plugins((
             planter::PlantsPlanterPlugin,
             peas::PlantsPeaPlugin,
+            producers::PlantsProducersPlugin,
+            explode::PlantsExplodePlugin,
             factors::PlantsFactorsPlugin,
         ));
     }

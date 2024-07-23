@@ -1,0 +1,108 @@
+use crate::prelude::*;
+
+pub(super) struct CompnExplodePlugin;
+
+impl Plugin for CompnExplodePlugin {
+    fn build(&self, app: &mut App) {
+        app.add_event::<ExplodeEvent>();
+        app.add_systems(
+            Update,
+            (add_no_loss, explode_work, cherry_bomb_timer_work)
+                .run_if(in_state(info::GlobalStates::Play)),
+        );
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct ExplodeShared {
+    pub anim: Arc<sprite::FrameArr>,
+    // The time the animation should exist before despawning
+    pub animation_time: Duration,
+    pub hitbox: game::HitBox,
+    pub damage: u32,
+}
+
+#[derive(Component, Debug, Clone, Deref)]
+pub struct Explode(pub Arc<ExplodeShared>);
+
+#[derive(Event, Debug, Clone)]
+pub struct ExplodeEvent {
+    pub entity: Entity,
+}
+
+fn add_no_loss(mut commands: Commands, q_explode: Query<Entity, Added<Explode>>) {
+    q_explode.iter().for_each(|entity| {
+        commands.entity(entity).insert(game::NoCollisionLoss);
+    });
+}
+
+#[allow(clippy::too_many_arguments)]
+fn explode_work(
+    mut commands: Commands,
+    mut explode_event: EventReader<ExplodeEvent>,
+    q_explode: Query<(&game::Position, &Explode)>,
+    mut action: EventWriter<game::CreatureAction>,
+    collision: Res<game::Collision>,
+    q_zombie: Query<(), With<game::Zombie>>,
+    q_plant: Query<(), With<game::Plant>>,
+    config: Res<config::Config>,
+) {
+    explode_event.read().for_each(|event| {
+        if let Ok((pos, explode)) = q_explode.get(event.entity) {
+            commands.spawn((
+                *pos,
+                sprite::Animation::new(explode.anim.clone()),
+                explode.hitbox,
+                level::Banner::new(explode.animation_time),
+                SpriteBundle::default(),
+            ));
+            if q_zombie.get(event.entity).is_ok() {
+                if let Some(set) = collision.get(&event.entity) {
+                    set.iter().for_each(|entity| {
+                        if q_plant.get(*entity).is_ok() {
+                            action.send(game::CreatureAction::Damage(
+                                *entity,
+                                multiply_uf!(explode.damage, config.gamerule.damage.0),
+                            ));
+                        }
+                    });
+                }
+            } else {
+                #[allow(clippy::collapsible_else_if)]
+                if let Some(set) = collision.get(&event.entity) {
+                    set.iter().for_each(|entity| {
+                        if q_zombie.get(*entity).is_ok() {
+                            action.send(game::CreatureAction::Damage(
+                                *entity,
+                                multiply_uf!(explode.damage, config.gamerule.damage.0),
+                            ));
+                        }
+                    });
+                }
+            }
+            commands.entity(event.entity).despawn_recursive();
+        } else {
+            warn!("Unable to execute explode event on {:?}", event)
+        }
+    });
+}
+
+#[derive(Component, Debug, Clone, Deref, DerefMut)]
+pub struct CherryBombTimer(pub Timer);
+
+fn cherry_bomb_timer_work(
+    time: Res<config::FrameTime>,
+    mut explode_event: EventWriter<ExplodeEvent>,
+    mut q_timer: Query<(Entity, &mut CherryBombTimer, &mut game::HitBox, &Explode)>,
+) {
+    q_timer
+        .iter_mut()
+        .for_each(|(entity, mut timer, mut hitbox, explode)| {
+            timer.tick(time.delta());
+            let rate = timer.elapsed().as_secs_f32() / timer.duration().as_secs_f32();
+            *hitbox = explode.hitbox * rate;
+            if timer.just_finished() {
+                explode_event.send(ExplodeEvent { entity });
+            }
+        });
+}

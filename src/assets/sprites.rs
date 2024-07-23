@@ -23,7 +23,7 @@ fn load_animation(server: &Res<AssetServer>, base: &str, delta: Duration) -> Arc
     let mut frames = Vec::new();
     loop {
         let path = format!("{}/{}.png", base, i);
-        if std::fs::exists(format!("assets/{}", path)).unwrap_or(false) {
+        if std::fs::File::open(format!("assets/{}", path)).is_ok() {
             let image: Handle<Image> = server.load(path);
             frames.push(image);
             i += 1;
@@ -83,6 +83,9 @@ impl SpriteLayouts {
 pub struct SpritePlants {
     pub pea: Arc<sprite::FrameArr>,
     pub peashooter: Arc<sprite::FrameArr>,
+    pub sunflower: Arc<sprite::FrameArr>,
+    pub cherry_bomb: Arc<sprite::FrameArr>,
+    pub boom: Arc<sprite::FrameArr>,
 }
 
 #[derive(Resource)]
@@ -90,6 +93,8 @@ pub struct SpriteZombies {
     pub basic: Arc<sprite::FrameArr>,
     pub basic_dying: Arc<sprite::FrameArr>,
     pub arm: Arc<sprite::FrameArr>,
+    pub roadcone: Arc<sprite::FrameArr>,
+    pub roadcone_broken: Arc<sprite::FrameArr>,
 }
 
 #[derive(Resource)]
@@ -135,6 +140,17 @@ fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/plants/peashooter",
             Duration::from_millis(100),
         ),
+        sunflower: load_animation(
+            &server,
+            "sprites/plants/sunflower",
+            Duration::from_millis(300),
+        ),
+        cherry_bomb: load_animation(
+            &server,
+            "sprites/plants/cherry_bomb",
+            Duration::from_millis(100),
+        ),
+        boom: load_animation(&server, "sprites/plants/boom", Duration::from_millis(100)),
     };
     commands.insert_resource(plants);
 }
@@ -148,6 +164,16 @@ fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(400),
         ),
         arm: load_animation(&server, "sprites/zombies/arm", Duration::from_millis(400)),
+        roadcone: load_animation(
+            &server,
+            "sprites/zombies/roadcone",
+            Duration::from_millis(200),
+        ),
+        roadcone_broken: load_animation(
+            &server,
+            "sprites/zombies/roadcone_broken",
+            Duration::from_millis(200),
+        ),
     };
     commands.insert_resource(zombies);
 }

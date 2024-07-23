@@ -8,9 +8,21 @@ macro_rules! game_conf {
         #[derive(Resource, Debug, Clone, Deref, DerefMut)]
         pub struct $name(Arc<$crate::compn::ShooterShared>);
     };
+    (producer $name: ident) => {
+        #[derive(Resource, Debug, Clone, Deref, DerefMut)]
+        pub struct $name(Arc<$crate::compn::ProducerShared>);
+    };
     (walker $name: ident) => {
         #[derive(Resource, Debug, Clone, Deref, DerefMut)]
         pub struct $name(Arc<$crate::compn::WalkerShared>);
+    };
+    (breaks $name: ident) => {
+        #[derive(Resource, Debug, Clone, Deref, DerefMut)]
+        pub struct $name(Arc<$crate::compn::BreaksShared>);
+    };
+    (explode $name: ident) => {
+        #[derive(Resource, Debug, Clone, Deref, DerefMut)]
+        pub struct $name(Arc<$crate::compn::ExplodeShared>);
     };
     (systems $name: ident) => {
         lazy_static! {

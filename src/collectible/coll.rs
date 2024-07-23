@@ -5,7 +5,7 @@ pub(super) struct CollectibleCollPlugin;
 impl Plugin for CollectibleCollPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<CollectibleEvent>();
-        app.add_systems(Update, (test_tap,));
+        app.add_systems(Update, (test_tap, add_components));
     }
 }
 
@@ -34,4 +34,26 @@ fn test_tap(
             }
         });
     }
+}
+
+fn add_components(
+    mut commands: Commands,
+    factors: Res<collectible::ItemFactors>,
+    items: Res<assets::SpriteItems>,
+    q_sun: Query<(Entity, &Collectible), Added<Collectible>>,
+) {
+    q_sun
+        .iter()
+        .for_each(|(entity, collectible)| match collectible {
+            Collectible::Sun(sun) => {
+                commands.entity(entity).insert((
+                    factors.sun.self_box * *sun,
+                    sprite::Animation::new(items.sun.clone()),
+                    SpriteBundle {
+                        transform: Transform::from_xyz(0.0, 0.0, 14.37 - 1.0),
+                        ..Default::default()
+                    },
+                ));
+            }
+        });
 }

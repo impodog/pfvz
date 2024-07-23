@@ -21,10 +21,18 @@ pub struct BasicZombie {
     pub cooldown: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct RoadconeZombie {
+    pub roadcone_box: game::HitBox,
+    pub roadcone_health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
     pub basic: BasicZombie,
+    pub roadcone: RoadconeZombie,
 }
 
 fn init_factors(mut commands: Commands) {

@@ -1,5 +1,5 @@
 [basic]
-velocity = [-0.004, -0.003]
+velocity = [-0.0035, -0.0025]
 self_box = { width = 0.5, height = 1.2 }
 arm_box = { width = 0.2, height = 0.6 }
 self_health = [100, 70]
@@ -8,3 +8,8 @@ damage = 20
 interval = 0.3
 cooldown = 1.0
 cost = 50
+[roadcone]
+roadcone_box = { width = 0.3, height = 0.6 }
+roadcone_health = 370
+cooldown = 1.5
+cost = 75

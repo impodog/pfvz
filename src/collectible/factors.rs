@@ -14,7 +14,7 @@ pub struct Sun {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
     pub height: f32,
-    pub interval: u64,
+    pub interval: f32,
 }
 
 #[derive(Debug, Resource, Serialize, Deserialize)]

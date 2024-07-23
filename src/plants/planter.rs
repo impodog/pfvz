@@ -49,9 +49,10 @@ fn do_plant(
                         .layout
                         .get_tile(usize_pos.0, usize_pos.1)
                         .compat(creature)
-                    && cooldown
+                    // NOTE: We may use `Option::is_none_or` if possible in the future
+                    && !cooldown
                         .get_option(select.0)
-                        .is_none_or(|timer| timer.finished())
+                        .is_some_and(|timer| !timer.finished())
                     && sun.0 >= creature.cost
                 {
                     sun.0 -= creature.cost;

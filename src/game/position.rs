@@ -88,6 +88,16 @@ impl From<&HitBox> for Vec2 {
         Self::new(value.width, value.height)
     }
 }
+impl std::ops::Mul<f32> for HitBox {
+    type Output = Self;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        Self {
+            width: self.width * rhs,
+            height: self.height * rhs,
+        }
+    }
+}
 impl HitBox {
     pub fn new(width: f32, height: f32) -> Self {
         Self { width, height }
@@ -107,8 +117,13 @@ impl Velocity {
     }
 }
 
+/// This component allows an object to fall in z coordinates due to gravity
 #[derive(Component, Default, Debug, Clone, Copy)]
 pub struct Gravity;
+
+// This component marks that one entity should never be skipped while loss calculation
+#[derive(Component, Default, Clone, Copy)]
+pub struct NoCollisionLoss;
 
 #[derive(Resource, Default, Debug)]
 pub struct Collision {
@@ -151,7 +166,7 @@ fn update_position(config: Res<config::Config>, mut q_pos: Query<(&Velocity, &mu
 
 fn update_velocity(config: Res<config::Config>, mut q_vel: Query<&mut Velocity, With<Gravity>>) {
     q_vel.par_iter_mut().for_each(|mut vel| {
-        vel.z += config.gamerule.gravity.0 * config.gamerule.speed.0;
+        vel.z -= config.gamerule.gravity.0 * config.gamerule.speed.0;
     });
 }
 
@@ -165,23 +180,42 @@ fn update_collision(
     mut collision: ResMut<Collision>,
     config: Res<config::Config>,
     q_pos: Query<(Entity, &Position, &HitBox)>,
+    q_no_loss: Query<&NoCollisionLoss>,
 ) {
     let map = Arc::new(RwLock::new(HashMap::new()));
     q_pos.par_iter().for_each(|(entity, pos, hitbox)| {
         let mut rng = rand::thread_rng();
-        let ok = rng.gen_ratio(config.program.loss_rate.0 .0, config.program.loss_rate.0 .1);
+        // With `NoCollisionLoss`, the loss calculation is skipped
+        let no_loss = q_no_loss.get(entity).is_ok();
+        let ok =
+            no_loss || rng.gen_ratio(config.program.loss_rate.0 .0, config.program.loss_rate.0 .1);
         if ok {
             let set = q_pos
                 .iter()
                 .filter_map(|(sub_entity, sub_pos, sub_hitbox)| {
-                    if sub_entity == entity
-                        || (pos.y_i32() != sub_pos.y_i32())
-                        || (pos.x - sub_pos.x).abs() >= (hitbox.width + sub_hitbox.width) / 2.0
-                        || (pos.z - sub_pos.z).abs() >= (hitbox.height + sub_hitbox.height) / 2.0
-                    {
-                        None
+                    if no_loss {
+                        // No loss allow a computation of 2d geometry
+                        if sub_entity == entity
+                            || (pos.x - sub_pos.x).abs() >= (hitbox.width + sub_hitbox.width) / 2.0
+                            || (pos.z + pos.y - sub_pos.z - sub_pos.y).abs()
+                                >= (hitbox.height + sub_hitbox.height) / 2.0
+                        {
+                            None
+                        } else {
+                            Some(sub_entity)
+                        }
                     } else {
-                        Some(sub_entity)
+                        #[allow(clippy::collapsible_else_if)]
+                        if sub_entity == entity
+                            || (pos.y_i32() != sub_pos.y_i32())
+                            || (pos.x - sub_pos.x).abs() >= (hitbox.width + sub_hitbox.width) / 2.0
+                            || (pos.z - sub_pos.z).abs()
+                                >= (hitbox.height + sub_hitbox.height) / 2.0
+                        {
+                            None
+                        } else {
+                            Some(sub_entity)
+                        }
                     }
                 })
                 .collect::<BTreeSet<_>>();
@@ -210,7 +244,9 @@ fn remove_outbound(
     q_pos.iter().for_each(|(entity, pos)| {
         let x = pos.x * display.ratio;
         let y = pos.y * display.ratio;
-        if x < -LOGICAL_WIDTH || x > LOGICAL_WIDTH || y < -LOGICAL_HEIGHT || y > LOGICAL_HEIGHT {
+        if !(-LOGICAL_WIDTH..=LOGICAL_WIDTH).contains(&x)
+            || !(-LOGICAL_HEIGHT..=LOGICAL_HEIGHT).contains(&y)
+        {
             commands.entity(entity).despawn_recursive();
         }
     });

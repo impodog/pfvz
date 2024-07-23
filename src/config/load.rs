@@ -23,7 +23,7 @@ macro_rules! configuration {
 }
 
 configuration!(ConfigProgramFramerate, f32, 30.0);
-configuration!(ConfigProgramLossRate, (u32, u32), (1, 3));
+configuration!(ConfigProgramLossRate, (u32, u32), (3, 5));
 #[derive(Default, Serialize, Deserialize)]
 pub struct ConfigProgram {
     pub framerate: ConfigProgramFramerate,
@@ -33,7 +33,7 @@ pub struct ConfigProgram {
 configuration!(ConfigGameRuleSunValue, u32, 25);
 configuration!(ConfigGameRuleDamage, f32, 1.0);
 configuration!(ConfigGameRuleSpeed, f32, 1.0);
-configuration!(ConfigGameRuleGravity, f32, 1.0);
+configuration!(ConfigGameRuleGravity, f32, 0.003);
 #[derive(Default, Serialize, Deserialize)]
 pub struct ConfigGameRule {
     pub sun_value: ConfigGameRuleSunValue,
