@@ -9,6 +9,7 @@ impl Plugin for LevelPlugin {
             load::LevelLoadPlugin,
             room::LevelRoomPlugin,
             banners::LevelBannersPlugin,
+            progress::LevelProgressPlugin,
         ));
     }
 }

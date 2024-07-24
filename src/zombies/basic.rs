@@ -5,6 +5,9 @@ pub(super) struct ZombiesBasicPlugin;
 impl Plugin for ZombiesBasicPlugin {
     fn build(&self, app: &mut App) {
         initialize(&basic_zombie_systems);
+        initialize(&roadcone_zombie_systems);
+        initialize(&bucket_zombie_systems);
+        initialize(&flag_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
         *basic_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_basic_zombie),
@@ -21,6 +24,11 @@ impl Plugin for ZombiesBasicPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
+        *flag_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_flag_zombie),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
     }
 }
 
@@ -30,6 +38,7 @@ game_conf!(systems roadcone_zombie_systems);
 game_conf!(breaks RoadconeBreaks);
 game_conf!(systems bucket_zombie_systems);
 game_conf!(breaks BucketBreaks);
+game_conf!(systems flag_zombie_systems);
 
 fn spawn_basic_zombie(
     In(pos): In<game::Position>,
@@ -128,7 +137,7 @@ fn spawn_bucket_zombie(
     walker: Res<BasicZombieWalker>,
     breaks: Res<BucketBreaks>,
 ) {
-    let creature = map.get(&ROADCONE_ZOMBIE).unwrap();
+    let creature = map.get(&BUCKET_ZOMBIE).unwrap();
     let entity = commands
         .spawn((
             game::Zombie,
@@ -150,6 +159,55 @@ fn spawn_bucket_zombie(
             sprite::Animation::new(zombies.bucket.clone()),
             game::Armor::new(factors.bucket.bucket_health),
             compn::Breaks(breaks.0.clone()),
+            SpriteBundle {
+                transform: Transform::from_xyz(0.0, 0.0, 1.0),
+                ..Default::default()
+            },
+        ))
+        .set_parent(entity);
+    commands
+        .spawn((
+            game::Position::new_xy(0.1, 0.0),
+            factors.basic.arm_box,
+            sprite::Animation::new(zombies.arm.clone()),
+            game::Armor::new(factors.basic.arm_health),
+            SpriteBundle {
+                transform: Transform::from_xyz(0.0, 0.0, 1.0),
+                ..Default::default()
+            },
+        ))
+        .set_parent(entity);
+}
+
+fn spawn_flag_zombie(
+    In(pos): In<game::Position>,
+    zombies: Res<assets::SpriteZombies>,
+    mut commands: Commands,
+    factors: Res<zombies::ZombieFactors>,
+    map: Res<game::CreatureMap>,
+    walker: Res<BasicZombieWalker>,
+) {
+    let creature = map.get(&FLAG_ZOMBIE).unwrap();
+    let entity = commands
+        .spawn((
+            game::Zombie,
+            creature.clone(),
+            pos,
+            game::Velocity::from(factors.flag.velocity),
+            sprite::Animation::new(creature.anim.clone()),
+            compn::Dying::new(zombies.basic_dying.clone()),
+            creature.hitbox,
+            compn::Walker(walker.0.clone()),
+            game::Health::from(factors.basic.self_health),
+            SpriteBundle::default(),
+        ))
+        .id();
+    commands
+        .spawn((
+            game::Position::new(-0.2, 0.0, 0.1, -0.1),
+            factors.flag.flag_box,
+            sprite::Animation::new(zombies.flag.clone()),
+            game::Armor::new(factors.flag.flag_health),
             SpriteBundle {
                 transform: Transform::from_xyz(0.0, 0.0, 1.0),
                 ..Default::default()
@@ -230,5 +288,18 @@ fn init_config(
             hitbox: factors.basic.self_box,
         }));
         map.insert(BUCKET_ZOMBIE, creature);
+    }
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: flag_zombie_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            anim: zombies.basic.clone(),
+            cost: factors.flag.cost,
+            cooldown: factors.flag.cooldown,
+            hitbox: factors.basic.self_box,
+        }));
+        map.insert(FLAG_ZOMBIE, creature);
     }
 }

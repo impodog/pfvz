@@ -2,6 +2,7 @@ pub(crate) use crate::config::constants::*;
 pub(crate) use crate::*;
 pub(crate) use bevy::ecs::system::SystemId;
 pub(crate) use bevy::prelude::*;
+pub(crate) use bevy::sprite::Anchor;
 pub(crate) use lazy_static::{initialize, lazy_static};
 pub(crate) use rand::Rng;
 pub(crate) use std::collections::{BTreeSet, HashMap};

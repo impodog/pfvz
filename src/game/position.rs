@@ -86,6 +86,16 @@ impl Position {
         self.y_i32() == rhs.y_i32()
     }
 }
+impl From<&Vec2> for Position {
+    fn from(value: &Vec2) -> Self {
+        Self {
+            x: value.x,
+            y: value.y,
+            z: 0.0,
+            r: 0.0,
+        }
+    }
+}
 
 #[derive(Component, Serialize, Deserialize, Default, Debug, Clone, Copy)]
 pub struct HitBox {
@@ -95,6 +105,14 @@ pub struct HitBox {
 impl From<&HitBox> for Vec2 {
     fn from(value: &HitBox) -> Self {
         Self::new(value.width, value.height)
+    }
+}
+impl From<&Vec2> for HitBox {
+    fn from(value: &Vec2) -> Self {
+        Self {
+            width: value.x,
+            height: value.y,
+        }
     }
 }
 impl std::ops::Mul<f32> for HitBox {
@@ -110,6 +128,13 @@ impl std::ops::Mul<f32> for HitBox {
 impl HitBox {
     pub fn new(width: f32, height: f32) -> Self {
         Self { width, height }
+    }
+
+    pub fn with_width(self, width: f32) -> Self {
+        Self {
+            width,
+            height: self.height,
+        }
     }
 }
 

@@ -64,7 +64,7 @@ fn update_room(
     // 3. The timer defined by user has finished, or when the zombies from the previous wave(if any) has been all killed
     if status.cursor < level.waves.len()
         && status.min_timer.finished()
-        && (status.timer.just_finished() || (q_zombie.iter().next().is_none() && status.cursor > 0))
+        && (status.timer.finished() || (q_zombie.iter().next().is_none() && status.cursor > 0))
     {
         next_wave.send(RoomNextWave(status.cursor));
         info!("Updated to wave {}", status.cursor);

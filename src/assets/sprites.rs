@@ -51,6 +51,7 @@ pub struct SpriteChunks {
     pub zayb: Handle<Image>,
     pub cooldown: Handle<Image>,
     pub you_win: Handle<Image>,
+    pub white: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -102,6 +103,7 @@ pub struct SpriteZombies {
     pub bucket: Arc<sprite::FrameArr>,
     pub bucket_broken: Arc<sprite::FrameArr>,
     pub bucket_destroyed: Arc<sprite::FrameArr>,
+    pub flag: Arc<sprite::FrameArr>,
 }
 
 #[derive(Resource)]
@@ -120,6 +122,7 @@ fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         zayb: server.load("sprites/chunks/zayb.png"),
         cooldown: server.load("sprites/chunks/cooldown.png"),
         you_win: server.load("sprites/chunks/you_win.png"),
+        white: server.load("sprites/chunks/white.png"),
     };
     commands.spawn(SpriteBundle {
         sprite: Sprite {
@@ -212,6 +215,7 @@ fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/zombies/bucket_destroyed",
             Duration::from_millis(300),
         ),
+        flag: load_animation(&server, "sprites/zombies/flag", Duration::from_millis(400)),
     };
     commands.insert_resource(zombies);
 }

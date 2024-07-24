@@ -45,6 +45,21 @@ impl LayoutKind {
         (s.0 as f32, s.1 as f32)
     }
 
+    pub const fn size_vec2(&self) -> Vec2 {
+        let s = self.size_f32();
+        Vec2::new(s.0, s.1)
+    }
+
+    pub fn half_size_f32(&self) -> (f32, f32) {
+        let s = self.size();
+        (s.0 as f32 / 2.0, s.1 as f32 / 2.0)
+    }
+
+    pub fn half_size_vec2(&self) -> Vec2 {
+        let s = self.half_size_f32();
+        Vec2::new(s.0, s.1)
+    }
+
     /// This returns a index applicable to `PlantLayout`, or usize::MAX if conversion is not
     /// possible
     pub fn position_to_index(&self, pos: &game::Position) -> usize {

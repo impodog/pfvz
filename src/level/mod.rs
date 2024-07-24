@@ -2,6 +2,7 @@ mod banners;
 mod config;
 mod load;
 mod plugin;
+mod progress;
 mod room;
 
 pub use banners::*;
