@@ -3,9 +3,11 @@ use crate::prelude::*;
 pub const PEASHOOTER: Id = -1;
 pub const SUNFLOWER: Id = -2;
 pub const CHERRY_BOMB: Id = -3;
+pub const WALL_NUT: Id = -4;
 
 pub const BASIC_ZOMBIE: Id = 1;
 pub const ROADCONE_ZOMBIE: Id = 2;
+pub const BUCKET_ZOMBIE: Id = 3;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;

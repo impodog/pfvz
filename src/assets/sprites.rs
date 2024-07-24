@@ -50,6 +50,7 @@ pub struct SpriteChunks {
     pub alert: Handle<Image>,
     pub zayb: Handle<Image>,
     pub cooldown: Handle<Image>,
+    pub you_win: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -86,6 +87,9 @@ pub struct SpritePlants {
     pub sunflower: Arc<sprite::FrameArr>,
     pub cherry_bomb: Arc<sprite::FrameArr>,
     pub boom: Arc<sprite::FrameArr>,
+    pub wall_nut: Arc<sprite::FrameArr>,
+    pub wall_nut_damaged: Arc<sprite::FrameArr>,
+    pub wall_nut_destroyed: Arc<sprite::FrameArr>,
 }
 
 #[derive(Resource)]
@@ -95,6 +99,9 @@ pub struct SpriteZombies {
     pub arm: Arc<sprite::FrameArr>,
     pub roadcone: Arc<sprite::FrameArr>,
     pub roadcone_broken: Arc<sprite::FrameArr>,
+    pub bucket: Arc<sprite::FrameArr>,
+    pub bucket_broken: Arc<sprite::FrameArr>,
+    pub bucket_destroyed: Arc<sprite::FrameArr>,
 }
 
 #[derive(Resource)]
@@ -112,6 +119,7 @@ fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         alert: server.load("sprites/chunks/alert.png"),
         zayb: server.load("sprites/chunks/zayb.png"),
         cooldown: server.load("sprites/chunks/cooldown.png"),
+        you_win: server.load("sprites/chunks/you_win.png"),
     };
     commands.spawn(SpriteBundle {
         sprite: Sprite {
@@ -151,6 +159,21 @@ fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(100),
         ),
         boom: load_animation(&server, "sprites/plants/boom", Duration::from_millis(100)),
+        wall_nut: load_animation(
+            &server,
+            "sprites/plants/wall_nut",
+            Duration::from_millis(500),
+        ),
+        wall_nut_damaged: load_animation(
+            &server,
+            "sprites/plants/wall_nut_damaged",
+            Duration::from_millis(500),
+        ),
+        wall_nut_destroyed: load_animation(
+            &server,
+            "sprites/plants/wall_nut_destroyed",
+            Duration::from_millis(500),
+        ),
     };
     commands.insert_resource(plants);
 }
@@ -173,6 +196,21 @@ fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/zombies/roadcone_broken",
             Duration::from_millis(200),
+        ),
+        bucket: load_animation(
+            &server,
+            "sprites/zombies/bucket",
+            Duration::from_millis(300),
+        ),
+        bucket_broken: load_animation(
+            &server,
+            "sprites/zombies/bucket_broken",
+            Duration::from_millis(300),
+        ),
+        bucket_destroyed: load_animation(
+            &server,
+            "sprites/zombies/bucket_destroyed",
+            Duration::from_millis(300),
         ),
     };
     commands.insert_resource(zombies);

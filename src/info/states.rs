@@ -15,4 +15,5 @@ pub enum GlobalStates {
     Menu,
     Play,
     Lose,
+    Win,
 }

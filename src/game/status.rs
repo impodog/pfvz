@@ -48,6 +48,10 @@ impl Health {
     pub fn decr(&mut self, value: u32) {
         self.stack.push(value);
     }
+
+    pub fn value(&self) -> u32 {
+        self.hp + self.remain
+    }
 }
 impl From<u32> for Health {
     fn from(value: u32) -> Self {

@@ -30,7 +30,8 @@ fn proj_action(
             }
         };
         if !ok {
-            warn!("Unable to execute projectile action: {:?}", action);
+            // This is very annoy when a projectile hurts multiple targets, so it's turned off
+            // warn!("Unable to execute projectile action: {:?}", action);
         }
     });
 }

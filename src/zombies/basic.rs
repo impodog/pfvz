@@ -16,6 +16,11 @@ impl Plugin for ZombiesBasicPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
+        *bucket_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_bucket_zombie),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
     }
 }
 
@@ -23,6 +28,8 @@ game_conf!(walker BasicZombieWalker);
 game_conf!(systems basic_zombie_systems);
 game_conf!(systems roadcone_zombie_systems);
 game_conf!(breaks RoadconeBreaks);
+game_conf!(systems bucket_zombie_systems);
+game_conf!(breaks BucketBreaks);
 
 fn spawn_basic_zombie(
     In(pos): In<game::Position>,
@@ -112,6 +119,57 @@ fn spawn_roadcone_zombie(
         .set_parent(entity);
 }
 
+fn spawn_bucket_zombie(
+    In(pos): In<game::Position>,
+    zombies: Res<assets::SpriteZombies>,
+    mut commands: Commands,
+    factors: Res<zombies::ZombieFactors>,
+    map: Res<game::CreatureMap>,
+    walker: Res<BasicZombieWalker>,
+    breaks: Res<BucketBreaks>,
+) {
+    let creature = map.get(&ROADCONE_ZOMBIE).unwrap();
+    let entity = commands
+        .spawn((
+            game::Zombie,
+            creature.clone(),
+            pos,
+            game::Velocity::from(factors.basic.velocity),
+            sprite::Animation::new(creature.anim.clone()),
+            compn::Dying::new(zombies.basic_dying.clone()),
+            creature.hitbox,
+            compn::Walker(walker.0.clone()),
+            game::Health::from(factors.basic.self_health),
+            SpriteBundle::default(),
+        ))
+        .id();
+    commands
+        .spawn((
+            game::Position::new(0.0, 0.0, 0.53, 0.1),
+            factors.bucket.bucket_box,
+            sprite::Animation::new(zombies.bucket.clone()),
+            game::Armor::new(factors.bucket.bucket_health),
+            compn::Breaks(breaks.0.clone()),
+            SpriteBundle {
+                transform: Transform::from_xyz(0.0, 0.0, 1.0),
+                ..Default::default()
+            },
+        ))
+        .set_parent(entity);
+    commands
+        .spawn((
+            game::Position::new_xy(0.1, 0.0),
+            factors.basic.arm_box,
+            sprite::Animation::new(zombies.arm.clone()),
+            game::Armor::new(factors.basic.arm_health),
+            SpriteBundle {
+                transform: Transform::from_xyz(0.0, 0.0, 1.0),
+                ..Default::default()
+            },
+        ))
+        .set_parent(entity);
+}
+
 fn init_config(
     mut commands: Commands,
     zombies: Res<assets::SpriteZombies>,
@@ -126,19 +184,14 @@ fn init_config(
         v: vec![zombies.roadcone.clone(), zombies.roadcone_broken.clone()],
         init: factors.roadcone.roadcone_health,
     })));
-    {
-        let creature = game::Creature(Arc::new(game::CreatureShared {
-            systems: basic_zombie_systems
-                .read()
-                .unwrap()
-                .expect("systems are not initialized"),
-            anim: zombies.basic.clone(),
-            cost: factors.basic.cost,
-            cooldown: factors.basic.cooldown,
-            hitbox: factors.basic.self_box,
-        }));
-        map.insert(BASIC_ZOMBIE, creature);
-    }
+    commands.insert_resource(BucketBreaks(Arc::new(compn::BreaksShared {
+        v: vec![
+            zombies.bucket.clone(),
+            zombies.bucket_broken.clone(),
+            zombies.bucket_destroyed.clone(),
+        ],
+        init: factors.bucket.bucket_health,
+    })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
             systems: basic_zombie_systems
@@ -164,5 +217,18 @@ fn init_config(
             hitbox: factors.basic.self_box,
         }));
         map.insert(ROADCONE_ZOMBIE, creature);
+    }
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: bucket_zombie_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            anim: zombies.basic.clone(),
+            cost: factors.bucket.cost,
+            cooldown: factors.bucket.cooldown,
+            hitbox: factors.basic.self_box,
+        }));
+        map.insert(BUCKET_ZOMBIE, creature);
     }
 }

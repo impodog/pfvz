@@ -1,0 +1,59 @@
+[config]
+layout = "Day"
+game = "Adventure"
+selection = { "All" = [-1, -2, -3, -4] }
+sun = 100
+[[waves]]
+points = 0
+wait = 30.0
+big = false
+fixed = [[1, 1], [2, 1]]
+avail = []
+[[waves]]
+points = 150
+wait = 60.0
+big = false
+fixed = [[2, 1]]
+avail = [1, 2]
+[[waves]]
+points = 150
+wait = 40.0
+big = false
+fixed = [[1, 3]]
+avail = [1, 2]
+[[waves]]
+points = 200
+wait = 60.0
+big = false
+fixed = [[1, 1]]
+avail = [2, 3]
+[[waves]]
+points = 400
+wait = 80.0
+big = true
+fixed = []
+avail = [1, 2, 3]
+[[waves]]
+points = 150
+wait = 40.0
+big = false
+fixed = [[3, 1]]
+avail = [1, 2, 3]
+[[waves]]
+points = 150
+wait = 60.0
+big = false
+fixed = [[3, 2]]
+avail = [1, 2]
+[[waves]]
+points = 250
+wait = 50.0
+big = false
+fixed = [[2, 2]]
+avail = [1, 2, 3]
+[[waves]]
+points = 800
+wait = 80.0
+big = true
+fixed = []
+avail = [1, 2, 3]

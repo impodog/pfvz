@@ -24,3 +24,8 @@ cooldown = 60.0
 countdown = 1.5
 animation_time = 3.0
 cost = 150
+[wall_nut]
+self_box = { width = 0.7, height = 0.9 }
+health = 4000
+cooldown = 40.0
+cost = 50

@@ -10,6 +10,7 @@ pub mod plants;
 mod prelude;
 pub mod save;
 pub mod sprite;
+pub mod win;
 pub mod zombies;
 
 pub fn start_pfvz() {
@@ -29,6 +30,7 @@ pub fn start_pfvz() {
         zombies::ZombiesPlugin,
         compn::CompnPlugin,
         lose::LosePlugin,
+        win::WinPlugin,
     ));
     app.run();
 }

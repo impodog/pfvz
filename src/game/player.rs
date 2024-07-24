@@ -142,6 +142,8 @@ fn show_selection(
                                 color: Color::LinearRgba(LinearRgba::new(0.1, 1.0, 1.0, 0.5)),
                             },
                         ),
+                        // z=1.0 makes sure that the cost is shown above the selection image
+                        transform: Transform::from_xyz(0.0, 0.0, 1.0),
                         ..Default::default()
                     },
                 ))
@@ -196,7 +198,7 @@ fn spawn_cooldown_rect(
             SelectionCooldownIndex(planter.index),
             SpriteBundle {
                 texture: chunks.cooldown.clone(),
-                transform: Transform::from_xyz(0.0, 0.0, 14.37 + 2.0),
+                transform: Transform::from_xyz(0.0, 0.0, 14.37 + 10.0),
                 sprite: Sprite {
                     anchor: bevy::sprite::Anchor::BottomLeft,
                     color: Color::LinearRgba(LinearRgba::new(1.0, 1.0, 1.0, 0.9)),

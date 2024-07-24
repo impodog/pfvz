@@ -9,7 +9,7 @@ impl Plugin for LevelLoadPlugin {
         // NOTE: This is for game testing
         #[cfg(debug_assertions)]
         app.add_systems(PostStartup, |mut e_level: EventWriter<LevelIndex>| {
-            e_level.send(LevelIndex { stage: 1, level: 3 });
+            e_level.send(LevelIndex { stage: 1, level: 4 });
         });
     }
 }

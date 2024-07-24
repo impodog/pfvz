@@ -20,6 +20,8 @@ impl FrameTime {
 
 fn init_timer(mut commands: Commands, config: Res<config::Config>) {
     commands.insert_resource(FrameTime {
-        delta: Duration::from_millis((1000.0 / config.program.framerate.0) as u64),
+        delta: Duration::from_millis(
+            (1000.0 / config.program.framerate.0 * config.gamerule.speed.0) as u64,
+        ),
     })
 }

@@ -10,6 +10,7 @@ impl Plugin for PlantsPlugin {
             peas::PlantsPeaPlugin,
             producers::PlantsProducersPlugin,
             explode::PlantsExplodePlugin,
+            defense::PlantsDefensePlugin,
             factors::PlantsFactorsPlugin,
         ));
     }

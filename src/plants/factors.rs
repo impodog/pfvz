@@ -41,12 +41,20 @@ pub struct CherryBomb {
     pub animation_time: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct WallNut {
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct PlantFactors {
     pub peashooter: Peashooter,
     pub sunflower: Sunflower,
     pub cherry_bomb: CherryBomb,
+    pub wall_nut: WallNut,
 }
 
 fn init_factors(mut commands: Commands) {

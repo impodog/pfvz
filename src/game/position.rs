@@ -56,6 +56,15 @@ impl Position {
         }
     }
 
+    pub fn align_y(&self) -> Self {
+        Self {
+            x: self.x,
+            y: self.y.round(),
+            z: self.z,
+            r: self.r,
+        }
+    }
+
     pub fn x_i32(&self) -> i32 {
         self.x as i32
     }

@@ -30,21 +30,21 @@ fn add_breaks_impl(mut commands: Commands, q_breaks: Query<Entity, Added<Breaks>
 }
 
 fn breaks_work(
-    mut q_breaks: Query<
-        (
-            &mut sprite::Animation,
-            &Breaks,
-            &mut BreaksImpl,
-            &game::Armor,
-        ),
-        Changed<game::Armor>,
-    >,
+    mut q_breaks: Query<(Entity, &mut sprite::Animation, &Breaks, &mut BreaksImpl)>,
+    q_armor: Query<&game::Armor, Changed<game::Armor>>,
+    q_health: Query<&game::Health, Changed<game::Health>>,
 ) {
     q_breaks
         .par_iter_mut()
-        .for_each(|(mut animation, breaks, mut breaks_impl, armor)| {
-            let percentage = (breaks.init / armor.hp.max(1)) as usize;
-            let percentage = percentage.min(breaks.v.len() - 1);
+        .for_each(|(entity, mut animation, breaks, mut breaks_impl)| {
+            let percentage = if let Ok(armor) = q_armor.get(entity) {
+                (1.0 - armor.hp.max(1) as f32 / breaks.init as f32) * breaks.v.len() as f32
+            } else if let Ok(health) = q_health.get(entity) {
+                (1.0 - health.value().max(1) as f32 / breaks.init as f32) * breaks.v.len() as f32
+            } else {
+                return;
+            };
+            let percentage = (percentage as usize).min(breaks.v.len() - 1);
             if percentage != breaks_impl.0 {
                 breaks_impl.0 = percentage;
                 animation.replace(breaks.v.get(percentage).unwrap().clone());
