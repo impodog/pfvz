@@ -22,6 +22,7 @@ fn spawn_peashooter(
     In(pos): In<game::Position>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
     map: Res<game::CreatureMap>,
     shooter: Res<PeashooterShooter>,
 ) {
@@ -30,7 +31,7 @@ fn spawn_peashooter(
         game::Plant,
         creature.clone(),
         pos,
-        sprite::Animation::new(creature.anim.clone()),
+        sprite::Animation::new(plants.peashooter.clone()),
         creature.hitbox,
         compn::Shooter(shooter.0.clone()),
         game::Health::from(factors.peashooter.health),
@@ -65,7 +66,7 @@ fn init_config(
                 .read()
                 .unwrap()
                 .expect("systems are not initialized"),
-            anim: plants.peashooter.clone(),
+            image: plants.peashooter_concept.clone(),
             cost: factors.peashooter.cost,
             cooldown: factors.peashooter.cooldown,
             hitbox: factors.peashooter.self_box,

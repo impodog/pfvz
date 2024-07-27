@@ -21,6 +21,7 @@ fn spawn_wall_nut(
     In(pos): In<game::Position>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
     map: Res<game::CreatureMap>,
     breaks: Res<WallNutBreaks>,
 ) {
@@ -29,7 +30,7 @@ fn spawn_wall_nut(
         game::Plant,
         creature.clone(),
         pos,
-        sprite::Animation::new(creature.anim.clone()),
+        sprite::Animation::new(plants.wall_nut.clone()),
         creature.hitbox,
         compn::Breaks(breaks.0.clone()),
         game::Health::from(factors.wall_nut.health),
@@ -57,7 +58,12 @@ fn init_config(
                 .read()
                 .unwrap()
                 .expect("systems are not initialized"),
-            anim: plants.wall_nut.clone(),
+            image: plants
+                .wall_nut
+                .frames
+                .first()
+                .expect("Empty animation wall_nut")
+                .clone(),
             cost: factors.wall_nut.cost,
             cooldown: factors.wall_nut.cooldown,
             hitbox: factors.wall_nut.self_box,

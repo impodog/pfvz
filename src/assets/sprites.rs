@@ -85,6 +85,7 @@ impl SpriteLayouts {
 pub struct SpritePlants {
     pub pea: Arc<sprite::FrameArr>,
     pub peashooter: Arc<sprite::FrameArr>,
+    pub peashooter_concept: Handle<Image>,
     pub sunflower: Arc<sprite::FrameArr>,
     pub cherry_bomb: Arc<sprite::FrameArr>,
     pub boom: Arc<sprite::FrameArr>,
@@ -100,10 +101,13 @@ pub struct SpriteZombies {
     pub arm: Arc<sprite::FrameArr>,
     pub roadcone: Arc<sprite::FrameArr>,
     pub roadcone_broken: Arc<sprite::FrameArr>,
+    pub roadcone_concept: Handle<Image>,
     pub bucket: Arc<sprite::FrameArr>,
     pub bucket_broken: Arc<sprite::FrameArr>,
     pub bucket_destroyed: Arc<sprite::FrameArr>,
+    pub bucket_concept: Handle<Image>,
     pub flag: Arc<sprite::FrameArr>,
+    pub flag_concept: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -151,6 +155,7 @@ fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/plants/peashooter",
             Duration::from_millis(100),
         ),
+        peashooter_concept: server.load("sprites/plants/peashooter/concept.png"),
         sunflower: load_animation(
             &server,
             "sprites/plants/sunflower",
@@ -200,6 +205,7 @@ fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/zombies/roadcone_broken",
             Duration::from_millis(200),
         ),
+        roadcone_concept: server.load("sprites/zombies/roadcone/concept.png"),
         bucket: load_animation(
             &server,
             "sprites/zombies/bucket",
@@ -215,7 +221,9 @@ fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/zombies/bucket_destroyed",
             Duration::from_millis(300),
         ),
+        bucket_concept: server.load("sprites/zombies/bucket/concept.png"),
         flag: load_animation(&server, "sprites/zombies/flag", Duration::from_millis(400)),
+        flag_concept: server.load("sprites/zombies/flag/concept.png"),
     };
     commands.insert_resource(zombies);
 }

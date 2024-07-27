@@ -1,0 +1,22 @@
+[desc.peashooter]
+name = "Pisum sativum chlorojaculum"
+short = "You would not see this anyway"
+desc = """Shoots peas at zombies
+Damage: Regular"""
+[desc.sunflower]
+name = "Helianthus annuus"
+short = "Gives you more sun"
+desc = """Throws sun that you can pick up, or not, I don't care anyway
+Damage: Why Ask"""
+[desc.cherry_bomb]
+name = "Prunus avium"
+short = "Blows up zombies in an area"
+desc = """Deals great damage to zombies in an area(smaller than 3x3)]
+Damage: SUPER
+Works when planted"""
+[desc.wall_nut]
+name = "Juglans regia"
+short = "Blocks zombies with its high health"
+desc = """Blocks zombies
+Damage: Not Again
+Health: High"""

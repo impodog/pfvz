@@ -60,6 +60,10 @@ fn producer_work(
                     producer.collectible.clone(),
                     game::Gravity,
                 ));
+                // This adds fun to the sunflower etc. :)
+                producer_impl.timer.set_duration(Duration::from_secs_f32(
+                    producer.interval.as_secs_f32() * rand::thread_rng().gen_range(0.9..=1.1),
+                ));
             }
         });
 }

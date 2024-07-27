@@ -15,3 +15,22 @@ pub const LOGICAL_HEIGHT: f32 = 1080.0;
 pub const LOGICAL: Vec2 = Vec2::new(LOGICAL_WIDTH, LOGICAL_HEIGHT);
 pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.8);
 pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
+
+/// This function defines the standard naming of creatures in configuration files and code
+pub fn id_name(id: Id) -> &'static str {
+    match id {
+        0 => "default",
+
+        PEASHOOTER => "peashooter",
+        SUNFLOWER => "sunflower",
+        CHERRY_BOMB => "cherry_bomb",
+        WALL_NUT => "wall_nut",
+
+        BASIC_ZOMBIE => "basic",
+        ROADCONE_ZOMBIE => "roadcone",
+        BUCKET_ZOMBIE => "bucket",
+        FLAG_ZOMBIE => "flag",
+
+        _ => "unknown",
+    }
+}

@@ -9,6 +9,7 @@ impl Plugin for ZombiesBasicPlugin {
         initialize(&bucket_zombie_systems);
         initialize(&flag_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
+        app.add_systems(Update, (add_basic_zombie_arm,));
         *basic_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_basic_zombie),
             die: app.register_system(compn::default::die),
@@ -40,6 +41,31 @@ game_conf!(systems bucket_zombie_systems);
 game_conf!(breaks BucketBreaks);
 game_conf!(systems flag_zombie_systems);
 
+#[derive(Component, Debug, Clone)]
+pub struct BasicZombieMarker;
+
+fn add_basic_zombie_arm(
+    mut commands: Commands,
+    q_basic: Query<Entity, Added<BasicZombieMarker>>,
+    factors: Res<zombies::ZombieFactors>,
+    zombies: Res<assets::SpriteZombies>,
+) {
+    q_basic.iter().for_each(|entity| {
+        commands
+            .spawn((
+                game::Position::new_xy(0.1, 0.0),
+                factors.basic.arm_box,
+                sprite::Animation::new(zombies.arm.clone()),
+                game::Armor::new(factors.basic.arm_health),
+                SpriteBundle {
+                    transform: Transform::from_xyz(0.0, 0.0, 1.0),
+                    ..Default::default()
+                },
+            ))
+            .set_parent(entity);
+    });
+}
+
 fn spawn_basic_zombie(
     In(pos): In<game::Position>,
     zombies: Res<assets::SpriteZombies>,
@@ -49,32 +75,19 @@ fn spawn_basic_zombie(
     walker: Res<BasicZombieWalker>,
 ) {
     let creature = map.get(&BASIC_ZOMBIE).unwrap();
-    let entity = commands
-        .spawn((
-            game::Zombie,
-            creature.clone(),
-            pos,
-            game::Velocity::from(factors.basic.velocity),
-            sprite::Animation::new(creature.anim.clone()),
-            compn::Dying::new(zombies.basic_dying.clone()),
-            creature.hitbox,
-            compn::Walker(walker.0.clone()),
-            game::Health::from(factors.basic.self_health),
-            SpriteBundle::default(),
-        ))
-        .id();
-    commands
-        .spawn((
-            game::Position::new_xy(0.1, 0.0),
-            factors.basic.arm_box,
-            sprite::Animation::new(zombies.arm.clone()),
-            game::Armor::new(factors.basic.arm_health),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                ..Default::default()
-            },
-        ))
-        .set_parent(entity);
+    commands.spawn((
+        game::Zombie,
+        BasicZombieMarker,
+        creature.clone(),
+        pos,
+        game::Velocity::from(factors.basic.velocity),
+        sprite::Animation::new(zombies.basic.clone()),
+        compn::Dying::new(zombies.basic_dying.clone()),
+        creature.hitbox,
+        compn::Walker(walker.0.clone()),
+        game::Health::from(factors.basic.self_health),
+        SpriteBundle::default(),
+    ));
 }
 
 fn spawn_roadcone_zombie(
@@ -90,10 +103,11 @@ fn spawn_roadcone_zombie(
     let entity = commands
         .spawn((
             game::Zombie,
+            BasicZombieMarker,
             creature.clone(),
             pos,
             game::Velocity::from(factors.basic.velocity),
-            sprite::Animation::new(creature.anim.clone()),
+            sprite::Animation::new(zombies.basic.clone()),
             compn::Dying::new(zombies.basic_dying.clone()),
             creature.hitbox,
             compn::Walker(walker.0.clone()),
@@ -108,18 +122,6 @@ fn spawn_roadcone_zombie(
             sprite::Animation::new(zombies.roadcone.clone()),
             game::Armor::new(factors.roadcone.roadcone_health),
             compn::Breaks(breaks.0.clone()),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                ..Default::default()
-            },
-        ))
-        .set_parent(entity);
-    commands
-        .spawn((
-            game::Position::new_xy(0.1, 0.0),
-            factors.basic.arm_box,
-            sprite::Animation::new(zombies.arm.clone()),
-            game::Armor::new(factors.basic.arm_health),
             SpriteBundle {
                 transform: Transform::from_xyz(0.0, 0.0, 1.0),
                 ..Default::default()
@@ -144,7 +146,7 @@ fn spawn_bucket_zombie(
             creature.clone(),
             pos,
             game::Velocity::from(factors.basic.velocity),
-            sprite::Animation::new(creature.anim.clone()),
+            sprite::Animation::new(zombies.basic.clone()),
             compn::Dying::new(zombies.basic_dying.clone()),
             creature.hitbox,
             compn::Walker(walker.0.clone()),
@@ -159,18 +161,6 @@ fn spawn_bucket_zombie(
             sprite::Animation::new(zombies.bucket.clone()),
             game::Armor::new(factors.bucket.bucket_health),
             compn::Breaks(breaks.0.clone()),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                ..Default::default()
-            },
-        ))
-        .set_parent(entity);
-    commands
-        .spawn((
-            game::Position::new_xy(0.1, 0.0),
-            factors.basic.arm_box,
-            sprite::Animation::new(zombies.arm.clone()),
-            game::Armor::new(factors.basic.arm_health),
             SpriteBundle {
                 transform: Transform::from_xyz(0.0, 0.0, 1.0),
                 ..Default::default()
@@ -194,7 +184,7 @@ fn spawn_flag_zombie(
             creature.clone(),
             pos,
             game::Velocity::from(factors.flag.velocity),
-            sprite::Animation::new(creature.anim.clone()),
+            sprite::Animation::new(zombies.basic.clone()),
             compn::Dying::new(zombies.basic_dying.clone()),
             creature.hitbox,
             compn::Walker(walker.0.clone()),
@@ -208,18 +198,6 @@ fn spawn_flag_zombie(
             factors.flag.flag_box,
             sprite::Animation::new(zombies.flag.clone()),
             game::Armor::new(factors.flag.flag_health),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                ..Default::default()
-            },
-        ))
-        .set_parent(entity);
-    commands
-        .spawn((
-            game::Position::new_xy(0.1, 0.0),
-            factors.basic.arm_box,
-            sprite::Animation::new(zombies.arm.clone()),
-            game::Armor::new(factors.basic.arm_health),
             SpriteBundle {
                 transform: Transform::from_xyz(0.0, 0.0, 1.0),
                 ..Default::default()
@@ -256,7 +234,12 @@ fn init_config(
                 .read()
                 .unwrap()
                 .expect("systems are not initialized"),
-            anim: zombies.basic.clone(),
+            image: zombies
+                .basic
+                .frames
+                .first()
+                .expect("Empty animation basic_zombie")
+                .clone(),
             cost: factors.basic.cost,
             cooldown: factors.basic.cooldown,
             hitbox: factors.basic.self_box,
@@ -269,7 +252,7 @@ fn init_config(
                 .read()
                 .unwrap()
                 .expect("systems are not initialized"),
-            anim: zombies.basic.clone(),
+            image: zombies.roadcone_concept.clone(),
             cost: factors.roadcone.cost,
             cooldown: factors.roadcone.cooldown,
             hitbox: factors.basic.self_box,
@@ -282,7 +265,7 @@ fn init_config(
                 .read()
                 .unwrap()
                 .expect("systems are not initialized"),
-            anim: zombies.basic.clone(),
+            image: zombies.bucket_concept.clone(),
             cost: factors.bucket.cost,
             cooldown: factors.bucket.cooldown,
             hitbox: factors.basic.self_box,
@@ -295,7 +278,7 @@ fn init_config(
                 .read()
                 .unwrap()
                 .expect("systems are not initialized"),
-            anim: zombies.basic.clone(),
+            image: zombies.flag_concept.clone(),
             cost: factors.flag.cost,
             cooldown: factors.flag.cooldown,
             hitbox: factors.basic.self_box,

@@ -21,6 +21,7 @@ fn spawn_sunflower(
     In(pos): In<game::Position>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
     map: Res<game::CreatureMap>,
     producer: Res<SunflowerProducer>,
 ) {
@@ -29,7 +30,7 @@ fn spawn_sunflower(
         game::Plant,
         creature.clone(),
         pos,
-        sprite::Animation::new(creature.anim.clone()),
+        sprite::Animation::new(plants.sunflower.clone()),
         creature.hitbox,
         compn::Producer(producer.0.clone()),
         game::Health::from(factors.sunflower.health),
@@ -54,7 +55,12 @@ fn init_config(
                 .read()
                 .unwrap()
                 .expect("systems are not initialized"),
-            anim: plants.sunflower.clone(),
+            image: plants
+                .sunflower
+                .frames
+                .first()
+                .expect("Empty animation sunflower")
+                .clone(),
             cost: factors.sunflower.cost,
             cooldown: factors.sunflower.cooldown,
             hitbox: factors.sunflower.self_box,

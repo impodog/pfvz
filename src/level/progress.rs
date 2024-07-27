@@ -64,7 +64,7 @@ fn modify_progress_bar(
     next_wave.read().for_each(|wave| {
         let wave = wave.0;
         q_overlay.iter_mut().for_each(|mut hitbox| {
-            hitbox.width = (rect.1.x * wave as f32 + 1.0) / level.waves.len() as f32;
+            hitbox.width = (rect.1.x * (wave + 1) as f32) / level.waves.len() as f32;
         });
     });
 }

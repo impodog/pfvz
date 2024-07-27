@@ -12,7 +12,7 @@ impl Plugin for ConfigLoadPlugin {
 #[macro_export]
 macro_rules! configuration {
     ($name: ident, $type: ty, $value: expr) => {
-        #[derive(Serialize, Deserialize, Debug, Clone)]
+        #[derive(Serialize, Deserialize, Debug, Clone, Deref, DerefMut)]
         pub struct $name(pub $type);
         impl Default for $name {
             fn default() -> Self {

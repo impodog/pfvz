@@ -13,15 +13,12 @@ impl Plugin for GamePositionPlugin {
             (update_collision,).run_if(in_state(info::GlobalStates::Play)),
         );
         app.add_systems(Update, (remove_outbound,));
+        // Positioning system may be used by other states,
+        // so it is not wrapped under play state
+        app.add_systems(PostUpdate, (update_transform, update_sprite));
         app.add_systems(
             PostUpdate,
-            (
-                update_transform,
-                update_position,
-                update_velocity,
-                update_sprite,
-            )
-                .run_if(in_state(info::GlobalStates::Play)),
+            (update_position, update_velocity).run_if(in_state(info::GlobalStates::Play)),
         );
     }
 }

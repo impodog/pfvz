@@ -114,12 +114,7 @@ fn show_selection(
                 .spawn((
                     SelectionMarker,
                     SpriteBundle {
-                        texture: creature
-                            .anim
-                            .frames
-                            .first()
-                            .expect("Empty animation!")
-                            .clone(),
+                        texture: creature.image.clone(),
                         transform: Transform::from_xyz(0.0, 0.0, 14.37 + 1.0),
                         sprite: Sprite {
                             custom_size: Some(SLOT_SIZE * display.ratio),

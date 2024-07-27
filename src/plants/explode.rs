@@ -21,6 +21,7 @@ fn spawn_cherry_bomb(
     In(pos): In<game::Position>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
     map: Res<game::CreatureMap>,
     explode: Res<CherryBombExplode>,
 ) {
@@ -29,7 +30,7 @@ fn spawn_cherry_bomb(
         game::Plant,
         creature.clone(),
         pos,
-        sprite::Animation::new(creature.anim.clone()),
+        sprite::Animation::new(plants.cherry_bomb.clone()),
         creature.hitbox,
         compn::Explode(explode.0.clone()),
         compn::CherryBombTimer(Timer::new(
@@ -58,7 +59,12 @@ fn init_config(
             .read()
             .unwrap()
             .expect("systems are not initialized"),
-        anim: plants.cherry_bomb.clone(),
+        image: plants
+            .cherry_bomb
+            .frames
+            .first()
+            .expect("Empty animation cherry_bomb")
+            .clone(),
         cost: factors.cherry_bomb.cost,
         cooldown: factors.cherry_bomb.cooldown,
         hitbox: factors.cherry_bomb.self_box,

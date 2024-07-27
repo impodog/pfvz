@@ -12,11 +12,18 @@ impl Plugin for SaveDataPlugin {
 
 configuration!(SaveSlots, usize, 6);
 configuration!(SaveMoney, i32, 0);
+configuration!(
+    SaveAdventure,
+    level::LevelIndex,
+    level::LevelIndex { stage: 1, level: 1 }
+);
 #[derive(Serialize, Deserialize, Resource, Debug, Default, Clone)]
 pub struct Save {
     pub slots: SaveSlots,
     pub selection: game::Selection,
     pub money: SaveMoney,
+    pub plants: BTreeSet<Id>,
+    pub adventure: SaveAdventure,
 }
 
 fn load_save(mut commands: Commands) {

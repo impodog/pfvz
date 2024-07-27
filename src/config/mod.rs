@@ -7,6 +7,7 @@ mod util;
 mod window;
 
 pub use camera::*;
+pub use constants::id_name;
 pub use load::*;
 pub use plugin::*;
 pub use util::*;

@@ -12,6 +12,14 @@ pub struct Wave {
     pub avail: Vec<Id>,
 }
 
+#[derive(
+    Serialize, Deserialize, Resource, Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord,
+)]
+pub struct LevelIndex {
+    pub stage: u8,
+    pub level: u8,
+}
+
 #[derive(Debug, Clone, Copy)]
 pub enum TileFeature {
     Grass,
@@ -121,10 +129,19 @@ impl SelectionArr {
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
+pub struct StateModify {
+    // TODO: Make this 0 to give default item(money)
+    pub give: Id,
+    pub next: LevelIndex,
+}
+
+#[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct LevelConfig {
     pub layout: LayoutKind,
     pub game: GameKind,
     pub selection: SelectionArr,
+    #[serde(default)]
+    pub modify: Option<StateModify>,
     pub sun: u32,
 }
 impl LevelConfig {

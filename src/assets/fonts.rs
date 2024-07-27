@@ -11,6 +11,10 @@ impl Plugin for AssetsFontsPlugin {
 #[derive(Resource, Debug, Clone)]
 pub struct DefaultFont(pub Handle<Font>);
 
+#[derive(Resource, Debug, Clone)]
+pub struct ItalicsFont(pub Handle<Font>);
+
 fn init_fonts(mut commands: Commands, server: Res<AssetServer>) {
     commands.insert_resource(DefaultFont(server.load("fonts/zed.ttf")));
+    commands.insert_resource(ItalicsFont(server.load("fonts/cas-italics.ttf")));
 }

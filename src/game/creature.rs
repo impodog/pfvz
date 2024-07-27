@@ -32,7 +32,7 @@ pub struct CreatureShared {
     pub systems: CreatureSystems,
     pub cost: u32,
     pub cooldown: f32,
-    pub anim: Arc<sprite::FrameArr>,
+    pub image: Handle<Image>,
     pub hitbox: game::HitBox,
 }
 

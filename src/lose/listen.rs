@@ -12,7 +12,7 @@ impl Plugin for LoseListenPlugin {
 }
 
 fn listen_mouse(
-    mut e_level: EventWriter<level::LevelIndex>,
+    mut e_level: EventWriter<level::LevelEvent>,
     mut state: ResMut<NextState<info::GlobalStates>>,
     cursor: Res<info::CursorInfo>,
     level_index: Res<level::LevelIndex>,
@@ -21,7 +21,9 @@ fn listen_mouse(
     // Wait for banner to disappear
     if q_banner.iter().next().is_none() {
         if cursor.left {
-            e_level.send(*level_index);
+            e_level.send(level::LevelEvent {
+                index: *level_index,
+            });
         } else if cursor.right {
             state.set(info::GlobalStates::Menu);
         }
