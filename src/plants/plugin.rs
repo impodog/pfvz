@@ -11,6 +11,7 @@ impl Plugin for PlantsPlugin {
             producers::PlantsProducersPlugin,
             explode::PlantsExplodePlugin,
             defense::PlantsDefensePlugin,
+            bowling::PlantsBowlingPlugin,
             factors::PlantsFactorsPlugin,
         ));
     }

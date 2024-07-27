@@ -275,8 +275,8 @@ fn remove_outbound(
     q_pos.iter().for_each(|(entity, pos)| {
         let x = pos.x * display.ratio;
         let y = pos.y * display.ratio;
-        if !(-LOGICAL_WIDTH..=LOGICAL_WIDTH).contains(&x)
-            || !(-LOGICAL_HEIGHT..=LOGICAL_HEIGHT).contains(&y)
+        if !(-LOGICAL_BOUND.x..=LOGICAL_BOUND.x).contains(&x)
+            || !(-LOGICAL_BOUND.y..=LOGICAL_BOUND.y).contains(&y)
         {
             commands.entity(entity).despawn_recursive();
         }

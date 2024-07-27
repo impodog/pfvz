@@ -5,6 +5,8 @@ pub const SUNFLOWER: Id = -2;
 pub const CHERRY_BOMB: Id = -3;
 pub const WALL_NUT: Id = -4;
 
+pub const BOWLING_NUT: Id = -101;
+
 pub const BASIC_ZOMBIE: Id = 1;
 pub const ROADCONE_ZOMBIE: Id = 2;
 pub const BUCKET_ZOMBIE: Id = 3;
@@ -13,6 +15,7 @@ pub const FLAG_ZOMBIE: Id = 4;
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
 pub const LOGICAL: Vec2 = Vec2::new(LOGICAL_WIDTH, LOGICAL_HEIGHT);
+pub const LOGICAL_BOUND: Vec2 = Vec2::new(LOGICAL_WIDTH * 0.6, LOGICAL_HEIGHT * 0.6);
 pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.8);
 pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
 
@@ -25,6 +28,8 @@ pub fn id_name(id: Id) -> &'static str {
         SUNFLOWER => "sunflower",
         CHERRY_BOMB => "cherry_bomb",
         WALL_NUT => "wall_nut",
+
+        BOWLING_NUT => "bowling_nut",
 
         BASIC_ZOMBIE => "basic",
         ROADCONE_ZOMBIE => "roadcone",

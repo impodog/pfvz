@@ -48,6 +48,15 @@ pub struct WallNut {
     pub cooldown: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct BowlingNut {
+    pub velocity: game::Velocity,
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub damage: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct PlantFactors {
@@ -55,6 +64,7 @@ pub struct PlantFactors {
     pub sunflower: Sunflower,
     pub cherry_bomb: CherryBomb,
     pub wall_nut: WallNut,
+    pub bowling_nut: BowlingNut,
 }
 
 fn init_factors(mut commands: Commands) {

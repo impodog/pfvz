@@ -1,3 +1,4 @@
+mod bowling;
 mod breaks;
 pub mod default;
 mod dying;
@@ -8,6 +9,7 @@ mod proj;
 mod shooter;
 mod walker;
 
+pub use bowling::*;
 pub use breaks::*;
 pub use dying::*;
 pub use explode::*;

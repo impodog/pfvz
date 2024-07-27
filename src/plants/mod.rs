@@ -1,3 +1,4 @@
+mod bowling;
 mod defense;
 mod explode;
 mod factors;

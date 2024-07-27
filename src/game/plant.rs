@@ -35,12 +35,13 @@ fn renew_layout(mut plants: ResMut<PlantLayout>, level: Res<level::Level>) {
     plants.clear(size.0 * size.1);
 }
 
-fn scan_plants(plants: Res<PlantLayout>, q_plant: Query<&Plant>) {
+fn scan_plants(plants: Res<PlantLayout>, q_plant: Query<&game::Position, With<Plant>>) {
     // NOTE: This scans every tile. May be a performance bottleneck!
     let mut remove = Vec::new();
     for lane in plants.plants.iter() {
         for (i, plant) in lane.read().unwrap().iter().enumerate() {
-            if q_plant.get(*plant).is_err() {
+            if let Ok(_pos) = q_plant.get(*plant) {
+            } else {
                 remove.push(i);
             }
         }

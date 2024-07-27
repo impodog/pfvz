@@ -29,3 +29,10 @@ self_box = { width = 0.7, height = 0.9 }
 health = 4000
 cooldown = 40.0
 cost = 50
+[bowling_nut]
+velocity = { x = 0.05, y = 0.05, z = 0.0, r = -0.1 }
+self_box = { width = 0.7, height = 0.9 }
+health = 4000
+damage = 300
+cooldown = 3.0
+cost = 75

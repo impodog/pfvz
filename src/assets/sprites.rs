@@ -92,6 +92,7 @@ pub struct SpritePlants {
     pub wall_nut: Arc<sprite::FrameArr>,
     pub wall_nut_damaged: Arc<sprite::FrameArr>,
     pub wall_nut_destroyed: Arc<sprite::FrameArr>,
+    pub bowling_nut_concept: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -182,6 +183,7 @@ fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/plants/wall_nut_destroyed",
             Duration::from_millis(500),
         ),
+        bowling_nut_concept: server.load("sprites/plants/bowling_nut/concept.png"),
     };
     commands.insert_resource(plants);
 }
