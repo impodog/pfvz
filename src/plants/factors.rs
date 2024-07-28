@@ -60,6 +60,18 @@ pub struct PotatoMine {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SnowPea {
+    pub velocity: game::VelocityX,
+    pub self_box: game::HitBox,
+    pub pea_box: game::HitBox,
+    pub snow: compn::SnowSerde,
+    pub health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -76,6 +88,7 @@ pub struct PlantFactors {
     pub cherry_bomb: CherryBomb,
     pub wall_nut: WallNut,
     pub potato_mine: PotatoMine,
+    pub snow_pea: SnowPea,
     pub bowling_nut: BowlingNut,
 }
 

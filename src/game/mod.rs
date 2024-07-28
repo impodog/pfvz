@@ -1,4 +1,5 @@
 mod creature;
+mod overlay;
 mod plant;
 mod player;
 mod plugin;
@@ -11,6 +12,7 @@ mod util;
 mod zombie;
 
 pub use creature::*;
+pub use overlay::*;
 pub use plant::*;
 pub use player::*;
 pub use plugin::*;
@@ -18,4 +20,5 @@ pub use position::*;
 pub use proj::*;
 pub use special::*;
 pub use status::*;
+pub use util::*;
 pub use zombie::*;

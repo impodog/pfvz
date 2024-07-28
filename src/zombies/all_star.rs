@@ -6,7 +6,10 @@ impl Plugin for ZombiesAllStarPlugin {
     fn build(&self, app: &mut App) {
         initialize(&all_star_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (all_star_tackle,));
+        app.add_systems(
+            Update,
+            (all_star_tackle,).run_if(in_state(info::GlobalStates::Play)),
+        );
         *all_star_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_all_star_zombie),
             die: app.register_system(compn::default::die),

@@ -5,23 +5,37 @@ pub(super) struct CompnProjPlugin;
 impl Plugin for CompnProjPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
-            Update,
-            (proj_action,).run_if(in_state(info::GlobalStates::Play)),
+            PostUpdate,
+            (despawn, proj_action)
+                .chain()
+                .run_if(in_state(info::GlobalStates::Play)),
         );
+        app.init_resource::<DespawnQueue>();
+    }
+}
+
+#[derive(Resource, Default, Debug, Clone, Deref, DerefMut)]
+struct DespawnQueue(Vec<Entity>);
+
+fn despawn(mut commands: Commands, mut queue: ResMut<DespawnQueue>) {
+    if !queue.is_empty() {
+        for entity in queue.drain(..) {
+            commands.entity(entity).despawn_recursive();
+        }
     }
 }
 
 fn proj_action(
-    mut commands: Commands,
     mut e_proj: EventReader<game::ProjectileAction>,
     q_proj: Query<&game::Projectile>,
+    mut queue: ResMut<DespawnQueue>,
 ) {
     e_proj.read().for_each(|action| {
         let ok = match action {
-            game::ProjectileAction::Damage(entity) => {
+            game::ProjectileAction::Damage(entity, _other) => {
                 if let Ok(proj) = q_proj.get(*entity) {
                     if proj.instant {
-                        commands.entity(*entity).despawn_recursive();
+                        queue.push(*entity);
                     }
                     true
                 } else {
@@ -30,7 +44,7 @@ fn proj_action(
             }
         };
         if !ok {
-            // This is very annoy when a projectile hurts multiple targets, so it's turned off
+            // This is very annoying when a projectile hurts multiple targets, so it's turned off
             // warn!("Unable to execute projectile action: {:?}", action);
         }
     });

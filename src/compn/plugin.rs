@@ -13,6 +13,7 @@ impl Plugin for CompnPlugin {
             dying::CompnDyingPlugin,
             breaks::CompnBreaksPlugin,
             explode::CompnExplodePlugin,
+            snow::CompnSnowPlugin,
             bowling::CompnBowlingPlugin,
         ));
     }

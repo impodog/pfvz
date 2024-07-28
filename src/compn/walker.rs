@@ -63,17 +63,21 @@ fn walker_lock_target(
 }
 
 fn walker_deal_damage(
-    mut q_walker: Query<(&mut WalkerImpl, &mut game::Velocity, &Walker)>,
+    mut q_walker: Query<(
+        &game::Overlay,
+        &mut WalkerImpl,
+        &mut game::Velocity,
+        &Walker,
+    )>,
     q_plant: Query<(), With<game::Plant>>,
     mut action: EventWriter<game::CreatureAction>,
-    time: Res<config::FrameTime>,
 ) {
     // NOTE: This is not parallel! Fix?
     q_walker
         .iter_mut()
-        .for_each(|(mut walker_impl, mut velocity, walker)| {
+        .for_each(|(overlay, mut walker_impl, mut velocity, walker)| {
             if let Some(entity) = walker_impl.target {
-                walker_impl.timer.tick(time.delta());
+                walker_impl.timer.tick(overlay.delta());
                 if walker_impl.timer.just_finished() {
                     if q_plant.get(entity).is_ok() {
                         action.send(game::CreatureAction::Damage(entity, walker.damage));

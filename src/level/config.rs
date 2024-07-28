@@ -71,12 +71,12 @@ impl LayoutKind {
     /// This returns a index applicable to `PlantLayout`, or usize::MAX if conversion is not
     /// possible
     pub fn position_to_index(&self, pos: &game::Position) -> usize {
-        let size = self.size();
-        let x = pos.x_i32() + (size.0 as i32 / 2);
-        let y = pos.y_i32() + (size.1 as i32 / 2);
+        let size = self.half_size_f32();
+        let x = (pos.x + size.0) as i32;
+        let y = (pos.y + size.1) as i32;
         if let Ok(x) = usize::try_from(x) {
             if let Ok(y) = usize::try_from(y) {
-                return y * size.0 + x;
+                return y * self.size().0 + x;
             }
         }
         usize::MAX

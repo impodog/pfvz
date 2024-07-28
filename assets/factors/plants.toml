@@ -38,6 +38,16 @@ prepare = 25.0
 cooldown = 30.0
 animation_time = 3.0
 cost = 25
+[snow_pea]
+velocity = 0.11
+self_box = { width = 1.0, height = 1.0 }
+pea_box = { width = 0.3, height = 0.3 }
+snow = { duration = 5.0, factor = 0.5 }
+health = 200
+damage = 20
+interval = 1.5
+cooldown = 7.5
+cost = 175
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }

@@ -46,13 +46,17 @@ fn add_producer_impl(
 
 fn producer_work(
     mut commands: Commands,
-    time: Res<config::FrameTime>,
-    mut q_producer: Query<(&game::Position, &Producer, &mut ProducerImpl)>,
+    mut q_producer: Query<(
+        &game::Overlay,
+        &game::Position,
+        &Producer,
+        &mut ProducerImpl,
+    )>,
 ) {
     q_producer
         .iter_mut()
-        .for_each(|(pos, producer, mut producer_impl)| {
-            producer_impl.timer.tick(time.delta());
+        .for_each(|(overlay, pos, producer, mut producer_impl)| {
+            producer_impl.timer.tick(overlay.delta());
             if producer_impl.timer.just_finished() {
                 commands.spawn((
                     *pos,

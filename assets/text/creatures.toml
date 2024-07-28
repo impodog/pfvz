@@ -1,5 +1,5 @@
 [desc.peashooter]
-name = "Pisum sativum chlorojaculum"
+name = "Pisum sativum var. chlorojaculum"
 short = "You would not see this anyway"
 desc = """Shoots peas at zombies
 Damage: Regular"""
@@ -26,3 +26,9 @@ short = "Blows up a small area of zombies on touch, takes time to arm himself"
 desc = """Blows up a small area of zombies on touch, takes time to arm himself
 Damage: SUPER
 Takes time to be usable"""
+[desc.snow_pea]
+name = "Pisum sativum var. macrocarpum"
+short = "Shoots peas that slow down zombies"
+desc = """Shoots snow peas that can slow down zombies while dealing damage
+Damage: Regular
+Slows down zombies"""

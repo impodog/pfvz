@@ -21,7 +21,7 @@ pub struct ProjectileShared {
 
 #[derive(Event, Debug, Clone)]
 pub enum ProjectileAction {
-    Damage(Entity),
+    Damage(Entity, Entity),
 }
 
 #[derive(Component, Debug, Clone)]
@@ -42,7 +42,7 @@ fn test_plant_proj_zombie(
         if let Some(set) = collision.get(&entity) {
             for zombie in set.iter() {
                 if let Ok(zombie_entity) = q_zombie.get(*zombie) {
-                    e_proj.send(ProjectileAction::Damage(entity));
+                    e_proj.send(ProjectileAction::Damage(entity, zombie_entity));
                     e_creature.send(game::CreatureAction::Damage(
                         zombie_entity,
                         multiply_uf!(proj.damage, config.gamerule.damage.0),
@@ -66,7 +66,7 @@ fn test_zombie_proj_plant(
         if let Some(set) = collision.get(&entity) {
             set.iter().for_each(|plant| {
                 if let Ok(plant_entity) = q_plant.get(*plant) {
-                    e_proj.send(ProjectileAction::Damage(entity));
+                    e_proj.send(ProjectileAction::Damage(entity, plant_entity));
                     e_creature.send(game::CreatureAction::Damage(plant_entity, proj.damage));
                 }
             });

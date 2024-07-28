@@ -96,14 +96,19 @@ fn explode_work(
 pub struct CherryBombTimer(pub Timer);
 
 fn cherry_bomb_timer_work(
-    time: Res<config::FrameTime>,
     mut explode_event: EventWriter<ExplodeEvent>,
-    mut q_timer: Query<(Entity, &mut CherryBombTimer, &mut game::HitBox, &Explode)>,
+    mut q_timer: Query<(
+        Entity,
+        &game::Overlay,
+        &mut CherryBombTimer,
+        &mut game::HitBox,
+        &Explode,
+    )>,
 ) {
     q_timer
         .iter_mut()
-        .for_each(|(entity, mut timer, mut hitbox, explode)| {
-            timer.tick(time.delta());
+        .for_each(|(entity, overlay, mut timer, mut hitbox, explode)| {
+            timer.tick(overlay.delta());
             let rate = timer.elapsed().as_secs_f32() / timer.duration().as_secs_f32();
             *hitbox = explode.hitbox * rate;
             if timer.just_finished() {
@@ -120,17 +125,21 @@ pub struct PotatoMineTimer {
 }
 
 fn potato_mine_timer_work(
-    time: Res<config::FrameTime>,
     mut explode_event: EventWriter<ExplodeEvent>,
-    mut q_timer: Query<(Entity, &mut PotatoMineTimer, &mut sprite::Animation)>,
+    mut q_timer: Query<(
+        Entity,
+        &game::Overlay,
+        &mut PotatoMineTimer,
+        &mut sprite::Animation,
+    )>,
     q_plant: Query<(), With<game::Plant>>,
     q_zombie: Query<(), With<game::Zombie>>,
     collision: Res<game::Collision>,
 ) {
     q_timer
         .iter_mut()
-        .for_each(|(entity, mut timer, mut anim)| {
-            timer.tick(time.delta());
+        .for_each(|(entity, overlay, mut timer, mut anim)| {
+            timer.tick(overlay.delta());
             if timer.just_finished() {
                 anim.replace(timer.prepared.clone());
             }

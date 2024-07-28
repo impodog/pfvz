@@ -97,6 +97,8 @@ pub struct SpritePlants {
     pub potato_mine: Arc<sprite::FrameArr>,
     pub potato_mine_preparing: Arc<sprite::FrameArr>,
     pub spudow: Arc<sprite::FrameArr>,
+    pub snow_pea: Arc<sprite::FrameArr>,
+    pub snow: Arc<sprite::FrameArr>,
 }
 
 #[derive(Resource)]
@@ -207,6 +209,12 @@ fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(800),
         ),
         spudow: load_animation(&server, "sprites/plants/spudow", Duration::from_millis(100)),
+        snow_pea: load_animation(
+            &server,
+            "sprites/plants/snow_pea",
+            Duration::from_millis(200),
+        ),
+        snow: load_animation(&server, "sprites/plants/snow", Duration::from_millis(50)),
     };
     commands.insert_resource(plants);
 }

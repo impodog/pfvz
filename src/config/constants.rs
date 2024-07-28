@@ -5,6 +5,7 @@ pub const SUNFLOWER: Id = -2;
 pub const CHERRY_BOMB: Id = -3;
 pub const WALL_NUT: Id = -4;
 pub const POTATO_MINE: Id = -5;
+pub const SNOW_PEA: Id = -6;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -31,6 +32,7 @@ pub fn id_name(id: Id) -> &'static str {
         CHERRY_BOMB => "cherry_bomb",
         WALL_NUT => "wall_nut",
         POTATO_MINE => "potato_mine",
+        SNOW_PEA => "snow_pea",
 
         BOWLING_NUT => "bowling_nut",
 
@@ -38,6 +40,7 @@ pub fn id_name(id: Id) -> &'static str {
         ROADCONE_ZOMBIE => "roadcone",
         BUCKET_ZOMBIE => "bucket",
         FLAG_ZOMBIE => "flag",
+        ALL_STAR_ZOMBIE => "all_star",
 
         _ => "unknown",
     }

@@ -7,6 +7,7 @@ mod plugin;
 mod producer;
 mod proj;
 mod shooter;
+mod snow;
 mod walker;
 
 pub use bowling::*;
@@ -16,4 +17,5 @@ pub use explode::*;
 pub use plugin::*;
 pub use producer::*;
 pub use shooter::*;
+pub use snow::*;
 pub use walker::*;

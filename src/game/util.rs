@@ -1,3 +1,5 @@
+use crate::prelude::*;
+
 #[macro_export]
 macro_rules! game_conf {
     (projectile $name: ident) => {
@@ -29,6 +31,30 @@ macro_rules! game_conf {
             static ref $name: RwLock<Option<$crate::game::CreatureSystems>> = RwLock::new(None);
         }
     };
+    (system $name: ident, $in: ty) => {
+        lazy_static! {
+            static ref $name: RwLock<Option<bevy::ecs::system::SystemId<$in>>> = RwLock::new(None);
+        }
+    };
+}
+
+pub fn query_overlay<F, R>(
+    f: F,
+    entity: Entity,
+    q_overlay: &Query<&game::Overlay>,
+    q_parent: &Query<&Parent>,
+) -> R
+where
+    F: FnOnce(Option<&game::Overlay>) -> R,
+    R: 'static,
+{
+    if let Ok(overlay) = q_overlay.get(entity) {
+        f(Some(overlay))
+    } else if let Ok(parent) = q_parent.get(entity) {
+        query_overlay(f, parent.get(), q_overlay, q_parent)
+    } else {
+        f(None)
+    }
 }
 
 #[macro_export]

@@ -3,7 +3,7 @@ layout = "Day"
 game = "Adventure"
 selection = { "All" = [-1, -2, -3, -4, -5] }
 modify = { give = -6, next = { stage = 1, level = 7 } }
-sun = 100
+sun = 50
 [[waves]]
 points = 0
 wait = 30.0

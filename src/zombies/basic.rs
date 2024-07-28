@@ -143,6 +143,7 @@ fn spawn_bucket_zombie(
     let entity = commands
         .spawn((
             game::Zombie,
+            BasicZombieMarker,
             creature.clone(),
             pos,
             game::Velocity::from(factors.basic.velocity),

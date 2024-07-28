@@ -18,40 +18,59 @@ pub struct FrameArr {
 pub struct Animation {
     frames: Arc<FrameArr>,
     cursor: usize,
-    begin: std::time::SystemTime,
+    timer: Timer,
 }
 
 impl Animation {
     pub fn new(frames: Arc<FrameArr>) -> Self {
+        let timer = Timer::new(frames.delta, TimerMode::Repeating);
         Self {
             frames,
             cursor: 0,
-            begin: std::time::SystemTime::now(),
+            timer,
         }
     }
 
     pub fn replace(&mut self, frames: Arc<FrameArr>) {
+        self.timer = Timer::new(frames.delta, TimerMode::Repeating);
         self.frames = frames;
         self.cursor = 0;
-        self.begin = std::time::SystemTime::now();
     }
 }
 
-fn update_animation(mut q_anim: Query<(&mut Animation, &mut Handle<Image>)>) {
-    let now = std::time::SystemTime::now();
-    q_anim.par_iter_mut().for_each(|(mut anim, mut image)| {
-        if now.duration_since(anim.begin).unwrap() >= anim.frames.delta {
-            anim.cursor += 1;
-            anim.begin = now;
-            if anim.cursor >= anim.frames.frames.len() {
-                anim.cursor = 0;
+fn update_animation(
+    mut q_anim: Query<(Entity, &mut Animation, &mut Handle<Image>)>,
+    q_overlay: Query<&game::Overlay>,
+    q_parent: Query<&Parent>,
+    time: Res<config::FrameTime>,
+) {
+    q_anim
+        .par_iter_mut()
+        .for_each(|(entity, mut anim, mut image)| {
+            let delta = game::query_overlay(
+                |overlay| {
+                    if let Some(overlay) = overlay {
+                        overlay.delta()
+                    } else {
+                        time.delta()
+                    }
+                },
+                entity,
+                &q_overlay,
+                &q_parent,
+            );
+            anim.timer.tick(delta);
+            if anim.timer.just_finished() {
+                anim.cursor += 1;
+                if anim.cursor >= anim.frames.frames.len() {
+                    anim.cursor = 0;
+                }
+                *image = anim
+                    .frames
+                    .frames
+                    .get(anim.cursor)
+                    .expect("empty animation")
+                    .clone();
             }
-            *image = anim
-                .frames
-                .frames
-                .get(anim.cursor)
-                .expect("empty animation")
-                .clone();
-        }
-    });
+        });
 }

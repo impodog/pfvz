@@ -8,6 +8,8 @@ pub(crate) fn die_not(In(_entity): In<Entity>) {
     // Do nothing on death
 }
 
+pub(crate) fn do_nothing(In(_): In<Entity>) {}
+
 pub(crate) fn damage(
     In((entity, damage)): In<(Entity, u32)>,
     mut q_health: Query<&mut game::Health>,
