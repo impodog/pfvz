@@ -24,11 +24,15 @@ pub struct LevelEvent {
     pub index: level::LevelIndex,
 }
 
+#[derive(Resource, Debug, Clone, Copy, Deref, DerefMut)]
+pub struct LevelSlots(pub usize);
+
 fn load_level(
     mut commands: Commands,
     mut e_level: EventReader<LevelEvent>,
     mut state: ResMut<NextState<info::GlobalStates>>,
     mut selection: ResMut<game::Selection>,
+    save: Res<save::Save>,
 ) {
     if let Some(level_event) = e_level.read().last() {
         let path = format!(
@@ -43,6 +47,8 @@ fn load_level(
                         * 2.0
                         / 3.0;
                     level.config.selection.modify(selection.as_mut());
+                    commands
+                        .insert_resource(LevelSlots(save.slots.max(level.config.selection.len())));
                     commands.insert_resource(level);
                     commands.insert_resource(level_event.index);
                     commands.insert_resource(game::Display { ratio });

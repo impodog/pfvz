@@ -4,14 +4,19 @@ pub(super) struct ConfigProgramPlugin;
 
 impl Plugin for ConfigProgramPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(PostUpdate, (control_framerate,));
+        app.add_systems(PostUpdate, (control_framerate, quit));
     }
 }
 
-fn control_framerate(time: Res<Time>, config: Res<super::Config>) {
-    let secs = time.delta_seconds();
-    let target = 1.0 / config.program.framerate.0;
-    if secs < target {
-        std::thread::sleep(std::time::Duration::from_secs_f32(target - secs));
+fn control_framerate(
+    mut settings: ResMut<bevy_framepace::FramepaceSettings>,
+    config: Res<super::Config>,
+) {
+    settings.limiter = bevy_framepace::Limiter::from_framerate(config.program.framerate.0 as f64);
+}
+
+fn quit(mut e_exit: EventWriter<AppExit>, button: Res<ButtonInput<KeyCode>>) {
+    if button.just_pressed(KeyCode::Escape) {
+        e_exit.send(AppExit::Success);
     }
 }

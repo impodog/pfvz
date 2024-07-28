@@ -5,6 +5,10 @@ pub struct ZombiesPlugin;
 
 impl Plugin for ZombiesPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((factors::ZombiesFactorsPlugin, basic::ZombiesBasicPlugin));
+        app.add_plugins((
+            factors::ZombiesFactorsPlugin,
+            basic::ZombiesBasicPlugin,
+            all_star::ZombiesAllStarPlugin,
+        ));
     }
 }

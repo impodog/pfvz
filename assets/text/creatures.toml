@@ -20,3 +20,9 @@ short = "Blocks zombies with its high health"
 desc = """Blocks zombies
 Damage: Not Again
 Health: High"""
+[desc.potato_mine]
+name = "Solanum tuberosum"
+short = "Blows up a small area of zombies on touch, takes time to arm himself"
+desc = """Blows up a small area of zombies on touch, takes time to arm himself
+Damage: SUPER
+Takes time to be usable"""

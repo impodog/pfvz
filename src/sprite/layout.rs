@@ -37,7 +37,7 @@ fn spawn_layout(
     sp_layout: Res<assets::SpriteLayouts>,
     display: Res<game::Display>,
     level: Res<level::Level>,
-    save: Res<save::Save>,
+    slots: Res<level::LevelSlots>,
 ) {
     let layout = level.config.layout;
     let size = layout.size();
@@ -67,7 +67,7 @@ fn spawn_layout(
             ));
         }
     }
-    for pos in 0..save.slots.0 {
+    for pos in 0..slots.0 {
         let pos = SlotIndex(pos).into_position(display.ratio);
         commands.spawn((
             SpriteBundle {

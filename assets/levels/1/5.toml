@@ -2,7 +2,7 @@
 layout = "Day"
 game = "Adventure"
 selection = { "All" = [-2, -3, -101] }
-modify = { give = 0, next = { stage = 1, level = 5 } }
+modify = { give = -5, next = { stage = 1, level = 6 } }
 sun = 125
 [[waves]]
 points = 0
@@ -18,7 +18,7 @@ fixed = [[1, 5], [2, 3]]
 avail = []
 [[waves]]
 points = 200
-wait = 30.0
+wait = 40.0
 big = false
 fixed = [[2, 3], [3, 1]]
 avail = [1, 2, 3]
@@ -36,7 +36,7 @@ fixed = []
 avail = [1, 2, 3]
 [[waves]]
 points = 500
-wait = 40.0
+wait = 50.0
 big = false
 fixed = []
 avail = [1, 2, 3]

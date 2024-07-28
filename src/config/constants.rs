@@ -4,6 +4,7 @@ pub const PEASHOOTER: Id = -1;
 pub const SUNFLOWER: Id = -2;
 pub const CHERRY_BOMB: Id = -3;
 pub const WALL_NUT: Id = -4;
+pub const POTATO_MINE: Id = -5;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -11,6 +12,7 @@ pub const BASIC_ZOMBIE: Id = 1;
 pub const ROADCONE_ZOMBIE: Id = 2;
 pub const BUCKET_ZOMBIE: Id = 3;
 pub const FLAG_ZOMBIE: Id = 4;
+pub const ALL_STAR_ZOMBIE: Id = 5;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
@@ -28,6 +30,7 @@ pub fn id_name(id: Id) -> &'static str {
         SUNFLOWER => "sunflower",
         CHERRY_BOMB => "cherry_bomb",
         WALL_NUT => "wall_nut",
+        POTATO_MINE => "potato_mine",
 
         BOWLING_NUT => "bowling_nut",
 

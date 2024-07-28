@@ -20,6 +20,7 @@ pub struct PlanterEvent {
 
 #[allow(clippy::too_many_arguments)]
 fn do_plant(
+    mut commands: Commands,
     mut action: EventWriter<game::CreatureAction>,
     mut planter: EventWriter<PlanterEvent>,
     mut sun: ResMut<game::Sun>,
@@ -30,12 +31,14 @@ fn do_plant(
     cooldown: Res<game::SelectionCooldown>,
     level: Res<level::Level>,
     cursor: Res<info::CursorInfo>,
+    slots: Res<level::LevelSlots>,
+    q_transform: Query<&Transform>,
 ) {
     if cursor.left && cursor.inbound {
+        let pos = cursor.pos.regularize();
+        let usize_pos = cursor.pos.to_usize_pos();
         if let Some(id) = selection.get(select.0) {
             if let Some(creature) = map.get(id) {
-                let pos = cursor.pos.regularize();
-                let usize_pos = cursor.pos.to_usize_pos();
                 let ok = *id >= 0 || {
                     let index = level.config.layout.position_to_index(&pos);
                     plants
@@ -64,6 +67,31 @@ fn do_plant(
                     select.0 = usize::MAX;
                 }
             }
+        } else if select.0 == slots.0 {
+            let list = {
+                let index = level.config.layout.position_to_index(&pos);
+                plants.plants.get(index)
+            };
+            if let Some(list) = list {
+                let list = list.read().unwrap();
+                // This makes sure that only the top level of plant is removed
+                let entity = list.iter().max_by(|left, right| {
+                    if let Ok(left) = q_transform.get(**left) {
+                        if let Ok(right) = q_transform.get(**right) {
+                            return left
+                                .translation
+                                .z
+                                .partial_cmp(&right.translation.z)
+                                .unwrap();
+                        }
+                    }
+                    std::cmp::Ordering::Less
+                });
+                if let Some(entity) = entity {
+                    commands.entity(*entity).despawn_recursive();
+                }
+            }
+            select.0 = usize::MAX;
         }
     }
 }

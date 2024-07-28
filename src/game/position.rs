@@ -67,7 +67,8 @@ impl Position {
     }
 
     pub fn y_i32(&self) -> i32 {
-        self.y as i32
+        // TODO: Is this even legal?
+        (self.y + 0.5) as i32
     }
 
     pub fn z_i32(&self) -> i32 {
@@ -229,7 +230,7 @@ fn update_collision(
                         if sub_entity == entity
                             || (pos.x - sub_pos.x).abs() >= (hitbox.width + sub_hitbox.width) / 2.0
                             || (pos.z + pos.y - sub_pos.z - sub_pos.y).abs()
-                                >= (hitbox.height + sub_hitbox.height) / 2.0
+                                >= (hitbox.height + sub_hitbox.height) / 2.5
                         {
                             None
                         } else {

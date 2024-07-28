@@ -7,7 +7,12 @@ impl Plugin for CompnExplodePlugin {
         app.add_event::<ExplodeEvent>();
         app.add_systems(
             Update,
-            (add_no_loss, explode_work, cherry_bomb_timer_work)
+            (
+                add_no_loss,
+                explode_work,
+                cherry_bomb_timer_work,
+                potato_mine_timer_work,
+            )
                 .run_if(in_state(info::GlobalStates::Play)),
         );
     }
@@ -103,6 +108,43 @@ fn cherry_bomb_timer_work(
             *hitbox = explode.hitbox * rate;
             if timer.just_finished() {
                 explode_event.send(ExplodeEvent { entity });
+            }
+        });
+}
+
+#[derive(Component, Debug, Clone, Deref, DerefMut)]
+pub struct PotatoMineTimer {
+    #[deref]
+    pub timer: Timer,
+    pub prepared: Arc<sprite::FrameArr>,
+}
+
+fn potato_mine_timer_work(
+    time: Res<config::FrameTime>,
+    mut explode_event: EventWriter<ExplodeEvent>,
+    mut q_timer: Query<(Entity, &mut PotatoMineTimer, &mut sprite::Animation)>,
+    q_plant: Query<(), With<game::Plant>>,
+    q_zombie: Query<(), With<game::Zombie>>,
+    collision: Res<game::Collision>,
+) {
+    q_timer
+        .iter_mut()
+        .for_each(|(entity, mut timer, mut anim)| {
+            timer.tick(time.delta());
+            if timer.just_finished() {
+                anim.replace(timer.prepared.clone());
+            }
+            if timer.finished() {
+                if let Some(coll) = collision.get(&entity) {
+                    let ok = if q_plant.get(entity).is_ok() {
+                        coll.iter().any(|zombie| q_zombie.get(*zombie).is_ok())
+                    } else {
+                        coll.iter().any(|plant| q_plant.get(*plant).is_ok())
+                    };
+                    if ok {
+                        explode_event.send(ExplodeEvent { entity });
+                    }
+                }
             }
         });
 }

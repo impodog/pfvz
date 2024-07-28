@@ -97,12 +97,15 @@ fn init_player_status(mut commands: Commands, level: Res<level::Level>) {
     commands.insert_resource(SelectionCooldown::default());
 }
 
+#[allow(clippy::too_many_arguments)]
 fn show_selection(
     mut commands: Commands,
     sel: Res<Selection>,
     map: Res<game::CreatureMap>,
     font: Res<assets::DefaultFont>,
     display: Res<game::Display>,
+    chunks: Res<assets::SpriteChunks>,
+    slots: Res<level::LevelSlots>,
     q_sel: Query<Entity, With<SelectionMarker>>,
 ) {
     q_sel.iter().for_each(|entity| {
@@ -147,6 +150,19 @@ fn show_selection(
             warn!("Attempting to show non-existing id in slots bar: {}", id);
         }
     }
+    commands.spawn((
+        SelectionMarker,
+        SpriteBundle {
+            texture: chunks.shovel.clone(),
+            transform: Transform::from_xyz(0.0, 0.0, 14.37 + 1.0),
+            sprite: Sprite {
+                custom_size: Some(SLOT_SIZE * display.ratio),
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        sprite::SlotIndex(slots.0).into_position(display.ratio),
+    ));
 }
 
 fn update_cooldown(mut cooldown: ResMut<SelectionCooldown>, time: Res<config::FrameTime>) {
@@ -231,11 +247,12 @@ fn update_select(
     mut selecting: ResMut<Selecting>,
     cursor: Res<info::CursorInfo>,
     display: Res<game::Display>,
-    save: Res<save::Save>,
+    slots: Res<level::LevelSlots>,
 ) {
     if cursor.left {
         if let Some(index) = sprite::SlotIndex::from_position(cursor.pos, display.ratio) {
-            if index.0 < save.slots.0 {
+            // +1 for shovel
+            if index.0 < slots.0 + 1 {
                 selecting.0 = index.0;
             }
         }

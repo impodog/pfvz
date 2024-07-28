@@ -126,6 +126,17 @@ impl SelectionArr {
             }
         }
     }
+
+    pub fn len(&self) -> usize {
+        match self {
+            Self::Any => 0,
+            Self::Few(v) | Self::All(v) => v.len(),
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        matches!(self, Self::Any)
+    }
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]

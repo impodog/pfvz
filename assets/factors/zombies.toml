@@ -5,7 +5,7 @@ arm_box = { width = 0.2, height = 0.6 }
 self_health = [100, 70]
 arm_health = 100
 damage = 20
-interval = 0.3
+interval = 0.2
 cooldown = 1.0
 cost = 50
 [roadcone]
@@ -24,3 +24,15 @@ flag_box = { width = 0.5, height = 0.8 }
 flag_health = 100
 cooldown = 1.5
 cost = 75
+[all_star]
+velocity_running = [-0.06, -0.05]
+velocity = [-0.0025, -0.002]
+self_box = { width = 0.7, height = 1.2 }
+helmet_box = { width = 0.4, height = 0.4 }
+self_health = [300, 50]
+helmet_health = 800
+damage = 20
+interval = 0.3
+tackle_damage = 2000
+cooldown = 5.0
+cost = 175

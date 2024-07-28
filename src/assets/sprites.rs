@@ -52,6 +52,7 @@ pub struct SpriteChunks {
     pub cooldown: Handle<Image>,
     pub you_win: Handle<Image>,
     pub white: Handle<Image>,
+    pub shovel: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -93,6 +94,9 @@ pub struct SpritePlants {
     pub wall_nut_damaged: Arc<sprite::FrameArr>,
     pub wall_nut_destroyed: Arc<sprite::FrameArr>,
     pub bowling_nut_concept: Handle<Image>,
+    pub potato_mine: Arc<sprite::FrameArr>,
+    pub potato_mine_preparing: Arc<sprite::FrameArr>,
+    pub spudow: Arc<sprite::FrameArr>,
 }
 
 #[derive(Resource)]
@@ -109,6 +113,13 @@ pub struct SpriteZombies {
     pub bucket_concept: Handle<Image>,
     pub flag: Arc<sprite::FrameArr>,
     pub flag_concept: Handle<Image>,
+    pub all_star: Arc<sprite::FrameArr>,
+    pub all_star_running: Arc<sprite::FrameArr>,
+    pub all_star_dying: Arc<sprite::FrameArr>,
+    pub helmet: Arc<sprite::FrameArr>,
+    pub helmet_broken: Arc<sprite::FrameArr>,
+    pub helmet_destroyed: Arc<sprite::FrameArr>,
+    pub all_star_concept: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -128,6 +139,7 @@ fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         cooldown: server.load("sprites/chunks/cooldown.png"),
         you_win: server.load("sprites/chunks/you_win.png"),
         white: server.load("sprites/chunks/white.png"),
+        shovel: server.load("sprites/chunks/shovel.png"),
     };
     commands.spawn(SpriteBundle {
         sprite: Sprite {
@@ -184,6 +196,17 @@ fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(500),
         ),
         bowling_nut_concept: server.load("sprites/plants/bowling_nut/concept.png"),
+        potato_mine: load_animation(
+            &server,
+            "sprites/plants/potato_mine",
+            Duration::from_millis(700),
+        ),
+        potato_mine_preparing: load_animation(
+            &server,
+            "sprites/plants/potato_mine_preparing",
+            Duration::from_millis(800),
+        ),
+        spudow: load_animation(&server, "sprites/plants/spudow", Duration::from_millis(100)),
     };
     commands.insert_resource(plants);
 }
@@ -226,6 +249,37 @@ fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
         bucket_concept: server.load("sprites/zombies/bucket/concept.png"),
         flag: load_animation(&server, "sprites/zombies/flag", Duration::from_millis(400)),
         flag_concept: server.load("sprites/zombies/flag/concept.png"),
+        all_star: load_animation(
+            &server,
+            "sprites/zombies/all_star",
+            Duration::from_millis(600),
+        ),
+        all_star_running: load_animation(
+            &server,
+            "sprites/zombies/all_star_running",
+            Duration::from_millis(100),
+        ),
+        all_star_dying: load_animation(
+            &server,
+            "sprites/zombies/all_star_dying",
+            Duration::from_millis(300),
+        ),
+        helmet: load_animation(
+            &server,
+            "sprites/zombies/helmet",
+            Duration::from_millis(400),
+        ),
+        helmet_broken: load_animation(
+            &server,
+            "sprites/zombies/helmet_broken",
+            Duration::from_millis(400),
+        ),
+        helmet_destroyed: load_animation(
+            &server,
+            "sprites/zombies/helmet_destroyed",
+            Duration::from_millis(400),
+        ),
+        all_star_concept: server.load("sprites/zombies/all_star/concept.png"),
     };
     commands.insert_resource(zombies);
 }

@@ -23,6 +23,7 @@ bevy = { version = "0.14.0", default-features = false, features = [
     "file_watcher", # Asset hot-reloading
     "wayland",
 ] }
+bevy_framepace = "0.17.1"
 lazy_static = "1.5.0"
 rand = "0.8.5"
 serde = { version = "1.0.203", features = ["derive"] }

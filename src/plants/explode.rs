@@ -11,11 +11,18 @@ impl Plugin for PlantsExplodePlugin {
             die: app.register_system(compn::default::die_not),
             damage: app.register_system(compn::default::damage),
         });
+        *potato_mine_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_potato_mine),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
     }
 }
 
 game_conf!(explode CherryBombExplode);
 game_conf!(systems cherry_bomb_systems);
+game_conf!(explode PotatoMineExplode);
+game_conf!(systems potato_mine_systems);
 
 fn spawn_cherry_bomb(
     In(pos): In<game::Position>,
@@ -42,6 +49,35 @@ fn spawn_cherry_bomb(
     ));
 }
 
+fn spawn_potato_mine(
+    In(mut pos): In<game::Position>,
+    mut commands: Commands,
+    factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
+    map: Res<game::CreatureMap>,
+    explode: Res<PotatoMineExplode>,
+) {
+    pos.y -= 0.2;
+    let creature = map.get(&POTATO_MINE).unwrap();
+    commands.spawn((
+        game::Plant,
+        creature.clone(),
+        pos,
+        sprite::Animation::new(plants.potato_mine_preparing.clone()),
+        creature.hitbox,
+        compn::Explode(explode.0.clone()),
+        compn::PotatoMineTimer {
+            timer: Timer::new(
+                Duration::from_secs_f32(factors.potato_mine.prepare),
+                TimerMode::Once,
+            ),
+            prepared: plants.potato_mine.clone(),
+        },
+        game::Health::from(factors.potato_mine.health),
+        SpriteBundle::default(),
+    ));
+}
+
 fn init_config(
     mut commands: Commands,
     plants: Res<assets::SpritePlants>,
@@ -54,20 +90,46 @@ fn init_config(
         hitbox: factors.cherry_bomb.boom_box,
         damage: factors.cherry_bomb.damage,
     })));
-    let creature = game::Creature(Arc::new(game::CreatureShared {
-        systems: cherry_bomb_systems
-            .read()
-            .unwrap()
-            .expect("systems are not initialized"),
-        image: plants
-            .cherry_bomb
-            .frames
-            .first()
-            .expect("Empty animation cherry_bomb")
-            .clone(),
-        cost: factors.cherry_bomb.cost,
-        cooldown: factors.cherry_bomb.cooldown,
-        hitbox: factors.cherry_bomb.self_box,
-    }));
-    map.insert(CHERRY_BOMB, creature);
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: cherry_bomb_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            image: plants
+                .cherry_bomb
+                .frames
+                .first()
+                .expect("Empty animation cherry_bomb")
+                .clone(),
+            cost: factors.cherry_bomb.cost,
+            cooldown: factors.cherry_bomb.cooldown,
+            hitbox: factors.cherry_bomb.self_box,
+        }));
+        map.insert(CHERRY_BOMB, creature);
+    }
+    commands.insert_resource(PotatoMineExplode(Arc::new(compn::ExplodeShared {
+        anim: plants.spudow.clone(),
+        animation_time: Duration::from_secs_f32(factors.potato_mine.animation_time),
+        hitbox: factors.potato_mine.boom_box,
+        damage: factors.potato_mine.damage,
+    })));
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: potato_mine_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            image: plants
+                .potato_mine
+                .frames
+                .first()
+                .expect("Empty animation potato_mine")
+                .clone(),
+            cost: factors.potato_mine.cost,
+            cooldown: factors.potato_mine.cooldown,
+            hitbox: factors.potato_mine.self_box,
+        }));
+        map.insert(POTATO_MINE, creature);
+    }
 }

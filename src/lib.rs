@@ -18,6 +18,7 @@ pub fn start_pfvz() {
     let mut app = App::new();
     app.add_plugins((
         DefaultPlugins,
+        bevy_framepace::FramepacePlugin,
         assets::AssetsPlugin,
         collectible::CollectiblePlugin,
         config::ConfigPlugin,
