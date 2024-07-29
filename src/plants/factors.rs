@@ -14,6 +14,7 @@ pub struct Peashooter {
     pub velocity: game::VelocityX,
     pub self_box: game::HitBox,
     pub pea_box: game::HitBox,
+    pub times: usize,
     pub health: u32,
     pub damage: u32,
     pub interval: f32,
@@ -65,6 +66,18 @@ pub struct SnowPea {
     pub self_box: game::HitBox,
     pub pea_box: game::HitBox,
     pub snow: compn::SnowSerde,
+    pub times: usize,
+    pub health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Repeater {
+    pub velocity: game::VelocityX,
+    pub self_box: game::HitBox,
+    pub times: usize,
     pub health: u32,
     pub damage: u32,
     pub interval: f32,
@@ -89,6 +102,7 @@ pub struct PlantFactors {
     pub wall_nut: WallNut,
     pub potato_mine: PotatoMine,
     pub snow_pea: SnowPea,
+    pub repeater: Repeater,
     pub bowling_nut: BowlingNut,
 }
 

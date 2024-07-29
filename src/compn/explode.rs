@@ -13,7 +13,7 @@ impl Plugin for CompnExplodePlugin {
                 cherry_bomb_timer_work,
                 potato_mine_timer_work,
             )
-                .run_if(in_state(info::GlobalStates::Play)),
+                .run_if(when_state!(gaming)),
         );
     }
 }

@@ -53,6 +53,8 @@ pub struct SpriteChunks {
     pub you_win: Handle<Image>,
     pub white: Handle<Image>,
     pub shovel: Handle<Image>,
+    pub start: Handle<Image>,
+    pub next: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -99,6 +101,7 @@ pub struct SpritePlants {
     pub spudow: Arc<sprite::FrameArr>,
     pub snow_pea: Arc<sprite::FrameArr>,
     pub snow: Arc<sprite::FrameArr>,
+    pub repeater: Arc<sprite::FrameArr>,
 }
 
 #[derive(Resource)]
@@ -142,6 +145,8 @@ fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         you_win: server.load("sprites/chunks/you_win.png"),
         white: server.load("sprites/chunks/white.png"),
         shovel: server.load("sprites/chunks/shovel.png"),
+        start: server.load("sprites/chunks/start.png"),
+        next: server.load("sprites/chunks/next.png"),
     };
     commands.spawn(SpriteBundle {
         sprite: Sprite {
@@ -215,6 +220,11 @@ fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(200),
         ),
         snow: load_animation(&server, "sprites/plants/snow", Duration::from_millis(50)),
+        repeater: load_animation(
+            &server,
+            "sprites/plants/repeater",
+            Duration::from_millis(150),
+        ),
     };
     commands.insert_resource(plants);
 }

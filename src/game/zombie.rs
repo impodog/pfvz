@@ -7,7 +7,7 @@ impl Plugin for GameZombiePlugin {
         app.add_systems(OnEnter(info::GlobalStates::Play), (init_win_timer,));
         app.add_systems(
             PostUpdate,
-            (losing_test, winning_test).run_if(in_state(info::GlobalStates::Play)),
+            (losing_test, winning_test).run_if(when_state!(gaming)),
         );
     }
 }

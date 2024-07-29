@@ -8,7 +8,7 @@ impl Plugin for GameCreaturePlugin {
         app.init_resource::<CreatureMap>();
         app.add_systems(
             Update,
-            (creature_action,).run_if(in_state(info::GlobalStates::Play)),
+            (creature_action,).run_if(when_state!(gaming)),
         );
     }
 }

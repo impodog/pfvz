@@ -6,7 +6,7 @@ impl Plugin for CompnShooterPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             PreUpdate,
-            (add_shooter_impl, shooter_work).run_if(in_state(info::GlobalStates::Play)),
+            (add_shooter_impl, shooter_work).run_if(when_state!(gaming)),
         );
     }
 }
@@ -17,6 +17,7 @@ pub struct ShooterShared {
     pub interval: Duration,
     pub velocity: game::Velocity,
     pub proj: game::Projectile,
+    pub times: usize,
     pub require_zombie: bool,
     pub after: SystemId<Entity>,
     pub shared: Arc<game::ProjectileShared>,
@@ -74,27 +75,32 @@ fn shooter_work(
                         return;
                     }
                 }
-                let proj_entity = {
-                    let mut commands = commands.spawn((
-                        *pos,
-                        sprite::Animation::new(shooter.shared.anim.clone()),
-                        shooter.shared.hitbox,
-                        shooter.proj.clone(),
-                        shooter.velocity,
-                        SpriteBundle {
-                            transform: Transform::from_xyz(0.0, 0.0, transform.translation.z),
-                            ..Default::default()
-                        },
-                    ));
-                    // Determines whether the projectile is plant(default) or zombie
-                    if q_zombie.get(entity).is_ok() {
-                        commands.insert(game::ZombieRelevant);
-                    } else {
-                        commands.insert(game::PlantRelevant);
-                    }
-                    commands.id()
-                };
-                commands.run_system_with_input(shooter.after, proj_entity);
+                let mut pos = *pos;
+                for _ in 0..shooter.times {
+                    let proj_entity = {
+                        let mut commands = commands.spawn((
+                            pos,
+                            sprite::Animation::new(shooter.shared.anim.clone()),
+                            shooter.shared.hitbox,
+                            shooter.proj.clone(),
+                            shooter.velocity,
+                            SpriteBundle {
+                                transform: Transform::from_xyz(0.0, 0.0, transform.translation.z),
+                                ..Default::default()
+                            },
+                        ));
+                        // Determines whether the projectile is plant(default) or zombie
+                        if q_zombie.get(entity).is_ok() {
+                            commands.insert(game::ZombieRelevant);
+                        } else {
+                            commands.insert(game::PlantRelevant);
+                        }
+                        commands.id()
+                    };
+                    // NOTE: Do we need to make this customizable?
+                    pos.x += 3.0 * shooter.velocity.x;
+                    commands.run_system_with_input(shooter.after, proj_entity);
+                }
             }
         })
 }

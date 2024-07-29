@@ -6,7 +6,7 @@ impl Plugin for CompnBreaksPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (add_breaks_impl, breaks_work).run_if(in_state(info::GlobalStates::Play)),
+            (add_breaks_impl, breaks_work).run_if(when_state!(gaming)),
         );
     }
 }

@@ -7,7 +7,7 @@ impl Plugin for PlantsPlanterPlugin {
         app.add_event::<PlanterEvent>();
         app.add_systems(
             Update,
-            (do_plant,).run_if(in_state(info::GlobalStates::Play)),
+            (do_plant,).run_if(when_state!(gaming)),
         );
     }
 }

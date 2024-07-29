@@ -8,7 +8,7 @@ impl Plugin for LevelRoomPlugin {
         app.add_systems(OnEnter(info::GlobalStates::Play), (init_room,));
         app.add_systems(
             Update,
-            (update_room, spawn_zombies).run_if(in_state(info::GlobalStates::Play)),
+            (update_room, spawn_zombies).run_if(when_state!(gaming)),
         );
     }
 }

@@ -5,24 +5,30 @@ pub(super) struct GamePlayerPlugin;
 
 impl Plugin for GamePlayerPlugin {
     fn build(&self, app: &mut App) {
+        app.add_event::<ShowSelectionEvent>();
+        // This pre-shows the selected plants
+        app.add_systems(OnEnter(info::PlayStates::Cys), (show_selection_on_startup,));
         app.add_systems(
-            OnEnter(info::GlobalStates::Play),
+            OnEnter(info::PlayStates::Gaming),
             (
                 init_player_status,
-                show_selection,
+                show_selection_on_startup,
                 init_sun,
                 init_highlighter,
             ),
         );
         app.add_systems(
+            PreUpdate,
+            (show_selection,).run_if(in_state(info::GlobalStates::Play)),
+        );
+        app.add_systems(
             Update,
             (update_cooldown, update_cooldown_rect, spawn_cooldown_rect)
-                .run_if(in_state(info::GlobalStates::Play)),
+                .run_if(when_state!(gaming)),
         );
         app.add_systems(
             PostUpdate,
-            (update_highlight, update_select, update_sun)
-                .run_if(in_state(info::GlobalStates::Play)),
+            (update_highlight, update_select, update_sun).run_if(when_state!(gaming)),
         );
         app.init_resource::<Sun>();
         app.init_resource::<Selection>();
@@ -97,9 +103,18 @@ fn init_player_status(mut commands: Commands, level: Res<level::Level>) {
     commands.insert_resource(SelectionCooldown::default());
 }
 
+/// This event is used to manually call `show_selection`, so that the selection refreshes
+#[derive(Event, Debug, Clone)]
+pub struct ShowSelectionEvent;
+
+fn show_selection_on_startup(mut event: EventWriter<ShowSelectionEvent>) {
+    event.send(ShowSelectionEvent);
+}
+
 #[allow(clippy::too_many_arguments)]
 fn show_selection(
     mut commands: Commands,
+    mut event: EventReader<ShowSelectionEvent>,
     sel: Res<Selection>,
     map: Res<game::CreatureMap>,
     font: Res<assets::DefaultFont>,
@@ -108,6 +123,11 @@ fn show_selection(
     slots: Res<level::LevelSlots>,
     q_sel: Query<Entity, With<SelectionMarker>>,
 ) {
+    // Only spawn on incoming events, usually sent by `show_selection_on_startup`
+    if event.read().next().is_none() {
+        return;
+    }
+
     q_sel.iter().for_each(|entity| {
         commands.entity(entity).despawn_recursive();
     });

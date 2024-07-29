@@ -6,7 +6,7 @@ impl Plugin for CompnSnowPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (add_snow, snowy_bump, remove_snow).run_if(in_state(info::GlobalStates::Play)),
+            (add_snow, snowy_bump, remove_snow).run_if(when_state!(gaming)),
         );
     }
 }

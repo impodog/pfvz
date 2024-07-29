@@ -6,6 +6,7 @@ pub const CHERRY_BOMB: Id = -3;
 pub const WALL_NUT: Id = -4;
 pub const POTATO_MINE: Id = -5;
 pub const SNOW_PEA: Id = -6;
+pub const REPEATER: Id = -7;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -17,9 +18,9 @@ pub const ALL_STAR_ZOMBIE: Id = 5;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
-pub const LOGICAL: Vec2 = Vec2::new(LOGICAL_WIDTH, LOGICAL_HEIGHT);
 pub const LOGICAL_BOUND: Vec2 = Vec2::new(LOGICAL_WIDTH * 0.6, LOGICAL_HEIGHT * 0.6);
 pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.8);
+pub const BUTTON_SIZE: Vec2 = Vec2::new(SLOT_SIZE.x * 2.0, SLOT_SIZE.y);
 pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
 
 /// This function defines the standard naming of creatures in configuration files and code
@@ -33,6 +34,7 @@ pub fn id_name(id: Id) -> &'static str {
         WALL_NUT => "wall_nut",
         POTATO_MINE => "potato_mine",
         SNOW_PEA => "snow_pea",
+        REPEATER => "repeater",
 
         BOWLING_NUT => "bowling_nut",
 

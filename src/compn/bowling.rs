@@ -6,7 +6,7 @@ impl Plugin for CompnBowlingPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (add_bowling_impl, bowling_work).run_if(in_state(info::GlobalStates::Play)),
+            (add_bowling_impl, bowling_work).run_if(when_state!(gaming)),
         );
     }
 }

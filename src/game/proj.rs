@@ -7,8 +7,7 @@ impl Plugin for GameProjPlugin {
         app.add_event::<ProjectileAction>();
         app.add_systems(
             Update,
-            (test_plant_proj_zombie, test_zombie_proj_plant)
-                .run_if(in_state(info::GlobalStates::Play)),
+            (test_plant_proj_zombie, test_zombie_proj_plant).run_if(when_state!(gaming)),
         );
     }
 }

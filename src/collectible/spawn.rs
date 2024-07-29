@@ -7,7 +7,7 @@ impl Plugin for CollectibleSpawnPlugin {
         app.add_systems(PostStartup, (init_timer,));
         app.add_systems(
             Update,
-            (spawn_sun,).run_if(in_state(info::GlobalStates::Play)),
+            (spawn_sun,).run_if(when_state!(gaming)),
         );
     }
 }

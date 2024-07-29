@@ -8,10 +8,7 @@ impl Plugin for GamePositionPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<Display>();
         app.init_resource::<Collision>();
-        app.add_systems(
-            PreUpdate,
-            (update_collision,).run_if(in_state(info::GlobalStates::Play)),
-        );
+        app.add_systems(PreUpdate, (update_collision,).run_if(when_state!(gaming)));
         app.add_systems(Update, (remove_outbound,));
         // Positioning system may be used by other states,
         // so it is not wrapped under play state
@@ -23,7 +20,7 @@ impl Plugin for GamePositionPlugin {
                 update_position_with_overlay,
                 update_velocity,
             )
-                .run_if(in_state(info::GlobalStates::Play)),
+                .run_if(when_state!(gaming)),
         );
     }
 }
@@ -86,6 +83,12 @@ impl Position {
 
     pub fn same_y(&self, rhs: &Position) -> bool {
         self.y_i32() == rhs.y_i32()
+    }
+
+    pub fn move_by(mut self, x: f32, y: f32) -> Self {
+        self.x += x;
+        self.y += y;
+        self
     }
 }
 impl From<&Vec2> for Position {

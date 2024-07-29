@@ -9,7 +9,7 @@ impl Plugin for InfoMousePlugin {
             PreUpdate,
             ((
                 update_cursor_info,
-                update_inbound.run_if(in_state(info::GlobalStates::Play)),
+                update_inbound.run_if(when_state!(gaming)),
             ),),
         );
     }

@@ -7,7 +7,7 @@ impl Plugin for LevelBannersPlugin {
         app.add_systems(Update, (banner_work,));
         app.add_systems(
             Update,
-            (spawn_wave_banners,).run_if(in_state(info::GlobalStates::Play)),
+            (spawn_wave_banners,).run_if(when_state!(gaming)),
         );
     }
 }

@@ -8,7 +8,7 @@ impl Plugin for CompnProjPlugin {
             PostUpdate,
             (despawn, proj_action)
                 .chain()
-                .run_if(in_state(info::GlobalStates::Play)),
+                .run_if(when_state!(gaming)),
         );
         app.init_resource::<DespawnQueue>();
     }

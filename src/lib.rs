@@ -1,4 +1,5 @@
 pub mod assets;
+pub mod choose;
 pub mod collectible;
 pub mod compn;
 pub mod config;
@@ -33,5 +34,6 @@ pub fn start_pfvz() {
         lose::LosePlugin,
         win::WinPlugin,
     ));
+    app.add_plugins((choose::ChoosePlugin,));
     app.run();
 }

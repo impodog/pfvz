@@ -7,7 +7,7 @@ impl Plugin for LevelProgressPlugin {
         app.add_systems(OnEnter(info::GlobalStates::Play), (init_progress_bar,));
         app.add_systems(
             PostUpdate,
-            (modify_progress_bar,).run_if(in_state(info::GlobalStates::Play)),
+            (modify_progress_bar,).run_if(when_state!(gaming)),
         );
     }
 }

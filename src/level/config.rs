@@ -159,6 +159,19 @@ impl LevelConfig {
     pub fn is_sun_spawn(&self) -> bool {
         self.layout.is_sun_spawn() && self.game.is_sun_spawn()
     }
+
+    pub fn is_compat_plant(&self, id: Id) -> bool {
+        // TODO: Add compatible checks
+        true
+    }
+
+    pub fn max_select(&self, slots: usize) -> usize {
+        match &self.selection {
+            SelectionArr::Any => slots,
+            SelectionArr::Few(v) => slots.saturating_sub(v.len()),
+            SelectionArr::All(_) => 0,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Resource, Default, Debug, Clone)]

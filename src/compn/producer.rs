@@ -6,7 +6,7 @@ impl Plugin for CompnProducerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             PreUpdate,
-            (add_producer_impl, producer_work).run_if(in_state(info::GlobalStates::Play)),
+            (add_producer_impl, producer_work).run_if(when_state!(gaming)),
         );
     }
 }
