@@ -12,6 +12,7 @@ impl Plugin for AssetsTextPlugin {
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct TextInterfaceWin {
     pub get_plant: String,
+    pub note: String,
 }
 
 #[derive(Serialize, Deserialize, Resource, Default, Debug, Clone)]

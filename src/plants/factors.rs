@@ -85,6 +85,14 @@ pub struct Repeater {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct IcebergLettuce {
+    pub self_box: game::HitBox,
+    pub snow: compn::SnowSerde,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -103,6 +111,7 @@ pub struct PlantFactors {
     pub potato_mine: PotatoMine,
     pub snow_pea: SnowPea,
     pub repeater: Repeater,
+    pub iceberg_lettuce: IcebergLettuce,
     pub bowling_nut: BowlingNut,
 }
 

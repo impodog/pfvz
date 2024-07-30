@@ -68,20 +68,6 @@ impl LayoutKind {
         Vec2::new(s.0, s.1)
     }
 
-    /// This returns a index applicable to `PlantLayout`, or usize::MAX if conversion is not
-    /// possible
-    pub fn position_to_index(&self, pos: &game::Position) -> usize {
-        let size = self.half_size_f32();
-        let x = (pos.x + size.0) as i32;
-        let y = (pos.y + size.1) as i32;
-        if let Ok(x) = usize::try_from(x) {
-            if let Ok(y) = usize::try_from(y) {
-                return y * self.size().0 + x;
-            }
-        }
-        usize::MAX
-    }
-
     pub fn get_tile(&self, x: usize, y: usize) -> TileFeature {
         match self {
             Self::Day => TileFeature::Grass,

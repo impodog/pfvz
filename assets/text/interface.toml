@@ -1,2 +1,3 @@
 [win]
 get_plant = "You get a new plant!"
+note = "You get a note from zombies!"

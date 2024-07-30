@@ -6,13 +6,14 @@ pub struct PlantsPlugin;
 impl Plugin for PlantsPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
+            factors::PlantsFactorsPlugin,
             planter::PlantsPlanterPlugin,
             peas::PlantsPeaPlugin,
             producers::PlantsProducersPlugin,
             explode::PlantsExplodePlugin,
             defense::PlantsDefensePlugin,
             bowling::PlantsBowlingPlugin,
-            factors::PlantsFactorsPlugin,
+            contact::PlantsContactPlugin,
         ));
     }
 }

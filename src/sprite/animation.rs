@@ -10,7 +10,7 @@ impl Plugin for SpriteAnimationPlugin {
 
 #[derive(Debug)]
 pub struct FrameArr {
-    pub frames: Vec<Handle<Image>>,
+    pub frames: SmallVec<[Handle<Image>; 3]>,
     pub delta: Duration,
 }
 

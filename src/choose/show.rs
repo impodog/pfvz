@@ -61,6 +61,8 @@ fn spawn_selection(
     save: Res<save::Save>,
     map: Res<game::CreatureMap>,
     level: Res<level::Level>,
+    // Using this preserves the initial selection
+    selection: Res<game::Selection>,
 ) {
     let each = SLOT_SIZE;
     let begin = sprite::SlotIndex(0)
@@ -74,6 +76,7 @@ fn spawn_selection(
     };
     commands.insert_resource(page_size);
     commands.insert_resource(choose::ChooseMenu::from_iter_values(
+        selection.0.clone(),
         save.plants.iter().rev().cloned(),
         level.config.max_select(save.slots.0),
     ));

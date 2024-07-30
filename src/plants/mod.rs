@@ -1,4 +1,5 @@
 mod bowling;
+mod contact;
 mod defense;
 mod explode;
 mod factors;
@@ -7,6 +8,7 @@ mod planter;
 mod plugin;
 mod producers;
 
+pub use contact::*;
 pub use explode::*;
 pub use factors::*;
 pub use peas::*;

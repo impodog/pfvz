@@ -5,10 +5,7 @@ pub(super) struct PlantsPlanterPlugin;
 impl Plugin for PlantsPlanterPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<PlanterEvent>();
-        app.add_systems(
-            Update,
-            (do_plant,).run_if(when_state!(gaming)),
-        );
+        app.add_systems(Update, (do_plant,).run_if(when_state!(gaming)));
     }
 }
 
@@ -35,12 +32,12 @@ fn do_plant(
     q_transform: Query<&Transform>,
 ) {
     if cursor.left && cursor.inbound {
-        let pos = cursor.pos.regularize();
-        let usize_pos = cursor.pos.to_usize_pos();
+        let coordinates = level.config.layout.position_to_coordinates(&cursor.pos);
+        let pos = level.config.layout.regularize(cursor.pos);
         if let Some(id) = selection.get(select.0) {
             if let Some(creature) = map.get(id) {
                 let ok = *id >= 0 || {
-                    let index = level.config.layout.position_to_index(&pos);
+                    let index = level.config.layout.position_to_index(&cursor.pos);
                     plants
                         .plants
                         .get(index)
@@ -50,7 +47,7 @@ fn do_plant(
                     && level
                         .config
                         .layout
-                        .get_tile(usize_pos.0, usize_pos.1)
+                        .get_tile(coordinates.0, coordinates.1)
                         .compat(creature)
                     // NOTE: We may use `Option::is_none_or` if possible in the future
                     && !cooldown
@@ -69,7 +66,7 @@ fn do_plant(
             }
         } else if select.0 == slots.0 {
             let list = {
-                let index = level.config.layout.position_to_index(&pos);
+                let index = level.config.layout.position_to_index(&cursor.pos);
                 plants.plants.get(index)
             };
             if let Some(list) = list {

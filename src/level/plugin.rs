@@ -10,6 +10,7 @@ impl Plugin for LevelPlugin {
             room::LevelRoomPlugin,
             banners::LevelBannersPlugin,
             progress::LevelProgressPlugin,
+            spawn::LevelSpawnPlugin,
         ));
     }
 }

@@ -46,45 +46,6 @@ impl Position {
         }
     }
 
-    pub fn regularize(&self) -> Self {
-        Self {
-            x: self.x.round(),
-            y: self.y.round(),
-            z: self.z.round(),
-            r: self.r,
-        }
-    }
-
-    pub fn align_y(&self) -> Self {
-        Self {
-            x: self.x,
-            y: self.y.round(),
-            z: self.z,
-            r: self.r,
-        }
-    }
-
-    pub fn x_i32(&self) -> i32 {
-        self.x as i32
-    }
-
-    pub fn y_i32(&self) -> i32 {
-        self.y as i32
-    }
-
-    pub fn z_i32(&self) -> i32 {
-        self.z as i32
-    }
-
-    pub fn to_usize_pos(&self) -> (usize, usize) {
-        let pos = self.regularize();
-        (pos.x as usize, pos.y as usize)
-    }
-
-    pub fn same_y(&self, rhs: &Position) -> bool {
-        self.y_i32() == rhs.y_i32()
-    }
-
     pub fn move_by(mut self, x: f32, y: f32) -> Self {
         self.x += x;
         self.y += y;
@@ -254,6 +215,7 @@ fn update_collision(
     config: Res<config::Config>,
     q_pos: Query<(Entity, &Position, &HitBox)>,
     q_no_loss: Query<&NoCollisionLoss>,
+    level: Res<level::Level>,
 ) {
     let map = Arc::new(RwLock::new(HashMap::new()));
     q_pos.par_iter().for_each(|(entity, pos, hitbox)| {
@@ -266,6 +228,7 @@ fn update_collision(
             let set = q_pos
                 .iter()
                 .filter_map(|(sub_entity, sub_pos, sub_hitbox)| {
+                    // NOTE: Regularized positions for y comparison
                     if no_loss {
                         // No loss allow a computation of 2d geometry
                         if sub_entity == entity
@@ -279,11 +242,11 @@ fn update_collision(
                         }
                     } else {
                         #[allow(clippy::collapsible_else_if)]
-                        if sub_entity == entity
-                            || (pos.y_i32() != sub_pos.y_i32())
+                        if !level.config.layout.same_y(pos, sub_pos)
+                            || sub_entity == entity
                             || (pos.x - sub_pos.x).abs() >= (hitbox.width + sub_hitbox.width) / 2.0
                             || (pos.z - sub_pos.z).abs()
-                                >= (hitbox.height + sub_hitbox.height) / 2.0
+                                >= (hitbox.height + sub_hitbox.height) / 2.0 / COLLISION_Z_FACTOR
                         {
                             None
                         } else {

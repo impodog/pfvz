@@ -6,7 +6,7 @@ impl Plugin for WinBannerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             OnEnter(info::GlobalStates::Win),
-            (spawn_banner, get_new_plant),
+            (spawn_banner, get_new_plant, note_from_zombies),
         );
     }
 }
@@ -20,6 +20,43 @@ fn spawn_banner(mut commands: Commands, chunks: Res<assets::SpriteChunks>) {
             ..Default::default()
         },
     ));
+}
+
+fn note_from_zombies(
+    mut commands: Commands,
+    level_index: Res<level::LevelIndex>,
+    italics: Res<assets::ItalicsFont>,
+    interface: Res<assets::TextInterface>,
+    chunks: Res<assets::SpriteChunks>,
+) {
+    if (1..=6).contains(&level_index.stage) && level_index.level == 9 {
+        commands.spawn((
+            game::Position::new_xy(0.0, 2.0),
+            Text2dBundle {
+                text: Text::from_sections([TextSection::new(
+                    interface.win.note.clone() + "\n\n",
+                    TextStyle {
+                        font: italics.0.clone(),
+                        font_size: 80.0,
+                        color: Color::LinearRgba(LinearRgba::new(0.0, 1.0, 1.0, 1.0)),
+                    },
+                )]),
+                ..Default::default()
+            },
+        ));
+        let texture = match level_index.stage {
+            1 => chunks.note1.clone(),
+            _ => Default::default(),
+        };
+        commands.spawn((
+            game::Position::new_xy(0.0, -0.5),
+            game::HitBox::new(6.0, 4.2),
+            SpriteBundle {
+                texture,
+                ..Default::default()
+            },
+        ));
+    }
 }
 
 #[allow(clippy::too_many_arguments)]

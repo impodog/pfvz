@@ -6,10 +6,7 @@ impl Plugin for LevelRoomPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<RoomNextWave>();
         app.add_systems(OnEnter(info::GlobalStates::Play), (init_room,));
-        app.add_systems(
-            Update,
-            (update_room, spawn_zombies).run_if(when_state!(gaming)),
-        );
+        app.add_systems(Update, (update_room,).run_if(when_state!(gaming)));
     }
 }
 
@@ -79,43 +76,4 @@ fn update_room(
             status.fin = true;
         }
     }
-}
-
-fn spawn_zombies(
-    mut action: EventWriter<game::CreatureAction>,
-    mut next_wave: EventReader<RoomNextWave>,
-    level: Res<level::Level>,
-    map: Res<game::CreatureMap>,
-) {
-    next_wave.read().for_each(|wave| {
-        let wave = wave.0;
-        let size = level.config.layout.size();
-
-        // This mostly prevents overlapping zombies
-        let get_x = || size.0 as f32 / 2.0 + 0.5 + rand::thread_rng().gen_range(-0.2..=0.2);
-        let get_y = || rand::thread_rng().gen_range(-(size.1 as f32) / 2.0..size.1 as f32 / 2.0);
-
-        let mut points = level.waves[wave].points;
-        for (id, times) in &level.waves[wave].fixed {
-            for _ in 0..*times {
-                action.send(game::CreatureAction::Spawn(
-                    *id,
-                    game::Position::new_xy(get_x(), get_y()).align_y(),
-                ));
-            }
-        }
-        while points > 0 {
-            let i = rand::thread_rng().gen_range(0..level.waves[wave].avail.len());
-            let id = level.waves[wave].avail[i];
-            if let Some(creature) = map.get(&id) {
-                points = points.saturating_sub(creature.cost);
-            } else {
-                warn!("Attempt to spawn non-existing creature {}", i);
-            }
-            action.send(game::CreatureAction::Spawn(
-                id,
-                game::Position::new_xy(get_x(), get_y()).align_y(),
-            ));
-        }
-    });
 }

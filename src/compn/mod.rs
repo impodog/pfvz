@@ -1,6 +1,8 @@
 mod bowling;
 mod breaks;
+mod contact;
 pub mod default;
+mod dog;
 mod dying;
 mod explode;
 mod plugin;
@@ -12,6 +14,8 @@ mod walker;
 
 pub use bowling::*;
 pub use breaks::*;
+pub use contact::*;
+pub use dog::*;
 pub use dying::*;
 pub use explode::*;
 pub use plugin::*;

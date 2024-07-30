@@ -20,7 +20,7 @@ impl Plugin for AssetsSpritesPlugin {
 /// Load an animation from directory
 fn load_animation(server: &Res<AssetServer>, base: &str, delta: Duration) -> Arc<sprite::FrameArr> {
     let mut i = 1;
-    let mut frames = Vec::new();
+    let mut frames = SmallVec::new();
     loop {
         let path = format!("{}/{}.png", base, i);
         if std::fs::File::open(format!("assets/{}", path)).is_ok() {
@@ -55,6 +55,7 @@ pub struct SpriteChunks {
     pub shovel: Handle<Image>,
     pub start: Handle<Image>,
     pub next: Handle<Image>,
+    pub note1: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -101,6 +102,7 @@ pub struct SpritePlants {
     pub spudow: Arc<sprite::FrameArr>,
     pub snow_pea: Arc<sprite::FrameArr>,
     pub snow: Arc<sprite::FrameArr>,
+    pub iceberg_lettuce: Arc<sprite::FrameArr>,
     pub repeater: Arc<sprite::FrameArr>,
 }
 
@@ -147,6 +149,7 @@ fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         shovel: server.load("sprites/chunks/shovel.png"),
         start: server.load("sprites/chunks/start.png"),
         next: server.load("sprites/chunks/next.png"),
+        note1: server.load("sprites/chunks/note1.png"),
     };
     commands.spawn(SpriteBundle {
         sprite: Sprite {
@@ -224,6 +227,11 @@ fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/plants/repeater",
             Duration::from_millis(150),
+        ),
+        iceberg_lettuce: load_animation(
+            &server,
+            "sprites/plants/iceberg_lettuce",
+            Duration::from_millis(200),
         ),
     };
     commands.insert_resource(plants);

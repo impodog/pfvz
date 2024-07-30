@@ -57,6 +57,7 @@ fn shooter_work(
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
     q_zpos: Query<&game::Position, With<game::Zombie>>,
+    level: Res<level::Level>,
 ) {
     q_shooter
         .iter_mut()
@@ -66,7 +67,7 @@ fn shooter_work(
                 if shooter.require_zombie {
                     let mut ok = false;
                     for zpos in q_zpos.iter() {
-                        if pos.same_y(zpos) && zpos.x >= pos.x {
+                        if level.config.layout.same_y(pos, zpos) && zpos.x >= pos.x {
                             ok = true;
                             break;
                         }

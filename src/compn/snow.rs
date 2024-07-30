@@ -83,11 +83,13 @@ fn add_snow(
 fn remove_snow(
     mut commands: Commands,
     mut q_snow: Query<(Entity, &mut game::Overlay, &Snow, &mut SnowImpl)>,
+    actual_time: Res<config::FrameTime>,
 ) {
     q_snow
         .iter_mut()
         .for_each(|(entity, mut overlay, snow, mut snow_imp)| {
-            snow_imp.timer.tick(overlay.delta());
+            // We use actual time here to detach the snow timer from the snow effect
+            snow_imp.timer.tick(actual_time.delta());
             if snow_imp.timer.just_finished() {
                 overlay.divide(snow.factor);
                 commands

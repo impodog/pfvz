@@ -1,7 +1,9 @@
 use crate::prelude::*;
 
 pub(crate) fn die(In(entity): In<Entity>, mut commands: Commands) {
-    commands.entity(entity).despawn_recursive();
+    if let Some(commands) = commands.get_entity(entity) {
+        commands.despawn_recursive();
+    }
 }
 
 pub(crate) fn die_not(In(_entity): In<Entity>) {

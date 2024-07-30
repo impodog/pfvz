@@ -15,6 +15,8 @@ impl Plugin for CompnPlugin {
             explode::CompnExplodePlugin,
             snow::CompnSnowPlugin,
             bowling::CompnBowlingPlugin,
+            dog::CompnDogPlugin,
+            contact::CompnContactPlugin,
         ));
     }
 }

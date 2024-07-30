@@ -32,3 +32,13 @@ short = "Shoots peas that slow down zombies"
 desc = """Shoots snow peas that can slow down zombies while dealing damage
 Damage: Regular
 Slows down zombies"""
+[desc.repeater]
+name = "Pisum sativum var. dijaculum"
+short = "Shoots two peas at a time"
+desc = """Shoots two peas at a time, saving you some space
+Damage: Double"""
+[desc.iceberg_lettuce]
+name = "Lactuca sativa var. capitata"
+short = "Freezes the first zombie that touches it for a short time"
+desc = """Freezes the first zombie that touches it for a short time
+Damage: Nothing at all"""

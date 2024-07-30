@@ -9,10 +9,14 @@ pub struct ChooseMenu {
     remain_max: usize,
 }
 impl ChooseMenu {
-    pub fn from_iter_values(from: impl IntoIterator<Item = Id>, remain: usize) -> Self {
+    pub fn from_iter_values(
+        result: Vec<Id>,
+        from: impl IntoIterator<Item = Id>,
+        remain: usize,
+    ) -> Self {
         let list = Vec::from_iter(from);
         Self {
-            result: Default::default(),
+            result,
             from: BTreeSet::from_iter(list.iter().cloned()),
             list,
             remain,

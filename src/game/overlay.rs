@@ -33,8 +33,15 @@ impl Overlay {
         self.delta
     }
 
+    // Whenever a division by 0.0 occurs, use this to get the accurate result of speed
+    pub fn recalculate(&mut self) {
+        self.speed = 1.0;
+        for (value, times) in self.speed_queue.iter() {
+            self.speed *= value.0 * (*times as f32);
+        }
+    }
+
     pub fn multiply(&mut self, rate: f32) {
-        self.speed *= rate;
         match self.speed_queue.entry(rate.into()) {
             std::collections::btree_map::Entry::Vacant(vacant) => {
                 vacant.insert(1);
@@ -43,10 +50,10 @@ impl Overlay {
                 *occupied.get_mut() += 1;
             }
         }
+        self.speed *= rate;
     }
 
     pub fn divide(&mut self, rate: f32) {
-        self.speed /= rate;
         let remove = match self.speed_queue.entry(rate.into()) {
             std::collections::btree_map::Entry::Occupied(mut occupied) => {
                 let value = occupied.get().saturating_sub(1);
@@ -57,6 +64,12 @@ impl Overlay {
         };
         if remove {
             self.speed_queue.remove(&rate.into());
+            // This prevents dividing by 0
+            if rate == 0.0 {
+                self.recalculate();
+            } else {
+                self.speed /= rate;
+            }
         }
     }
 }
