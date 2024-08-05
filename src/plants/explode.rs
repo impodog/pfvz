@@ -105,6 +105,7 @@ fn init_config(
             cost: factors.cherry_bomb.cost,
             cooldown: factors.cherry_bomb.cooldown,
             hitbox: factors.cherry_bomb.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(CHERRY_BOMB, creature);
     }
@@ -129,6 +130,7 @@ fn init_config(
             cost: factors.potato_mine.cost,
             cooldown: factors.potato_mine.cooldown,
             hitbox: factors.potato_mine.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(POTATO_MINE, creature);
     }

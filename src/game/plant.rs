@@ -16,6 +16,10 @@ pub struct Plant;
 #[derive(Component)]
 pub struct PlantRelevant;
 
+// Indicates a grave, or hole
+#[derive(Component)]
+pub struct NotPlanted;
+
 #[derive(Resource, Default, Debug)]
 pub struct PlantLayout {
     pub plants: Vec<RwLock<Vec<Entity>>>,
@@ -27,6 +31,12 @@ impl PlantLayout {
         for _ in 0..size {
             self.plants.push(RwLock::new(Vec::new()));
         }
+    }
+
+    pub fn top(&self, pos: usize) -> Option<Entity> {
+        self.plants
+            .get(pos)
+            .and_then(|list| list.read().unwrap().last().cloned())
     }
 }
 

@@ -93,11 +93,31 @@ pub struct IcebergLettuce {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PuffShroom {
+    pub velocity: game::VelocityX,
+    pub self_box: game::HitBox,
+    pub spore_box: game::HitBox,
+    pub range: game::PositionRangeX,
+    pub times: usize,
+    pub health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
     pub health: u32,
     pub damage: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Grave {
+    pub self_box: game::HitBox,
+    pub health: u32,
     pub cooldown: f32,
     pub cost: u32,
 }
@@ -112,7 +132,9 @@ pub struct PlantFactors {
     pub snow_pea: SnowPea,
     pub repeater: Repeater,
     pub iceberg_lettuce: IcebergLettuce,
+    pub puff_shroom: PuffShroom,
     pub bowling_nut: BowlingNut,
+    pub grave: Grave,
 }
 
 fn init_factors(mut commands: Commands) {

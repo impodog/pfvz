@@ -10,7 +10,7 @@ impl Plugin for LoseBannerPlugin {
 
 fn spawn_banner(mut commands: Commands, chunks: Res<assets::SpriteChunks>) {
     commands.spawn((
-        level::Banner::new(Duration::from_millis(10000)),
+        level::Banner::new(Duration::from_millis(5000)),
         game::Position::new_xy(0.0, 0.0),
         SpriteBundle {
             texture: chunks.zayb.clone(),

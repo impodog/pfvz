@@ -2946,6 +2946,7 @@ dependencies = [
  "bevy",
  "bevy_framepace",
  "bevy_kira_audio",
+ "bitflags 2.6.0",
  "lazy_static",
  "ordered-float",
  "rand",

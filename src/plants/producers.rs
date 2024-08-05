@@ -64,6 +64,7 @@ fn init_config(
             cost: factors.sunflower.cost,
             cooldown: factors.sunflower.cooldown,
             hitbox: factors.sunflower.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(SUNFLOWER, creature);
     }

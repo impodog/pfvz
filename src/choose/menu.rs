@@ -7,6 +7,7 @@ pub struct ChooseMenu {
     list: Vec<Id>,
     remain: usize,
     remain_max: usize,
+    remain_min: usize,
 }
 impl ChooseMenu {
     pub fn from_iter_values(
@@ -15,12 +16,14 @@ impl ChooseMenu {
         remain: usize,
     ) -> Self {
         let list = Vec::from_iter(from);
+        let remain_min = result.len();
         Self {
             result,
             from: BTreeSet::from_iter(list.iter().cloned()),
             list,
             remain,
             remain_max: remain,
+            remain_min,
         }
     }
 
@@ -73,7 +76,7 @@ impl ChooseMenu {
     }
 
     pub fn remove_index(&mut self, index: usize) -> bool {
-        if self.remain < self.remain_max {
+        if self.remain < self.remain_max && index >= self.remain_min {
             if let Some(id) = self.result.get(index) {
                 // Make use of NLL, un-borrow the id
                 let id = *id;

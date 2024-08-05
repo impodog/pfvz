@@ -39,3 +39,13 @@ impl From<VelocityAny> for game::Velocity {
         )
     }
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub struct PositionRangeX(pub f32);
+impl From<PositionRangeX> for game::PositionRange {
+    fn from(value: PositionRangeX) -> Self {
+        let mut range = game::PositionRange::default();
+        range.x.end = value.0;
+        range
+    }
+}

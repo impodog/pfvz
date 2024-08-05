@@ -6,10 +6,7 @@ impl Plugin for ZombiesAllStarPlugin {
     fn build(&self, app: &mut App) {
         initialize(&all_star_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(
-            Update,
-            (all_star_tackle,).run_if(when_state!(gaming)),
-        );
+        app.add_systems(Update, (all_star_tackle,).run_if(when_state!(gaming)));
         *all_star_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_all_star_zombie),
             die: app.register_system(compn::default::die),
@@ -83,7 +80,7 @@ fn all_star_tackle(
         &mut game::Velocity,
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
-    q_plant: Query<(), With<game::Plant>>,
+    q_plant: Query<(), (With<game::Plant>, Without<game::NotPlanted>)>,
 ) {
     q_all_star
         .iter_mut()
@@ -160,6 +157,7 @@ fn init_config(
             cost: factors.all_star.cost,
             cooldown: factors.all_star.cooldown,
             hitbox: factors.all_star.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(ALL_STAR_ZOMBIE, creature);
     }

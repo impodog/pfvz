@@ -76,6 +76,7 @@ fn init_config(
             cost: factors.iceberg_lettuce.cost,
             cooldown: factors.iceberg_lettuce.cooldown,
             hitbox: factors.iceberg_lettuce.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(ICEBERG_LETTUCE, creature);
     }

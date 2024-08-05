@@ -30,31 +30,51 @@ fn do_plant(
     cursor: Res<info::CursorInfo>,
     slots: Res<level::LevelSlots>,
     q_transform: Query<&Transform>,
+    q_creature: Query<&game::Creature>,
+    q_pos: Query<&game::Position>,
 ) {
     if cursor.left && cursor.inbound {
         let coordinates = level.config.layout.position_to_coordinates(&cursor.pos);
         let pos = level.config.layout.regularize(cursor.pos);
         if let Some(id) = selection.get(select.0) {
             if let Some(creature) = map.get(id) {
+                let index = level.config.layout.position_to_index(&cursor.pos);
+
                 let ok = *id >= 0 || {
-                    let index = level.config.layout.position_to_index(&cursor.pos);
-                    plants
-                        .plants
-                        .get(index)
-                        .is_some_and(|tile| tile.read().unwrap().is_empty())
+                    // Determines whether the plant is compatible with the tile selected
+                    // Or, when the tile is not empty, return whether the plant is compatible with
+                    // the top layer plant
+                    if let Some(plant) = plants.top(index) {
+                        if let Ok(top_creature) = q_creature.get(plant) {
+                            creature.flags.is_compat(top_creature.flags)
+                        } else {
+                            warn!("Top of a tile is not creature, this should not happen!");
+                            true
+                        }
+                    } else {
+                        creature.flags.is_compat(
+                            level
+                                .config
+                                .layout
+                                .get_tile(coordinates.0, coordinates.1)
+                                .flags(),
+                        )
+                    }
                 };
                 if ok
-                    && level
-                        .config
-                        .layout
-                        .get_tile(coordinates.0, coordinates.1)
-                        .compat(creature)
                     // NOTE: We may use `Option::is_none_or` if possible in the future
                     && !cooldown
                         .get_option(select.0)
                         .is_some_and(|timer| !timer.finished())
                     && sun.0 >= creature.cost
                 {
+                    // When planted on top, increase z height
+                    let mut pos = pos;
+                    if let Some(plant) = plants.top(index) {
+                        if let Ok(top_pos) = q_pos.get(plant) {
+                            pos.z += top_pos.z;
+                        }
+                    }
                     sun.0 -= creature.cost;
                     action.send(game::CreatureAction::Spawn(*id, pos));
                     planter.send(PlanterEvent {
@@ -85,7 +105,14 @@ fn do_plant(
                     std::cmp::Ordering::Less
                 });
                 if let Some(entity) = entity {
-                    commands.entity(*entity).despawn_recursive();
+                    if let Ok(creature) = q_creature.get(*entity) {
+                        // Filters undiggable creatures
+                        if (creature.flags & level::CreatureFlags::UNDIGGABLE).bits() == 0 {
+                            if let Some(commands) = commands.get_entity(*entity) {
+                                commands.despawn_recursive();
+                            }
+                        }
+                    }
                 }
             }
             select.0 = usize::MAX;

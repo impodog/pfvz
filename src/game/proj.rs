@@ -27,6 +27,9 @@ pub enum ProjectileAction {
 pub struct Projectile {
     pub damage: u32,
     pub instant: bool,
+    // Range is placed in `Projectile` instead of `ShooterShared`
+    // This may be used for short-ranged projectiles to disappear
+    pub range: game::PositionRange,
 }
 
 fn test_plant_proj_zombie(

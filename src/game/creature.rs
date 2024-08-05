@@ -6,10 +6,7 @@ impl Plugin for GameCreaturePlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<CreatureAction>();
         app.init_resource::<CreatureMap>();
-        app.add_systems(
-            Update,
-            (creature_action,).run_if(when_state!(gaming)),
-        );
+        app.add_systems(Update, (creature_action,).run_if(when_state!(gaming)));
     }
 }
 
@@ -34,6 +31,7 @@ pub struct CreatureShared {
     pub cooldown: f32,
     pub image: Handle<Image>,
     pub hitbox: game::HitBox,
+    pub flags: level::CreatureFlags,
 }
 
 #[derive(Event, Debug, Clone)]

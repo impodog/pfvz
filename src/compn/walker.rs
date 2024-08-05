@@ -43,7 +43,7 @@ fn walker_add_impl(mut commands: Commands, q_walker: Query<(Entity, &Walker), Ad
 fn walker_lock_target(
     collision: Res<game::Collision>,
     mut q_walker: Query<(&mut WalkerImpl, &mut game::Velocity, Entity)>,
-    q_plant: Query<(), With<game::Plant>>,
+    q_plant: Query<(), (With<game::Plant>, Without<game::NotPlanted>)>,
 ) {
     q_walker
         .par_iter_mut()

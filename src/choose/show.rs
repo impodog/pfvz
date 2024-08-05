@@ -171,6 +171,7 @@ fn modify_selection(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn select_deselect(
     mut menu: ResMut<choose::ChooseMenu>,
     mut play_state: ResMut<NextState<info::PlayStates>>,
@@ -179,6 +180,7 @@ fn select_deselect(
     mut page: ResMut<SelectionPageInfo>,
     display: Res<game::Display>,
     slots: Res<level::LevelSlots>,
+    level: Res<level::Level>,
 ) {
     if cursor.left {
         if let Some(index) = sprite::SlotIndex::from_position(cursor.pos, display.ratio) {
@@ -198,7 +200,12 @@ fn select_deselect(
             let col = (pos.y / page_size.each.y).round() as usize;
             let index =
                 page.current * page_size.rows * page_size.columns + col * page_size.rows + row;
-            menu.add_index(index);
+            if menu
+                .get(index)
+                .is_some_and(|id| level.config.is_compat(*id))
+            {
+                menu.add_index(index);
+            }
         }
     }
 }

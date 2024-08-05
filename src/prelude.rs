@@ -3,12 +3,14 @@ pub(crate) use crate::*;
 pub(crate) use bevy::ecs::system::SystemId;
 pub(crate) use bevy::prelude::*;
 pub(crate) use bevy::sprite::Anchor;
+pub(crate) use bitflags::bitflags;
 pub(crate) use lazy_static::{initialize, lazy_static};
 pub(crate) use ordered_float::OrderedFloat;
 pub(crate) use rand::distributions::WeightedIndex;
 pub(crate) use rand::prelude::*;
 pub(crate) use smallvec::SmallVec;
 pub(crate) use std::collections::{BTreeMap, BTreeSet, HashMap};
+pub(crate) use std::ops::Range;
 pub(crate) use std::sync::{Arc, RwLock};
 pub(crate) use std::time::Duration;
 

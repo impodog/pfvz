@@ -6,7 +6,7 @@ pub(super) struct SaveDataPlugin;
 impl Plugin for SaveDataPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(PreStartup, (load_save,));
-        app.add_systems(PreUpdate, (save_save,));
+        app.add_systems(Last, (save_save,));
     }
 }
 
@@ -41,7 +41,6 @@ fn load_save(mut commands: Commands) {
 fn save_save(mut e_exit: EventReader<AppExit>, save: Res<Save>) {
     e_exit.read().for_each(|_| {
         let s = serde_json::to_string(save.as_ref()).unwrap();
-        info!("Save file serialized: {}", s);
         std::fs::write("save.json", s).expect("Failed to write save file");
     });
 }

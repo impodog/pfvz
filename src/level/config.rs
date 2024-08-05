@@ -26,9 +26,15 @@ pub enum TileFeature {
     Dirt,
 }
 impl TileFeature {
-    pub fn compat(&self, creature: &game::Creature) -> bool {
-        // TODO: Add compatible checks
-        true
+    pub fn is_compat(&self, creature: &game::Creature) -> bool {
+        creature.flags.is_compat(self.flags())
+    }
+
+    pub fn flags(&self) -> level::CreatureFlags {
+        match self {
+            Self::Grass => level::CreatureFlags::MAKE_TERRESTRIAL,
+            Self::Dirt => level::CreatureFlags::MAKE_BARE_GROUND,
+        }
     }
 }
 
@@ -36,11 +42,13 @@ impl TileFeature {
 pub enum LayoutKind {
     #[default]
     Day,
+    Night,
 }
 impl LayoutKind {
     pub const fn size(&self) -> (usize, usize) {
         match self {
             Self::Day => (9, 5),
+            Self::Night => (9, 5),
         }
     }
 
@@ -71,12 +79,21 @@ impl LayoutKind {
     pub fn get_tile(&self, x: usize, y: usize) -> TileFeature {
         match self {
             Self::Day => TileFeature::Grass,
+            Self::Night => TileFeature::Grass,
         }
     }
 
     fn is_sun_spawn(&self) -> bool {
         match self {
             Self::Day => true,
+            Self::Night => false,
+        }
+    }
+
+    fn has_grave(&self) -> bool {
+        match self {
+            Self::Day => false,
+            Self::Night => true,
         }
     }
 }
@@ -91,6 +108,17 @@ impl GameKind {
         match self {
             Self::Adventure => true,
         }
+    }
+
+    fn has_grave(&self) -> bool {
+        match self {
+            Self::Adventure => true,
+        }
+    }
+
+    fn is_compat(&self, id: Id) -> bool {
+        // TODO: ban some plants according to the game kind
+        true
     }
 }
 
@@ -146,9 +174,12 @@ impl LevelConfig {
         self.layout.is_sun_spawn() && self.game.is_sun_spawn()
     }
 
-    pub fn is_compat_plant(&self, id: Id) -> bool {
-        // TODO: Add compatible checks
-        true
+    pub fn has_grave(&self) -> bool {
+        self.layout.has_grave() && self.game.has_grave()
+    }
+
+    pub fn is_compat(&self, id: Id) -> bool {
+        self.game.is_compat(id)
     }
 
     pub fn max_select(&self, slots: usize) -> usize {

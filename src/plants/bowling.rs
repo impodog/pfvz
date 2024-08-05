@@ -58,6 +58,7 @@ fn init_config(
             cost: factors.bowling_nut.cost,
             cooldown: factors.bowling_nut.cooldown,
             hitbox: factors.bowling_nut.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(BOWLING_NUT, creature);
     }

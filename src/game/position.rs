@@ -62,6 +62,37 @@ impl From<&Vec2> for Position {
         }
     }
 }
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PositionRange {
+    pub x: Range<f32>,
+    pub y: Range<f32>,
+    pub z: Range<f32>,
+}
+impl std::ops::Add<Position> for PositionRange {
+    type Output = PositionRange;
+
+    fn add(self, rhs: Position) -> Self::Output {
+        Self::Output {
+            x: self.x.start + rhs.x..self.x.end + rhs.x,
+            y: self.y.start + rhs.y..self.y.end + rhs.y,
+            z: self.z.start + rhs.z..self.z.end + rhs.z,
+        }
+    }
+}
+impl Default for PositionRange {
+    fn default() -> Self {
+        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, 0.0..1.0)
+    }
+}
+impl PositionRange {
+    pub fn new(x: Range<f32>, y: Range<f32>, z: Range<f32>) -> Self {
+        Self { x, y, z }
+    }
+
+    pub fn contains(&self, pos: &Position) -> bool {
+        self.x.contains(&pos.x) && self.y.contains(&pos.y) && self.z.contains(&pos.z)
+    }
+}
 
 #[derive(Component, Serialize, Deserialize, Default, Debug, Clone, Copy)]
 pub struct HitBox {

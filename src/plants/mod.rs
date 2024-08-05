@@ -7,11 +7,12 @@ mod peas;
 mod planter;
 mod plugin;
 mod producers;
+mod special;
 
-pub use contact::*;
 pub use explode::*;
 pub use factors::*;
 pub use peas::*;
 pub use planter::*;
 pub use plugin::*;
 pub use producers::*;
+pub use special::*;

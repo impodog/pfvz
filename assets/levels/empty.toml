@@ -1,0 +1,11 @@
+[config]
+layout = "Day"
+game = "Adventure"
+selection = "Any"
+sun = 50
+[[waves]]
+points = 0
+wait = 0.0
+big = false
+fixed = []
+avail = []

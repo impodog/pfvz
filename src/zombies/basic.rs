@@ -244,6 +244,7 @@ fn init_config(
             cost: factors.basic.cost,
             cooldown: factors.basic.cooldown,
             hitbox: factors.basic.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(BASIC_ZOMBIE, creature);
     }
@@ -257,6 +258,7 @@ fn init_config(
             cost: factors.roadcone.cost,
             cooldown: factors.roadcone.cooldown,
             hitbox: factors.basic.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(ROADCONE_ZOMBIE, creature);
     }
@@ -270,6 +272,7 @@ fn init_config(
             cost: factors.bucket.cost,
             cooldown: factors.bucket.cooldown,
             hitbox: factors.basic.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(BUCKET_ZOMBIE, creature);
     }
@@ -283,6 +286,7 @@ fn init_config(
             cost: factors.flag.cost,
             cooldown: factors.flag.cooldown,
             hitbox: factors.basic.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(FLAG_ZOMBIE, creature);
     }

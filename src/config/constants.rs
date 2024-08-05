@@ -8,8 +8,11 @@ pub const POTATO_MINE: Id = -5;
 pub const SNOW_PEA: Id = -6;
 pub const REPEATER: Id = -7;
 pub const ICEBERG_LETTUCE: Id = -8;
+pub const PUFF_SHROOM: Id = -9;
 
 pub const BOWLING_NUT: Id = -101;
+
+pub const GRAVE: Id = -201;
 
 pub const BASIC_ZOMBIE: Id = 1;
 pub const ROADCONE_ZOMBIE: Id = 2;
@@ -43,8 +46,11 @@ pub fn id_name(id: Id) -> &'static str {
         SNOW_PEA => "snow_pea",
         REPEATER => "repeater",
         ICEBERG_LETTUCE => "iceberg_lettuce",
+        PUFF_SHROOM => "puff_shroom",
 
         BOWLING_NUT => "bowling_nut",
+
+        GRAVE => "grave",
 
         BASIC_ZOMBIE => "basic",
         ROADCONE_ZOMBIE => "roadcone",

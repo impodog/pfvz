@@ -14,6 +14,7 @@ impl Plugin for PlantsPlugin {
             defense::PlantsDefensePlugin,
             bowling::PlantsBowlingPlugin,
             contact::PlantsContactPlugin,
+            special::PlantsSpecialPlugin,
         ));
     }
 }

@@ -64,10 +64,12 @@ fn shooter_work(
         .for_each(|(entity, overlay, shooter, mut work, pos, transform)| {
             work.timer.tick(overlay.delta());
             if work.timer.just_finished() {
+                let range = shooter.proj.range.clone() + level.config.layout.regularize(*pos);
                 if shooter.require_zombie {
                     let mut ok = false;
                     for zpos in q_zpos.iter() {
-                        if level.config.layout.same_y(pos, zpos) && zpos.x >= pos.x {
+                        let zpos = level.config.layout.regularize(*zpos);
+                        if range.contains(&zpos) {
                             ok = true;
                             break;
                         }
