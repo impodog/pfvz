@@ -24,6 +24,9 @@ fn update_save(level: Res<level::Level>, mut save: ResMut<save::Save>) {
         if modify.next > save.adventure.0 {
             save.adventure.0 = modify.next;
         }
+        if modify.slots > save.slots.0 {
+            save.slots.0 = modify.slots;
+        }
     }
 }
 

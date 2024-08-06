@@ -40,7 +40,10 @@ fn spawn_grave(
         sprite::Animation::new(anim),
         creature.hitbox,
         game::Health::from(factors.grave.health),
-        SpriteBundle::default(),
+        SpriteBundle {
+            transform: Transform::from_xyz(0.0, 0.0, -0.1),
+            ..Default::default()
+        },
     ));
 }
 

@@ -23,6 +23,8 @@ pub struct SpritePlants {
     pub spore: Arc<sprite::FrameArr>,
     pub grave1: Arc<sprite::FrameArr>,
     pub grave2: Arc<sprite::FrameArr>,
+    pub sun_shroom_small: Arc<sprite::FrameArr>,
+    pub sun_shroom_big: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -96,6 +98,16 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
         spore: super::load_animation(&server, "sprites/plants/spore", Duration::from_millis(100)),
         grave1: super::load_animation(&server, "sprites/plants/grave1", Duration::from_millis(100)),
         grave2: super::load_animation(&server, "sprites/plants/grave2", Duration::from_millis(100)),
+        sun_shroom_small: super::load_animation(
+            &server,
+            "sprites/plants/sun_shroom_small",
+            Duration::from_millis(250),
+        ),
+        sun_shroom_big: super::load_animation(
+            &server,
+            "sprites/plants/sun_shroom_big",
+            Duration::from_millis(350),
+        ),
     };
     commands.insert_resource(plants);
 }

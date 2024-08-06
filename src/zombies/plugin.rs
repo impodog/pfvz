@@ -9,6 +9,7 @@ impl Plugin for ZombiesPlugin {
             factors::ZombiesFactorsPlugin,
             basic::ZombiesBasicPlugin,
             all_star::ZombiesAllStarPlugin,
+            newspaper::ZombiesNewspaperPlugin,
         ));
     }
 }

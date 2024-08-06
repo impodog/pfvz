@@ -3,10 +3,40 @@ selection = "Any"
 layout = "Night"
 game = "Adventure"
 modify = { give = -10, next = { stage = 2, level = 2 } }
-sun = 99999
+sun = 50
 [[waves]]
 points = 0
-wait = 0.0
+wait = 30.0
+big = false
+fixed = [[1, 2]]
+avail = []
+[[waves]]
+points = 150
+wait = 40.0
+big = false
+fixed = []
+avail = [1, 2]
+[[waves]]
+points = 200
+wait = 50.0
+big = false
+fixed = [[3, 1]]
+avail = [1, 2, 3]
+[[waves]]
+points = 200
+wait = 50.0
 big = false
 fixed = [[1, 1], [2, 2]]
-avail = []
+avail = [1, 2, 3]
+[[waves]]
+points = 200
+wait = 60.0
+big = false
+fixed = [[3, 2]]
+avail = [1, 2, 3]
+[[waves]]
+points = 500
+wait = 60.0
+big = true
+fixed = [[4, 1], [1, 4]]
+avail = [1, 2, 3]

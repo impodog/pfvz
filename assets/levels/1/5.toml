@@ -6,7 +6,7 @@ modify = { give = -5, next = { stage = 1, level = 6 } }
 sun = 125
 [[waves]]
 points = 0
-wait = 0.0
+wait = 20.0
 big = false
 fixed = [[1, 5], [3, 1]]
 avail = []
@@ -20,7 +20,7 @@ avail = []
 points = 200
 wait = 40.0
 big = false
-fixed = [[2, 3], [3, 1]]
+fixed = [[2, 2], [3, 1]]
 avail = [1, 2, 3]
 [[waves]]
 points = 300

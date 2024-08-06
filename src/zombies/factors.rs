@@ -57,6 +57,20 @@ pub struct AllStarZombie {
     pub cooldown: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct NewspaperZombie {
+    pub velocity: game::VelocityXRange,
+    pub rage_velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub newspaper_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub newspaper_health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub rage_interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
@@ -65,6 +79,7 @@ pub struct ZombieFactors {
     pub bucket: BucketZombie,
     pub flag: FlagZombie,
     pub all_star: AllStarZombie,
+    pub newspaper: NewspaperZombie,
 }
 
 fn init_factors(mut commands: Commands) {

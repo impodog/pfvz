@@ -51,7 +51,7 @@ fn snowy_bump(
         if let game::ProjectileAction::Damage(entity, other) = action {
             if let Ok(snowy) = q_snow.get(*entity) {
                 if let Some(mut commands) = commands.get_entity(*other) {
-                    commands.insert(snowy.snow.clone());
+                    commands.try_insert(snowy.snow.clone());
                 }
             }
         }

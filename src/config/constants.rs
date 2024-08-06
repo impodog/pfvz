@@ -9,6 +9,7 @@ pub const SNOW_PEA: Id = -6;
 pub const REPEATER: Id = -7;
 pub const ICEBERG_LETTUCE: Id = -8;
 pub const PUFF_SHROOM: Id = -9;
+pub const SUN_SHROOM: Id = -10;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -19,6 +20,7 @@ pub const ROADCONE_ZOMBIE: Id = 2;
 pub const BUCKET_ZOMBIE: Id = 3;
 pub const FLAG_ZOMBIE: Id = 4;
 pub const ALL_STAR_ZOMBIE: Id = 5;
+pub const NEWSPAPER_ZOMBIE: Id = 6;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
@@ -47,6 +49,7 @@ pub fn id_name(id: Id) -> &'static str {
         REPEATER => "repeater",
         ICEBERG_LETTUCE => "iceberg_lettuce",
         PUFF_SHROOM => "puff_shroom",
+        SUN_SHROOM => "sun_shroom",
 
         BOWLING_NUT => "bowling_nut",
 
@@ -57,7 +60,13 @@ pub fn id_name(id: Id) -> &'static str {
         BUCKET_ZOMBIE => "bucket",
         FLAG_ZOMBIE => "flag",
         ALL_STAR_ZOMBIE => "all_star",
+        NEWSPAPER_ZOMBIE => "newspaper",
 
         _ => "unknown",
     }
+}
+
+/// This function returns the popularity of a creature
+pub fn creature_popularity(creature: &game::Creature) -> f32 {
+    1.0 / creature.cost as f32
 }

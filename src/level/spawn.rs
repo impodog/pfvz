@@ -93,11 +93,22 @@ fn by_probability(
 
     let (id, cost) = if stack.is_empty() {
         (
-            level
-                .waves
-                .get(current.0)
-                .and_then(|wave| wave.avail.choose(&mut rand::thread_rng()))
-                .cloned(),
+            level.waves.get(current.0).and_then(|wave| {
+                let weight = wave
+                    .avail
+                    .iter()
+                    .map(|id| {
+                        (
+                            *id,
+                            map.get(id).map(creature_popularity).unwrap_or_default(),
+                        )
+                    })
+                    .collect::<Vec<_>>();
+                weight
+                    .choose_weighted(&mut rand::thread_rng(), |item| item.1)
+                    .ok()
+                    .map(|item| item.0)
+            }),
             true,
         )
     } else {

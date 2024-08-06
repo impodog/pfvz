@@ -8,6 +8,7 @@ mod planter;
 mod plugin;
 mod producers;
 mod special;
+mod spores;
 
 pub use explode::*;
 pub use factors::*;
@@ -16,3 +17,4 @@ pub use planter::*;
 pub use plugin::*;
 pub use producers::*;
 pub use special::*;
+pub use spores::*;

@@ -106,6 +106,19 @@ pub struct PuffShroom {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SunShroom {
+    pub velocity: game::VelocityAny,
+    pub small_box: game::HitBox,
+    pub big_box: game::HitBox,
+    pub health: u32,
+    pub interval: f32,
+    pub grow_interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+    pub small_multiplier: f32,
+    pub big_multiplier: f32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -133,6 +146,7 @@ pub struct PlantFactors {
     pub repeater: Repeater,
     pub iceberg_lettuce: IcebergLettuce,
     pub puff_shroom: PuffShroom,
+    pub sun_shroom: SunShroom,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
 }

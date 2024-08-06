@@ -42,3 +42,13 @@ name = "Lactuca sativa var. capitata"
 short = "Freezes the first zombie that touches it for a short time"
 desc = """Freezes the first zombie that touches it for a short time
 Damage: Nothing at all"""
+[desc.puff_shroom]
+name = "Calvatia cyathiformis"
+short = "Costless short-ranged shooter"
+desc = """Shoots short-ranged spores at zombies
+Damage: Regular"""
+[desc.sun_shroom]
+name = "Pholiota aurivella"
+short = "Gives you less sun at first. After some time, grows and gives regular sun"
+desc = """Gives you less sun at first. After some time, grows and gives regular sun
+Damage: This won't work"""

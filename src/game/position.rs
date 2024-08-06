@@ -247,6 +247,7 @@ fn update_collision(
     q_pos: Query<(Entity, &Position, &HitBox)>,
     q_no_loss: Query<&NoCollisionLoss>,
     level: Res<level::Level>,
+    mut commands: Commands,
 ) {
     let map = Arc::new(RwLock::new(HashMap::new()));
     q_pos.par_iter().for_each(|(entity, pos, hitbox)| {
@@ -291,7 +292,7 @@ fn update_collision(
     });
     let mut to_remove = Vec::new();
     for (k, v) in map.read().unwrap().iter() {
-        if v.is_empty() {
+        if v.is_empty() || commands.get_entity(*k).is_none() {
             to_remove.push(*k);
         }
     }

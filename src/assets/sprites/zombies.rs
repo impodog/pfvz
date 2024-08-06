@@ -21,6 +21,10 @@ pub struct SpriteZombies {
     pub helmet_broken: Arc<sprite::FrameArr>,
     pub helmet_destroyed: Arc<sprite::FrameArr>,
     pub all_star_concept: Handle<Image>,
+    pub newspaper_zombie: Arc<sprite::FrameArr>,
+    pub newspaper_dying: Arc<sprite::FrameArr>,
+    pub newspaper: Arc<sprite::FrameArr>,
+    pub newspaper_broken: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -92,6 +96,26 @@ pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(400),
         ),
         all_star_concept: server.load("sprites/zombies/all_star/concept.png"),
+        newspaper_zombie: super::load_animation(
+            &server,
+            "sprites/zombies/newspaper_zombie",
+            Duration::from_millis(400),
+        ),
+        newspaper_dying: super::load_animation(
+            &server,
+            "sprites/zombies/newspaper_dying",
+            Duration::from_millis(400),
+        ),
+        newspaper: super::load_animation(
+            &server,
+            "sprites/zombies/newspaper",
+            Duration::from_millis(200),
+        ),
+        newspaper_broken: super::load_animation(
+            &server,
+            "sprites/zombies/newspaper_broken",
+            Duration::from_millis(250),
+        ),
     };
     commands.insert_resource(zombies);
 }

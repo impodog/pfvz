@@ -158,6 +158,8 @@ pub struct StateModify {
     // TODO: Make this 0 to give default item(money)
     pub give: Id,
     pub next: LevelIndex,
+    #[serde(default)]
+    pub slots: usize,
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]

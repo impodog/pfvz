@@ -5,8 +5,13 @@ pub struct CompnWalkerPlugin;
 impl Plugin for CompnWalkerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
-            PreUpdate,
-            (walker_lock_target, walker_add_impl, walker_deal_damage),
+            Update,
+            (
+                walker_lock_target,
+                walker_add_impl,
+                walker_deal_damage,
+                walker_unlock,
+            ),
         );
     }
 }
@@ -34,9 +39,9 @@ impl From<&Walker> for WalkerImpl {
     }
 }
 
-fn walker_add_impl(mut commands: Commands, q_walker: Query<(Entity, &Walker), Added<Walker>>) {
+fn walker_add_impl(mut commands: Commands, q_walker: Query<(Entity, &Walker), Changed<Walker>>) {
     q_walker.iter().for_each(|(entity, walker)| {
-        commands.entity(entity).insert(WalkerImpl::from(walker));
+        commands.entity(entity).try_insert(WalkerImpl::from(walker));
     })
 }
 
@@ -60,6 +65,12 @@ fn walker_lock_target(
                 }
             }
         });
+}
+
+fn walker_unlock(mut q_walker: Query<&mut WalkerImpl, Changed<Walker>>) {
+    q_walker.par_iter_mut().for_each(|mut walker_impl| {
+        walker_impl.target = None;
+    });
 }
 
 fn walker_deal_damage(

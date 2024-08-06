@@ -25,6 +25,14 @@ pub struct Save {
     pub plants: BTreeSet<Id>,
     pub adventure: SaveAdventure,
 }
+impl Save {
+    fn new() -> Self {
+        Self {
+            plants: BTreeSet::from_iter([-1]),
+            ..Default::default()
+        }
+    }
+}
 
 fn load_save(mut commands: Commands) {
     if let Some(save) = std::fs::read_to_string("save.json")
@@ -34,7 +42,7 @@ fn load_save(mut commands: Commands) {
         commands.insert_resource(save);
     } else {
         warn!("No save file available, using default");
-        commands.init_resource::<Save>();
+        commands.insert_resource(Save::new());
     }
 }
 
