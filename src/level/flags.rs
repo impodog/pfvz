@@ -25,6 +25,7 @@ bitflags! {
         const FLOWER_POT = 0x0105;
         const WATER_POT = 0x0205;
         const GRAVE = 0x8080;
+        const GRAVE_BUSTER = 0x0080;
     }
 }
 
@@ -39,7 +40,6 @@ impl CreatureFlags {
 
     // top is the flags provided by the top creature
     pub fn is_compat(&self, top: CreatureFlags) -> bool {
-        top.bits() & CreatureFlags::MAKE_UNUSABLE.bits() == 0
-            && self.compat_bits() & top.terrain_bits() != 0
+        self.compat_bits() & top.terrain_bits() != 0
     }
 }

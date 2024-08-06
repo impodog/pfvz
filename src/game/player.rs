@@ -266,6 +266,7 @@ fn update_highlight(
 fn update_select(
     mut selecting: ResMut<Selecting>,
     cursor: Res<info::CursorInfo>,
+    key: Res<ButtonInput<KeyCode>>,
     display: Res<game::Display>,
     slots: Res<level::LevelSlots>,
 ) {
@@ -282,6 +283,25 @@ fn update_select(
     } else if cursor.right {
         selecting.0 = usize::MAX;
     }
+    key.get_just_pressed().for_each(|key| {
+        let index = match key {
+            KeyCode::Digit1 => 0,
+            KeyCode::Digit2 => 1,
+            KeyCode::Digit3 => 2,
+            KeyCode::Digit4 => 3,
+            KeyCode::Digit5 => 4,
+            KeyCode::Digit6 => 5,
+            KeyCode::Digit7 => 6,
+            KeyCode::Digit8 => 7,
+            KeyCode::Digit9 => 8,
+            KeyCode::Digit0 => 9,
+            KeyCode::KeyS => slots.0,
+            _ => usize::MAX,
+        };
+        if index < slots.0 + 1 {
+            selecting.0 = index;
+        }
+    });
 }
 
 fn init_sun(mut commands: Commands, display: Res<game::Display>, font: Res<assets::DefaultFont>) {

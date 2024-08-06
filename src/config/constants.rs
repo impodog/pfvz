@@ -10,6 +10,7 @@ pub const REPEATER: Id = -7;
 pub const ICEBERG_LETTUCE: Id = -8;
 pub const PUFF_SHROOM: Id = -9;
 pub const SUN_SHROOM: Id = -10;
+pub const GRAVE_BUSTER: Id = -11;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -50,6 +51,7 @@ pub fn id_name(id: Id) -> &'static str {
         ICEBERG_LETTUCE => "iceberg_lettuce",
         PUFF_SHROOM => "puff_shroom",
         SUN_SHROOM => "sun_shroom",
+        GRAVE_BUSTER => "grave_buster",
 
         BOWLING_NUT => "bowling_nut",
 

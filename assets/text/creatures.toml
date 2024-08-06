@@ -52,3 +52,8 @@ name = "Pholiota aurivella"
 short = "Gives you less sun at first. After some time, grows and gives regular sun"
 desc = """Gives you less sun at first. After some time, grows and gives regular sun
 Damage: This won't work"""
+[desc.grave_buster]
+name = "Idontknow nonplantae var. sepultura"
+short = "Removes a grave"
+desc = """Removes a grave on planted
+Damage: This should not exist"""

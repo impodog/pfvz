@@ -87,6 +87,12 @@ cooldown = 7.5
 cost = 25
 small_multiplier = 0.6
 big_multiplier = 1.0
+[grave_buster]
+self_box = { width = 0.8, height = 0.8 }
+health = 300
+interval = 2.0
+cooldown = 7.5
+cost = 75
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }

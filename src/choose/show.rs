@@ -70,7 +70,8 @@ fn spawn_selection(
         .move_by(0.0, -1.0);
     let page_size = SelectionPageSize {
         columns: ((LOGICAL_HEIGHT - begin.y) / each.y) as usize,
-        rows: ((LOGICAL_WIDTH - begin.x) / each.x) as usize,
+        //rows: ((LOGICAL_WIDTH - begin.x) / each.x) as usize,
+        rows: 8,
         each,
         begin,
     };
@@ -85,7 +86,6 @@ fn spawn_selection(
     let mut col = 0usize;
     let mut row = 0usize;
     for id in save.plants.iter().rev() {
-        row += 1;
         if row >= page_size.rows {
             row = 0;
             col += 1;
@@ -115,6 +115,7 @@ fn spawn_selection(
                 ..Default::default()
             },
         ));
+        row += 1;
     }
 
     commands.insert_resource(SelectionPageInfo {
@@ -196,7 +197,7 @@ fn select_deselect(
         } else {
             let mut pos = cursor.pos.move_by(-page_size.begin.x, -page_size.begin.y);
             pos.y = -pos.y;
-            let row = (pos.x / page_size.each.x - SLOT_SIZE.x * 2.0).round() as usize;
+            let row = (pos.x / page_size.each.x).round() as usize;
             let col = (pos.y / page_size.each.y).round() as usize;
             let index =
                 page.current * page_size.rows * page_size.columns + col * page_size.rows + row;

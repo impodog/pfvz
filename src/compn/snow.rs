@@ -6,7 +6,8 @@ impl Plugin for CompnSnowPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (add_snow, snowy_bump, remove_snow).run_if(when_state!(gaming)),
+            (add_snow, snowy_bump, remove_snow, remove_snow_from_parent)
+                .run_if(when_state!(gaming)),
         );
     }
 }
@@ -40,6 +41,12 @@ pub struct SnowyProjectile {
 #[derive(Component, Debug, Clone)]
 pub struct SnowImpl {
     pub timer: Timer,
+}
+
+#[derive(Component, Debug, Clone)]
+pub struct UnsnowParent {
+    // If absolute, no snow effect is applied, otherwise only >0.0 effects are applied
+    pub absolute: bool,
 }
 
 fn snowy_bump(
@@ -98,4 +105,21 @@ fn remove_snow(
                     .remove::<SnowImpl>();
             }
         })
+}
+
+fn remove_snow_from_parent(
+    mut commands: Commands,
+    q_parent: Query<(&UnsnowParent, &Parent)>,
+    q_snow: Query<&Snow, With<SnowImpl>>,
+) {
+    q_parent.iter().for_each(|(unsnow, parent)| {
+        if let Ok(snow) = q_snow.get(parent.get()) {
+            if unsnow.absolute || snow.factor != 0.0 {
+                commands
+                    .entity(parent.get())
+                    .remove::<Snow>()
+                    .remove::<SnowImpl>();
+            }
+        }
+    });
 }

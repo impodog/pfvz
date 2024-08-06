@@ -54,6 +54,7 @@ fn spawn_newspaper_zombie(
             sprite::Animation::new(zombies.newspaper.clone()),
             game::Armor::new(factors.newspaper.newspaper_health),
             compn::Breaks(breaks.0.clone()),
+            compn::UnsnowParent { absolute: false },
             SpriteBundle {
                 transform: Transform::from_translation(Vec3::new(0.0, 0.0, 0.1)),
                 ..SpriteBundle::default()

@@ -1,4 +1,5 @@
 mod bowling;
+mod buster;
 mod contact;
 mod defense;
 mod explode;
@@ -10,6 +11,7 @@ mod producers;
 mod special;
 mod spores;
 
+pub use buster::*;
 pub use explode::*;
 pub use factors::*;
 pub use peas::*;

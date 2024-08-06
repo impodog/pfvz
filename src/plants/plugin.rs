@@ -16,6 +16,7 @@ impl Plugin for PlantsPlugin {
             contact::PlantsContactPlugin,
             special::PlantsSpecialPlugin,
             spores::PlantsSporesPlugin,
+            buster::PlantsBusterPlugin,
         ));
     }
 }
