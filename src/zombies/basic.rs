@@ -8,6 +8,7 @@ impl Plugin for ZombiesBasicPlugin {
         initialize(&roadcone_zombie_systems);
         initialize(&bucket_zombie_systems);
         initialize(&flag_zombie_systems);
+        initialize(&screen_door_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
         app.add_systems(Update, (add_basic_zombie_arm,));
         *basic_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
@@ -30,6 +31,11 @@ impl Plugin for ZombiesBasicPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
+        *screen_door_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_screen_door_zombie),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
     }
 }
 
@@ -40,6 +46,8 @@ game_conf!(breaks RoadconeBreaks);
 game_conf!(systems bucket_zombie_systems);
 game_conf!(breaks BucketBreaks);
 game_conf!(systems flag_zombie_systems);
+game_conf!(systems screen_door_zombie_systems);
+game_conf!(breaks ScreenDoorBreaks);
 
 #[derive(Component, Debug, Clone)]
 pub struct BasicZombieMarker;
@@ -182,6 +190,7 @@ fn spawn_flag_zombie(
     let entity = commands
         .spawn((
             game::Zombie,
+            BasicZombieMarker,
             creature.clone(),
             pos,
             game::Velocity::from(factors.flag.velocity),
@@ -199,6 +208,47 @@ fn spawn_flag_zombie(
             factors.flag.flag_box,
             sprite::Animation::new(zombies.flag.clone()),
             game::Armor::new(factors.flag.flag_health),
+            SpriteBundle {
+                transform: Transform::from_xyz(0.0, 0.0, 1.0),
+                ..Default::default()
+            },
+        ))
+        .set_parent(entity);
+}
+
+fn spawn_screen_door_zombie(
+    In(pos): In<game::Position>,
+    zombies: Res<assets::SpriteZombies>,
+    mut commands: Commands,
+    factors: Res<zombies::ZombieFactors>,
+    map: Res<game::CreatureMap>,
+    walker: Res<BasicZombieWalker>,
+    breaks: Res<ScreenDoorBreaks>,
+) {
+    let creature = map.get(&SCREEN_DOOR_ZOMBIE).unwrap();
+    let entity = commands
+        .spawn((
+            game::Zombie,
+            BasicZombieMarker,
+            creature.clone(),
+            pos,
+            game::Velocity::from(factors.basic.velocity),
+            sprite::Animation::new(zombies.basic.clone()),
+            compn::Dying::new(zombies.basic_dying.clone()),
+            creature.hitbox,
+            compn::Walker(walker.0.clone()),
+            game::Health::from(factors.basic.self_health),
+            SpriteBundle::default(),
+        ))
+        .id();
+    commands
+        .spawn((
+            game::Position::new(-0.1, 0.0, 0.1, 0.1),
+            factors.screen_door.screen_door_box,
+            sprite::Animation::new(zombies.screen_door.clone()),
+            game::Armor::new(factors.screen_door.screen_door_health),
+            compn::Breaks(breaks.0.clone()),
+            compn::UnsnowParent { absolute: false },
             SpriteBundle {
                 transform: Transform::from_xyz(0.0, 0.0, 1.0),
                 ..Default::default()
@@ -228,6 +278,14 @@ fn init_config(
             zombies.bucket_destroyed.clone(),
         ],
         init: factors.bucket.bucket_health,
+    })));
+    commands.insert_resource(ScreenDoorBreaks(Arc::new(compn::BreaksShared {
+        v: vec![
+            zombies.screen_door.clone(),
+            zombies.screen_door_broken.clone(),
+            zombies.screen_door_destroyed.clone(),
+        ],
+        init: factors.screen_door.screen_door_health,
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
@@ -289,5 +347,19 @@ fn init_config(
             flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(FLAG_ZOMBIE, creature);
+    }
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: screen_door_zombie_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            image: zombies.screen_door_concept.clone(),
+            cost: factors.screen_door.cost,
+            cooldown: factors.screen_door.cooldown,
+            hitbox: factors.basic.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+        }));
+        map.insert(SCREEN_DOOR_ZOMBIE, creature);
     }
 }

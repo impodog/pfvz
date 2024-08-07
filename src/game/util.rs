@@ -36,6 +36,12 @@ macro_rules! game_conf {
             static ref $name: RwLock<Option<bevy::ecs::system::SystemId<$in>>> = RwLock::new(None);
         }
     };
+    (pub system $name: ident, $in: ty) => {
+        lazy_static! {
+            pub static ref $name: RwLock<Option<bevy::ecs::system::SystemId<$in>>> =
+                RwLock::new(None);
+        }
+    };
 }
 
 pub fn query_overlay<F, R>(

@@ -57,3 +57,9 @@ name = "Idontknow nonplantae var. sepultura"
 short = "Removes a grave"
 desc = """Removes a grave on planted
 Damage: This should not exist"""
+[desc.fume_shroom]
+name = "Cortinarius archeri"
+short = "Shoots fumes that can damage many zombies at once"
+desc = """Shoots fumes that can pass through zombies
+Damage: Regular
+Area effect"""

@@ -25,6 +25,10 @@ pub struct SpriteZombies {
     pub newspaper_dying: Arc<sprite::FrameArr>,
     pub newspaper: Arc<sprite::FrameArr>,
     pub newspaper_broken: Arc<sprite::FrameArr>,
+    pub screen_door: Arc<sprite::FrameArr>,
+    pub screen_door_broken: Arc<sprite::FrameArr>,
+    pub screen_door_destroyed: Arc<sprite::FrameArr>,
+    pub screen_door_concept: Handle<Image>,
 }
 
 pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -116,6 +120,22 @@ pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/zombies/newspaper_broken",
             Duration::from_millis(250),
         ),
+        screen_door: super::load_animation(
+            &server,
+            "sprites/zombies/screen_door",
+            Duration::from_millis(300),
+        ),
+        screen_door_broken: super::load_animation(
+            &server,
+            "sprites/zombies/screen_door_broken",
+            Duration::from_millis(300),
+        ),
+        screen_door_destroyed: super::load_animation(
+            &server,
+            "sprites/zombies/screen_door_destroyed",
+            Duration::from_millis(300),
+        ),
+        screen_door_concept: server.load("sprites/zombies/screen_door/concept.png"),
     };
     commands.insert_resource(zombies);
 }

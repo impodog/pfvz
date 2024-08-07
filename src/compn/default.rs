@@ -1,5 +1,15 @@
 use crate::prelude::*;
 
+pub(super) struct CompnDefaultPlugin;
+
+impl Plugin for CompnDefaultPlugin {
+    fn build(&self, app: &mut App) {
+        *system_do_nothing.write().unwrap() = Some(app.register_system(do_nothing));
+    }
+}
+
+game_conf!(pub system system_do_nothing, Entity);
+
 pub(crate) fn die(In(entity): In<Entity>, mut commands: Commands) {
     if let Some(commands) = commands.get_entity(entity) {
         commands.despawn_recursive();

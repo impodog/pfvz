@@ -20,7 +20,22 @@ pub struct ShooterShared {
     pub times: usize,
     pub require_zombie: bool,
     pub after: SystemId<Entity>,
+    pub callback: SystemId<Entity>,
     pub shared: Arc<game::ProjectileShared>,
+}
+impl Default for ShooterShared {
+    fn default() -> Self {
+        Self {
+            interval: Default::default(),
+            velocity: Default::default(),
+            proj: Default::default(),
+            times: 1,
+            require_zombie: false,
+            after: compn::default::system_do_nothing.read().unwrap().unwrap(),
+            callback: compn::default::system_do_nothing.read().unwrap().unwrap(),
+            shared: Default::default(),
+        }
+    }
 }
 #[derive(Component, Debug, Clone, Deref)]
 pub struct Shooter(pub Arc<ShooterShared>);
@@ -102,6 +117,7 @@ fn shooter_work(
                     };
                     // NOTE: Do we need to make this customizable?
                     pos.x += 3.0 * shooter.velocity.x;
+                    commands.run_system_with_input(shooter.callback, entity);
                     commands.run_system_with_input(shooter.after, proj_entity);
                 }
             }

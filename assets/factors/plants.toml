@@ -93,6 +93,15 @@ health = 300
 interval = 2.0
 cooldown = 7.5
 cost = 75
+[fume_shroom]
+self_box = { width = 1.05, height = 1.0 }
+fume_box = { width = 4.0, height = 0.3 }
+times = 1
+health = 200
+damage = 20
+interval = 1.5
+cooldown = 7.5
+cost = 125
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }

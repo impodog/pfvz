@@ -6,6 +6,7 @@ pub struct CompnPlugin;
 impl Plugin for CompnPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
+            default::CompnDefaultPlugin,
             shooter::CompnShooterPlugin,
             producer::CompnProducerPlugin,
             proj::CompnProjPlugin,
@@ -17,6 +18,7 @@ impl Plugin for CompnPlugin {
             bowling::CompnBowlingPlugin,
             dog::CompnDogPlugin,
             contact::CompnContactPlugin,
+            anim_do::CompnAnimDoPlugin,
         ));
     }
 }

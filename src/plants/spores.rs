@@ -11,14 +11,12 @@ impl Plugin for PlantsSporesPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
-        *puff_shroom_after.write().unwrap() = Some(app.register_system(compn::default::do_nothing));
     }
 }
 
 game_conf!(projectile ProjectileSpore);
 game_conf!(shooter PuffShroomShooter);
 game_conf!(systems puff_shroom_systems);
-game_conf!(system puff_shroom_after, Entity);
 
 fn spawn_puff_shroom(
     In(pos): In<game::Position>,
@@ -58,13 +56,13 @@ fn init_config(
             velocity: factors.puff_shroom.velocity.into(),
             proj: game::Projectile {
                 damage: factors.puff_shroom.damage,
-                instant: true,
                 range: factors.puff_shroom.range.into(),
+                ..Default::default()
             },
             times: factors.puff_shroom.times,
             require_zombie: true,
-            after: puff_shroom_after.read().unwrap().unwrap(),
             shared: spore.clone(),
+            ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
             systems: puff_shroom_systems

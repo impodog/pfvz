@@ -1,3 +1,4 @@
+mod anim_do;
 mod bowling;
 mod breaks;
 mod contact;
@@ -12,6 +13,7 @@ mod shooter;
 mod snow;
 mod walker;
 
+pub use anim_do::*;
 pub use bowling::*;
 pub use breaks::*;
 pub use contact::*;

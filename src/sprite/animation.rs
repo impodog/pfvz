@@ -13,6 +13,15 @@ pub struct FrameArr {
     pub frames: SmallVec<[Handle<Image>; 3]>,
     pub delta: Duration,
 }
+impl Default for FrameArr {
+    fn default() -> Self {
+        Self {
+            // This additional blank is added to prevent issues caused by empty animations
+            frames: smallvec::smallvec![Default::default()],
+            delta: Default::default(),
+        }
+    }
+}
 
 #[derive(Component, Debug, Clone)]
 pub struct Animation {
@@ -35,6 +44,14 @@ impl Animation {
         self.timer = Timer::new(frames.delta, TimerMode::Repeating);
         self.frames = frames;
         self.cursor = 0;
+    }
+
+    pub fn just_finished(&self) -> bool {
+        self.timer.just_finished() && self.cursor == self.frames.frames.len() - 1
+    }
+
+    pub fn frames(&self) -> Arc<FrameArr> {
+        self.frames.clone()
     }
 }
 

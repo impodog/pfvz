@@ -71,6 +71,13 @@ pub struct NewspaperZombie {
     pub cooldown: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ScreenDoorZombie {
+    pub screen_door_box: game::HitBox,
+    pub screen_door_health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
@@ -80,6 +87,7 @@ pub struct ZombieFactors {
     pub flag: FlagZombie,
     pub all_star: AllStarZombie,
     pub newspaper: NewspaperZombie,
+    pub screen_door: ScreenDoorZombie,
 }
 
 fn init_factors(mut commands: Commands) {

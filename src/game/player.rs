@@ -157,7 +157,7 @@ fn show_selection(
                             TextStyle {
                                 font: font.0.clone(),
                                 font_size: 30.0,
-                                color: Color::LinearRgba(LinearRgba::new(0.1, 1.0, 1.0, 0.7)),
+                                color: Color::LinearRgba(LinearRgba::new(0.1, 1.0, 1.0, 0.8)),
                             },
                         ),
                         // z=1.0 makes sure that the cost is shown above the selection image
@@ -312,7 +312,7 @@ fn init_sun(mut commands: Commands, display: Res<game::Display>, font: Res<asset
         pos,
         Text2dBundle {
             text: Text::from_section(
-                "99999",
+                "CYAN",
                 TextStyle {
                     font: font.0.clone(),
                     font_size: 40.0,

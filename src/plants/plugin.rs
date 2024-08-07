@@ -17,6 +17,7 @@ impl Plugin for PlantsPlugin {
             special::PlantsSpecialPlugin,
             spores::PlantsSporesPlugin,
             buster::PlantsBusterPlugin,
+            fume::PlantsFumePlugin,
         ));
     }
 }

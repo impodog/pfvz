@@ -11,6 +11,7 @@ pub const ICEBERG_LETTUCE: Id = -8;
 pub const PUFF_SHROOM: Id = -9;
 pub const SUN_SHROOM: Id = -10;
 pub const GRAVE_BUSTER: Id = -11;
+pub const FUME_SHROOM: Id = -12;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -22,6 +23,7 @@ pub const BUCKET_ZOMBIE: Id = 3;
 pub const FLAG_ZOMBIE: Id = 4;
 pub const ALL_STAR_ZOMBIE: Id = 5;
 pub const NEWSPAPER_ZOMBIE: Id = 6;
+pub const SCREEN_DOOR_ZOMBIE: Id = 7;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
@@ -63,6 +65,7 @@ pub fn id_name(id: Id) -> &'static str {
         FLAG_ZOMBIE => "flag",
         ALL_STAR_ZOMBIE => "all_star",
         NEWSPAPER_ZOMBIE => "newspaper",
+        SCREEN_DOOR_ZOMBIE => "screen_door",
 
         _ => "unknown",
     }

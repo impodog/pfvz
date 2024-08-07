@@ -31,7 +31,7 @@ fn do_plant(
     slots: Res<level::LevelSlots>,
     q_transform: Query<&Transform>,
     q_creature: Query<&game::Creature>,
-    q_pos: Query<&game::Position>,
+    q_pos: Query<(&game::Position, &game::HitBox)>,
 ) {
     if cursor.left && cursor.inbound {
         let coordinates = level.config.layout.position_to_coordinates(&cursor.pos);
@@ -71,8 +71,8 @@ fn do_plant(
                     // When planted on top, increase z height
                     let mut pos = pos;
                     if let Some(plant) = plants.top(index) {
-                        if let Ok(top_pos) = q_pos.get(plant) {
-                            pos.z += top_pos.z;
+                        if let Ok((top_pos, top_hitbox)) = q_pos.get(plant) {
+                            pos.z += top_pos.z + top_hitbox.height / 2.0;
                         }
                     }
                     sun.0 -= creature.cost;

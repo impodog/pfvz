@@ -12,7 +12,7 @@ impl Plugin for GameProjPlugin {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct ProjectileShared {
     pub anim: Arc<sprite::FrameArr>,
     pub hitbox: game::HitBox,
@@ -21,12 +21,14 @@ pub struct ProjectileShared {
 #[derive(Event, Debug, Clone)]
 pub enum ProjectileAction {
     Damage(Entity, Entity),
+    Consumed(Entity),
 }
 
-#[derive(Component, Debug, Clone)]
+#[derive(Component, Default, Debug, Clone)]
 pub struct Projectile {
     pub damage: u32,
-    pub instant: bool,
+    pub area: bool,
+    pub time: Duration,
     // Range is placed in `Projectile` instead of `ShooterShared`
     // This may be used for short-ranged projectiles to disappear
     pub range: game::PositionRange,
@@ -41,6 +43,7 @@ fn test_plant_proj_zombie(
     q_zombie: Query<Entity, With<game::Zombie>>,
 ) {
     q_proj.iter().for_each(|(entity, proj)| {
+        let mut consumed = false;
         if let Some(set) = collision.get(&entity) {
             for zombie in set.iter() {
                 if let Ok(zombie_entity) = q_zombie.get(*zombie) {
@@ -49,10 +52,16 @@ fn test_plant_proj_zombie(
                         zombie_entity,
                         multiply_uf!(proj.damage, config.gamerule.damage.0),
                     ));
+                    consumed = true;
                     // This prevents multiple damages
-                    break;
+                    if !proj.area {
+                        break;
+                    }
                 }
             }
+        }
+        if consumed {
+            e_proj.send(ProjectileAction::Consumed(entity));
         }
     });
 }
@@ -65,13 +74,21 @@ fn test_zombie_proj_plant(
     q_plant: Query<Entity, With<game::Plant>>,
 ) {
     q_proj.iter().for_each(|(entity, proj)| {
+        let mut consumed = false;
         if let Some(set) = collision.get(&entity) {
-            set.iter().for_each(|plant| {
+            for plant in set.iter() {
                 if let Ok(plant_entity) = q_plant.get(*plant) {
                     e_proj.send(ProjectileAction::Damage(entity, plant_entity));
                     e_creature.send(game::CreatureAction::Damage(plant_entity, proj.damage));
+                    consumed = true;
+                    if !proj.area {
+                        break;
+                    }
                 }
-            });
+            }
+        }
+        if consumed {
+            e_proj.send(ProjectileAction::Consumed(entity));
         }
     });
 }

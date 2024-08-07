@@ -13,7 +13,6 @@ impl Plugin for PlantsPeaPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
-        *peashooter_after.write().unwrap() = Some(app.register_system(compn::default::do_nothing));
         *snow_pea_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_snow_pea),
             die: app.register_system(compn::default::die),
@@ -25,14 +24,12 @@ impl Plugin for PlantsPeaPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
-        *repeater_after.write().unwrap() = Some(app.register_system(compn::default::do_nothing));
     }
 }
 
 game_conf!(projectile ProjectilePea);
 game_conf!(shooter PeashooterShooter);
 game_conf!(systems peashooter_systems);
-game_conf!(system peashooter_after, Entity);
 game_conf!(projectile ProjectileSnow);
 game_conf!(shooter SnowPeaShooter);
 game_conf!(systems snow_pea_systems);
@@ -40,7 +37,6 @@ game_conf!(system snow_pea_after, Entity);
 // We'll reuse the same projectile pea
 game_conf!(shooter RepeaterShooter);
 game_conf!(systems repeater_systems);
-game_conf!(system repeater_after, Entity);
 
 fn spawn_peashooter(
     In(pos): In<game::Position>,
@@ -128,13 +124,12 @@ fn init_config(
             velocity: factors.peashooter.velocity.into(),
             proj: game::Projectile {
                 damage: factors.peashooter.damage,
-                instant: true,
-                range: game::PositionRange::default(),
+                ..Default::default()
             },
             times: factors.peashooter.times,
             require_zombie: true,
-            after: peashooter_after.read().unwrap().unwrap(),
             shared: pea.clone(),
+            ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
             systems: peashooter_systems
@@ -161,13 +156,12 @@ fn init_config(
             velocity: factors.snow_pea.velocity.into(),
             proj: game::Projectile {
                 damage: factors.snow_pea.damage,
-                instant: true,
-                range: game::PositionRange::default(),
+                ..Default::default()
             },
             times: factors.snow_pea.times,
             require_zombie: true,
-            after: snow_pea_after.read().unwrap().unwrap(),
             shared: snow.clone(),
+            ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
             systems: snow_pea_systems
@@ -193,13 +187,12 @@ fn init_config(
             velocity: factors.repeater.velocity.into(),
             proj: game::Projectile {
                 damage: factors.repeater.damage,
-                instant: true,
-                range: game::PositionRange::default(),
+                ..Default::default()
             },
             times: factors.repeater.times,
             require_zombie: true,
-            after: repeater_after.read().unwrap().unwrap(),
             shared: pea.clone(),
+            ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
             systems: repeater_systems
