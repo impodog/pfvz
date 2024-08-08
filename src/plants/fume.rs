@@ -105,7 +105,7 @@ fn init_config(
                 .fume_shroom
                 .frames
                 .first()
-                .expect("Empty animation repeater")
+                .expect("Empty animation fume_shroom")
                 .clone(),
             cost: factors.fume_shroom.cost,
             cooldown: factors.fume_shroom.cooldown,

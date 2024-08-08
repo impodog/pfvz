@@ -13,6 +13,7 @@ pub const SUN_SHROOM: Id = -10;
 pub const GRAVE_BUSTER: Id = -11;
 pub const FUME_SHROOM: Id = -12;
 pub const SCAREDY_SHROOM: Id = -13;
+pub const ICE_SHROOM: Id = -14;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -58,6 +59,7 @@ pub fn id_name(id: Id) -> &'static str {
         GRAVE_BUSTER => "grave_buster",
         FUME_SHROOM => "fume_shroom",
         SCAREDY_SHROOM => "scaredy_shroom",
+        ICE_SHROOM => "ice_shroom",
 
         BOWLING_NUT => "bowling_nut",
 

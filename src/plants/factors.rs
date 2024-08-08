@@ -150,6 +150,16 @@ pub struct ScaredyShroom {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct IceShroom {
+    pub self_box: game::HitBox,
+    pub snow: compn::SnowSerde,
+    pub health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -181,6 +191,7 @@ pub struct PlantFactors {
     pub grave_buster: GraveBuster,
     pub fume_shroom: FumeShroom,
     pub scaredy_shroom: ScaredyShroom,
+    pub ice_shroom: IceShroom,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
 }

@@ -19,6 +19,7 @@ impl Plugin for CompnPlugin {
             dog::CompnDogPlugin,
             contact::CompnContactPlugin,
             anim_do::CompnAnimDoPlugin,
+            instant::CompnInstantPlugin,
         ));
     }
 }

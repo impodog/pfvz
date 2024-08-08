@@ -7,6 +7,7 @@ impl Plugin for PlantsPeaPlugin {
         initialize(&peashooter_systems);
         initialize(&snow_pea_systems);
         initialize(&repeater_systems);
+        initialize(&snow_pea_after);
         app.add_systems(PostStartup, (init_config,));
         *peashooter_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_peashooter),

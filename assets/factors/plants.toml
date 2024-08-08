@@ -112,6 +112,14 @@ damage = 20
 interval = 1.5
 cooldown = 7.5
 cost = 50
+[ice_shroom]
+self_box = { width = 1.0, height = 1.0 }
+snow = { duration = 10.0, factor = 0.0 }
+health = 200
+damage = 20
+interval = 1.0
+cooldown = 60.0
+cost = 100
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }

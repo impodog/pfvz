@@ -28,7 +28,10 @@ struct ProducerImpl {
 impl From<&Producer> for ProducerImpl {
     fn from(value: &Producer) -> Self {
         Self {
-            timer: Timer::new(value.interval / 2, TimerMode::Repeating),
+            timer: Timer::new(
+                Duration::from_secs_f32(value.interval.as_secs_f32() / 1.5),
+                TimerMode::Repeating,
+            ),
         }
     }
 }
