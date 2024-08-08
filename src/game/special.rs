@@ -49,3 +49,11 @@ impl From<PositionRangeX> for game::PositionRange {
         range
     }
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub struct DurationRangeSecs(pub f32, pub f32);
+impl From<DurationRangeSecs> for Duration {
+    fn from(value: DurationRangeSecs) -> Self {
+        Duration::from_secs_f32(rand::thread_rng().gen_range(value.0..=value.1))
+    }
+}

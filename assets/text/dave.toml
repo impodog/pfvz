@@ -1,0 +1,26 @@
+map = [
+    [
+        { stage = 2, level = 1 },
+        [
+            "Greetings, you.",
+            "I'm sorry that I'm NOT sorry for showing up late.",
+            "You should've listened to me.",
+            "Check this game out at impodog's github account.",
+            "DO IT OR I'LL SPAWN MORE ZOMBIES",
+        ],
+    ],
+    [
+        { stage = 2, level = 5 },
+        [
+            "Tell you what.",
+            "This is a fun level to play!",
+            "Use your hammer to smash those zombies!",
+        ],
+    ],
+    [
+        { stage = 2, level = 10 },
+        [
+            "I've heard about Max.",
+        ],
+    ],
+]

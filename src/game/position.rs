@@ -15,12 +15,11 @@ impl Plugin for GamePositionPlugin {
         app.add_systems(PostUpdate, (update_transform, update_sprite));
         app.add_systems(
             PostUpdate,
-            (
-                update_position,
-                update_position_with_overlay,
-                update_velocity,
-            )
-                .run_if(when_state!(gaming)),
+            (update_position, update_velocity).run_if(when_state!(play)),
+        );
+        app.add_systems(
+            PostUpdate,
+            (update_position_with_overlay,).run_if(when_state!(gaming)),
         );
     }
 }

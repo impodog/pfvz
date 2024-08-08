@@ -13,6 +13,7 @@ mod special;
 mod spores;
 
 pub use buster::*;
+pub use contact::*;
 pub use explode::*;
 pub use factors::*;
 pub use fume::*;

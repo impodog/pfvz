@@ -35,12 +35,12 @@ impl From<&Producer> for ProducerImpl {
 
 fn add_producer_impl(
     mut commands: Commands,
-    q_producer: Query<(Entity, &Producer), Added<Producer>>,
+    q_producer: Query<(Entity, &Producer), Changed<Producer>>,
 ) {
     q_producer.iter().for_each(|(entity, producer)| {
         commands
             .entity(entity)
-            .insert((ProducerImpl::from(producer),));
+            .try_insert((ProducerImpl::from(producer),));
     });
 }
 

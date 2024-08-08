@@ -13,7 +13,18 @@ pub struct Wave {
 }
 
 #[derive(
-    Serialize, Deserialize, Resource, Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord,
+    Serialize,
+    Deserialize,
+    Resource,
+    Default,
+    Debug,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
 )]
 pub struct LevelIndex {
     pub stage: u8,
@@ -98,21 +109,24 @@ impl LayoutKind {
     }
 }
 
-#[derive(Serialize, Deserialize, Default, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum GameKind {
     #[default]
     Adventure,
+    WhackAZombie,
 }
 impl GameKind {
     fn is_sun_spawn(&self) -> bool {
         match self {
             Self::Adventure => true,
+            Self::WhackAZombie => false,
         }
     }
 
     fn has_grave(&self) -> bool {
         match self {
             Self::Adventure => true,
+            Self::WhackAZombie => true,
         }
     }
 

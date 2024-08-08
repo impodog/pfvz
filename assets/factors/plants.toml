@@ -67,7 +67,7 @@ cooldown = 7.5
 cost = 25
 [puff_shroom]
 velocity = 0.1
-self_box = { width = 0.8, height = 0.7 }
+self_box = { width = 0.5, height = 0.5 }
 spore_box = { width = 0.2, height = 0.2 }
 range = 4.0
 times = 1
@@ -80,7 +80,7 @@ cost = 0
 velocity = { x = [-0.05, 0.05], y = [-0.03, 0.03], z = 0.08, r = 0.1 }
 small_box = { width = 0.8, height = 0.8 }
 big_box = { width = 1.0, height = 1.0 }
-health = 300
+health = 200
 interval = 24.0
 grow_interval = 120.0
 cooldown = 7.5
@@ -102,6 +102,16 @@ damage = 20
 interval = 1.5
 cooldown = 7.5
 cost = 125
+[scaredy_shroom]
+velocity = 0.11
+self_box = { width = 0.8, height = 1.0 }
+scare_range = { x = [-1.5, 1.5], y = [-1.5, 1.5], z = [-1.0, 1.0] }
+times = 1
+health = 400
+damage = 20
+interval = 1.5
+cooldown = 7.5
+cost = 50
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }

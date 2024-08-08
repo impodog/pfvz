@@ -16,10 +16,17 @@ pub struct Sun {
     pub height: f32,
     pub interval: f32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Whack {
+    pub self_box: game::HitBox,
+    pub damage: u32,
+    pub interval: game::DurationRangeSecs,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ItemFactors {
     pub sun: Sun,
+    pub whack: Whack,
 }
 
 fn init_factors(mut commands: Commands) {

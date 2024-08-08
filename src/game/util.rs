@@ -28,7 +28,7 @@ macro_rules! game_conf {
     };
     (systems $name: ident) => {
         lazy_static! {
-            static ref $name: RwLock<Option<$crate::game::CreatureSystems>> = RwLock::new(None);
+            pub static ref $name: RwLock<Option<$crate::game::CreatureSystems>> = RwLock::new(None);
         }
     };
     (system $name: ident, $in: ty) => {

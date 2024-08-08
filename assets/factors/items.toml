@@ -1,5 +1,9 @@
 [sun]
 velocity = { x = 0.0, y = 0.0, z = -0.01, r = 0.0 }
-self_box = { width = 0.5, height = 0.5 }
+self_box = { width = 0.6, height = 0.6 }
 height = 4.0
 interval = 10.0
+[whack]
+self_box = { width = 0.3, height = 0.3 }
+damage = 300
+interval = [7.0, 12.0]

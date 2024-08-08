@@ -29,6 +29,7 @@ pub struct SpritePlants {
     pub fume_shroom: Arc<sprite::FrameArr>,
     pub fume_shroom_shoot: Arc<sprite::FrameArr>,
     pub fume: Arc<sprite::FrameArr>,
+    pub scaredy_shroom: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -128,6 +129,11 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(150),
         ),
         fume: super::load_animation(&server, "sprites/plants/fume", Duration::from_millis(100)),
+        scaredy_shroom: super::load_animation(
+            &server,
+            "sprites/plants/scaredy_shroom",
+            Duration::from_millis(300),
+        ),
     };
     commands.insert_resource(plants);
 }

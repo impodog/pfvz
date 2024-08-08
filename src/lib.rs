@@ -1,12 +1,16 @@
+#![allow(clippy::type_complexity)]
+
 pub mod assets;
 pub mod choose;
 pub mod collectible;
 pub mod compn;
 pub mod config;
+mod dave;
 pub mod game;
 pub mod info;
 pub mod level;
 pub mod lose;
+pub mod modes;
 pub mod plants;
 mod prelude;
 pub mod save;
@@ -34,6 +38,6 @@ pub fn start_pfvz() {
         lose::LosePlugin,
         win::WinPlugin,
     ));
-    app.add_plugins((choose::ChoosePlugin,));
+    app.add_plugins((choose::ChoosePlugin, dave::DavePlugin, modes::ModesPlugin));
     app.run();
 }

@@ -135,7 +135,7 @@ fn init_config(
         collectible: collectible::Collectible::Sun(factors.sun_shroom.small_multiplier),
     })));
     commands.insert_resource(SunShroomBigProducer(Arc::new(compn::ProducerShared {
-        interval: Duration::from_secs_f32(factors.sun_shroom.grow_interval),
+        interval: Duration::from_secs_f32(factors.sun_shroom.interval),
         velocity: factors.sun_shroom.velocity,
         collectible: collectible::Collectible::Sun(factors.sun_shroom.big_multiplier),
     })));

@@ -6,17 +6,19 @@ impl Plugin for PlantsSpecialPlugin {
     fn build(&self, app: &mut App) {
         initialize(&grave_systems);
         app.add_systems(PostStartup, (init_config,));
+        app.add_systems(OnEnter(info::PlayStates::Gaming), (add_grave_timer,));
+        app.add_systems(Update, (auto_spawn_grave,).run_if(when_state!(gaming)));
         *grave_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_grave),
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
-        app.add_systems(OnEnter(info::PlayStates::Gaming), (add_grave_timer,));
-        app.add_systems(Update, (auto_spawn_grave,).run_if(when_state!(gaming)));
+        *grave_spawn_anywhere.write().unwrap() = Some(app.register_system(spawn_grave_any));
     }
 }
 
 game_conf!(systems grave_systems);
+game_conf!(pub system grave_spawn_anywhere, ());
 
 fn spawn_grave(
     In(pos): In<game::Position>,
@@ -57,35 +59,41 @@ fn add_grave_timer(mut commands: Commands, factors: Res<plants::PlantFactors>) {
     )));
 }
 
+fn spawn_grave_any(
+    mut commands: Commands,
+    level: Res<level::Level>,
+    layout: Res<game::PlantLayout>,
+) {
+    let size = level.config.layout.size();
+    // This randomly selects an unused tile to spawn
+    for _ in 0..10 {
+        let (x, y) = (
+            rand::thread_rng().gen_range(0..size.0),
+            rand::thread_rng().gen_range(0..size.1),
+        );
+        let pos = level.config.layout.coordinates_to_position(x, y);
+        let index = level.config.layout.position_to_index(&pos);
+        if layout
+            .plants
+            .get(index)
+            .is_some_and(|list| list.read().unwrap().is_empty())
+        {
+            commands.run_system_with_input(grave_systems.read().unwrap().unwrap().spawn, pos);
+            break;
+        }
+    }
+}
+
 fn auto_spawn_grave(
     mut commands: Commands,
     level: Res<level::Level>,
     mut timer: ResMut<GraveTimer>,
     time: Res<config::FrameTime>,
-    layout: Res<game::PlantLayout>,
 ) {
     if level.config.has_grave() {
         timer.tick(time.delta());
         if timer.just_finished() {
-            let size = level.config.layout.size();
-            // This randomly selects an unused tile to spawn
-            for _ in 0..10 {
-                let (x, y) = (
-                    rand::thread_rng().gen_range(0..size.0),
-                    rand::thread_rng().gen_range(0..size.1),
-                );
-                let pos = level.config.layout.coordinates_to_position(x, y);
-                let index = level.config.layout.position_to_index(&pos);
-                if layout
-                    .plants
-                    .get(index)
-                    .is_some_and(|list| list.read().unwrap().is_empty())
-                {
-                    commands
-                        .run_system_with_input(grave_systems.read().unwrap().unwrap().spawn, pos);
-                    break;
-                }
-            }
+            commands.run_system(grave_spawn_anywhere.read().unwrap().unwrap());
         }
     }
 }

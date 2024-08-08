@@ -55,7 +55,7 @@ Damage: This won't work"""
 [desc.grave_buster]
 name = "Idontknow nonplantae var. sepultura"
 short = "Removes a grave"
-desc = """Removes a grave on planted
+desc = """Removes a grave on the planted tile
 Damage: This should not exist"""
 [desc.fume_shroom]
 name = "Cortinarius archeri"
@@ -63,3 +63,8 @@ short = "Shoots fumes that can damage many zombies at once"
 desc = """Shoots fumes that can pass through zombies
 Damage: Regular
 Area effect"""
+[desc.scaredy_shroom]
+name = "Cortinarius violaceus"
+short = "Shoots at zombies, hides when zombies are around"
+desc = """A long-range shooter, hides when zombies are around
+Damage: Regular"""

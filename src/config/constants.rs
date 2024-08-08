@@ -12,6 +12,7 @@ pub const PUFF_SHROOM: Id = -9;
 pub const SUN_SHROOM: Id = -10;
 pub const GRAVE_BUSTER: Id = -11;
 pub const FUME_SHROOM: Id = -12;
+pub const SCAREDY_SHROOM: Id = -13;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -28,6 +29,7 @@ pub const SCREEN_DOOR_ZOMBIE: Id = 7;
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
 pub const LOGICAL_BOUND: Vec2 = Vec2::new(LOGICAL_WIDTH * 0.6, LOGICAL_HEIGHT * 0.6);
+pub const LOGICAL: Vec2 = Vec2::new(LOGICAL_WIDTH, LOGICAL_HEIGHT);
 pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.8);
 pub const BUTTON_SIZE: Vec2 = Vec2::new(SLOT_SIZE.x * 2.0, SLOT_SIZE.y);
 pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
@@ -54,6 +56,8 @@ pub fn id_name(id: Id) -> &'static str {
         PUFF_SHROOM => "puff_shroom",
         SUN_SHROOM => "sun_shroom",
         GRAVE_BUSTER => "grave_buster",
+        FUME_SHROOM => "fume_shroom",
+        SCAREDY_SHROOM => "scaredy_shroom",
 
         BOWLING_NUT => "bowling_nut",
 
