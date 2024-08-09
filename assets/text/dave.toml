@@ -21,7 +21,6 @@ map = [
         { stage = 2, level = 10 },
         [
             "I've heard about Max.",
-            "He's seeing you.",
         ],
     ],
     [

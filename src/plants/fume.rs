@@ -49,10 +49,13 @@ fn move_fume(
     In(entity): In<Entity>,
     factors: Res<plants::PlantFactors>,
     mut q_pos: Query<&mut game::Position>,
+    audio: Res<Audio>,
+    plants: Res<assets::AudioPlants>,
 ) {
     if let Ok(mut pos) = q_pos.get_mut(entity) {
         pos.x += factors.fume_shroom.fume_box.width / 2.0;
     }
+    audio.play(plants.fume_shroom.random());
 }
 
 fn play_shoot_animation(

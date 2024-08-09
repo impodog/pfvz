@@ -118,6 +118,7 @@ fn spawn_crater(
     let creature = map.get(&CRATER).unwrap();
     commands.spawn((
         game::Plant,
+        game::NotPlanted,
         creature.clone(),
         pos,
         sprite::Animation::new(plants.crater.clone()),

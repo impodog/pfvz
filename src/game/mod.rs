@@ -1,4 +1,5 @@
 mod creature;
+mod debug;
 mod overlay;
 mod plant;
 mod player;
@@ -12,6 +13,7 @@ mod util;
 mod zombie;
 
 pub use creature::*;
+pub use debug::*;
 pub use overlay::*;
 pub use plant::*;
 pub use player::*;

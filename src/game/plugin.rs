@@ -16,6 +16,7 @@ impl Plugin for GamePlugin {
             zombie::GameZombiePlugin,
             spawn::GameSpawnPlugin,
             player::GamePlayerPlugin,
+            debug::GameDebugPlugin,
         ));
     }
 }

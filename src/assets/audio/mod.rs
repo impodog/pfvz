@@ -1,7 +1,9 @@
 mod items;
+mod plants;
 mod zombies;
 
 pub use items::*;
+pub use plants::*;
 pub use zombies::*;
 
 use crate::prelude::*;
@@ -10,7 +12,14 @@ pub(super) struct AssetsAudioPlugin;
 
 impl Plugin for AssetsAudioPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, (items::load_items, zombies::load_zombies));
+        app.add_systems(
+            Startup,
+            (
+                items::load_items,
+                zombies::load_zombies,
+                plants::load_plants,
+            ),
+        );
     }
 }
 

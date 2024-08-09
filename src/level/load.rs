@@ -6,16 +6,6 @@ impl Plugin for LevelLoadPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<LevelEvent>();
         app.add_systems(PreUpdate, (load_level,));
-        // NOTE: This is for game testing
-        #[cfg(debug_assertions)]
-        app.add_systems(
-            PostStartup,
-            |mut e_level: EventWriter<LevelEvent>, save: Res<save::Save>| {
-                e_level.send(LevelEvent {
-                    index: save.adventure.0,
-                });
-            },
-        );
     }
 }
 
