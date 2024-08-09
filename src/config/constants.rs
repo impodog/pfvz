@@ -1,5 +1,12 @@
 use crate::prelude::*;
 
+// Usage range for identifiers:
+// + positives for zombies
+// - negatives for plants
+// (+/-) 1..100 => adventure creautres
+// (+/-) 101..200 => mini game creatures
+// (+/-) 201..300 => adventure non-player non-individual creatures
+
 pub const PEASHOOTER: Id = -1;
 pub const SUNFLOWER: Id = -2;
 pub const CHERRY_BOMB: Id = -3;
@@ -14,10 +21,13 @@ pub const GRAVE_BUSTER: Id = -11;
 pub const FUME_SHROOM: Id = -12;
 pub const SCAREDY_SHROOM: Id = -13;
 pub const ICE_SHROOM: Id = -14;
+pub const DOOM_SHROOM: Id = -15;
+pub const SUN_BEAN: Id = -16;
 
 pub const BOWLING_NUT: Id = -101;
 
 pub const GRAVE: Id = -201;
+pub const CRATER: Id = -202;
 
 pub const BASIC_ZOMBIE: Id = 1;
 pub const ROADCONE_ZOMBIE: Id = 2;
@@ -26,6 +36,11 @@ pub const FLAG_ZOMBIE: Id = 4;
 pub const ALL_STAR_ZOMBIE: Id = 5;
 pub const NEWSPAPER_ZOMBIE: Id = 6;
 pub const SCREEN_DOOR_ZOMBIE: Id = 7;
+pub const TRASHCAN_ZOMBIE: Id = 8;
+
+pub const HIDDEN_ZOMBIE: Id = 101;
+
+pub const TRASHCAN: Id = 201;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
@@ -60,6 +75,8 @@ pub fn id_name(id: Id) -> &'static str {
         FUME_SHROOM => "fume_shroom",
         SCAREDY_SHROOM => "scaredy_shroom",
         ICE_SHROOM => "ice_shroom",
+        DOOM_SHROOM => "doom_shroom",
+        SUN_BEAN => "sun_bean",
 
         BOWLING_NUT => "bowling_nut",
 
@@ -72,6 +89,11 @@ pub fn id_name(id: Id) -> &'static str {
         ALL_STAR_ZOMBIE => "all_star",
         NEWSPAPER_ZOMBIE => "newspaper",
         SCREEN_DOOR_ZOMBIE => "screen_door",
+        TRASHCAN_ZOMBIE => "trashcan",
+
+        HIDDEN_ZOMBIE => "hidden",
+
+        TRASHCAN => "trashcan_item",
 
         _ => "unknown",
     }

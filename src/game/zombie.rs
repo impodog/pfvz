@@ -50,7 +50,7 @@ fn losing_test(
 
 fn winning_test(
     mut state: ResMut<NextState<info::GlobalStates>>,
-    q_zombie: Query<(), With<Zombie>>,
+    q_zombie: Query<(), (With<Zombie>, Without<NotInvasive>)>,
     level: Res<level::Level>,
     status: Res<level::RoomStatus>,
     mut win_timer: ResMut<WinTimer>,

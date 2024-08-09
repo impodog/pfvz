@@ -29,6 +29,11 @@ pub struct SpriteZombies {
     pub screen_door_broken: Arc<sprite::FrameArr>,
     pub screen_door_destroyed: Arc<sprite::FrameArr>,
     pub screen_door_concept: Handle<Image>,
+    pub trashcan_zombie: Arc<sprite::FrameArr>,
+    pub trashcan_zombie_dying: Arc<sprite::FrameArr>,
+    pub trashcan: Arc<sprite::FrameArr>,
+    pub trashcan_broken: Arc<sprite::FrameArr>,
+    pub hidden_zombie: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -136,6 +141,31 @@ pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(300),
         ),
         screen_door_concept: server.load("sprites/zombies/screen_door/concept.png"),
+        trashcan_zombie: super::load_animation(
+            &server,
+            "sprites/zombies/trashcan_zombie",
+            Duration::from_millis(300),
+        ),
+        trashcan_zombie_dying: super::load_animation(
+            &server,
+            "sprites/zombies/trashcan_zombie_dying",
+            Duration::from_millis(300),
+        ),
+        trashcan: super::load_animation(
+            &server,
+            "sprites/zombies/trashcan",
+            Duration::from_millis(300),
+        ),
+        trashcan_broken: super::load_animation(
+            &server,
+            "sprites/zombies/trashcan_broken",
+            Duration::from_millis(300),
+        ),
+        hidden_zombie: super::load_animation(
+            &server,
+            "sprites/zombies/hidden",
+            Duration::from_millis(300),
+        ),
     };
     commands.insert_resource(zombies);
 }

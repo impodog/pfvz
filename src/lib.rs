@@ -1,4 +1,5 @@
 #![allow(clippy::type_complexity)]
+#![allow(clippy::too_many_arguments)]
 
 pub mod assets;
 pub mod choose;
@@ -23,6 +24,7 @@ pub fn start_pfvz() {
     let mut app = App::new();
     app.add_plugins((
         DefaultPlugins,
+        bevy_kira_audio::AudioPlugin,
         bevy_framepace::FramepacePlugin,
         assets::AssetsPlugin,
         collectible::CollectiblePlugin,
@@ -35,9 +37,13 @@ pub fn start_pfvz() {
         plants::PlantsPlugin,
         zombies::ZombiesPlugin,
         compn::CompnPlugin,
+    ));
+    app.add_plugins((
+        choose::ChoosePlugin,
+        dave::DavePlugin,
+        modes::ModesPlugin,
         lose::LosePlugin,
         win::WinPlugin,
     ));
-    app.add_plugins((choose::ChoosePlugin, dave::DavePlugin, modes::ModesPlugin));
     app.run();
 }

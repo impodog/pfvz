@@ -51,7 +51,7 @@ fn update_room(
     level: Res<level::Level>,
     mut next_wave: EventWriter<RoomNextWave>,
     time: Res<config::FrameTime>,
-    q_zombie: Query<(), With<game::Zombie>>,
+    q_zombie: Query<(), (With<game::Zombie>, Without<game::NotInvasive>)>,
 ) {
     status.timer.tick(time.delta());
     status.min_timer.tick(time.delta());

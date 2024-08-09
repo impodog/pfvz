@@ -78,6 +78,29 @@ pub struct ScreenDoorZombie {
     pub cooldown: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct TrashcanZombie {
+    pub velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub trashcan_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub trashcan_health: (u32, u32),
+    pub damage: u32,
+    pub trashcan_damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct HiddenZombie {
+    pub velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
@@ -88,6 +111,8 @@ pub struct ZombieFactors {
     pub all_star: AllStarZombie,
     pub newspaper: NewspaperZombie,
     pub screen_door: ScreenDoorZombie,
+    pub trashcan: TrashcanZombie,
+    pub hidden: HiddenZombie,
 }
 
 fn init_factors(mut commands: Commands) {

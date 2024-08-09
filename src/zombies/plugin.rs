@@ -10,6 +10,8 @@ impl Plugin for ZombiesPlugin {
             basic::ZombiesBasicPlugin,
             all_star::ZombiesAllStarPlugin,
             newspaper::ZombiesNewspaperPlugin,
+            trashcan::ZombiesTrashcanPlugin,
+            hidden::ZombiesHiddenPlugin,
         ));
     }
 }

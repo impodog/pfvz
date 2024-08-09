@@ -13,11 +13,19 @@ impl Plugin for PlantsInstantPlugin {
             damage: app.register_system(compn::default::damage),
         });
         *ice_shroom_work.write().unwrap() = Some(app.register_system(freeze_all));
+        *doom_shroom_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_doom_shroom),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
+        *doom_shroom_work.write().unwrap() = Some(app.register_system(doom_all));
     }
 }
 
 game_conf!(systems ice_shroom_systems);
 game_conf!(system ice_shroom_work, Entity);
+game_conf!(systems doom_shroom_systems);
+game_conf!(system doom_shroom_work, Entity);
 
 fn spawn_ice_shroom(
     In(pos): In<game::Position>,
@@ -64,6 +72,56 @@ fn freeze_all(
     });
 }
 
+#[derive(Component)]
+pub struct DoomShroomMarker;
+
+fn spawn_doom_shroom(
+    In(pos): In<game::Position>,
+    mut commands: Commands,
+    factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
+    map: Res<game::CreatureMap>,
+) {
+    let creature = map.get(&DOOM_SHROOM).unwrap();
+    commands.spawn((
+        game::Plant,
+        creature.clone(),
+        pos,
+        sprite::Animation::new(plants.doom_shroom.clone()),
+        creature.hitbox,
+        compn::Instant::new(
+            Duration::from_secs_f32(factors.doom_shroom.interval),
+            doom_shroom_work.read().unwrap().unwrap(),
+        ),
+        game::Health::from(factors.doom_shroom.health),
+        DoomShroomMarker,
+        SpriteBundle::default(),
+    ));
+}
+
+fn doom_all(
+    In(entity): In<Entity>,
+    mut commands: Commands,
+    q_zombie: Query<Entity, With<game::Zombie>>,
+    q_pos: Query<&game::Position>,
+    factors: Res<plants::PlantFactors>,
+    mut action: EventWriter<game::CreatureAction>,
+    config: Res<config::Config>,
+) {
+    if let Some(commands) = commands.get_entity(entity) {
+        commands.despawn_recursive();
+    }
+    if let Ok(pos) = q_pos.get(entity) {
+        commands.run_system_with_input(plants::crater_systems.read().unwrap().unwrap().spawn, *pos);
+    }
+    q_zombie.iter().for_each(|zombie_entity| {
+        action.send(game::CreatureAction::Damage(
+            zombie_entity,
+            multiply_uf!(factors.doom_shroom.damage, config.gamerule.damage.0),
+        ));
+    });
+}
+
 fn init_config(
     mut _commands: Commands,
     plants: Res<assets::SpritePlants>,
@@ -88,5 +146,24 @@ fn init_config(
             flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
         }));
         map.insert(ICE_SHROOM, creature);
+    }
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: doom_shroom_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            image: plants
+                .doom_shroom
+                .frames
+                .first()
+                .expect("Empty animation doom_shroom")
+                .clone(),
+            cost: factors.doom_shroom.cost,
+            cooldown: factors.doom_shroom.cooldown,
+            hitbox: factors.doom_shroom.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+        }));
+        map.insert(DOOM_SHROOM, creature);
     }
 }

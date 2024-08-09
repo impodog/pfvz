@@ -9,6 +9,7 @@ impl Plugin for AssetsPlugin {
             sprites::AssetsSpritesPlugin,
             fonts::AssetsFontsPlugin,
             text::AssetsTextPlugin,
+            audio::AssetsAudioPlugin,
         ));
     }
 }

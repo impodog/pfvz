@@ -26,6 +26,7 @@ bitflags! {
         const WATER_POT = 0x0205;
         const GRAVE = 0x8080;
         const GRAVE_BUSTER = 0x0080;
+        const CRATER = 0x0080;
     }
 }
 

@@ -25,10 +25,10 @@ pub struct WalkerShared {
 pub struct Walker(pub Arc<WalkerShared>);
 
 #[derive(Component, Default, Debug, Clone)]
-struct WalkerImpl {
+pub struct WalkerImpl {
     timer: Timer,
     velocity: game::Velocity,
-    target: Option<Entity>,
+    pub target: Option<Entity>,
 }
 impl From<&Walker> for WalkerImpl {
     fn from(value: &Walker) -> WalkerImpl {
@@ -82,6 +82,8 @@ fn walker_deal_damage(
     )>,
     q_plant: Query<(), With<game::Plant>>,
     mut action: EventWriter<game::CreatureAction>,
+    audio: Res<Audio>,
+    audio_zombies: Res<assets::AudioZombies>,
 ) {
     // NOTE: This is not parallel! Fix?
     q_walker
@@ -92,6 +94,7 @@ fn walker_deal_damage(
                 if walker_impl.timer.just_finished() {
                     if q_plant.get(entity).is_ok() {
                         action.send(game::CreatureAction::Damage(entity, walker.damage));
+                        audio.play(audio_zombies.bite.random());
                     } else {
                         *velocity = std::mem::take(&mut walker_impl.velocity);
                         walker_impl.target = None;

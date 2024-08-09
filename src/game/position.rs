@@ -80,7 +80,7 @@ impl std::ops::Add<Position> for PositionRange {
 }
 impl Default for PositionRange {
     fn default() -> Self {
-        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, 0.0..1.0)
+        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, -0.1..0.5)
     }
 }
 impl PositionRange {

@@ -120,6 +120,20 @@ damage = 20
 interval = 1.0
 cooldown = 60.0
 cost = 100
+[doom_shroom]
+self_box = { width = 1.0, height = 1.0 }
+health = 200
+damage = 1800
+interval = 1.0
+cooldown = 60.0
+cost = 150
+[sun_bean]
+self_box = { width = 0.8, height = 0.8 }
+health = 200
+interval = 7.5
+cooldown = 40.0
+max = 150
+cost = 50
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }
@@ -131,4 +145,9 @@ cost = 75
 self_box = { width = 0.9, height = 1.0 }
 health = 1
 cooldown = 60.0
+cost = 0
+[crater]
+self_box = { width = 1.0, height = 1.0 }
+health = 1
+cooldown = 180.0
 cost = 0

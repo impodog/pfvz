@@ -107,6 +107,8 @@ fn whack_work(
     collision: Res<game::Collision>,
     factors: Res<collectible::ItemFactors>,
     q_zombie: Query<(), With<game::Zombie>>,
+    audio: Res<Audio>,
+    items: Res<assets::AudioItems>,
 ) {
     q_whack.iter().for_each(|entity| {
         if cursor.left {
@@ -115,6 +117,7 @@ fn whack_work(
                     if q_zombie.get(*zombie).is_ok() {
                         // NOTE: Multiply the damage multiplier?
                         action.send(game::CreatureAction::Damage(*zombie, factors.whack.damage));
+                        audio.play(items.whack.random());
                         break;
                     }
                 }

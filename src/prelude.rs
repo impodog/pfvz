@@ -3,6 +3,8 @@ pub(crate) use crate::*;
 pub(crate) use bevy::ecs::system::SystemId;
 pub(crate) use bevy::prelude::*;
 pub(crate) use bevy::sprite::Anchor;
+pub(crate) use bevy_kira_audio::prelude::AudioSource;
+pub(crate) use bevy_kira_audio::prelude::*;
 pub(crate) use bitflags::bitflags;
 pub(crate) use lazy_static::{initialize, lazy_static};
 pub(crate) use ordered_float::OrderedFloat;

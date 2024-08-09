@@ -16,6 +16,7 @@ pub struct SpriteChunks {
     pub start: Handle<Image>,
     pub next: Handle<Image>,
     pub note1: Handle<Image>,
+    pub note2: Handle<Image>,
     pub dave: Handle<Image>,
 }
 
@@ -35,6 +36,7 @@ pub(super) fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         start: server.load("sprites/chunks/start.png"),
         next: server.load("sprites/chunks/next.png"),
         note1: server.load("sprites/chunks/note1.png"),
+        note2: server.load("sprites/chunks/note2.png"),
         dave: server.load("sprites/chunks/dave.png"),
     };
     commands.spawn(SpriteBundle {

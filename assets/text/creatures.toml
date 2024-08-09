@@ -68,3 +68,21 @@ name = "Cortinarius violaceus"
 short = "Shoots at zombies, hides when zombies are around"
 desc = """A long-range shooter, hides when zombies are around
 Damage: Regular"""
+[desc.ice_shroom]
+name = "Clitocybe odora"
+short = "Freezes all zombies on the screen"
+desc = """Freezes all zombies on the screen
+Damage: Just once, so what do you expect
+One-use"""
+[desc.doom_shroom]
+name = "Tylopilus alboater"
+short = "Blows up a large area of zombies"
+desc = """Blows up a large area of zombies(actually full-screen as implemented)
+Damage: SUPER
+One-use"""
+[desc.sun_bean]
+name = "Phaseolus vulgaris"
+short = "Gives you sun when a zombie touches it, gains more value over time"
+desc = """Gives you sun when a zombie touches it, gains more value over time, so it is wise to plant early
+Damage: (unsigned) NULL
+One-use, work on touch"""

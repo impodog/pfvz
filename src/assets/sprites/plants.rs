@@ -31,6 +31,10 @@ pub struct SpritePlants {
     pub fume: Arc<sprite::FrameArr>,
     pub scaredy_shroom: Arc<sprite::FrameArr>,
     pub ice_shroom: Arc<sprite::FrameArr>,
+    pub doom_shroom: Arc<sprite::FrameArr>,
+    pub sun_bean: Arc<sprite::FrameArr>,
+    pub sun_bean_plus: Arc<sprite::FrameArr>,
+    pub crater: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -139,6 +143,22 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/plants/ice_shroom",
             Duration::from_millis(300),
+        ),
+        doom_shroom: super::load_animation(
+            &server,
+            "sprites/plants/doom_shroom",
+            Duration::from_millis(300),
+        ),
+        crater: super::load_animation(&server, "sprites/plants/crater", Duration::from_millis(100)),
+        sun_bean: super::load_animation(
+            &server,
+            "sprites/plants/sun_bean",
+            Duration::from_millis(250),
+        ),
+        sun_bean_plus: super::load_animation(
+            &server,
+            "sprites/plants/sun_bean_plus",
+            Duration::from_millis(200),
         ),
     };
     commands.insert_resource(plants);
