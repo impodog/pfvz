@@ -49,7 +49,8 @@ fn spawn_newspaper_zombie(
         .id();
     let newspaper = commands
         .spawn((
-            game::Position::new(-0.03, 0.0, 0.0, -0.1),
+            game::Position::default(),
+            game::RelativePosition::new(-0.03, 0.0, 0.0, -0.1),
             factors.newspaper.newspaper_box,
             sprite::Animation::new(zombies.newspaper.clone()),
             game::Armor::new(factors.newspaper.newspaper_health),
@@ -120,7 +121,7 @@ fn init_config(
             cost: factors.newspaper.cost,
             cooldown: factors.newspaper.cooldown,
             hitbox: factors.newspaper.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
         map.insert(NEWSPAPER_ZOMBIE, creature);
     }

@@ -17,6 +17,7 @@ impl Plugin for GamePlugin {
             spawn::GameSpawnPlugin,
             player::GamePlayerPlugin,
             debug::GameDebugPlugin,
+            size::GameSizePlugin,
         ));
     }
 }

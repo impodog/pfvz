@@ -19,6 +19,7 @@ impl Plugin for PlantsPlugin {
             buster::PlantsBusterPlugin,
             fume::PlantsFumePlugin,
             instant::PlantsInstantPlugin,
+            pads::PlantsPadsPlugin,
         ));
     }
 }

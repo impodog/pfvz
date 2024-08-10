@@ -39,6 +39,7 @@ fn spawn_puff_shroom(
     pos.z -= 0.5 - creature.hitbox.height / 2.0;
     commands.spawn((
         game::Plant,
+        compn::Mushroom::default(),
         creature.clone(),
         pos,
         sprite::Animation::new(plants.puff_shroom.clone()),
@@ -63,6 +64,7 @@ fn spawn_scaredy_shroom(
     let creature = map.get(&SCAREDY_SHROOM).unwrap();
     commands.spawn((
         game::Plant,
+        compn::Mushroom::default(),
         creature.clone(),
         pos,
         sprite::Animation::new(plants.scaredy_shroom.clone()),

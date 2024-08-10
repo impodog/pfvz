@@ -34,7 +34,7 @@ fn load_level(
                 Ok(level) => {
                     let size = level.config.layout.size();
                     let ratio = (LOGICAL_WIDTH / size.0 as f32).min(LOGICAL_HEIGHT / size.1 as f32)
-                        * 2.0
+                        * 2.1
                         / 3.0;
                     level.config.selection.modify(selection.as_mut());
                     commands

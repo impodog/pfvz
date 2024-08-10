@@ -35,6 +35,8 @@ pub struct SpritePlants {
     pub sun_bean: Arc<sprite::FrameArr>,
     pub sun_bean_plus: Arc<sprite::FrameArr>,
     pub crater: Arc<sprite::FrameArr>,
+    pub zzz: Arc<sprite::FrameArr>,
+    pub lily_pad: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -158,6 +160,12 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
         sun_bean_plus: super::load_animation(
             &server,
             "sprites/plants/sun_bean_plus",
+            Duration::from_millis(200),
+        ),
+        zzz: super::load_animation(&server, "sprites/plants/zzz", Duration::from_millis(400)),
+        lily_pad: super::load_animation(
+            &server,
+            "sprites/plants/lily_pad",
             Duration::from_millis(200),
         ),
     };

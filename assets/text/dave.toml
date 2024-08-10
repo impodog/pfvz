@@ -26,7 +26,9 @@ map = [
     [
         { stage = 3, level = 1 },
         [
-            "That's the end of this version. I hope you enjoy!",
+            "Fungi are no good stuff.",
+            "It appears that they've planned to spend the day sleeping",
+            "Pro tip: use Nymphaeaceae to plant terrestrial stuff on water.",
         ],
     ],
 ]

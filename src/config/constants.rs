@@ -23,6 +23,7 @@ pub const SCAREDY_SHROOM: Id = -13;
 pub const ICE_SHROOM: Id = -14;
 pub const DOOM_SHROOM: Id = -15;
 pub const SUN_BEAN: Id = -16;
+pub const LILY_PAD: Id = -17;
 
 pub const BOWLING_NUT: Id = -101;
 

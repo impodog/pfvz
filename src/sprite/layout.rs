@@ -50,11 +50,14 @@ fn spawn_layout(
                 y: (lane as f32 - half_y),
                 ..Default::default()
             };
-            let index = lane * size.0 + row;
-            let picture = index % 2;
+            let index = level.config.layout.get_layout(row, lane);
             commands.spawn((
                 SpriteBundle {
-                    texture: sp_layout.get(&layout).grass[picture].clone(),
+                    texture: sp_layout
+                        .get(&layout)
+                        .get(index)
+                        .cloned()
+                        .unwrap_or_default(),
                     transform: Transform::from_xyz(0.0, 0.0, -14.37),
                     sprite: Sprite {
                         custom_size: Some(Vec2::new(display.ratio, display.ratio)),

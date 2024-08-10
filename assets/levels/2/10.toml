@@ -2,7 +2,7 @@
 selection = { "All" = [-9, -10, -11, -12, -13, -14, -15, -16] }
 layout = "Night"
 game = "Adventure"
-modify = { give = -17, next = { stage = 3, level = 1 } }
+modify = { give = -17, next = { stage = 3, level = 1 }, slots = 8 }
 sun = 1000
 [[waves]]
 points = 0

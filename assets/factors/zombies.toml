@@ -72,3 +72,5 @@ damage = 40
 interval = 0.05
 cooldown = 800.0
 cost = 800
+[tube]
+self_box = { width = 0.6, height = 0.3 }

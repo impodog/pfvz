@@ -7,7 +7,7 @@ pub(crate) use bevy_kira_audio::prelude::AudioSource;
 pub(crate) use bevy_kira_audio::prelude::*;
 pub(crate) use bitflags::bitflags;
 pub(crate) use lazy_static::{initialize, lazy_static};
-pub(crate) use ordered_float::OrderedFloat;
+pub(crate) use ordered_float::{Float, OrderedFloat};
 pub(crate) use rand::distributions::WeightedIndex;
 pub(crate) use rand::prelude::*;
 pub(crate) use smallvec::SmallVec;

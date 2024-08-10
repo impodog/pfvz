@@ -21,5 +21,6 @@ impl Plugin for CompnPlugin {
             anim_do::CompnAnimDoPlugin,
             instant::CompnInstantPlugin,
         ));
+        app.add_plugins((mushroom::PlantsMushroomPlugin, water::CompnWaterPlugin));
     }
 }

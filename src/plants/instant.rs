@@ -37,6 +37,7 @@ fn spawn_ice_shroom(
     let creature = map.get(&ICE_SHROOM).unwrap();
     commands.spawn((
         game::Plant,
+        compn::Mushroom::default(),
         creature.clone(),
         pos,
         sprite::Animation::new(plants.ice_shroom.clone()),
@@ -85,6 +86,7 @@ fn spawn_doom_shroom(
     let creature = map.get(&DOOM_SHROOM).unwrap();
     commands.spawn((
         game::Plant,
+        compn::Mushroom::default(),
         creature.clone(),
         pos,
         sprite::Animation::new(plants.doom_shroom.clone()),

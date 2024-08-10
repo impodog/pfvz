@@ -68,13 +68,20 @@ fn scan_plants(plants: Res<PlantLayout>, q_plant: Query<&game::Position, With<Pl
 fn add_plants(
     plants: Res<PlantLayout>,
     q_plant: Query<(Entity, &game::Position), Added<Plant>>,
+    mut q_transform: Query<&mut Transform>,
     level: Res<level::Level>,
 ) {
-    q_plant.par_iter().for_each(|(entity, pos)| {
+    q_plant.iter().for_each(|(entity, pos)| {
         if !plants.in_layout.read().unwrap().contains(&entity) {
             plants.in_layout.write().unwrap().insert(entity);
             let i = level.config.layout.position_to_index(pos);
             if let Some(plants) = plants.plants.get(i) {
+                if let Some(plant) = plants.read().unwrap().last() {
+                    if let Ok(mut values) = q_transform.get_many_mut([*plant, entity]) {
+                        values[1].translation.z =
+                            values[1].translation.z.max(values[0].translation.z + 0.1);
+                    }
+                }
                 plants.write().unwrap().push(entity);
             } else {
                 error!(

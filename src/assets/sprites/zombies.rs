@@ -34,6 +34,7 @@ pub struct SpriteZombies {
     pub trashcan: Arc<sprite::FrameArr>,
     pub trashcan_broken: Arc<sprite::FrameArr>,
     pub hidden_zombie: Arc<sprite::FrameArr>,
+    pub tube: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -166,6 +167,7 @@ pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/zombies/hidden",
             Duration::from_millis(300),
         ),
+        tube: super::load_animation(&server, "sprites/zombies/tube", Duration::from_millis(300)),
     };
     commands.insert_resource(zombies);
 }

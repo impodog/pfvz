@@ -52,7 +52,8 @@ fn spawn_all_star_zombie(
         .id();
     commands
         .spawn((
-            game::Position::new(0.03, 0.0, 0.35, -0.3),
+            game::Position::default(),
+            game::RelativePosition::new(0.03, 0.0, 0.35, -0.3),
             factors.all_star.helmet_box,
             sprite::Animation::new(zombies.helmet.clone()),
             game::Armor::new(factors.all_star.helmet_health),
@@ -157,7 +158,7 @@ fn init_config(
             cost: factors.all_star.cost,
             cooldown: factors.all_star.cooldown,
             hitbox: factors.all_star.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
         map.insert(ALL_STAR_ZOMBIE, creature);
     }

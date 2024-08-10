@@ -31,10 +31,11 @@ pub struct LevelIndex {
     pub level: u8,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TileFeature {
     Grass,
     Dirt,
+    Water,
 }
 impl TileFeature {
     pub fn is_compat(&self, creature: &game::Creature) -> bool {
@@ -45,6 +46,7 @@ impl TileFeature {
         match self {
             Self::Grass => level::CreatureFlags::MAKE_TERRESTRIAL,
             Self::Dirt => level::CreatureFlags::MAKE_BARE_GROUND,
+            Self::Water => level::CreatureFlags::MAKE_AQUATIC,
         }
     }
 }
@@ -54,12 +56,14 @@ pub enum LayoutKind {
     #[default]
     Day,
     Night,
+    Pool,
 }
 impl LayoutKind {
     pub const fn size(&self) -> (usize, usize) {
         match self {
             Self::Day => (9, 5),
             Self::Night => (9, 5),
+            Self::Pool => (9, 6),
         }
     }
 
@@ -91,6 +95,48 @@ impl LayoutKind {
         match self {
             Self::Day => TileFeature::Grass,
             Self::Night => TileFeature::Grass,
+            Self::Pool => {
+                if y == 2 || y == 3 {
+                    TileFeature::Water
+                } else {
+                    TileFeature::Grass
+                }
+            }
+        }
+    }
+
+    /// Get a tile that represents the lane's feature
+    /// This is used in zombie spawning
+    pub fn get_lane(&self, y: usize) -> TileFeature {
+        match self {
+            Self::Day => TileFeature::Grass,
+            Self::Night => TileFeature::Grass,
+            Self::Pool => {
+                if y == 2 || y == 3 {
+                    TileFeature::Water
+                } else {
+                    TileFeature::Grass
+                }
+            }
+        }
+    }
+
+    /// Get the tile's picture index in the loaded layout vector
+    pub fn get_layout(&self, x: usize, y: usize) -> usize {
+        let size = self.size();
+        match self {
+            Self::Day | Self::Night => {
+                let pos = y * size.0 + x;
+                pos % 2
+            }
+            Self::Pool => {
+                if y == 2 || y == 3 {
+                    2
+                } else {
+                    let pos = y * size.0 + x;
+                    pos % 2
+                }
+            }
         }
     }
 
@@ -98,6 +144,7 @@ impl LayoutKind {
         match self {
             Self::Day => true,
             Self::Night => false,
+            Self::Pool => true,
         }
     }
 
@@ -105,6 +152,15 @@ impl LayoutKind {
         match self {
             Self::Day => false,
             Self::Night => true,
+            Self::Pool => false,
+        }
+    }
+
+    pub fn is_night(&self) -> bool {
+        match self {
+            Self::Day => false,
+            Self::Night => true,
+            Self::Pool => false,
         }
     }
 }

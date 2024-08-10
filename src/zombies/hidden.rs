@@ -93,7 +93,7 @@ fn init_config(
             cost: factors.hidden.cost,
             cooldown: factors.hidden.cooldown,
             hitbox: factors.hidden.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
         map.insert(HIDDEN_ZOMBIE, creature);
     }

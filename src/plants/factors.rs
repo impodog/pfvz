@@ -178,6 +178,13 @@ pub struct SunBean {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct LilyPad {
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -219,6 +226,7 @@ pub struct PlantFactors {
     pub ice_shroom: IceShroom,
     pub doom_shroom: DoomShroom,
     pub sun_bean: SunBean,
+    pub lily_pad: LilyPad,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

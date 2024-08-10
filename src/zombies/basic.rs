@@ -10,7 +10,7 @@ impl Plugin for ZombiesBasicPlugin {
         initialize(&flag_zombie_systems);
         initialize(&screen_door_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (add_basic_zombie_arm,));
+        app.add_systems(Update, (add_basic_zombie_arm, add_aquatic_zombie_tube));
         *basic_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_basic_zombie),
             die: app.register_system(compn::default::die),
@@ -61,7 +61,8 @@ fn add_basic_zombie_arm(
     q_basic.iter().for_each(|entity| {
         commands
             .spawn((
-                game::Position::new_xy(0.1, 0.0),
+                game::Position::default(),
+                game::RelativePosition::new(0.1, 0.0, 0.0, 0.0),
                 factors.basic.arm_box,
                 sprite::Animation::new(zombies.arm.clone()),
                 game::Armor::new(factors.basic.arm_health),
@@ -71,6 +72,36 @@ fn add_basic_zombie_arm(
                 },
             ))
             .set_parent(entity);
+    });
+}
+
+fn add_aquatic_zombie_tube(
+    mut commands: Commands,
+    q_basic: Query<(Entity, &game::Position), Added<BasicZombieMarker>>,
+    level: Res<level::Level>,
+    zombies: Res<assets::SpriteZombies>,
+    factors: Res<zombies::ZombieFactors>,
+) {
+    q_basic.iter().for_each(|(entity, pos)| {
+        let (_x, y) = level.config.layout.position_to_coordinates(pos);
+        match level.config.layout.get_lane(y) {
+            level::TileFeature::Water => {
+                commands
+                    .spawn((
+                        game::Position::new_xyz(0.0, 0.0, -0.2),
+                        factors.tube.self_box,
+                        sprite::Animation::new(zombies.tube.clone()),
+                        SpriteBundle {
+                            transform: Transform::from_xyz(0.0, 0.0, 0.1),
+                            ..Default::default()
+                        },
+                    ))
+                    .set_parent(entity);
+            }
+            _ => {
+                // do nothing
+            }
+        }
     });
 }
 
@@ -125,7 +156,8 @@ fn spawn_roadcone_zombie(
         .id();
     commands
         .spawn((
-            game::Position::new(0.0, 0.0, 0.5, 0.1),
+            game::Position::default(),
+            game::RelativePosition::new(0.0, 0.0, 0.5, 0.1),
             factors.roadcone.roadcone_box,
             sprite::Animation::new(zombies.roadcone.clone()),
             game::Armor::new(factors.roadcone.roadcone_health),
@@ -165,7 +197,8 @@ fn spawn_bucket_zombie(
         .id();
     commands
         .spawn((
-            game::Position::new(0.0, 0.0, 0.53, 0.1),
+            game::Position::default(),
+            game::RelativePosition::new(0.0, 0.0, 0.53, 0.1),
             factors.bucket.bucket_box,
             sprite::Animation::new(zombies.bucket.clone()),
             game::Armor::new(factors.bucket.bucket_health),
@@ -204,7 +237,8 @@ fn spawn_flag_zombie(
         .id();
     commands
         .spawn((
-            game::Position::new(-0.2, 0.0, 0.1, -0.1),
+            game::Position::default(),
+            game::RelativePosition::new(-0.2, 0.0, 0.1, -0.1),
             factors.flag.flag_box,
             sprite::Animation::new(zombies.flag.clone()),
             game::Armor::new(factors.flag.flag_health),
@@ -243,7 +277,8 @@ fn spawn_screen_door_zombie(
         .id();
     commands
         .spawn((
-            game::Position::new(-0.1, 0.0, 0.1, 0.1),
+            game::Position::default(),
+            game::RelativePosition::new(-0.1, 0.0, 0.1, 0.1),
             factors.screen_door.screen_door_box,
             sprite::Animation::new(zombies.screen_door.clone()),
             game::Armor::new(factors.screen_door.screen_door_health),
@@ -302,7 +337,7 @@ fn init_config(
             cost: factors.basic.cost,
             cooldown: factors.basic.cooldown,
             hitbox: factors.basic.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
         map.insert(BASIC_ZOMBIE, creature);
     }
@@ -316,7 +351,7 @@ fn init_config(
             cost: factors.roadcone.cost,
             cooldown: factors.roadcone.cooldown,
             hitbox: factors.basic.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
         map.insert(ROADCONE_ZOMBIE, creature);
     }
@@ -330,7 +365,7 @@ fn init_config(
             cost: factors.bucket.cost,
             cooldown: factors.bucket.cooldown,
             hitbox: factors.basic.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
         map.insert(BUCKET_ZOMBIE, creature);
     }
@@ -344,7 +379,7 @@ fn init_config(
             cost: factors.flag.cost,
             cooldown: factors.flag.cooldown,
             hitbox: factors.basic.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
         map.insert(FLAG_ZOMBIE, creature);
     }
@@ -358,7 +393,7 @@ fn init_config(
             cost: factors.screen_door.cost,
             cooldown: factors.screen_door.cooldown,
             hitbox: factors.basic.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
         map.insert(SCREEN_DOOR_ZOMBIE, creature);
     }

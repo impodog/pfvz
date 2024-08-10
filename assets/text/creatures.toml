@@ -86,3 +86,9 @@ short = "Gives you sun when a zombie touches it, gains more value over time"
 desc = """Gives you sun when a zombie touches it, gains more value over time, so it is wise to plant early
 Damage: (unsigned) NULL
 One-use, work on touch"""
+[desc.lily_pad]
+name = "Nymphaeaceae ???"
+short = "Lets you plant on water"
+desc = """Lets you plant on water
+Damage: Insane, or just nothing, what's the difference?
+Aquatic plant"""

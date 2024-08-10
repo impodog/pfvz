@@ -12,7 +12,7 @@ impl Plugin for GamePositionPlugin {
         app.add_systems(Update, (remove_outbound,));
         // Positioning system may be used by other states,
         // so it is not wrapped under play state
-        app.add_systems(PostUpdate, (update_transform, update_sprite));
+        app.add_systems(PostUpdate, (update_transform,));
         app.add_systems(
             PostUpdate,
             (update_position, update_velocity).run_if(when_state!(play)),
@@ -43,6 +43,10 @@ impl Position {
             z: 0.0,
             r: 0.0,
         }
+    }
+
+    pub fn new_xyz(x: f32, y: f32, z: f32) -> Self {
+        Self { x, y, z, r: 0.0 }
     }
 
     pub fn move_by(mut self, x: f32, y: f32) -> Self {
@@ -80,7 +84,7 @@ impl std::ops::Add<Position> for PositionRange {
 }
 impl Default for PositionRange {
     fn default() -> Self {
-        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, -0.1..0.5)
+        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, -0.2..0.5)
     }
 }
 impl PositionRange {
@@ -231,12 +235,6 @@ fn update_velocity(
 ) {
     q_vel.par_iter_mut().for_each(|mut vel| {
         vel.z -= time.diff() * config.gamerule.gravity.0 * config.gamerule.speed.0;
-    });
-}
-
-fn update_sprite(display: Res<Display>, mut q_pos: Query<(&HitBox, &mut Sprite), Changed<HitBox>>) {
-    q_pos.par_iter_mut().for_each(|(hitbox, mut sprite)| {
-        sprite.custom_size = Some(Vec2::from(hitbox) * display.ratio);
     });
 }
 

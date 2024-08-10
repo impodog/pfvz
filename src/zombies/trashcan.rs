@@ -129,7 +129,7 @@ fn init_config(
             cost: factors.trashcan.cost,
             cooldown: factors.trashcan.cooldown,
             hitbox: factors.trashcan.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
         map.insert(TRASHCAN_ZOMBIE, creature);
     }
@@ -148,7 +148,7 @@ fn init_config(
             cost: factors.trashcan.cost,
             cooldown: factors.trashcan.cooldown,
             hitbox: factors.trashcan.trashcan_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
         map.insert(TRASHCAN, creature);
     }

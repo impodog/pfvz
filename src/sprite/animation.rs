@@ -77,7 +77,8 @@ fn update_animation(
                 &q_parent,
             );
             anim.timer.tick(delta);
-            if anim.timer.just_finished() {
+            // is_added prevents white chunks showing up
+            if anim.is_added() || anim.timer.just_finished() {
                 anim.cursor += 1;
                 if anim.cursor >= anim.frames.frames.len() {
                     anim.cursor = 0;

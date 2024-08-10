@@ -35,6 +35,7 @@ fn spawn_fume_shroom(
     let creature = map.get(&FUME_SHROOM).unwrap();
     commands.spawn((
         game::Plant,
+        compn::Mushroom::default(),
         creature.clone(),
         pos,
         sprite::Animation::new(plants.fume_shroom.clone()),

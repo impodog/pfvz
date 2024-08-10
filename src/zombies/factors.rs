@@ -101,6 +101,10 @@ pub struct HiddenZombie {
     pub cooldown: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Tube {
+    pub self_box: game::HitBox,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
@@ -113,6 +117,7 @@ pub struct ZombieFactors {
     pub screen_door: ScreenDoorZombie,
     pub trashcan: TrashcanZombie,
     pub hidden: HiddenZombie,
+    pub tube: Tube,
 }
 
 fn init_factors(mut commands: Commands) {

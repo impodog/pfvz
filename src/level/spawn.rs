@@ -77,20 +77,6 @@ fn by_probability(
     // This will be modified to true again if spawning is completed
     guard.0 = false;
 
-    // Increment all probability by 1(with caps)
-    for value in prob.iter_mut() {
-        if *value < SPARSENESS {
-            *value += 1;
-        }
-    }
-    // Randomly select a index accordingly
-    let index: usize = {
-        let dist = WeightedIndex::new(&prob.0).unwrap();
-        dist.sample(&mut rand::thread_rng())
-    };
-    // Clear probability
-    prob.0[index] = 0;
-
     let (id, cost) = if stack.is_empty() {
         (
             level.waves.get(current.0).and_then(|wave| {
@@ -114,13 +100,48 @@ fn by_probability(
     } else {
         (stack.pop(), false)
     };
-
-    let hsize = level.config.layout.half_size_f32();
-
-    // This mostly prevents overlapping zombies
-    let get_x = || hsize.0 + 0.5 + rand::thread_rng().gen_range(-0.2..=0.2);
-    let y = index as f32 - hsize.1;
     if let Some(id) = id {
+        let creature = if let Some(creature) = map.get(&id) {
+            creature
+        } else {
+            error!("Unknown creature id {} in level file", id);
+            return;
+        };
+
+        let mut index: usize;
+        let mut count = 0usize;
+        // Only 10 attempts allowed
+        // When level creator mistakenly puts incompatible zombies, count will exceed this limit
+        loop {
+            // Increment all probability by 1(with caps)
+            for value in prob.iter_mut() {
+                if *value < SPARSENESS {
+                    *value += 1;
+                }
+            }
+            // Randomly select a index accordingly
+            index = {
+                let dist = WeightedIndex::new(&prob.0).unwrap();
+                dist.sample(&mut rand::thread_rng())
+            };
+            // Clear probability
+            prob.0[index] = 0;
+
+            // Only spawn compatible creatures
+            if level.config.layout.get_lane(index).is_compat(creature) {
+                break;
+            }
+            count += 1;
+            if count >= 10 {
+                break;
+            }
+        }
+
+        let hsize = level.config.layout.half_size_f32();
+
+        // This mostly prevents overlapping zombies
+        let get_x = || hsize.0 + 0.5 + rand::thread_rng().gen_range(-0.2..=0.2);
+        let y = index as f32 - hsize.1;
         if let Some(creature) = map.get(&id) {
             // Define if a new zombie can be spawn
             let ok = if cost && points.0 >= creature.cost {

@@ -62,6 +62,7 @@ fn spawn_sun_shroom(
     let creature = map.get(&SUN_SHROOM).unwrap();
     commands.spawn((
         game::Plant,
+        compn::Mushroom::default(),
         creature.clone(),
         pos,
         sprite::Animation::new(plants.sun_shroom_small.clone()),

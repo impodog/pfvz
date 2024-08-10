@@ -162,6 +162,7 @@ fn init_config(
             times: factors.snow_pea.times,
             require_zombie: true,
             shared: snow.clone(),
+            after: snow_pea_after.read().unwrap().unwrap(),
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
