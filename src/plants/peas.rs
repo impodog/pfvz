@@ -25,6 +25,11 @@ impl Plugin for PlantsPeaPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
+        *threepeater_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_threepeater),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
     }
 }
 
@@ -38,6 +43,8 @@ game_conf!(system snow_pea_after, Entity);
 // We'll reuse the same projectile pea
 game_conf!(shooter RepeaterShooter);
 game_conf!(systems repeater_systems);
+game_conf!(shooter ThreepeaterShooter);
+game_conf!(systems threepeater_systems);
 
 fn spawn_peashooter(
     In(pos): In<game::Position>,
@@ -81,6 +88,12 @@ fn spawn_snow_pea(
     ));
 }
 
+fn add_snow(In(entity): In<Entity>, mut commands: Commands, factors: Res<plants::PlantFactors>) {
+    commands.entity(entity).insert(compn::SnowyProjectile {
+        snow: compn::Snow::from(factors.snow_pea.snow),
+    });
+}
+
 fn spawn_repeater(
     In(pos): In<game::Position>,
     mut commands: Commands,
@@ -102,10 +115,25 @@ fn spawn_repeater(
     ));
 }
 
-fn add_snow(In(entity): In<Entity>, mut commands: Commands, factors: Res<plants::PlantFactors>) {
-    commands.entity(entity).insert(compn::SnowyProjectile {
-        snow: compn::Snow::from(factors.snow_pea.snow),
-    });
+fn spawn_threepeater(
+    In(pos): In<game::Position>,
+    mut commands: Commands,
+    factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
+    map: Res<game::CreatureMap>,
+    shooter: Res<ThreepeaterShooter>,
+) {
+    let creature = map.get(&THREEPEATER).unwrap();
+    commands.spawn((
+        game::Plant,
+        creature.clone(),
+        pos,
+        sprite::Animation::new(plants.threepeater.clone()),
+        creature.hitbox,
+        compn::Shooter(shooter.0.clone()),
+        game::Health::from(factors.threepeater.health),
+        SpriteBundle::default(),
+    ));
 }
 
 fn init_config(
@@ -213,5 +241,45 @@ fn init_config(
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(REPEATER, creature);
+    }
+    {
+        commands.insert_resource(ThreepeaterShooter(Arc::new(compn::ShooterShared {
+            interval: Duration::from_secs_f32(factors.threepeater.interval),
+            velocity: factors.threepeater.velocity.into(),
+            proj: game::Projectile {
+                damage: factors.threepeater.damage,
+                range: game::PositionRange {
+                    y: -1.5..1.5,
+                    ..Default::default()
+                },
+                ..Default::default()
+            },
+            start: vec![
+                game::Position::new_xy(0.0, 0.0),
+                game::Position::new_xy(0.0, 1.0),
+                game::Position::new_xy(0.0, -1.0),
+            ],
+            times: factors.threepeater.times,
+            require_zombie: true,
+            shared: pea.clone(),
+            ..Default::default()
+        })));
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: threepeater_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            image: plants
+                .threepeater
+                .frames
+                .first()
+                .expect("Empty animation threepeater")
+                .clone(),
+            cost: factors.threepeater.cost,
+            cooldown: factors.threepeater.cooldown,
+            hitbox: factors.threepeater.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
+        }));
+        map.insert(THREEPEATER, creature);
     }
 }

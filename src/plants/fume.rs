@@ -99,6 +99,7 @@ fn init_config(
             after: fume_shroom_after.read().unwrap().unwrap(),
             callback: fume_shroom_callback.read().unwrap().unwrap(),
             shared: fume.clone(),
+            ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
             systems: fume_shroom_systems

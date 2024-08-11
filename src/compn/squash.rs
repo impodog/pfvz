@@ -62,7 +62,7 @@ fn goto_peak(
         .for_each(|(entity, overlay, mut status, mut velocity)| {
             if status.is_some() {
                 status.timer.tick(overlay.delta());
-                if status.timer.just_finished() {
+                if status.timer.finished() {
                     if let Some(coll) = collision.get(&entity) {
                         if q_plant.get(entity).is_ok() {
                             coll.iter().for_each(|zombie| {
@@ -83,10 +83,10 @@ fn goto_peak(
                                 }
                             });
                         }
+                        commands.command_scope(|mut commands| {
+                            commands.entity(entity).despawn_recursive();
+                        });
                     }
-                    commands.command_scope(|mut commands| {
-                        commands.entity(entity).despawn_recursive();
-                    });
                 } else if !status.peak && status.timer.remaining_secs() <= factors.squash.time / 2.0
                 {
                     velocity.z = -velocity.z;

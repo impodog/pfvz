@@ -65,6 +65,18 @@ impl From<&Vec2> for Position {
         }
     }
 }
+impl std::ops::Add<Position> for Position {
+    type Output = Position;
+
+    fn add(self, rhs: Position) -> Self::Output {
+        Self::Output {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z,
+            r: self.r + rhs.r,
+        }
+    }
+}
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PositionRange {
     pub x: Range<f32>,

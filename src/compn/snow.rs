@@ -88,7 +88,7 @@ fn modify_snow(
             match modify {
                 ModifySnow::Add(snow) => {
                     let ok = if let Ok((prev_snow, prev_snow_impl)) = q_snow.get(entity) {
-                        if prev_snow.factor < snow.factor
+                        if prev_snow.factor > snow.factor
                             || (prev_snow.factor == snow.factor
                                 && prev_snow_impl.timer.remaining() < snow.duration)
                         {

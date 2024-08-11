@@ -122,7 +122,7 @@ cooldown = 60.0
 cost = 100
 [doom_shroom]
 self_box = { width = 1.0, height = 1.0 }
-health = 300
+health = 400
 damage = 1800
 interval = 1.0
 cooldown = 60.0
@@ -148,6 +148,15 @@ health = 4000
 damage = 1800
 cooldown = 40.0
 cost = 75
+[threepeater]
+velocity = 3.0
+self_box = { width = 1.0, height = 1.0 }
+times = 1
+health = 300
+damage = 20
+interval = 1.5
+cooldown = 7.5
+cost = 325
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }

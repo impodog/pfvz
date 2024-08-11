@@ -22,6 +22,9 @@ fn init_progress_bar(
     mut commands: Commands,
     chunks: Res<assets::SpriteChunks>,
     level: Res<level::Level>,
+    level_index: Res<level::LevelIndex>,
+    font: Res<assets::DefaultFont>,
+    display: Res<game::Display>,
 ) {
     let mut corner = level.config.layout.half_size_vec2() + Vec2::new(0.2, 0.2);
     corner.y = -corner.y;
@@ -50,6 +53,21 @@ fn init_progress_bar(
                 color: Color::LinearRgba(LinearRgba::new(0.0, 1.0, 0.2, 1.0)),
                 ..Default::default()
             },
+            ..Default::default()
+        },
+    ));
+    commands.spawn((
+        game::Position::from(&corner).move_by(-0.5, 0.0),
+        Text2dBundle {
+            text: Text::from_section(
+                format!("{} - {}", level_index.stage, level_index.level),
+                TextStyle {
+                    font: font.0.clone(),
+                    font_size: display.ratio * PROGRESS_SIZE.y,
+                    color: Color::LinearRgba(LinearRgba::WHITE),
+                },
+            ),
+            text_anchor: Anchor::TopRight,
             ..Default::default()
         },
     ));

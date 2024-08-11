@@ -25,6 +25,7 @@ pub const DOOM_SHROOM: Id = -15;
 pub const SUN_BEAN: Id = -16;
 pub const LILY_PAD: Id = -17;
 pub const SQUASH: Id = -18;
+pub const THREEPEATER: Id = -19;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -80,7 +81,9 @@ pub fn id_name(id: Id) -> &'static str {
         ICE_SHROOM => "ice_shroom",
         DOOM_SHROOM => "doom_shroom",
         SUN_BEAN => "sun_bean",
+        LILY_PAD => "lily_pad",
         SQUASH => "squash",
+        THREEPEATER => "threepeater",
 
         BOWLING_NUT => "bowling_nut",
 

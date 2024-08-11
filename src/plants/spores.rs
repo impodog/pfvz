@@ -100,7 +100,7 @@ fn modify_scaredy(
                     break;
                 }
             }
-            velocity.r = if is_scaredy { -0.2 } else { 0.0 };
+            velocity.r = if is_scaredy { -6.2 } else { 0.0 };
             if scaredy.0 != is_scaredy {
                 if is_scaredy {
                     commands.entity(entity).remove::<compn::Shooter>();

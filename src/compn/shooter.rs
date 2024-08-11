@@ -17,6 +17,7 @@ pub struct ShooterShared {
     pub interval: Duration,
     pub velocity: game::Velocity,
     pub proj: game::Projectile,
+    pub start: Vec<game::Position>,
     pub times: usize,
     pub require_zombie: bool,
     pub after: SystemId<Entity>,
@@ -29,6 +30,7 @@ impl Default for ShooterShared {
             interval: Default::default(),
             velocity: Default::default(),
             proj: Default::default(),
+            start: vec![game::Position::default()],
             times: 1,
             require_zombie: false,
             after: compn::default::system_do_nothing.read().unwrap().unwrap(),
@@ -84,6 +86,7 @@ fn shooter_work(
                     let mut ok = false;
                     for zpos in q_zpos.iter() {
                         let zpos = level.config.layout.regularize(*zpos);
+                        info!("range = {:#?}, zpos = {:#?}", range, zpos);
                         if range.contains(&zpos) {
                             ok = true;
                             break;
@@ -95,30 +98,36 @@ fn shooter_work(
                 }
                 let mut pos = *pos;
                 for _ in 0..shooter.times {
-                    let proj_entity = {
-                        let mut commands = commands.spawn((
-                            pos,
-                            sprite::Animation::new(shooter.shared.anim.clone()),
-                            shooter.shared.hitbox,
-                            shooter.proj.clone(),
-                            shooter.velocity,
-                            SpriteBundle {
-                                transform: Transform::from_xyz(0.0, 0.0, transform.translation.z),
-                                ..Default::default()
-                            },
-                        ));
-                        // Determines whether the projectile is plant(default) or zombie
-                        if q_zombie.get(entity).is_ok() {
-                            commands.insert(game::ZombieRelevant);
-                        } else {
-                            commands.insert(game::PlantRelevant);
-                        }
-                        commands.id()
-                    };
+                    for start in shooter.start.iter() {
+                        let proj_entity = {
+                            let mut commands = commands.spawn((
+                                *start + pos,
+                                sprite::Animation::new(shooter.shared.anim.clone()),
+                                shooter.shared.hitbox,
+                                shooter.proj.clone(),
+                                shooter.velocity,
+                                SpriteBundle {
+                                    transform: Transform::from_xyz(
+                                        0.0,
+                                        0.0,
+                                        transform.translation.z + 0.1,
+                                    ),
+                                    ..Default::default()
+                                },
+                            ));
+                            // Determines whether the projectile is plant(default) or zombie
+                            if q_zombie.get(entity).is_ok() {
+                                commands.insert(game::ZombieRelevant);
+                            } else {
+                                commands.insert(game::PlantRelevant);
+                            }
+                            commands.id()
+                        };
+                        commands.run_system_with_input(shooter.callback, entity);
+                        commands.run_system_with_input(shooter.after, proj_entity);
+                    }
                     // NOTE: Do we need to make this customizable?
                     pos.x += 3.0 * shooter.velocity.x;
-                    commands.run_system_with_input(shooter.callback, entity);
-                    commands.run_system_with_input(shooter.after, proj_entity);
                 }
             }
         })

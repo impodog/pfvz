@@ -55,8 +55,12 @@ fn winning_test(
     status: Res<level::RoomStatus>,
     mut win_timer: ResMut<WinTimer>,
     time: Res<config::FrameTime>,
+    q_banner: Query<(), With<level::Banner>>,
 ) {
-    if q_zombie.iter().next().is_none() && status.cursor >= level.waves.len() {
+    if q_zombie.iter().next().is_none()
+        && status.cursor >= level.waves.len()
+        && q_banner.iter().next().is_none()
+    {
         win_timer.tick(time.delta());
         if win_timer.just_finished() {
             state.set(info::GlobalStates::Win);

@@ -92,3 +92,13 @@ short = "Lets you plant on water"
 desc = """Lets you plant on water
 Damage: Insane, or just nothing, what's the difference?
 Aquatic plant"""
+[desc.squash]
+name = "Sechium edule"
+short = "Squashes the first zombie in its range"
+desc = """Squashes the first zombie in its range
+Damage: SUPER"""
+[desc.threepeater]
+name = "Pisum sativum var. trijaculum"
+short = "Shoots peas at three lanes"
+desc = """Shoots peas at three lanes
+Damage: Regular"""

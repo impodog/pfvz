@@ -59,6 +59,16 @@ impl From<PositionRangeXStartEnd> for game::PositionRange {
         range
     }
 }
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub struct PositionRangeXY(pub f32, pub f32);
+impl From<PositionRangeXY> for game::PositionRange {
+    fn from(value: PositionRangeXY) -> Self {
+        let mut range = game::PositionRange::default();
+        range.x.end = value.0;
+        range.y.end = value.1;
+        range
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct DurationRangeSecs(pub f32, pub f32);
