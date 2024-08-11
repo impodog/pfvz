@@ -126,7 +126,7 @@ fn init_config(
             cost: factors.sunflower.cost,
             cooldown: factors.sunflower.cooldown,
             hitbox: factors.sunflower.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(SUNFLOWER, creature);
     }
@@ -155,7 +155,7 @@ fn init_config(
             cost: factors.sun_shroom.cost,
             cooldown: factors.sun_shroom.cooldown,
             hitbox: factors.sun_shroom.big_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(SUN_SHROOM, creature);
     }

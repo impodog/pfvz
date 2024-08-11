@@ -13,6 +13,7 @@ mod producer;
 mod proj;
 mod shooter;
 mod snow;
+mod squash;
 mod walker;
 mod water;
 
@@ -29,5 +30,6 @@ pub use plugin::*;
 pub use producer::*;
 pub use shooter::*;
 pub use snow::*;
+pub use squash::*;
 pub use walker::*;
 pub use water::*;

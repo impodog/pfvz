@@ -114,7 +114,7 @@ fn init_config(
             cost: factors.fume_shroom.cost,
             cooldown: factors.fume_shroom.cooldown,
             hitbox: factors.fume_shroom.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(FUME_SHROOM, creature);
     }

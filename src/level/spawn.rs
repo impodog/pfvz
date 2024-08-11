@@ -29,7 +29,10 @@ struct CurrentWave(pub usize);
 
 fn init_level(mut commands: Commands, level: Res<level::Level>) {
     commands.insert_resource(LevelPoints::default());
-    commands.insert_resource(SpawnProbability(vec![0; level.config.layout.size().1]));
+    commands.insert_resource(SpawnProbability(vec![
+        SPARSENESS;
+        level.config.layout.size().1
+    ]));
     commands.insert_resource(CurrentWave::default());
     commands.insert_resource(SpawnStack::default());
     commands.insert_resource(SpawnGuard::default());
@@ -68,9 +71,14 @@ fn by_probability(
     map: Res<game::CreatureMap>,
     current: Res<CurrentWave>,
     level: Res<level::Level>,
+    q_banner: Query<(), With<level::Banner>>,
 ) {
     // guard condition
     if !guard.0 {
+        return;
+    }
+    // Wait until the banner disappears
+    if q_banner.iter().next().is_some() {
         return;
     }
 
@@ -113,10 +121,10 @@ fn by_probability(
         // Only 10 attempts allowed
         // When level creator mistakenly puts incompatible zombies, count will exceed this limit
         loop {
-            // Increment all probability by 1(with caps)
+            // Multiply all probability by 2(with caps)
             for value in prob.iter_mut() {
                 if *value < SPARSENESS {
-                    *value += 1;
+                    *value = (*value * 2).min(SPARSENESS);
                 }
             }
             // Randomly select a index accordingly
@@ -125,7 +133,7 @@ fn by_probability(
                 dist.sample(&mut rand::thread_rng())
             };
             // Clear probability
-            prob.0[index] = 0;
+            prob.0[index] = 1;
 
             // Only spawn compatible creatures
             if level.config.layout.get_lane(index).is_compat(creature) {

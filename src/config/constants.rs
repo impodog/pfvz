@@ -3,7 +3,7 @@ use crate::prelude::*;
 // Usage range for identifiers:
 // + positives for zombies
 // - negatives for plants
-// (+/-) 1..100 => adventure creautres
+// (+/-) 1..100 => adventure creatures
 // (+/-) 101..200 => mini game creatures
 // (+/-) 201..300 => adventure non-player non-individual creatures
 
@@ -24,6 +24,7 @@ pub const ICE_SHROOM: Id = -14;
 pub const DOOM_SHROOM: Id = -15;
 pub const SUN_BEAN: Id = -16;
 pub const LILY_PAD: Id = -17;
+pub const SQUASH: Id = -18;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -38,6 +39,7 @@ pub const ALL_STAR_ZOMBIE: Id = 5;
 pub const NEWSPAPER_ZOMBIE: Id = 6;
 pub const SCREEN_DOOR_ZOMBIE: Id = 7;
 pub const TRASHCAN_ZOMBIE: Id = 8;
+pub const SNORKEL_ZOMBIE: Id = 9;
 
 pub const HIDDEN_ZOMBIE: Id = 101;
 
@@ -55,7 +57,7 @@ pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
 pub const COLLISION_Z_FACTOR: f32 = 2.0;
 // "sparseness" is used in level::spawn module, where the probability increases by spawn turn,
 // while having a maximum cap of sparseness, and when chosen, the probability falls back to zero
-pub const SPARSENESS: u32 = 3;
+pub const SPARSENESS: u32 = 5;
 
 /// This function defines the standard naming of creatures in configuration files and code
 pub fn id_name(id: Id) -> &'static str {
@@ -78,10 +80,12 @@ pub fn id_name(id: Id) -> &'static str {
         ICE_SHROOM => "ice_shroom",
         DOOM_SHROOM => "doom_shroom",
         SUN_BEAN => "sun_bean",
+        SQUASH => "squash",
 
         BOWLING_NUT => "bowling_nut",
 
         GRAVE => "grave",
+        CRATER => "crater",
 
         BASIC_ZOMBIE => "basic",
         ROADCONE_ZOMBIE => "roadcone",
@@ -91,6 +95,7 @@ pub fn id_name(id: Id) -> &'static str {
         NEWSPAPER_ZOMBIE => "newspaper",
         SCREEN_DOOR_ZOMBIE => "screen_door",
         TRASHCAN_ZOMBIE => "trashcan",
+        SNORKEL_ZOMBIE => "snorkel",
 
         HIDDEN_ZOMBIE => "hidden",
 

@@ -2,71 +2,71 @@
 selection = "Any"
 layout = "Pool"
 game = "Adventure"
-modify = { give = -17, next = { stage = 3, level = 2 } }
+modify = { give = -18, next = { stage = 3, level = 3 } }
 sun = 50
 [[waves]]
 points = 0
-wait = 0.0
+wait = 30.0
 big = false
-fixed = [[1, 100], [2, 1]]
+fixed = [[1, 1], [7, 1]]
 avail = []
 [[waves]]
 points = 0
-wait = 30.0
+wait = 40.0
 big = false
-fixed = [[1, 1], [3, 1]]
+fixed = [[1, 1], [6, 1]]
 avail = []
 [[waves]]
 points = 150
+wait = 50.0
+big = false
+fixed = [[5, 1]]
+avail = [1, 2, 3, 7]
+[[waves]]
+points = 175
 wait = 30.0
 big = false
-fixed = []
+fixed = [[1, 1], [2, 1]]
+avail = [5, 6, 7]
+[[waves]]
+points = 200
+wait = 30.0
+big = false
+fixed = [[2, 1], [3, 1]]
+avail = [1, 2, 3, 6, 7]
+[[waves]]
+points = 300
+wait = 50.0
+big = true
+fixed = [[1, 2], [6, 1]]
 avail = [1, 2, 3, 7]
+[[waves]]
+points = 200
+wait = 30.0
+big = false
+fixed = [[1, 2]]
+avail = [2, 3, 7]
 [[waves]]
 points = 200
 wait = 40.0
 big = false
+fixed = [[5, 1]]
+avail = [1, 2, 3, 7]
+[[waves]]
+points = 250
+wait = 30.0
+big = false
 fixed = [[7, 1]]
-avail = [1, 2, 3]
+avail = [1, 2, 3, 7]
+[[waves]]
+points = 300
+wait = 40.0
+big = false
+fixed = [[3, 1], [6, 1]]
+avail = [1, 2, 3, 7]
 [[waves]]
 points = 400
 wait = 50.0
 big = true
-fixed = [[4, 1], [6, 1]]
-avail = [1, 2, 3, 7]
-[[waves]]
-points = 200
-wait = 30.0
-big = false
-fixed = [[1, 1], [3, 1]]
-avail = [2, 3, 7]
-[[waves]]
-points = 300
-wait = 40.0
-big = false
-fixed = [[6, 1]]
-avail = [1, 2, 3, 7]
-[[waves]]
-points = 300
-wait = 30.0
-big = false
-fixed = [[2, 2]]
-avail = [1, 2, 3, 7]
-[[waves]]
-points = 400
-wait = 30.0
-big = false
-fixed = [[1, 2], [3, 1]]
-avail = [1, 2, 3, 7]
-[[waves]]
-points = 400
-wait = 30.0
-big = false
-fixed = [[6, 2]]
-avail = [1, 2, 3, 7]
-[[waves]]
-points = 600
-wait = 40.0
-big = true
-fixed = [[4, 2], [1, 5], [6, 1]]
+fixed = [[1, 2], [2, 2], [5, 1]]
 avail = [1, 2, 3, 6, 7]

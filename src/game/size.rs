@@ -12,13 +12,15 @@ impl Plugin for GameSizePlugin {
 /// A helpful layer between hitbox and sprite size
 /// Controls the size factor of cropping
 #[derive(Component, Default, Debug, Clone)]
-pub struct Size {
+pub struct SizeCrop {
     pub base: Vec2,
     pub corner: Vec2,
-    pub x: game::Factor,
-    pub y: game::Factor,
+    pub x_crop: game::Factor,
+    pub y_crop: game::Factor,
+    pub x_stretch: game::Factor,
+    pub y_stretch: game::Factor,
 }
-impl Size {
+impl SizeCrop {
     pub fn new(base: Vec2) -> Self {
         Self {
             base,
@@ -27,40 +29,51 @@ impl Size {
     }
 
     pub fn size(&self) -> Vec2 {
-        self.crop(self.base)
+        self.crop_stretch(self.base)
     }
 
     pub fn crop(&self, size: Vec2) -> Vec2 {
-        Vec2::new(size.x * self.x.factor(), size.y * self.y.factor())
+        Vec2::new(size.x * self.x_crop.factor(), size.y * self.y_crop.factor())
     }
 
-    pub fn x_factor(&self) -> f32 {
-        self.x.factor()
+    pub fn crop_stretch(&self, size: Vec2) -> Vec2 {
+        Vec2::new(
+            size.x * self.x_crop.factor() * self.x_stretch.factor(),
+            size.y * self.y_crop.factor() * self.y_stretch.factor(),
+        )
     }
 
-    pub fn y_factor(&self) -> f32 {
-        self.y.factor()
+    pub fn x_multiply(&mut self, factor: f32) {
+        self.x_crop.multiply(factor);
+        self.x_stretch.multiply(1.0 / factor);
     }
 
-    pub fn x_mut(&mut self) -> &mut game::Factor {
-        &mut self.x
+    pub fn y_multiply(&mut self, factor: f32) {
+        self.y_crop.multiply(factor);
+        self.y_stretch.multiply(1.0 / factor);
     }
 
-    pub fn y_mut(&mut self) -> &mut game::Factor {
-        &mut self.y
+    pub fn x_divide(&mut self, factor: f32) {
+        self.x_crop.divide(factor);
+        self.x_stretch.divide(1.0 / factor);
+    }
+
+    pub fn y_divide(&mut self, factor: f32) {
+        self.y_crop.divide(factor);
+        self.y_stretch.divide(1.0 / factor);
     }
 }
 
 fn update_size(
     mut q_size: Query<
-        (&Size, &Handle<Image>, &mut Sprite),
-        Or<(Changed<Size>, Changed<Handle<Image>>)>,
+        (&SizeCrop, &Handle<Image>, &mut Sprite),
+        Or<(Changed<SizeCrop>, Changed<Handle<Image>>)>,
     >,
     images: Res<Assets<Image>>,
 ) {
     q_size.par_iter_mut().for_each(|(size, image, mut sprite)| {
+        sprite.custom_size = Some(size.size());
         if let Some(image) = images.get(image) {
-            sprite.custom_size = Some(size.size());
             let image_size = image.size_f32();
             let new_size = size.crop(image_size);
             let rect = Rect::new(
@@ -71,7 +84,8 @@ fn update_size(
             );
             sprite.rect = Some(rect);
         } else {
-            warn!("No image size available!");
+            // FIXME: Why is this shown when the game starts into the menu?
+            // warn!("No image size available for id {}!", image.id());
         }
     });
 }
@@ -82,13 +96,13 @@ fn add_size(
     display: Res<game::Display>,
 ) {
     q_hitbox.iter().for_each(|(entity, hitbox)| {
-        let size = Size::new(Vec2::from(hitbox) * display.ratio);
+        let size = SizeCrop::new(Vec2::from(hitbox) * display.ratio);
         commands.entity(entity).try_insert(size);
     });
 }
 
 fn modify_size(
-    mut q_hitbox: Query<(&game::HitBox, &mut Size), Changed<game::HitBox>>,
+    mut q_hitbox: Query<(&game::HitBox, &mut SizeCrop), Changed<game::HitBox>>,
     display: Res<game::Display>,
 ) {
     q_hitbox.par_iter_mut().for_each(|(hitbox, mut size)| {
@@ -108,7 +122,7 @@ impl RelativePosition {
 
 fn modify_relative(
     mut q_rel: Query<(&Parent, Ref<RelativePosition>, &mut game::Position)>,
-    q_size: Query<(&game::HitBox, Ref<Size>)>,
+    q_size: Query<(&game::HitBox, Ref<SizeCrop>)>,
 ) {
     fn sign(v: f32) -> f32 {
         if v < -f32::EPSILON {
@@ -122,8 +136,8 @@ fn modify_relative(
         if let Ok((hitbox, size)) = q_size.get(parent.get()) {
             if rel.is_changed() || size.is_changed() {
                 *pos = rel.0;
-                pos.x -= sign(pos.x) * hitbox.width * (1.0 - size.x_factor()) / 2.0;
-                pos.z -= sign(pos.z) * hitbox.height * (1.0 - size.y_factor()) / 2.0;
+                pos.x -= sign(pos.x) * hitbox.width * (1.0 - size.x_crop.factor()) / 2.0;
+                pos.z -= sign(pos.z) * hitbox.height * (1.0 - size.y_crop.factor()) / 2.0;
             }
         }
     });

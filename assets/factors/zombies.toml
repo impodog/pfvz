@@ -1,5 +1,5 @@
 [basic]
-velocity = [-0.0035, -0.0025]
+velocity = [-0.095, -0.09]
 self_box = { width = 0.5, height = 1.2 }
 arm_box = { width = 0.2, height = 0.6 }
 self_health = [100, 70]
@@ -19,14 +19,14 @@ bucket_health = 1100
 cooldown = 2.0
 cost = 125
 [flag]
-velocity = [-0.006, -0.005]
+velocity = [-0.185, -0.18]
 flag_box = { width = 0.5, height = 0.8 }
 flag_health = 100
 cooldown = 1.5
 cost = 75
 [all_star]
-velocity_running = [-0.06, -0.05]
-velocity = [-0.0025, -0.002]
+velocity_running = [-1.5, -1.495]
+velocity = [-0.095, -0.09]
 self_box = { width = 0.7, height = 1.2 }
 helmet_box = { width = 0.4, height = 0.4 }
 self_health = [250, 50]
@@ -37,8 +37,8 @@ tackle_damage = 2000
 cooldown = 5.0
 cost = 175
 [newspaper]
-velocity = [-0.0035, -0.0025]
-rage_velocity = [-0.014, -0.012]
+velocity = [-0.095, -0.09]
+rage_velocity = [-0.365, -0.36]
 self_box = { width = 0.6, height = 1.1 }
 newspaper_box = { width = 0.5, height = 0.5 }
 self_health = [350, 70]
@@ -54,7 +54,7 @@ screen_door_health = 1100
 cooldown = 5.0
 cost = 150
 [trashcan]
-velocity = [-0.0040, -0.0035]
+velocity = [-0.105, -0.1]
 self_box = { width = 0.6, height = 1.1 }
 trashcan_box = { width = 0.6, height = 0.8 }
 self_health = [350, 70]
@@ -65,7 +65,7 @@ interval = 0.4
 cooldown = 5.0
 cost = 125
 [hidden]
-velocity = [-0.004, -0.0035]
+velocity = [-0.105, -0.1]
 self_box = { width = 1.0, height = 2.0 }
 self_health = [3600, 0]
 damage = 40
@@ -74,3 +74,12 @@ cooldown = 800.0
 cost = 800
 [tube]
 self_box = { width = 0.6, height = 0.3 }
+[snorkel]
+velocity = [-0.105, -0.1]
+self_box = { width = 0.4, height = 1.1 }
+underwater_box = { width = 0.4, height = 0.5 }
+self_health = [350, 70]
+damage = 40
+interval = 0.4
+cooldown = 2.0
+cost = 75

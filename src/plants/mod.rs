@@ -13,6 +13,7 @@ mod plugin;
 mod producers;
 mod special;
 mod spores;
+mod squash;
 
 pub use buster::*;
 pub use contact::*;
@@ -27,3 +28,4 @@ pub use plugin::*;
 pub use producers::*;
 pub use special::*;
 pub use spores::*;
+pub use squash::*;

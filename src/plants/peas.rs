@@ -141,7 +141,7 @@ fn init_config(
             cost: factors.peashooter.cost,
             cooldown: factors.peashooter.cooldown,
             hitbox: factors.peashooter.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(PEASHOOTER, creature);
     }
@@ -179,7 +179,7 @@ fn init_config(
             cost: factors.snow_pea.cost,
             cooldown: factors.snow_pea.cooldown,
             hitbox: factors.snow_pea.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(SNOW_PEA, creature);
     }
@@ -210,7 +210,7 @@ fn init_config(
             cost: factors.repeater.cost,
             cooldown: factors.repeater.cooldown,
             hitbox: factors.repeater.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(REPEATER, creature);
     }

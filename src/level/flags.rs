@@ -19,13 +19,17 @@ bitflags! {
 
         const MAKE_UNUSABLE = 0x8000;
 
-        const TERRESTRIAL_CREATURE = 0x8001;
-        const AQUATIC_CREATURE = 0x8002;
+        const TERRESTRIAL_PLANT = 0x8001;
+        const AQUATIC_PLANT = 0x8002;
+
         const LILY_PAD = 0x0102;
         const FLOWER_POT = 0x0105;
         const WATER_POT = 0x0205;
+
         const GROUND_ZOMBIE = 0x0005;
         const GROUND_AQUATIC_ZOMBIE = 0x0007;
+        const AQUATIC_ZOMBIE = 0x0002;
+
         const GRAVE = 0x8080;
         const GRAVE_BUSTER = 0x0080;
         const CRATER = 0x0080;

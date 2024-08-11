@@ -153,7 +153,7 @@ fn init_config(
             cost: factors.puff_shroom.cost,
             cooldown: factors.puff_shroom.cooldown,
             hitbox: factors.puff_shroom.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(PUFF_SHROOM, creature);
     }
@@ -184,7 +184,7 @@ fn init_config(
             cost: factors.scaredy_shroom.cost,
             cooldown: factors.scaredy_shroom.cooldown,
             hitbox: factors.scaredy_shroom.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(SCAREDY_SHROOM, creature);
     }

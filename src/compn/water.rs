@@ -31,8 +31,10 @@ fn add_in_water(
 }
 
 fn put_in_water(
-    mut q_zombie: Query<(&game::Position, &mut game::Size, &mut InWater), With<game::Zombie>>,
+    mut q_zombie: Query<(&game::Position, &mut game::SizeCrop, &mut InWater), With<game::Zombie>>,
     level: Res<level::Level>,
+    audio: Res<Audio>,
+    audio_zombies: Res<assets::AudioZombies>,
 ) {
     q_zombie
         .par_iter_mut()
@@ -42,9 +44,10 @@ fn put_in_water(
             if status != **in_water {
                 **in_water = status;
                 if status {
-                    size.y_mut().multiply(0.6);
+                    size.y_crop.multiply(0.6);
+                    audio.play(audio_zombies.water.random());
                 } else {
-                    size.y_mut().divide(0.6);
+                    size.y_crop.divide(0.6);
                 }
             }
         });

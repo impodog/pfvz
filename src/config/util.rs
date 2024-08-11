@@ -32,6 +32,6 @@ fn init_timer(mut commands: Commands, config: Res<config::Config>) {
         delta: Duration::from_millis(
             (1000.0 / config.program.framerate.0 * config.gamerule.speed.0) as u64,
         ),
-        diff: 30.0 / config.program.framerate.0,
+        diff: 1.0 / config.program.framerate.0,
     })
 }

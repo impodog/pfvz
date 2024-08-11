@@ -105,6 +105,17 @@ pub struct HiddenZombie {
 pub struct Tube {
     pub self_box: game::HitBox,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Snorkel {
+    pub velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub underwater_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
@@ -118,6 +129,7 @@ pub struct ZombieFactors {
     pub trashcan: TrashcanZombie,
     pub hidden: HiddenZombie,
     pub tube: Tube,
+    pub snorkel: Snorkel,
 }
 
 fn init_factors(mut commands: Commands) {

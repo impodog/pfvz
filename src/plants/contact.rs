@@ -59,7 +59,9 @@ fn iceberg_lettuce_freeze(
     factors: Res<plants::PlantFactors>,
 ) {
     if let Some(mut commands) = commands.get_entity(enemy) {
-        commands.insert(compn::Snow::from(factors.iceberg_lettuce.snow));
+        commands.insert(compn::ModifySnow::Add(compn::Snow::from(
+            factors.iceberg_lettuce.snow,
+        )));
     }
     if let Some(commands) = commands.get_entity(entity) {
         commands.despawn_recursive();
@@ -160,7 +162,7 @@ fn init_config(
             cost: factors.iceberg_lettuce.cost,
             cooldown: factors.iceberg_lettuce.cooldown,
             hitbox: factors.iceberg_lettuce.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(ICEBERG_LETTUCE, creature);
     }
@@ -179,7 +181,7 @@ fn init_config(
             cost: factors.sun_bean.cost,
             cooldown: factors.sun_bean.cooldown,
             hitbox: factors.sun_bean.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(SUN_BEAN, creature);
     }

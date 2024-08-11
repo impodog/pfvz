@@ -12,6 +12,7 @@ impl Plugin for ZombiesPlugin {
             newspaper::ZombiesNewspaperPlugin,
             trashcan::ZombiesTrashcanPlugin,
             hidden::ZombiesHiddenPlugin,
+            snorkel::ZombiesSnorkelPlugin,
         ));
     }
 }

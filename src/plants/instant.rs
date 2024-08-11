@@ -145,7 +145,7 @@ fn init_config(
             cost: factors.ice_shroom.cost,
             cooldown: factors.ice_shroom.cooldown,
             hitbox: factors.ice_shroom.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(ICE_SHROOM, creature);
     }
@@ -164,7 +164,7 @@ fn init_config(
             cost: factors.doom_shroom.cost,
             cooldown: factors.doom_shroom.cooldown,
             hitbox: factors.doom_shroom.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(DOOM_SHROOM, creature);
     }

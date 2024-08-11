@@ -96,7 +96,7 @@ impl LayoutKind {
             Self::Day => TileFeature::Grass,
             Self::Night => TileFeature::Grass,
             Self::Pool => {
-                if y == 2 || y == 3 {
+                if (y == 2 || y == 3) && (0..=8).contains(&x) {
                     TileFeature::Water
                 } else {
                     TileFeature::Grass

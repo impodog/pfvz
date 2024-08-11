@@ -20,6 +20,7 @@ impl Plugin for PlantsPlugin {
             fume::PlantsFumePlugin,
             instant::PlantsInstantPlugin,
             pads::PlantsPadsPlugin,
+            squash::PlantsSquashPlugin,
         ));
     }
 }

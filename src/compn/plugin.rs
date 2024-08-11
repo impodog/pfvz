@@ -20,6 +20,7 @@ impl Plugin for CompnPlugin {
             contact::CompnContactPlugin,
             anim_do::CompnAnimDoPlugin,
             instant::CompnInstantPlugin,
+            squash::CompnSquashPlugin,
         ));
         app.add_plugins((mushroom::PlantsMushroomPlugin, water::CompnWaterPlugin));
     }

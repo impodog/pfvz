@@ -6,7 +6,7 @@ impl Plugin for CompnSnowPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (add_snow, snowy_bump, remove_snow, remove_snow_from_parent)
+            (snowy_bump, modify_snow, snow_timer, remove_snow_from_parent)
                 .run_if(when_state!(gaming)),
         );
     }
@@ -17,6 +17,11 @@ pub struct Snow {
     pub duration: Duration,
     // The speed factor to multiply, e.g. 0.5
     pub factor: f32,
+}
+#[derive(Component, Debug, Clone)]
+pub enum ModifySnow {
+    Add(Snow),
+    Remove,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Debug, Clone, Copy)]
@@ -42,6 +47,13 @@ pub struct SnowyProjectile {
 pub struct SnowImpl {
     pub timer: Timer,
 }
+impl From<&Snow> for SnowImpl {
+    fn from(snow: &Snow) -> Self {
+        Self {
+            timer: Timer::new(snow.duration, TimerMode::Once),
+        }
+    }
+}
 
 #[derive(Component, Debug, Clone)]
 pub struct UnsnowParent {
@@ -58,53 +70,79 @@ fn snowy_bump(
         if let game::ProjectileAction::Damage(entity, other) = action {
             if let Ok(snowy) = q_snow.get(*entity) {
                 if let Some(mut commands) = commands.get_entity(*other) {
-                    commands.try_insert(snowy.snow.clone());
+                    commands.try_insert(ModifySnow::Add(snowy.snow.clone()));
                 }
             }
         }
     });
 }
 
-fn add_snow(
-    mut commands: Commands,
-    mut q_snow: Query<(Entity, &Snow, &mut game::Overlay), Changed<Snow>>,
-    mut q_snow_impl: Query<&mut SnowImpl>,
+fn modify_snow(
+    commands: ParallelCommands,
+    mut q_modify: Query<(Entity, &mut game::Overlay, &ModifySnow)>,
+    q_snow: Query<(&Snow, &SnowImpl)>,
 ) {
-    q_snow.iter_mut().for_each(|(entity, snow, mut overlay)| {
-        if let Ok(mut snow_impl) = q_snow_impl.get_mut(entity) {
-            if snow_impl.timer.remaining() < snow.duration {
-                snow_impl.timer.set_duration(snow.duration);
-                snow_impl.timer.reset();
+    q_modify
+        .par_iter_mut()
+        .for_each(|(entity, mut overlay, modify)| {
+            match modify {
+                ModifySnow::Add(snow) => {
+                    let ok = if let Ok((prev_snow, prev_snow_impl)) = q_snow.get(entity) {
+                        if prev_snow.factor < snow.factor
+                            || (prev_snow.factor == snow.factor
+                                && prev_snow_impl.timer.remaining() < snow.duration)
+                        {
+                            overlay.divide(prev_snow.factor);
+                            overlay.multiply(snow.factor);
+
+                            true
+                        } else {
+                            false
+                        }
+                    } else {
+                        overlay.multiply(snow.factor);
+                        true
+                    };
+                    if ok {
+                        commands.command_scope(|mut commands| {
+                            commands
+                                .entity(entity)
+                                .try_insert(snow.clone())
+                                .try_insert(SnowImpl::from(snow));
+                        });
+                    }
+                }
+                ModifySnow::Remove => {
+                    commands.command_scope(|mut commands| {
+                        if let Ok((prev_snow, _prev_snow_impl)) = q_snow.get(entity) {
+                            overlay.divide(prev_snow.factor);
+                            commands
+                                .entity(entity)
+                                .remove::<Snow>()
+                                .remove::<SnowImpl>();
+                        }
+                    });
+                }
             }
-        } else {
-            if let Some(mut commands) = commands.get_entity(entity) {
-                commands.insert(SnowImpl {
-                    timer: Timer::new(snow.duration, TimerMode::Once),
-                });
-            }
-            overlay.multiply(snow.factor);
-        }
-    });
+            commands.command_scope(|mut commands| {
+                commands.entity(entity).remove::<ModifySnow>();
+            })
+        });
 }
 
-fn remove_snow(
-    mut commands: Commands,
-    mut q_snow: Query<(Entity, &mut game::Overlay, &Snow, &mut SnowImpl)>,
-    actual_time: Res<config::FrameTime>,
+fn snow_timer(
+    commands: ParallelCommands,
+    time: Res<config::FrameTime>,
+    mut q_snow: Query<(Entity, &mut SnowImpl)>,
 ) {
-    q_snow
-        .iter_mut()
-        .for_each(|(entity, mut overlay, snow, mut snow_imp)| {
-            // We use actual time here to detach the snow timer from the snow effect
-            snow_imp.timer.tick(actual_time.delta());
-            if snow_imp.timer.just_finished() {
-                overlay.divide(snow.factor);
-                commands
-                    .entity(entity)
-                    .remove::<Snow>()
-                    .remove::<SnowImpl>();
-            }
-        })
+    q_snow.par_iter_mut().for_each(|(entity, mut snow_impl)| {
+        snow_impl.timer.tick(time.delta());
+        if snow_impl.timer.just_finished() {
+            commands.command_scope(|mut commands| {
+                commands.entity(entity).try_insert(ModifySnow::Remove);
+            });
+        }
+    });
 }
 
 fn remove_snow_from_parent(
@@ -115,10 +153,7 @@ fn remove_snow_from_parent(
     q_parent.iter().for_each(|(unsnow, parent)| {
         if let Ok(snow) = q_snow.get(parent.get()) {
             if unsnow.absolute || snow.factor != 0.0 {
-                commands
-                    .entity(parent.get())
-                    .remove::<Snow>()
-                    .remove::<SnowImpl>();
+                commands.entity(parent.get()).try_insert(ModifySnow::Remove);
             }
         }
     });

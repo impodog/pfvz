@@ -67,7 +67,7 @@ fn init_config(
             cost: factors.wall_nut.cost,
             cooldown: factors.wall_nut.cooldown,
             hitbox: factors.wall_nut.self_box,
-            flags: level::CreatureFlags::TERRESTRIAL_CREATURE,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(WALL_NUT, creature);
     }
