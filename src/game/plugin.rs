@@ -18,6 +18,7 @@ impl Plugin for GamePlugin {
             player::GamePlayerPlugin,
             debug::GameDebugPlugin,
             size::GameSizePlugin,
+            pos_util::GamePosUtilPlugin,
         ));
     }
 }

@@ -17,7 +17,7 @@ impl Plugin for PlantsBowlingPlugin {
 game_conf!(systems bowling_nut_systems);
 
 fn spawn_bowling_nut(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -31,6 +31,7 @@ fn spawn_bowling_nut(
         game::Plant,
         creature.clone(),
         pos,
+        game::Position::default(),
         sprite::Animation::new(plants.wall_nut.clone()),
         velocity,
         creature.hitbox,

@@ -25,7 +25,7 @@ game_conf!(explode PotatoMineExplode);
 game_conf!(systems potato_mine_systems);
 
 fn spawn_cherry_bomb(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -50,14 +50,13 @@ fn spawn_cherry_bomb(
 }
 
 fn spawn_potato_mine(
-    In(mut pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
     map: Res<game::CreatureMap>,
     explode: Res<PotatoMineExplode>,
 ) {
-    pos.y -= 0.2;
     let creature = map.get(&POTATO_MINE).unwrap();
     commands.spawn((
         game::Plant,

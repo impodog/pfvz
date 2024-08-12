@@ -45,12 +45,12 @@ fn renew_layout(mut plants: ResMut<PlantLayout>, level: Res<level::Level>) {
     plants.clear(size.0 * size.1);
 }
 
-fn scan_plants(plants: Res<PlantLayout>, q_plant: Query<&game::Position, With<Plant>>) {
+fn scan_plants(plants: Res<PlantLayout>, q_plant: Query<&game::LogicPosition, With<Plant>>) {
     // NOTE: This scans every tile. May be a performance bottleneck!
     let mut remove = Vec::new();
     for lane in plants.plants.iter() {
         for (i, plant) in lane.read().unwrap().iter().enumerate() {
-            if let Ok(_pos) = q_plant.get(*plant) {
+            if let Ok(_logic) = q_plant.get(*plant) {
             } else {
                 remove.push(i);
             }
@@ -67,14 +67,14 @@ fn scan_plants(plants: Res<PlantLayout>, q_plant: Query<&game::Position, With<Pl
 }
 fn add_plants(
     plants: Res<PlantLayout>,
-    q_plant: Query<(Entity, &game::Position), Added<Plant>>,
+    q_plant: Query<(Entity, &game::LogicPosition), Added<Plant>>,
     mut q_transform: Query<&mut Transform>,
     level: Res<level::Level>,
 ) {
-    q_plant.iter().for_each(|(entity, pos)| {
+    q_plant.iter().for_each(|(entity, logic)| {
         if !plants.in_layout.read().unwrap().contains(&entity) {
             plants.in_layout.write().unwrap().insert(entity);
-            let i = level.config.layout.position_to_index(pos);
+            let i = level.config.layout.position_to_index(&logic.base);
             if let Some(plants) = plants.plants.get(i) {
                 if let Some(plant) = plants.read().unwrap().last() {
                     if let Ok(mut values) = q_transform.get_many_mut([*plant, entity]) {
@@ -86,7 +86,7 @@ fn add_plants(
             } else {
                 error!(
                     "Plant at {:?} is outside the bounds and will not be monitored",
-                    pos
+                    logic
                 );
             }
         }

@@ -31,7 +31,7 @@ game_conf!(systems crater_systems);
 game_conf!(pub system grave_spawn_anywhere, ());
 
 fn spawn_grave(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -83,6 +83,7 @@ fn spawn_grave_any(
         );
         let pos = level.config.layout.coordinates_to_position(x, y);
         let index = level.config.layout.position_to_index(&pos);
+        let pos = game::LogicPosition::from_base(pos);
         if layout
             .plants
             .get(index)
@@ -109,7 +110,7 @@ fn auto_spawn_grave(
 }
 
 fn spawn_crater(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,

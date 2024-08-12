@@ -28,7 +28,7 @@ game_conf!(shooter ScaredyShroomShooter);
 game_conf!(systems scaredy_shroom_systems);
 
 fn spawn_puff_shroom(
-    In(mut pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -36,7 +36,6 @@ fn spawn_puff_shroom(
     shooter: Res<PuffShroomShooter>,
 ) {
     let creature = map.get(&PUFF_SHROOM).unwrap();
-    pos.z -= 0.5 - creature.hitbox.height / 2.0;
     commands.spawn((
         game::Plant,
         compn::Mushroom::default(),
@@ -54,7 +53,7 @@ fn spawn_puff_shroom(
 pub struct ScaredyStatus(pub bool);
 
 fn spawn_scaredy_shroom(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,

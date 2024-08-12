@@ -25,7 +25,7 @@ game_conf!(system fume_shroom_after, Entity);
 game_conf!(system fume_shroom_callback, Entity);
 
 fn spawn_fume_shroom(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,

@@ -26,6 +26,7 @@ pub const SUN_BEAN: Id = -16;
 pub const LILY_PAD: Id = -17;
 pub const SQUASH: Id = -18;
 pub const THREEPEATER: Id = -19;
+pub const TALL_NUT: Id = -20;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -50,7 +51,7 @@ pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
 pub const LOGICAL_BOUND: Vec2 = Vec2::new(LOGICAL_WIDTH * 0.6, LOGICAL_HEIGHT * 0.6);
 pub const LOGICAL: Vec2 = Vec2::new(LOGICAL_WIDTH, LOGICAL_HEIGHT);
-pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.8);
+pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.7);
 pub const BUTTON_SIZE: Vec2 = Vec2::new(SLOT_SIZE.x * 2.0, SLOT_SIZE.y);
 pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
 
@@ -58,7 +59,9 @@ pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
 pub const COLLISION_Z_FACTOR: f32 = 2.0;
 // "sparseness" is used in level::spawn module, where the probability increases by spawn turn,
 // while having a maximum cap of sparseness, and when chosen, the probability falls back to zero
-pub const SPARSENESS: u32 = 5;
+pub const SPARSENESS: u32 = 255;
+// The percentage of parts above water of a zombie in the water
+pub const WATER_PERCENTAGE: f32 = 0.7;
 
 /// This function defines the standard naming of creatures in configuration files and code
 pub fn id_name(id: Id) -> &'static str {
@@ -84,6 +87,7 @@ pub fn id_name(id: Id) -> &'static str {
         LILY_PAD => "lily_pad",
         SQUASH => "squash",
         THREEPEATER => "threepeater",
+        TALL_NUT => "tall_nut",
 
         BOWLING_NUT => "bowling_nut",
 

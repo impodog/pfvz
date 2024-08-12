@@ -18,7 +18,7 @@ pub struct CreatureMap(pub HashMap<Id, Creature>);
 
 #[derive(Debug, Clone, Copy)]
 pub struct CreatureSystems {
-    pub spawn: SystemId<game::Position>,
+    pub spawn: SystemId<game::LogicPosition>,
     pub die: SystemId<Entity>,
     pub damage: SystemId<(Entity, u32)>,
 }
@@ -36,7 +36,7 @@ pub struct CreatureShared {
 
 #[derive(Event, Debug, Clone)]
 pub enum CreatureAction {
-    Spawn(Id, game::Position),
+    Spawn(Id, game::LogicPosition),
     Die(Entity),
     Damage(Entity, u32),
 }

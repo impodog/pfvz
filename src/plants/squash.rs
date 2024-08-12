@@ -17,7 +17,7 @@ impl Plugin for PlantsSquashPlugin {
 game_conf!(systems squash_systems);
 
 fn spawn_squash(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,

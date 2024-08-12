@@ -70,23 +70,23 @@ fn shooter_work(
         &Shooter,
         &mut ShooterImpl,
         &game::Position,
+        &game::HitBox,
         &Transform,
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
     q_zpos: Query<&game::Position, With<game::Zombie>>,
     level: Res<level::Level>,
 ) {
-    q_shooter
-        .iter_mut()
-        .for_each(|(entity, overlay, shooter, mut work, pos, transform)| {
+    q_shooter.iter_mut().for_each(
+        |(entity, overlay, shooter, mut work, pos, hitbox, transform)| {
             work.timer.tick(overlay.delta());
             if work.timer.just_finished() {
-                let range = shooter.proj.range.clone() + level.config.layout.regularize(*pos);
+                let mut pos = (*pos).move_z(-hitbox.height * 0.2);
+                let range = shooter.proj.range.clone() + pos;
                 if shooter.require_zombie {
                     let mut ok = false;
                     for zpos in q_zpos.iter() {
                         let zpos = level.config.layout.regularize(*zpos);
-                        info!("range = {:#?}, zpos = {:#?}", range, zpos);
                         if range.contains(&zpos) {
                             ok = true;
                             break;
@@ -96,12 +96,11 @@ fn shooter_work(
                         return;
                     }
                 }
-                let mut pos = *pos;
                 for _ in 0..shooter.times {
                     for start in shooter.start.iter() {
                         let proj_entity = {
                             let mut commands = commands.spawn((
-                                *start + pos,
+                                game::LogicPosition::from_base(*start + pos),
                                 sprite::Animation::new(shooter.shared.anim.clone()),
                                 shooter.shared.hitbox,
                                 shooter.proj.clone(),
@@ -130,5 +129,6 @@ fn shooter_work(
                     pos.x += 3.0 * shooter.velocity.x;
                 }
             }
-        })
+        },
+    )
 }

@@ -28,7 +28,7 @@ game_conf!(breaks HelmetBreaks);
 game_conf!(systems all_star_zombie_systems);
 
 fn spawn_all_star_zombie(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,

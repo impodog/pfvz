@@ -162,10 +162,12 @@ fn by_probability(
             if ok {
                 action.send(game::CreatureAction::Spawn(
                     id,
-                    level
-                        .config
-                        .layout
-                        .regularize(game::Position::new_xy(get_x(), y)),
+                    game::LogicPosition::from_base(
+                        level
+                            .config
+                            .layout
+                            .regularize(game::Position::new_xy(get_x(), y)),
+                    ),
                 ));
                 // Continue on to spawning
                 guard.0 = true;

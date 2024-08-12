@@ -21,7 +21,7 @@ struct BusterTimer(Timer);
 game_conf!(systems grave_buster_systems);
 
 fn spawn_grave_buster(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,

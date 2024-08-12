@@ -207,6 +207,13 @@ pub struct Threepeater {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct TallNut {
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -251,6 +258,7 @@ pub struct PlantFactors {
     pub lily_pad: LilyPad,
     pub squash: Squash,
     pub threepeater: Threepeater,
+    pub tall_nut: TallNut,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

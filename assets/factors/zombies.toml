@@ -56,7 +56,7 @@ cost = 150
 [trashcan]
 velocity = [-0.105, -0.1]
 self_box = { width = 0.6, height = 1.1 }
-trashcan_box = { width = 0.6, height = 0.8 }
+trashcan_box = { width = 0.4, height = 0.6 }
 self_health = [350, 70]
 trashcan_health = [500, 0]
 damage = 40

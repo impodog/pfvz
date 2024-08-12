@@ -157,6 +157,11 @@ damage = 20
 interval = 1.5
 cooldown = 7.5
 cost = 325
+[tall_nut]
+self_box = { width = 0.9, height = 1.5 }
+health = 8000
+cooldown = 40.0
+cost = 125
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }

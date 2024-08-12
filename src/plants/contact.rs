@@ -32,7 +32,7 @@ game_conf!(systems sun_bean_systems);
 game_conf!(system sun_bean_contact, (Entity, Entity));
 
 fn spawn_iceberg_lettuce(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -69,7 +69,7 @@ fn iceberg_lettuce_freeze(
 }
 
 fn spawn_sun_bean(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,

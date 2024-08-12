@@ -32,7 +32,7 @@ game_conf!(walker TrashcanWalker);
 struct TrashcanBind(Entity);
 
 fn spawn_trashcan_zombie(
-    In(mut pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,
@@ -58,13 +58,15 @@ fn spawn_trashcan_zombie(
         ))
         .id();
     let trashcan = map.get(&TRASHCAN).unwrap();
-    pos.x -= (factors.trashcan.self_box.width + factors.trashcan.trashcan_box.width) / 2.0;
-    pos.z -= 0.3;
+    let disp = game::Position {
+        x: -(factors.trashcan.self_box.width + factors.trashcan.trashcan_box.width) / 2.0,
+        ..Default::default()
+    };
     commands.spawn((
         game::Zombie,
         game::NotInvasive,
         trashcan.clone(),
-        pos,
+        pos.plus(disp),
         velocity,
         sprite::Animation::new(zombies.trashcan.clone()),
         trashcan.hitbox,

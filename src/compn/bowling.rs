@@ -32,7 +32,7 @@ fn bowling_work(
     mut q_bowling: Query<(
         Entity,
         &mut game::Velocity,
-        &mut game::Position,
+        &mut game::LogicPosition,
         &Bowling,
         &mut BowlingImpl,
     )>,

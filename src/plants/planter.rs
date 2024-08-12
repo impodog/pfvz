@@ -69,14 +69,17 @@ fn do_plant(
                     && sun.0 >= creature.cost
                 {
                     // When planted on top, increase z height
-                    let mut pos = pos;
+                    let mut disp = game::Position::default();
                     if let Some(plant) = plants.top(index) {
                         if let Ok(top_pos) = q_pos.get(plant) {
-                            pos.z += top_pos.z + creature.hitbox.height / 3.0;
+                            disp.z += top_pos.z;
                         }
                     }
                     sun.0 -= creature.cost;
-                    action.send(game::CreatureAction::Spawn(*id, pos));
+                    action.send(game::CreatureAction::Spawn(
+                        *id,
+                        game::LogicPosition::new(pos, disp),
+                    ));
                     planter.send(PlanterEvent {
                         index: select.0,
                         id: *id,

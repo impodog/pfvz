@@ -38,12 +38,14 @@ fn spawn_whack(
         ));
         for y in 0..5 {
             let pos = level.config.layout.coordinates_to_position(0, y);
+            let pos = game::LogicPosition::from_base(pos);
             commands.run_system_with_input(
                 plants::sun_shroom_systems.read().unwrap().unwrap().spawn,
                 pos,
             );
             for x in 1..=2 {
                 let pos = level.config.layout.coordinates_to_position(x, y);
+                let pos = game::LogicPosition::from_base(pos);
                 commands.run_system_with_input(
                     plants::iceberg_lettuce_systems
                         .read()
@@ -62,7 +64,7 @@ fn spawn_whack(
 }
 
 fn move_to_grave(
-    mut q_zombie: Query<&mut game::Position, Added<game::Zombie>>,
+    mut q_zombie: Query<&mut game::LogicPosition, Added<game::Zombie>>,
     q_grave: Query<(&game::Position, &game::Creature), (With<game::Plant>, Without<game::Zombie>)>,
     level: Res<level::Level>,
 ) {
@@ -75,7 +77,7 @@ fn move_to_grave(
         });
         if !graves.is_empty() {
             q_zombie.par_iter_mut().for_each(|mut pos| {
-                let regular = level.config.layout.regularize(*pos);
+                let regular = level.config.layout.regularize(pos.base);
                 let grave = graves.choose(&mut rand::thread_rng()).unwrap();
                 pos.x += grave.x - regular.x;
                 pos.y += grave.y - regular.y;

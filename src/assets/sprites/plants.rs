@@ -39,6 +39,9 @@ pub struct SpritePlants {
     pub lily_pad: Arc<sprite::FrameArr>,
     pub squash: Arc<sprite::FrameArr>,
     pub threepeater: Arc<sprite::FrameArr>,
+    pub tall_nut: Arc<sprite::FrameArr>,
+    pub tall_nut_damaged: Arc<sprite::FrameArr>,
+    pub tall_nut_destroyed: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -175,6 +178,21 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/plants/threepeater",
             Duration::from_millis(150),
+        ),
+        tall_nut: super::load_animation(
+            &server,
+            "sprites/plants/tall_nut",
+            Duration::from_millis(500),
+        ),
+        tall_nut_damaged: super::load_animation(
+            &server,
+            "sprites/plants/tall_nut_damaged",
+            Duration::from_millis(500),
+        ),
+        tall_nut_destroyed: super::load_animation(
+            &server,
+            "sprites/plants/tall_nut_destroyed",
+            Duration::from_millis(500),
         ),
     };
     commands.insert_resource(plants);

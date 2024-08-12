@@ -47,7 +47,7 @@ game_conf!(shooter ThreepeaterShooter);
 game_conf!(systems threepeater_systems);
 
 fn spawn_peashooter(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -68,7 +68,7 @@ fn spawn_peashooter(
 }
 
 fn spawn_snow_pea(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -95,7 +95,7 @@ fn add_snow(In(entity): In<Entity>, mut commands: Commands, factors: Res<plants:
 }
 
 fn spawn_repeater(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -116,7 +116,7 @@ fn spawn_repeater(
 }
 
 fn spawn_threepeater(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,

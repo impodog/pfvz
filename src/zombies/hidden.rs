@@ -22,7 +22,7 @@ game_conf!(walker HiddenZombieWalker);
 pub struct HiddenZombieMarker;
 
 fn spawn_hidden_zombie(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,
@@ -46,7 +46,7 @@ fn spawn_hidden_zombie(
 }
 
 fn hidden_zombie_move(
-    mut q_pos: Query<&mut game::Position, With<HiddenZombieMarker>>,
+    mut q_pos: Query<&mut game::LogicPosition, With<HiddenZombieMarker>>,
     level: Res<level::Level>,
 ) {
     q_pos.iter_mut().for_each(|mut pos| {
@@ -62,7 +62,7 @@ fn hidden_zombie_move(
             } else {
                 y -= 1;
             }
-            *pos = level.config.layout.coordinates_to_position(x, y);
+            pos.base = level.config.layout.coordinates_to_position(x, y);
             pos.x = prev_x;
         }
     });

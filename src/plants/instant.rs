@@ -28,7 +28,7 @@ game_conf!(systems doom_shroom_systems);
 game_conf!(system doom_shroom_work, Entity);
 
 fn spawn_ice_shroom(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -77,7 +77,7 @@ fn freeze_all(
 pub struct DoomShroomMarker;
 
 fn spawn_doom_shroom(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -105,7 +105,7 @@ fn doom_all(
     In(entity): In<Entity>,
     mut commands: Commands,
     q_zombie: Query<Entity, With<game::Zombie>>,
-    q_pos: Query<&game::Position>,
+    q_pos: Query<&game::LogicPosition>,
     factors: Res<plants::PlantFactors>,
     mut action: EventWriter<game::CreatureAction>,
     config: Res<config::Config>,

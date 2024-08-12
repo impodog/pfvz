@@ -17,13 +17,12 @@ impl Plugin for PlantsPadsPlugin {
 game_conf!(systems lily_pad_systems);
 
 fn spawn_lily_pad(
-    In(mut pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
     map: Res<game::CreatureMap>,
 ) {
-    pos.z -= factors.lily_pad.self_box.height;
     let creature = map.get(&LILY_PAD).unwrap();
     commands.spawn((
         game::Plant,

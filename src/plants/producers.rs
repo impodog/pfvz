@@ -28,7 +28,7 @@ game_conf!(producer SunShroomBigProducer);
 game_conf!(systems sun_shroom_systems);
 
 fn spawn_sunflower(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -52,7 +52,7 @@ fn spawn_sunflower(
 struct SunShroomTimer(Timer);
 
 fn spawn_sun_shroom(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     mut commands: Commands,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,

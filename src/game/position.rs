@@ -12,10 +12,13 @@ impl Plugin for GamePositionPlugin {
         app.add_systems(Update, (remove_outbound,));
         // Positioning system may be used by other states,
         // so it is not wrapped under play state
-        app.add_systems(PostUpdate, (update_transform,));
         app.add_systems(
             PostUpdate,
-            (update_position, update_velocity).run_if(when_state!(play)),
+            (add_position, convert_position, update_transform).chain(),
+        );
+        app.add_systems(
+            PostUpdate,
+            (update_position, update_bare_position, update_velocity).run_if(when_state!(play)),
         );
         app.add_systems(
             PostUpdate,
@@ -52,6 +55,11 @@ impl Position {
     pub fn move_by(mut self, x: f32, y: f32) -> Self {
         self.x += x;
         self.y += y;
+        self
+    }
+
+    pub fn move_z(mut self, z: f32) -> Self {
+        self.z += z;
         self
     }
 }
@@ -213,10 +221,29 @@ fn update_transform(
     });
 }
 
+fn add_position(
+    mut commands: Commands,
+    q_pos: Query<Entity, (Added<game::LogicPosition>, Without<game::Position>)>,
+) {
+    q_pos.iter().for_each(|entity| {
+        commands
+            .entity(entity)
+            .try_insert(game::Position::default());
+    });
+}
+
+fn convert_position(mut q_pos: Query<(&mut game::Position, &game::HitBox, &game::LogicPosition)>) {
+    q_pos
+        .par_iter_mut()
+        .for_each(|(mut pos, hitbox, logic_pos)| {
+            *pos = logic_pos.center_of(hitbox);
+        });
+}
+
 fn update_position(
     config: Res<config::Config>,
     time: Res<config::FrameTime>,
-    mut q_pos: Query<(&Velocity, &mut Position), Without<game::Overlay>>,
+    mut q_pos: Query<(&Velocity, &mut game::LogicPosition), Without<game::Overlay>>,
 ) {
     q_pos.par_iter_mut().for_each(|(vel, mut pos)| {
         let factor = time.diff() * config.gamerule.speed.0;
@@ -229,10 +256,24 @@ fn update_position(
 
 fn update_position_with_overlay(
     time: Res<config::FrameTime>,
-    mut q_pos: Query<(&game::Overlay, &Velocity, &mut Position)>,
+    mut q_pos: Query<(&game::Overlay, &Velocity, &mut game::LogicPosition)>,
 ) {
     q_pos.par_iter_mut().for_each(|(overlay, vel, mut pos)| {
         let factor = time.diff() * overlay.speed();
+        pos.x += vel.x * factor;
+        pos.y += vel.y * factor;
+        pos.z += vel.z * factor;
+        pos.r += vel.r * factor;
+    });
+}
+
+fn update_bare_position(
+    config: Res<config::Config>,
+    time: Res<config::FrameTime>,
+    mut q_pos: Query<(&Velocity, &mut game::Position), Without<game::LogicPosition>>,
+) {
+    q_pos.par_iter_mut().for_each(|(vel, mut pos)| {
+        let factor = time.diff() * config.gamerule.speed.0;
         pos.x += vel.x * factor;
         pos.y += vel.y * factor;
         pos.z += vel.z * factor;

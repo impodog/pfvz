@@ -24,7 +24,7 @@ game_conf!(breaks NewspaperBreaks);
 game_conf!(systems newspaper_zombie_systems);
 
 fn spawn_newspaper_zombie(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,

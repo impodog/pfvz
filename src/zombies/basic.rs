@@ -106,7 +106,7 @@ fn add_aquatic_zombie_tube(
 }
 
 fn spawn_basic_zombie(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,
@@ -130,7 +130,7 @@ fn spawn_basic_zombie(
 }
 
 fn spawn_roadcone_zombie(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,
@@ -171,7 +171,7 @@ fn spawn_roadcone_zombie(
 }
 
 fn spawn_bucket_zombie(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,
@@ -212,7 +212,7 @@ fn spawn_bucket_zombie(
 }
 
 fn spawn_flag_zombie(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,
@@ -251,7 +251,7 @@ fn spawn_flag_zombie(
 }
 
 fn spawn_screen_door_zombie(
-    In(pos): In<game::Position>,
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,

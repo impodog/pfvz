@@ -102,3 +102,9 @@ name = "Pisum sativum var. trijaculum"
 short = "Shoots peas at three lanes"
 desc = """Shoots peas at three lanes
 Damage: Regular"""
+[desc.tall_nut]
+name = "Juglans regia var. longium"
+short = "Blocks zombies with its higggghhhh health"
+desc = """Blocks zombies
+Damage: Again?
+Health: Very High"""

@@ -8,7 +8,7 @@ impl Plugin for ZombiesSnorkelPlugin {
         app.add_systems(PostStartup, (init_config,));
         app.add_systems(Update, (snorkel_enter,));
         *snorkel_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
-            spawn: app.register_system(spawn_basic_zombie),
+            spawn: app.register_system(spawn_snorkel_zombie),
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
@@ -18,8 +18,8 @@ impl Plugin for ZombiesSnorkelPlugin {
 game_conf!(systems snorkel_zombie_systems);
 game_conf!(walker SnorkelZombieWalker);
 
-fn spawn_basic_zombie(
-    In(pos): In<game::Position>,
+fn spawn_snorkel_zombie(
+    In(pos): In<game::LogicPosition>,
     zombies: Res<assets::SpriteZombies>,
     mut commands: Commands,
     factors: Res<zombies::ZombieFactors>,
@@ -48,7 +48,7 @@ struct SnorkelStatus(bool);
 fn snorkel_enter(
     mut q_snorkel: Query<(
         Entity,
-        &mut game::Position,
+        &mut game::LogicPosition,
         &mut SnorkelStatus,
         &mut game::HitBox,
         &mut game::SizeCrop,
@@ -76,11 +76,11 @@ fn snorkel_enter(
                     (factors.snorkel.self_box.height - factors.snorkel.underwater_box.height) / 2.0;
                 if diving {
                     *hitbox = factors.snorkel.underwater_box;
-                    pos.z -= distance;
+                    pos.disp.z -= distance;
                     size.y_multiply(factor);
                 } else {
                     *hitbox = factors.snorkel.self_box;
-                    pos.z += distance;
+                    pos.disp.z += distance;
                     size.y_divide(factor);
                 }
             }

@@ -112,6 +112,7 @@ fn modify_size(
 
 /// An alternative to `game::Position` when a parent entity affect its positioning
 /// This is used with game::Position, and alters the position depending on `Size` of parent
+/// You should not use this with "game::LogicPosition"
 #[derive(Component, Debug, Clone, Copy, Deref, DerefMut)]
 pub struct RelativePosition(pub game::Position);
 impl RelativePosition {
