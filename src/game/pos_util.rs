@@ -4,7 +4,16 @@ pub(super) struct GamePosUtilPlugin;
 
 impl Plugin for GamePosUtilPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (spawn_shadow, move_shadow));
+        app.add_systems(
+            Update,
+            (
+                spawn_shadow,
+                move_shadow,
+                add_layer_disp,
+                update_transform_layer,
+                update_transform_layer_by_position,
+            ),
+        );
     }
 }
 
@@ -108,9 +117,9 @@ fn spawn_shadow(
             ShadowOf(parent),
             game::HitBox::new(hitbox.width, height),
             logic_pos.shadow(),
+            game::LayerDisp(-1.5),
             SpriteBundle {
                 texture: chunks.shadow.clone(),
-                transform: Transform::from_xyz(0.0, 0.0, -1.0),
                 ..Default::default()
             },
         ));
@@ -143,4 +152,47 @@ fn move_shadow(
                 });
             }
         })
+}
+
+#[derive(Component, Default, Debug, Clone, Copy, Deref, DerefMut)]
+pub struct LayerDisp(pub f32);
+
+fn add_layer_disp(
+    mut commands: Commands,
+    q_logic: Query<Entity, (Added<game::LogicPosition>, Without<LayerDisp>)>,
+) {
+    q_logic.iter().for_each(|entity| {
+        commands.entity(entity).try_insert(LayerDisp::default());
+    });
+}
+
+fn update_transform_layer(
+    mut q_pos: Query<
+        (&game::LogicPosition, &LayerDisp, &mut Transform),
+        Or<(Changed<game::LogicPosition>, Changed<LayerDisp>)>,
+    >,
+    level: Res<level::Level>,
+) {
+    let top = level.config.layout.half_size_f32().1;
+    q_pos
+        .par_iter_mut()
+        .for_each(|(logic, disp, mut transform)| {
+            transform.translation.z = top - logic.base_raw().y + disp.0;
+        });
+}
+
+fn update_transform_layer_by_position(
+    mut q_pos: Query<
+        (&game::Position, &LayerDisp, &mut Transform),
+        (
+            Or<(Changed<game::Position>, Changed<LayerDisp>)>,
+            Without<game::LogicPosition>,
+        ),
+    >,
+    level: Res<level::Level>,
+) {
+    let top = level.config.layout.half_size_f32().1;
+    q_pos.par_iter_mut().for_each(|(pos, disp, mut transform)| {
+        transform.translation.z = top - pos.y + disp.0;
+    });
 }

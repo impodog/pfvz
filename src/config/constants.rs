@@ -27,11 +27,13 @@ pub const LILY_PAD: Id = -17;
 pub const SQUASH: Id = -18;
 pub const THREEPEATER: Id = -19;
 pub const TALL_NUT: Id = -20;
+pub const SPIKEWEED: Id = -21;
 
 pub const BOWLING_NUT: Id = -101;
 
 pub const GRAVE: Id = -201;
 pub const CRATER: Id = -202;
+pub const ICE: Id = -203;
 
 pub const BASIC_ZOMBIE: Id = 1;
 pub const ROADCONE_ZOMBIE: Id = 2;
@@ -42,6 +44,7 @@ pub const NEWSPAPER_ZOMBIE: Id = 6;
 pub const SCREEN_DOOR_ZOMBIE: Id = 7;
 pub const TRASHCAN_ZOMBIE: Id = 8;
 pub const SNORKEL_ZOMBIE: Id = 9;
+pub const ZOMBONI: Id = 10;
 
 pub const HIDDEN_ZOMBIE: Id = 101;
 
@@ -90,6 +93,7 @@ pub fn id_name(id: Id) -> &'static str {
         SQUASH => "squash",
         THREEPEATER => "threepeater",
         TALL_NUT => "tall_nut",
+        SPIKEWEED => "spikeweed",
 
         BOWLING_NUT => "bowling_nut",
 
@@ -105,6 +109,7 @@ pub fn id_name(id: Id) -> &'static str {
         SCREEN_DOOR_ZOMBIE => "screen_door",
         TRASHCAN_ZOMBIE => "trashcan",
         SNORKEL_ZOMBIE => "snorkel",
+        ZOMBONI => "zomboni",
 
         HIDDEN_ZOMBIE => "hidden",
 

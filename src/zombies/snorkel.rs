@@ -26,7 +26,7 @@ fn spawn_snorkel_zombie(
     map: Res<game::CreatureMap>,
     walker: Res<SnorkelZombieWalker>,
 ) {
-    let creature = map.get(&BASIC_ZOMBIE).unwrap();
+    let creature = map.get(&SNORKEL_ZOMBIE).unwrap();
     commands.spawn((
         game::Zombie,
         creature.clone(),

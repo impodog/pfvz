@@ -108,3 +108,8 @@ short = "Blocks zombies with its higggghhhh health"
 desc = """Blocks zombies
 Damage: Again?
 Health: Very High"""
+[desc.spikeweed]
+name = "Centromadia pungens"
+short = "Damages zombies that walk over it, able to destroy zombonis"
+desc = """Damages zombies that walk over it, pokes a hole in zombonis' tires
+Damage: Regular"""

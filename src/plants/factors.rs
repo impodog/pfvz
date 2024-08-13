@@ -214,6 +214,15 @@ pub struct TallNut {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Spikeweed {
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -231,6 +240,13 @@ pub struct Grave {
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Crater {
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Ice {
     pub self_box: game::HitBox,
     pub health: u32,
     pub cooldown: f32,
@@ -259,9 +275,11 @@ pub struct PlantFactors {
     pub squash: Squash,
     pub threepeater: Threepeater,
     pub tall_nut: TallNut,
+    pub spikeweed: Spikeweed,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,
+    pub ice: Ice,
 }
 
 fn init_factors(mut commands: Commands) {

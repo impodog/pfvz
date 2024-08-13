@@ -12,6 +12,7 @@ mod planter;
 mod plugin;
 mod producers;
 mod special;
+mod spike;
 mod spores;
 mod squash;
 
@@ -27,5 +28,6 @@ pub use planter::*;
 pub use plugin::*;
 pub use producers::*;
 pub use special::*;
+pub use spike::*;
 pub use spores::*;
 pub use squash::*;

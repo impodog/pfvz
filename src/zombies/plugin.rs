@@ -13,6 +13,7 @@ impl Plugin for ZombiesPlugin {
             trashcan::ZombiesTrashcanPlugin,
             hidden::ZombiesHiddenPlugin,
             snorkel::ZombiesSnorkelPlugin,
+            zomboni::ZombiesZomboniPlugin,
         ));
     }
 }

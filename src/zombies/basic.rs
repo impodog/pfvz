@@ -66,10 +66,8 @@ fn add_basic_zombie_arm(
                 factors.basic.arm_box,
                 sprite::Animation::new(zombies.arm.clone()),
                 game::Armor::new(factors.basic.arm_health),
-                SpriteBundle {
-                    transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                    ..Default::default()
-                },
+                game::LayerDisp(0.1),
+                SpriteBundle::default(),
             ))
             .set_parent(entity);
     });
@@ -77,13 +75,16 @@ fn add_basic_zombie_arm(
 
 fn add_aquatic_zombie_tube(
     mut commands: Commands,
-    q_basic: Query<(Entity, &game::Position), Added<BasicZombieMarker>>,
+    q_basic: Query<(Entity, &game::LogicPosition), Added<BasicZombieMarker>>,
     level: Res<level::Level>,
     zombies: Res<assets::SpriteZombies>,
     factors: Res<zombies::ZombieFactors>,
 ) {
-    q_basic.iter().for_each(|(entity, pos)| {
-        let (_x, y) = level.config.layout.position_to_coordinates(pos);
+    q_basic.iter().for_each(|(entity, logic)| {
+        let (_x, y) = level
+            .config
+            .layout
+            .position_to_coordinates(logic.base_raw());
         match level.config.layout.get_lane(y) {
             level::TileFeature::Water => {
                 commands
@@ -91,10 +92,8 @@ fn add_aquatic_zombie_tube(
                         game::Position::new_xyz(0.0, 0.0, -0.2),
                         factors.tube.self_box,
                         sprite::Animation::new(zombies.tube.clone()),
-                        SpriteBundle {
-                            transform: Transform::from_xyz(0.0, 0.0, 0.1),
-                            ..Default::default()
-                        },
+                        game::LayerDisp(0.1),
+                        SpriteBundle::default(),
                     ))
                     .set_parent(entity);
             }
@@ -162,10 +161,8 @@ fn spawn_roadcone_zombie(
             sprite::Animation::new(zombies.roadcone.clone()),
             game::Armor::new(factors.roadcone.roadcone_health),
             compn::Breaks(breaks.0.clone()),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                ..Default::default()
-            },
+            game::LayerDisp(0.1),
+            SpriteBundle::default(),
         ))
         .set_parent(entity);
 }
@@ -203,10 +200,8 @@ fn spawn_bucket_zombie(
             sprite::Animation::new(zombies.bucket.clone()),
             game::Armor::new(factors.bucket.bucket_health),
             compn::Breaks(breaks.0.clone()),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                ..Default::default()
-            },
+            game::LayerDisp(0.1),
+            SpriteBundle::default(),
         ))
         .set_parent(entity);
 }
@@ -242,10 +237,8 @@ fn spawn_flag_zombie(
             factors.flag.flag_box,
             sprite::Animation::new(zombies.flag.clone()),
             game::Armor::new(factors.flag.flag_health),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                ..Default::default()
-            },
+            game::LayerDisp(0.1),
+            SpriteBundle::default(),
         ))
         .set_parent(entity);
 }
@@ -284,10 +277,8 @@ fn spawn_screen_door_zombie(
             game::Armor::new(factors.screen_door.screen_door_health),
             compn::Breaks(breaks.0.clone()),
             compn::UnsnowParent { absolute: false },
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                ..Default::default()
-            },
+            game::LayerDisp(0.1),
+            SpriteBundle::default(),
         ))
         .set_parent(entity);
 }

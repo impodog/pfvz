@@ -23,11 +23,17 @@ impl Plugin for PlantsSpecialPlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
+        *ice_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_ice),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
     }
 }
 
 game_conf!(systems grave_systems);
 game_conf!(systems crater_systems);
+game_conf!(systems ice_systems);
 game_conf!(pub system grave_spawn_anywhere, ());
 
 fn spawn_grave(
@@ -52,10 +58,8 @@ fn spawn_grave(
         sprite::Animation::new(anim),
         creature.hitbox,
         game::Health::from(factors.grave.health),
-        SpriteBundle {
-            transform: Transform::from_xyz(0.0, 0.0, -0.1),
-            ..Default::default()
-        },
+        game::LayerDisp(-0.1),
+        SpriteBundle::default(),
     ));
 }
 
@@ -133,6 +137,30 @@ fn spawn_crater(
     ));
 }
 
+fn spawn_ice(
+    In(pos): In<game::LogicPosition>,
+    mut commands: Commands,
+    factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
+    map: Res<game::CreatureMap>,
+) {
+    let creature = map.get(&ICE).unwrap();
+    commands.spawn((
+        game::Plant,
+        game::NotPlanted,
+        creature.clone(),
+        pos,
+        sprite::Animation::new(plants.ice.clone()),
+        creature.hitbox,
+        CraterTimer(Timer::new(
+            Duration::from_secs_f32(factors.ice.cooldown),
+            TimerMode::Once,
+        )),
+        game::Health::from(factors.ice.health),
+        SpriteBundle::default(),
+    ));
+}
+
 #[derive(Component, Debug, Clone, Deref, DerefMut)]
 pub struct CraterTimer(pub Timer);
 
@@ -193,5 +221,24 @@ fn init_config(
             flags: level::CreatureFlags::CRATER,
         }));
         map.insert(CRATER, creature);
+    }
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: ice_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            image: plants
+                .ice
+                .frames
+                .first()
+                .expect("Empty animation ice")
+                .clone(),
+            cost: factors.ice.cost,
+            cooldown: factors.ice.cooldown,
+            hitbox: factors.ice.self_box,
+            flags: level::CreatureFlags::CRATER,
+        }));
+        map.insert(ICE, creature);
     }
 }

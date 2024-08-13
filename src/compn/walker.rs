@@ -39,6 +39,9 @@ impl From<&Walker> for WalkerImpl {
     }
 }
 
+#[derive(Component)]
+pub struct WalkerImmunity;
+
 fn walker_add_impl(mut commands: Commands, q_walker: Query<(Entity, &Walker), Changed<Walker>>) {
     q_walker.iter().for_each(|(entity, walker)| {
         commands.entity(entity).try_insert(WalkerImpl::from(walker));
@@ -48,7 +51,14 @@ fn walker_add_impl(mut commands: Commands, q_walker: Query<(Entity, &Walker), Ch
 fn walker_lock_target(
     collision: Res<game::Collision>,
     mut q_walker: Query<(&mut WalkerImpl, &mut game::Velocity, Entity)>,
-    q_plant: Query<(), (With<game::Plant>, Without<game::NotPlanted>)>,
+    q_plant: Query<
+        (),
+        (
+            With<game::Plant>,
+            Without<game::NotPlanted>,
+            Without<WalkerImmunity>,
+        ),
+    >,
 ) {
     q_walker
         .par_iter_mut()

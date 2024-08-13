@@ -14,7 +14,7 @@ impl Plugin for GamePositionPlugin {
         // so it is not wrapped under play state
         app.add_systems(
             PostUpdate,
-            (add_position, convert_position, update_transform).chain(),
+            (add_position, convert_position, update_transform),
         );
         app.add_systems(
             PostUpdate,
@@ -182,7 +182,6 @@ impl std::ops::Mul<f32> for Velocity {
         }
     }
 }
-
 /// This component allows an object to fall in z coordinates due to gravity
 #[derive(Component, Default, Debug, Clone, Copy)]
 pub struct Gravity;

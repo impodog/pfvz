@@ -58,10 +58,8 @@ fn spawn_all_star_zombie(
             sprite::Animation::new(zombies.helmet.clone()),
             game::Armor::new(factors.all_star.helmet_health),
             compn::Breaks(breaks.0.clone()),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                ..Default::default()
-            },
+            game::LayerDisp(0.1),
+            SpriteBundle::default(),
         ))
         .set_parent(entity);
 }

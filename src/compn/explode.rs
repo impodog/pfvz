@@ -102,19 +102,21 @@ fn cherry_bomb_timer_work(
         &game::Overlay,
         &mut CherryBombTimer,
         &mut game::HitBox,
+        &mut game::LogicPosition,
         &Explode,
     )>,
 ) {
-    q_timer
-        .iter_mut()
-        .for_each(|(entity, overlay, mut timer, mut hitbox, explode)| {
+    q_timer.iter_mut().for_each(
+        |(entity, overlay, mut timer, mut hitbox, mut pos, explode)| {
             timer.tick(overlay.delta());
             let rate = timer.elapsed().as_secs_f32() / timer.duration().as_secs_f32();
             *hitbox = explode.hitbox * rate;
+            pos.disp.z = -hitbox.height / 2.0 + 0.5;
             if timer.just_finished() {
                 explode_event.send(ExplodeEvent { entity });
             }
-        });
+        },
+    );
 }
 
 #[derive(Component, Debug, Clone, Deref, DerefMut)]

@@ -31,10 +31,8 @@ fn spawn_whack(
             game::Position::default(),
             factors.whack.self_box,
             sprite::Animation::new(items.whack.clone()),
-            SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 2.0),
-                ..Default::default()
-            },
+            game::LayerDisp(1.0),
+            SpriteBundle::default(),
         ));
         for y in 0..5 {
             let pos = level.config.layout.coordinates_to_position(0, y);

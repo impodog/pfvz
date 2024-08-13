@@ -107,14 +107,8 @@ fn shooter_work(
                                     shooter.shared.hitbox,
                                     shooter.proj.clone(),
                                     shooter.velocity,
-                                    SpriteBundle {
-                                        transform: Transform::from_xyz(
-                                            0.0,
-                                            0.0,
-                                            transform.translation.z + 0.1,
-                                        ),
-                                        ..Default::default()
-                                    },
+                                    game::LayerDisp(0.3),
+                                    SpriteBundle::default(),
                                 ));
                                 // Determines whether the projectile is plant(default) or zombie
                                 if q_zombie.get(entity).is_ok() {

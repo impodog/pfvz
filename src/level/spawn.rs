@@ -132,8 +132,6 @@ fn by_probability(
                 let dist = WeightedIndex::new(&prob.0).unwrap();
                 dist.sample(&mut rand::thread_rng())
             };
-            // Clear probability
-            prob.0[index] = 1;
 
             // Only spawn compatible creatures
             if level.config.layout.get_lane(index).is_compat(creature) {
@@ -158,6 +156,7 @@ fn by_probability(
             } else {
                 !cost
             };
+            prob.0[index] = (prob.0[index].saturating_sub(creature.cost)).max(1);
 
             if ok {
                 action.send(game::CreatureAction::Spawn(

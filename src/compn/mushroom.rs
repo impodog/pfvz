@@ -59,10 +59,8 @@ fn modify_zzz(
                         game::Position::default(),
                         *hitbox,
                         sprite::Animation::new(plants.zzz.clone()),
-                        SpriteBundle {
-                            transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                            ..Default::default()
-                        },
+                        game::LayerDisp(0.2),
+                        SpriteBundle::default(),
                     ))
                     .set_parent(entity);
                 overlay.multiply(0.0);

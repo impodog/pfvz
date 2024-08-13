@@ -40,7 +40,7 @@ fn breaks_work(
             let percentage = if let Ok(armor) = q_armor.get(entity) {
                 (1.0 - armor.hp.max(1) as f32 / breaks.init as f32) * breaks.v.len() as f32
             } else if let Ok(health) = q_health.get(entity) {
-                (1.0 - health.value().max(1) as f32 / breaks.init as f32) * breaks.v.len() as f32
+                (1.0 - health.hp.max(1) as f32 / breaks.init as f32) * breaks.v.len() as f32
             } else {
                 return;
             };
