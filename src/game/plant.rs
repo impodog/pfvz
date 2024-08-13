@@ -74,7 +74,7 @@ fn add_plants(
     q_plant.iter().for_each(|(entity, logic)| {
         if !plants.in_layout.read().unwrap().contains(&entity) {
             plants.in_layout.write().unwrap().insert(entity);
-            let i = level.config.layout.position_to_index(&logic.base);
+            let i = level.config.layout.position_to_index(logic.base_raw());
             if let Some(plants) = plants.plants.get(i) {
                 if let Some(plant) = plants.read().unwrap().last() {
                     if let Ok(mut values) = q_transform.get_many_mut([*plant, entity]) {

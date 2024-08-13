@@ -27,8 +27,15 @@ map = [
         { stage = 3, level = 1 },
         [
             "Fungi are no good stuff.",
-            "It appears that they've planned to spend the day sleeping",
+            "It appears that they've planned to spend the day sleeping!",
             "Pro tip: use Nymphaeaceae to plant terrestrial stuff on water.",
+        ],
+    ],
+    [
+        { stage = 3, level = 5 },
+        [
+            "In this level, your shooters will shoot quicker over time!",
+            "Plant peashooters to release a powerful burst!",
         ],
     ],
 ]

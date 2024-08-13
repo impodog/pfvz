@@ -31,34 +31,22 @@ fn add_in_water(
 }
 
 fn put_in_water(
-    mut q_zombie: Query<
-        (
-            &game::Position,
-            &game::HitBox,
-            &mut game::LogicPosition,
-            &mut game::SizeCrop,
-            &mut InWater,
-        ),
-        With<game::Zombie>,
-    >,
+    mut q_zombie: Query<(&game::Position, &mut game::SizeCrop, &mut InWater), With<game::Zombie>>,
     level: Res<level::Level>,
     audio: Res<Audio>,
     audio_zombies: Res<assets::AudioZombies>,
 ) {
     q_zombie
         .par_iter_mut()
-        .for_each(|(pos, hitbox, mut logic, mut size, mut in_water)| {
+        .for_each(|(pos, mut size, mut in_water)| {
             let (x, y) = level.config.layout.position_to_coordinates(pos);
             let status = level.config.layout.get_tile(x, y) == level::TileFeature::Water;
             if status != **in_water {
                 **in_water = status;
-                let distance = hitbox.height * size.y_crop.factor() * (1.0 - WATER_PERCENTAGE);
                 if status {
-                    logic.disp.z -= distance;
                     size.y_crop.multiply(WATER_PERCENTAGE);
                     audio.play(audio_zombies.water.random());
                 } else {
-                    logic.disp.z += distance;
                     size.y_crop.divide(WATER_PERCENTAGE);
                 }
             }

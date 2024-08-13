@@ -70,13 +70,15 @@ fn bowling_work(
                 }
             }
             let hsize = level.config.layout.half_size_f32();
-            if pos.y > hsize.1 {
-                pos.y = hsize.1;
+            let mut base = *pos.base_raw();
+            if base.y > hsize.1 {
+                base.y = hsize.1;
                 velocity.y = -velocity.y.abs();
-            } else if pos.y < -hsize.1 {
-                pos.y = -hsize.1;
+            } else if base.y < -hsize.1 {
+                base.y = -hsize.1;
                 velocity.y = velocity.y.abs();
             }
+            pos.replace_base(base);
         },
     );
 }

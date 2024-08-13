@@ -104,7 +104,7 @@ impl std::ops::Add<Position> for PositionRange {
 }
 impl Default for PositionRange {
     fn default() -> Self {
-        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, -0.2..0.5)
+        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, -0.1..0.5)
     }
 }
 impl PositionRange {
@@ -247,10 +247,12 @@ fn update_position(
 ) {
     q_pos.par_iter_mut().for_each(|(vel, mut pos)| {
         let factor = time.diff() * config.gamerule.speed.0;
-        pos.x += vel.x * factor;
-        pos.y += vel.y * factor;
-        pos.z += vel.z * factor;
-        pos.r += vel.r * factor;
+        pos.plus_assign(game::Position::new(
+            vel.x * factor,
+            vel.y * factor,
+            vel.z * factor,
+            vel.r * factor,
+        ));
     });
 }
 
@@ -260,10 +262,12 @@ fn update_position_with_overlay(
 ) {
     q_pos.par_iter_mut().for_each(|(overlay, vel, mut pos)| {
         let factor = time.diff() * overlay.speed();
-        pos.x += vel.x * factor;
-        pos.y += vel.y * factor;
-        pos.z += vel.z * factor;
-        pos.r += vel.r * factor;
+        pos.plus_assign(game::Position::new(
+            vel.x * factor,
+            vel.y * factor,
+            vel.z * factor,
+            vel.r * factor,
+        ));
     });
 }
 

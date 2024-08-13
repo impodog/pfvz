@@ -77,10 +77,12 @@ fn move_to_grave(
         });
         if !graves.is_empty() {
             q_zombie.par_iter_mut().for_each(|mut pos| {
-                let regular = level.config.layout.regularize(pos.base);
+                let regular = level.config.layout.regularize(*pos.base_raw());
                 let grave = graves.choose(&mut rand::thread_rng()).unwrap();
-                pos.x += grave.x - regular.x;
-                pos.y += grave.y - regular.y;
+                pos.plus_assign(game::Position::new_xy(
+                    grave.x - regular.x,
+                    grave.y - regular.y,
+                ));
             });
         }
     }

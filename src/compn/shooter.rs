@@ -42,9 +42,10 @@ impl Default for ShooterShared {
 #[derive(Component, Debug, Clone, Deref)]
 pub struct Shooter(pub Arc<ShooterShared>);
 
-#[derive(Component, Debug, Clone)]
-struct ShooterImpl {
-    timer: Timer,
+#[derive(Component, Debug, Clone, Deref, DerefMut)]
+pub struct ShooterImpl {
+    #[deref]
+    pub timer: Timer,
 }
 impl From<&Shooter> for ShooterImpl {
     fn from(value: &Shooter) -> Self {
@@ -63,7 +64,7 @@ fn add_shooter_impl(mut commands: Commands, q_shooter: Query<(Entity, &Shooter),
 }
 
 fn shooter_work(
-    mut commands: Commands,
+    commands: ParallelCommands,
     mut q_shooter: Query<(
         Entity,
         &game::Overlay,
@@ -77,11 +78,11 @@ fn shooter_work(
     q_zpos: Query<&game::Position, With<game::Zombie>>,
     level: Res<level::Level>,
 ) {
-    q_shooter.iter_mut().for_each(
+    q_shooter.par_iter_mut().for_each(
         |(entity, overlay, shooter, mut work, pos, hitbox, transform)| {
             work.timer.tick(overlay.delta());
             if work.timer.just_finished() {
-                let mut pos = (*pos).move_z(-hitbox.height * 0.2);
+                let mut pos = (*pos).move_z(hitbox.height * -0.1);
                 let range = shooter.proj.range.clone() + pos;
                 if shooter.require_zombie {
                     let mut ok = false;
@@ -99,34 +100,38 @@ fn shooter_work(
                 for _ in 0..shooter.times {
                     for start in shooter.start.iter() {
                         let proj_entity = {
-                            let mut commands = commands.spawn((
-                                game::LogicPosition::from_base(*start + pos),
-                                sprite::Animation::new(shooter.shared.anim.clone()),
-                                shooter.shared.hitbox,
-                                shooter.proj.clone(),
-                                shooter.velocity,
-                                SpriteBundle {
-                                    transform: Transform::from_xyz(
-                                        0.0,
-                                        0.0,
-                                        transform.translation.z + 0.1,
-                                    ),
-                                    ..Default::default()
-                                },
-                            ));
-                            // Determines whether the projectile is plant(default) or zombie
-                            if q_zombie.get(entity).is_ok() {
-                                commands.insert(game::ZombieRelevant);
-                            } else {
-                                commands.insert(game::PlantRelevant);
-                            }
-                            commands.id()
+                            commands.command_scope(|mut commands| {
+                                let mut commands = commands.spawn((
+                                    game::LogicPosition::from_bottom(*start + pos),
+                                    sprite::Animation::new(shooter.shared.anim.clone()),
+                                    shooter.shared.hitbox,
+                                    shooter.proj.clone(),
+                                    shooter.velocity,
+                                    SpriteBundle {
+                                        transform: Transform::from_xyz(
+                                            0.0,
+                                            0.0,
+                                            transform.translation.z + 0.1,
+                                        ),
+                                        ..Default::default()
+                                    },
+                                ));
+                                // Determines whether the projectile is plant(default) or zombie
+                                if q_zombie.get(entity).is_ok() {
+                                    commands.insert(game::ZombieRelevant);
+                                } else {
+                                    commands.insert(game::PlantRelevant);
+                                }
+                                commands.id()
+                            })
                         };
-                        commands.run_system_with_input(shooter.callback, entity);
-                        commands.run_system_with_input(shooter.after, proj_entity);
+                        commands.command_scope(|mut commands| {
+                            commands.run_system_with_input(shooter.callback, entity);
+                            commands.run_system_with_input(shooter.after, proj_entity);
+                        });
                     }
                     // NOTE: Do we need to make this customizable?
-                    pos.x += 3.0 * shooter.velocity.x;
+                    pos.x += 0.1 * shooter.velocity.x;
                 }
             }
         },

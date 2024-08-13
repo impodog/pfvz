@@ -55,13 +55,15 @@ pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.7);
 pub const BUTTON_SIZE: Vec2 = Vec2::new(SLOT_SIZE.x * 2.0, SLOT_SIZE.y);
 pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
 
-// abs(delta z) must be below (hitbox1.height + hitbox2.height) / 2.0 / `COLLISION_Z_FACTOR`
+/// abs(delta z) must be below (hitbox1.height + hitbox2.height) / 2.0 / `COLLISION_Z_FACTOR`
 pub const COLLISION_Z_FACTOR: f32 = 2.0;
-// "sparseness" is used in level::spawn module, where the probability increases by spawn turn,
-// while having a maximum cap of sparseness, and when chosen, the probability falls back to zero
+/// "sparseness" is used in level::spawn module, where the probability increases by spawn turn,
+/// while having a maximum cap of sparseness, and when chosen, the probability falls back to zero
 pub const SPARSENESS: u32 = 255;
-// The percentage of parts above water of a zombie in the water
+/// The percentage of parts above water of a zombie in the water
 pub const WATER_PERCENTAGE: f32 = 0.7;
+/// The distance in tiles that plants move down
+pub const SHADOW_DISTANCE: f32 = 0.3;
 
 /// This function defines the standard naming of creatures in configuration files and code
 pub fn id_name(id: Id) -> &'static str {

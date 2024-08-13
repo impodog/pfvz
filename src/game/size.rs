@@ -42,26 +42,6 @@ impl SizeCrop {
             size.y * self.y_crop.factor() * self.y_stretch.factor(),
         )
     }
-
-    pub fn x_multiply(&mut self, factor: f32) {
-        self.x_crop.multiply(factor);
-        self.x_stretch.multiply(1.0 / factor);
-    }
-
-    pub fn y_multiply(&mut self, factor: f32) {
-        self.y_crop.multiply(factor);
-        self.y_stretch.multiply(1.0 / factor);
-    }
-
-    pub fn x_divide(&mut self, factor: f32) {
-        self.x_crop.divide(factor);
-        self.x_stretch.divide(1.0 / factor);
-    }
-
-    pub fn y_divide(&mut self, factor: f32) {
-        self.y_crop.divide(factor);
-        self.y_stretch.divide(1.0 / factor);
-    }
 }
 
 fn update_size(

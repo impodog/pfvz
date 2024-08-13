@@ -1,0 +1,12 @@
+[config]
+selection = "Any"
+layout = "Pool"
+game = "Adventure"
+modify = { give = -21, next = { stage = 3, level = 6 } }
+sun = 9999
+[[waves]]
+points = 0
+wait = 0.0
+big = false
+fixed = [[9, 1], [8, 1]]
+avail = []

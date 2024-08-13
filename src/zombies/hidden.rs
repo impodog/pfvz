@@ -51,8 +51,8 @@ fn hidden_zombie_move(
 ) {
     q_pos.iter_mut().for_each(|mut pos| {
         if rand::thread_rng().gen_bool(0.01) {
-            let prev_x = pos.x;
-            let (x, mut y) = level.config.layout.position_to_coordinates(pos.as_ref());
+            let prev_x = pos.base_raw().x;
+            let (x, mut y) = level.config.layout.position_to_coordinates(pos.base_raw());
             if y == 0 {
                 y += 1;
             } else if y >= level.config.layout.size().1 - 1 {
@@ -62,8 +62,9 @@ fn hidden_zombie_move(
             } else {
                 y -= 1;
             }
-            pos.base = level.config.layout.coordinates_to_position(x, y);
-            pos.x = prev_x;
+            let mut base = level.config.layout.coordinates_to_position(x, y);
+            base.x = prev_x;
+            pos.replace_base(base);
         }
     });
 }

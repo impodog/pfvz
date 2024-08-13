@@ -48,7 +48,7 @@ struct SnorkelStatus(bool);
 fn snorkel_enter(
     mut q_snorkel: Query<(
         Entity,
-        &mut game::LogicPosition,
+        &game::LogicPosition,
         &mut SnorkelStatus,
         &mut game::HitBox,
         &mut game::SizeCrop,
@@ -59,8 +59,8 @@ fn snorkel_enter(
 ) {
     q_snorkel
         .par_iter_mut()
-        .for_each(|(entity, mut pos, mut status, mut hitbox, mut size)| {
-            let (x, y) = level.config.layout.position_to_coordinates(pos.as_ref());
+        .for_each(|(entity, pos, mut status, mut hitbox, mut size)| {
+            let (x, y) = level.config.layout.position_to_coordinates(pos.base_raw());
             let diving = if level.config.layout.get_tile(x, y) == level::TileFeature::Water {
                 !q_walker_impl
                     .get(entity)
@@ -70,18 +70,17 @@ fn snorkel_enter(
             };
             if status.0 != diving {
                 status.0 = diving;
-                let factor =
+                let stretch_factor =
                     factors.snorkel.underwater_box.height / factors.snorkel.self_box.height;
-                let distance =
-                    (factors.snorkel.self_box.height - factors.snorkel.underwater_box.height) / 2.0;
+                let crop_factor = stretch_factor / WATER_PERCENTAGE;
                 if diving {
                     *hitbox = factors.snorkel.underwater_box;
-                    pos.disp.z -= distance;
-                    size.y_multiply(factor);
+                    size.y_crop.multiply(crop_factor);
+                    size.y_stretch.multiply(1.0 / stretch_factor);
                 } else {
                     *hitbox = factors.snorkel.self_box;
-                    pos.disp.z += distance;
-                    size.y_divide(factor);
+                    size.y_crop.divide(crop_factor);
+                    size.y_stretch.divide(1.0 / stretch_factor);
                 }
             }
         });

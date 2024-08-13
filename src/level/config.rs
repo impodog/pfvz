@@ -170,12 +170,14 @@ pub enum GameKind {
     #[default]
     Adventure,
     WhackAZombie,
+    QuickShot,
 }
 impl GameKind {
     fn is_sun_spawn(&self) -> bool {
         match self {
             Self::Adventure => true,
             Self::WhackAZombie => false,
+            Self::QuickShot => true,
         }
     }
 
@@ -183,6 +185,7 @@ impl GameKind {
         match self {
             Self::Adventure => true,
             Self::WhackAZombie => true,
+            Self::QuickShot => true,
         }
     }
 

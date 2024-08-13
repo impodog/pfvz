@@ -4,8 +4,8 @@ self_box = { width = 0.5, height = 1.2 }
 arm_box = { width = 0.2, height = 0.6 }
 self_health = [100, 70]
 arm_health = 100
-damage = 40
-interval = 0.4
+damage = 60
+interval = 0.6
 cooldown = 1.0
 cost = 50
 [roadcone]
@@ -31,8 +31,8 @@ self_box = { width = 0.7, height = 1.2 }
 helmet_box = { width = 0.4, height = 0.4 }
 self_health = [250, 50]
 helmet_health = 800
-damage = 40
-interval = 0.6
+damage = 60
+interval = 0.8
 tackle_damage = 2000
 cooldown = 5.0
 cost = 175
@@ -41,11 +41,11 @@ velocity = [-0.095, -0.09]
 rage_velocity = [-0.365, -0.36]
 self_box = { width = 0.6, height = 1.1 }
 newspaper_box = { width = 0.5, height = 0.5 }
-self_health = [350, 70]
+self_health = [400, 70]
 newspaper_health = 250
-damage = 40
-interval = 0.4
-rage_interval = 0.1
+damage = 60
+interval = 0.6
+rage_interval = 0.15
 cooldown = 5.0
 cost = 150
 [screen_door]
@@ -56,20 +56,20 @@ cost = 150
 [trashcan]
 velocity = [-0.105, -0.1]
 self_box = { width = 0.6, height = 1.1 }
-trashcan_box = { width = 0.4, height = 0.6 }
+trashcan_box = { width = 0.4, height = 0.5 }
 self_health = [350, 70]
 trashcan_health = [500, 0]
-damage = 40
-trashcan_damage = 100
-interval = 0.4
+damage = 60
+trashcan_damage = 150
+interval = 0.6
 cooldown = 5.0
 cost = 125
 [hidden]
 velocity = [-0.105, -0.1]
 self_box = { width = 1.0, height = 2.0 }
 self_health = [3600, 0]
-damage = 40
-interval = 0.05
+damage = 60
+interval = 0.1
 cooldown = 800.0
 cost = 800
 [tube]
@@ -77,9 +77,9 @@ self_box = { width = 0.6, height = 0.3 }
 [snorkel]
 velocity = [-0.105, -0.1]
 self_box = { width = 0.4, height = 1.1 }
-underwater_box = { width = 0.4, height = 0.5 }
+underwater_box = { width = 0.4, height = 0.3 }
 self_health = [350, 70]
-damage = 40
-interval = 0.4
+damage = 60
+interval = 0.6
 cooldown = 2.0
 cost = 75

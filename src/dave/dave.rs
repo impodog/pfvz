@@ -68,7 +68,7 @@ fn add_craziness(mut q_dave: Query<(&game::Position, &mut game::Velocity), With<
     q_dave.iter_mut().for_each(|(pos, mut velocity)| {
         velocity.x = -pos.x / 5.0;
         if rand::thread_rng().gen_bool(0.05) {
-            velocity.r = rand::thread_rng().gen_range(-0.3..0.3);
+            velocity.r = rand::thread_rng().gen_range(-9.0..9.0);
             velocity.x += rand::thread_rng().gen_range(-1.0..1.0);
         }
     });
