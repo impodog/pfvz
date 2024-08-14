@@ -22,6 +22,10 @@ impl Plugin for CompnPlugin {
             instant::CompnInstantPlugin,
             squash::CompnSquashPlugin,
         ));
-        app.add_plugins((mushroom::PlantsMushroomPlugin, water::CompnWaterPlugin));
+        app.add_plugins((
+            mushroom::PlantsMushroomPlugin,
+            water::CompnWaterPlugin,
+            fire::CompnFirePlugin,
+        ));
     }
 }

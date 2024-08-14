@@ -49,12 +49,15 @@ fn spawn_fume_shroom(
 fn move_fume(
     In(entity): In<Entity>,
     factors: Res<plants::PlantFactors>,
-    mut q_pos: Query<&mut game::Position>,
+    mut q_pos: Query<&mut game::LogicPosition>,
     audio: Res<Audio>,
     plants: Res<assets::AudioPlants>,
 ) {
     if let Ok(mut pos) = q_pos.get_mut(entity) {
-        pos.x += factors.fume_shroom.fume_box.width / 2.0;
+        pos.plus_assign(game::Position::new_xy(
+            factors.fume_shroom.fume_box.width / 2.0,
+            0.0,
+        ));
     }
     audio.play(plants.fume_shroom.random());
 }

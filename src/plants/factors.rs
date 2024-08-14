@@ -223,6 +223,14 @@ pub struct Spikeweed {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Torchwood {
+    pub self_box: game::HitBox,
+    pub fire: compn::FireProjectileSerde,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -276,6 +284,7 @@ pub struct PlantFactors {
     pub threepeater: Threepeater,
     pub tall_nut: TallNut,
     pub spikeweed: Spikeweed,
+    pub torchwood: Torchwood,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

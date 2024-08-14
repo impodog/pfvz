@@ -19,10 +19,18 @@ impl Plugin for GamePosUtilPlugin {
 
 /// The logic position of a entity represents the position of their bottom,
 /// where the shadow would be
-#[derive(Component, Default, Debug, Clone, Copy)]
+#[derive(Component, Debug, Clone, Copy)]
 pub struct LogicPosition {
     base: game::Position,
     pub disp: game::Position,
+}
+impl Default for LogicPosition {
+    fn default() -> Self {
+        Self {
+            base: game::Position::default().move_z(SHADOW_DISTANCE),
+            disp: game::Position::default(),
+        }
+    }
 }
 impl LogicPosition {
     pub fn new(base: game::Position, disp: game::Position) -> Self {
@@ -117,7 +125,7 @@ fn spawn_shadow(
             ShadowOf(parent),
             game::HitBox::new(hitbox.width, height),
             logic_pos.shadow(),
-            game::LayerDisp(-1.5),
+            game::LayerDisp(-1.0),
             SpriteBundle {
                 texture: chunks.shadow.clone(),
                 ..Default::default()

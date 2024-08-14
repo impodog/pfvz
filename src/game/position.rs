@@ -156,6 +156,20 @@ impl HitBox {
             height: self.height,
         }
     }
+
+    pub fn with_height(self, height: f32) -> Self {
+        Self {
+            width: self.width,
+            height,
+        }
+    }
+
+    pub fn with_height_multiply(self, factor: f32) -> Self {
+        Self {
+            width: self.width,
+            height: self.height * factor,
+        }
+    }
 }
 
 #[derive(Component, Serialize, Deserialize, Default, Debug, Clone, Copy)]

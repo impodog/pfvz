@@ -28,6 +28,7 @@ pub const SQUASH: Id = -18;
 pub const THREEPEATER: Id = -19;
 pub const TALL_NUT: Id = -20;
 pub const SPIKEWEED: Id = -21;
+pub const TORCHWOOD: Id = -22;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -94,6 +95,7 @@ pub fn id_name(id: Id) -> &'static str {
         THREEPEATER => "threepeater",
         TALL_NUT => "tall_nut",
         SPIKEWEED => "spikeweed",
+        TORCHWOOD => "torchwood",
 
         BOWLING_NUT => "bowling_nut",
 

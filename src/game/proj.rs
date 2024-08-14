@@ -37,21 +37,29 @@ pub struct Projectile {
 fn test_plant_proj_zombie(
     config: Res<config::Config>,
     collision: Res<game::Collision>,
-    mut e_proj: EventWriter<ProjectileAction>,
-    mut e_creature: EventWriter<game::CreatureAction>,
+    e_proj: EventWriter<ProjectileAction>,
+    e_creature: EventWriter<game::CreatureAction>,
     q_proj: Query<(Entity, &Projectile), With<game::PlantRelevant>>,
     q_zombie: Query<Entity, With<game::Zombie>>,
 ) {
-    q_proj.iter().for_each(|(entity, proj)| {
+    let e_proj = Mutex::new(e_proj);
+    let e_creature = Mutex::new(e_creature);
+    q_proj.par_iter().for_each(|(entity, proj)| {
         let mut consumed = false;
         if let Some(set) = collision.get(&entity) {
             for zombie in set.iter() {
                 if let Ok(zombie_entity) = q_zombie.get(*zombie) {
-                    e_proj.send(ProjectileAction::Damage(entity, zombie_entity));
-                    e_creature.send(game::CreatureAction::Damage(
-                        zombie_entity,
-                        multiply_uf!(proj.damage, config.gamerule.damage.0),
-                    ));
+                    e_proj
+                        .lock()
+                        .unwrap()
+                        .send(ProjectileAction::Damage(entity, zombie_entity));
+                    e_creature
+                        .lock()
+                        .unwrap()
+                        .send(game::CreatureAction::Damage(
+                            zombie_entity,
+                            multiply_uf!(proj.damage, config.gamerule.damage.0),
+                        ));
                     consumed = true;
                     // This prevents multiple damages
                     if !proj.area {
@@ -61,25 +69,36 @@ fn test_plant_proj_zombie(
             }
         }
         if consumed {
-            e_proj.send(ProjectileAction::Consumed(entity));
+            e_proj
+                .lock()
+                .unwrap()
+                .send(ProjectileAction::Consumed(entity));
         }
     });
 }
 fn test_zombie_proj_plant(
     _config: Res<config::Config>,
     collision: Res<game::Collision>,
-    mut e_proj: EventWriter<ProjectileAction>,
-    mut e_creature: EventWriter<game::CreatureAction>,
+    e_proj: EventWriter<ProjectileAction>,
+    e_creature: EventWriter<game::CreatureAction>,
     q_proj: Query<(Entity, &Projectile), With<game::ZombieRelevant>>,
     q_plant: Query<Entity, With<game::Plant>>,
 ) {
-    q_proj.iter().for_each(|(entity, proj)| {
+    let e_proj = Mutex::new(e_proj);
+    let e_creature = Mutex::new(e_creature);
+    q_proj.par_iter().for_each(|(entity, proj)| {
         let mut consumed = false;
         if let Some(set) = collision.get(&entity) {
             for plant in set.iter() {
                 if let Ok(plant_entity) = q_plant.get(*plant) {
-                    e_proj.send(ProjectileAction::Damage(entity, plant_entity));
-                    e_creature.send(game::CreatureAction::Damage(plant_entity, proj.damage));
+                    e_proj
+                        .lock()
+                        .unwrap()
+                        .send(ProjectileAction::Damage(entity, plant_entity));
+                    e_creature
+                        .lock()
+                        .unwrap()
+                        .send(game::CreatureAction::Damage(plant_entity, proj.damage));
                     consumed = true;
                     if !proj.area {
                         break;
@@ -88,7 +107,10 @@ fn test_zombie_proj_plant(
             }
         }
         if consumed {
-            e_proj.send(ProjectileAction::Consumed(entity));
+            e_proj
+                .lock()
+                .unwrap()
+                .send(ProjectileAction::Consumed(entity));
         }
     });
 }

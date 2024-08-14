@@ -44,6 +44,8 @@ pub struct SpritePlants {
     pub tall_nut_destroyed: Arc<sprite::FrameArr>,
     pub ice: Arc<sprite::FrameArr>,
     pub spikeweed: Arc<sprite::FrameArr>,
+    pub torchwood: Arc<sprite::FrameArr>,
+    pub fire: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -202,6 +204,12 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/plants/spikeweed",
             Duration::from_millis(400),
         ),
+        torchwood: super::load_animation(
+            &server,
+            "sprites/plants/torchwood",
+            Duration::from_millis(150),
+        ),
+        fire: super::load_animation(&server, "sprites/plants/fire", Duration::from_millis(100)),
     };
     commands.insert_resource(plants);
 }

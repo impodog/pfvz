@@ -124,7 +124,7 @@ fn by_probability(
             // Multiply all probability by 2(with caps)
             for value in prob.iter_mut() {
                 if *value < SPARSENESS {
-                    *value = (*value * 2).min(SPARSENESS);
+                    *value = (*value * 3 / 2).min(SPARSENESS);
                 }
             }
             // Randomly select a index accordingly

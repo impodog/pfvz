@@ -22,6 +22,6 @@ impl Plugin for PlantsPlugin {
             pads::PlantsPadsPlugin,
             squash::PlantsSquashPlugin,
         ));
-        app.add_plugins((spike::PlantsSpikePlugin,));
+        app.add_plugins((spike::PlantsSpikePlugin, fire::PlantsFirePlugin));
     }
 }

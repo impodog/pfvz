@@ -29,12 +29,13 @@ fn despawn(mut commands: Commands, mut queue: ResMut<DespawnQueue>) {
 struct ProjectileTimer(Timer);
 
 fn proj_action(
-    mut commands: Commands,
+    commands: ParallelCommands,
     mut e_proj: EventReader<game::ProjectileAction>,
     q_proj: Query<&game::Projectile>,
-    mut queue: ResMut<DespawnQueue>,
+    queue: ResMut<DespawnQueue>,
 ) {
-    e_proj.read().for_each(|action| {
+    let queue = RwLock::new(queue);
+    e_proj.par_read().for_each(|action| {
         let ok = match action {
             game::ProjectileAction::Damage(_entity, _other) => {
                 // TODO: Any good way to handle this?
@@ -43,28 +44,38 @@ fn proj_action(
             game::ProjectileAction::Consumed(entity) => {
                 let ok = if let Ok(proj) = q_proj.get(*entity) {
                     if proj.time.as_millis() == 0 {
-                        if commands.get_entity(*entity).is_some() {
-                            queue.push(*entity);
+                        if commands
+                            .command_scope(|mut commands| commands.get_entity(*entity).is_some())
+                        {
+                            queue.write().unwrap().push(*entity);
                             true
                         } else {
                             false
                         }
-                    } else if let Some(mut commands) = commands.get_entity(*entity) {
-                        commands
-                            .try_insert(ProjectileTimer(Timer::new(proj.time, TimerMode::Once)));
-                        true
                     } else {
-                        false
+                        commands.command_scope(|mut commands| {
+                            if let Some(mut commands) = commands.get_entity(*entity) {
+                                commands.try_insert(ProjectileTimer(Timer::new(
+                                    proj.time,
+                                    TimerMode::Once,
+                                )));
+                                true
+                            } else {
+                                false
+                            }
+                        })
                     }
                 } else {
                     false
                 };
-                if let Some(mut commands) = commands.get_entity(*entity) {
-                    // Removing these identifiers makes sure that the projectile is no
-                    // longer tested or deals damage
-                    commands.remove::<game::PlantRelevant>();
-                    commands.remove::<game::ZombieRelevant>();
-                }
+                commands.command_scope(|mut commands| {
+                    if let Some(mut commands) = commands.get_entity(*entity) {
+                        // Removing these identifiers makes sure that the projectile is no
+                        // longer tested or deals damage
+                        commands.remove::<game::PlantRelevant>();
+                        commands.remove::<game::ZombieRelevant>();
+                    }
+                });
                 ok
             }
         };

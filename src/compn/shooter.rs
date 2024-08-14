@@ -72,14 +72,14 @@ fn shooter_work(
         &mut ShooterImpl,
         &game::Position,
         &game::HitBox,
-        &Transform,
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
     q_zpos: Query<&game::Position, With<game::Zombie>>,
     level: Res<level::Level>,
 ) {
-    q_shooter.par_iter_mut().for_each(
-        |(entity, overlay, shooter, mut work, pos, hitbox, transform)| {
+    q_shooter
+        .par_iter_mut()
+        .for_each(|(entity, overlay, shooter, mut work, pos, hitbox)| {
             work.timer.tick(overlay.delta());
             if work.timer.just_finished() {
                 let mut pos = (*pos).move_z(hitbox.height * -0.1);
@@ -128,6 +128,5 @@ fn shooter_work(
                     pos.x += 0.1 * shooter.velocity.x;
                 }
             }
-        },
-    )
+        })
 }

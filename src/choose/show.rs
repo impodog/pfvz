@@ -6,7 +6,7 @@ impl Plugin for ChooseShowPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             OnEnter(info::PlayStates::Cys),
-            (spawn_selection, spawn_buttons),
+            (spawn_selection, (spawn_zombies, spawn_buttons)).chain(),
         );
         app.add_systems(
             Update,
@@ -49,6 +49,7 @@ impl SelectionPageInfo {
 #[derive(Resource, Debug, Clone, Copy)]
 pub struct SelectionPageSize {
     pub columns: usize,
+    pub max_rows: usize,
     pub rows: usize,
     pub each: Vec2,
     // The left top corner of the beginning of selection
@@ -70,7 +71,7 @@ fn spawn_selection(
         .move_by(0.0, -1.0);
     let page_size = SelectionPageSize {
         columns: ((LOGICAL_HEIGHT - begin.y) / each.y) as usize,
-        //rows: ((LOGICAL_WIDTH - begin.x) / each.x) as usize,
+        max_rows: ((LOGICAL_WIDTH - begin.x) / each.x) as usize,
         rows: 8,
         each,
         begin,
@@ -123,6 +124,58 @@ fn spawn_selection(
         total: page,
     });
 }
+
+fn spawn_zombies(
+    mut commands: Commands,
+    page_size: Res<SelectionPageSize>,
+    level: Res<level::Level>,
+    map: Res<game::CreatureMap>,
+) {
+    let mut zombies = BTreeSet::new();
+    for wave in level.waves.iter() {
+        zombies.extend(wave.fixed.iter().map(|(id, _)| *id));
+        zombies.extend(wave.avail.iter());
+    }
+    let row_begin = page_size.rows + 1;
+    let mut page = 0usize;
+    let mut row = row_begin;
+    let mut col = 0usize;
+    for id in zombies.into_iter() {
+        if row >= page_size.max_rows {
+            row = row_begin;
+            col += 1;
+        }
+        if col >= page_size.columns {
+            col = 0;
+            page += 1;
+        }
+
+        commands.spawn((
+            SelectionMarker,
+            SelectionInfo { page, id },
+            page_size.begin.move_by(
+                page_size.each.x * row as f32,
+                -page_size.each.y * col as f32 * 2.0,
+            ),
+            game::HitBox::from(&SLOT_SIZE).with_height_multiply(2.0),
+            SpriteBundle {
+                visibility: if page == 0 {
+                    Visibility::Visible
+                } else {
+                    Visibility::Hidden
+                },
+                texture: map
+                    .get(&id)
+                    .map(|creature| creature.image.clone())
+                    .unwrap_or_default(),
+                ..Default::default()
+            },
+        ));
+
+        row += 1;
+    }
+}
+
 fn spawn_buttons(
     mut commands: Commands,
     display: Res<game::Display>,
@@ -199,13 +252,15 @@ fn select_deselect(
             pos.y = -pos.y;
             let row = (pos.x / page_size.each.x).round() as usize;
             let col = (pos.y / page_size.each.y).round() as usize;
-            let index =
-                page.current * page_size.rows * page_size.columns + col * page_size.rows + row;
-            if menu
-                .get(index)
-                .is_some_and(|id| level.config.is_compat(*id))
-            {
-                menu.add_index(index);
+            if row < page_size.rows && col < page_size.columns {
+                let index =
+                    page.current * page_size.rows * page_size.columns + col * page_size.rows + row;
+                if menu
+                    .get(index)
+                    .is_some_and(|id| level.config.is_compat(*id))
+                {
+                    menu.add_index(index);
+                }
             }
         }
     }
