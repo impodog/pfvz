@@ -126,6 +126,21 @@ pub struct Zomboni {
     pub cooldown: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DancingZombie {
+    pub velocity_back: game::VelocityXRange,
+    pub velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub backup_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub backup_health: (u32, u32),
+    pub damage: u32,
+    pub interval: f32,
+    pub back_time: f32,
+    pub spawn_interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
@@ -141,6 +156,7 @@ pub struct ZombieFactors {
     pub tube: Tube,
     pub snorkel: SnorkelZombie,
     pub zomboni: Zomboni,
+    pub dancing: DancingZombie,
 }
 
 fn init_factors(mut commands: Commands) {

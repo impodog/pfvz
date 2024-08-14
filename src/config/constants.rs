@@ -29,6 +29,7 @@ pub const THREEPEATER: Id = -19;
 pub const TALL_NUT: Id = -20;
 pub const SPIKEWEED: Id = -21;
 pub const TORCHWOOD: Id = -22;
+pub const BONK_CHOY: Id = -23;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -46,14 +47,16 @@ pub const SCREEN_DOOR_ZOMBIE: Id = 7;
 pub const TRASHCAN_ZOMBIE: Id = 8;
 pub const SNORKEL_ZOMBIE: Id = 9;
 pub const ZOMBONI: Id = 10;
+pub const DANCING_ZOMBIE: Id = 11;
 
 pub const HIDDEN_ZOMBIE: Id = 101;
 
 pub const TRASHCAN: Id = 201;
+pub const BACKUP_DANCER: Id = 202;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
-pub const LOGICAL_BOUND: Vec2 = Vec2::new(LOGICAL_WIDTH * 0.6, LOGICAL_HEIGHT * 0.6);
+pub const LOGICAL_BOUND: Vec2 = Vec2::new(LOGICAL_WIDTH * 1.0, LOGICAL_HEIGHT * 1.0);
 pub const LOGICAL: Vec2 = Vec2::new(LOGICAL_WIDTH, LOGICAL_HEIGHT);
 pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.7);
 pub const BUTTON_SIZE: Vec2 = Vec2::new(SLOT_SIZE.x * 2.0, SLOT_SIZE.y);
@@ -96,6 +99,7 @@ pub fn id_name(id: Id) -> &'static str {
         TALL_NUT => "tall_nut",
         SPIKEWEED => "spikeweed",
         TORCHWOOD => "torchwood",
+        BONK_CHOY => "bonk_choy",
 
         BOWLING_NUT => "bowling_nut",
 
@@ -112,10 +116,12 @@ pub fn id_name(id: Id) -> &'static str {
         TRASHCAN_ZOMBIE => "trashcan",
         SNORKEL_ZOMBIE => "snorkel",
         ZOMBONI => "zomboni",
+        DANCING_ZOMBIE => "dancing",
 
         HIDDEN_ZOMBIE => "hidden",
 
         TRASHCAN => "trashcan_item",
+        BACKUP_DANCER => "backup_dancer",
 
         _ => "unknown",
     }

@@ -85,7 +85,7 @@ fn modify_scaredy(
         &mut ScaredyStatus,
         &mut game::Velocity,
     )>,
-    q_zombie: Query<&game::Position, (With<game::Zombie>, Without<ScaredyStatus>)>,
+    q_zombie: Query<(&game::Position, &game::HitBox), (With<game::Zombie>, Without<ScaredyStatus>)>,
     shooter: Res<ScaredyShroomShooter>,
 ) {
     q_scaredy
@@ -93,8 +93,8 @@ fn modify_scaredy(
         .for_each(|(entity, pos, mut scaredy, mut velocity)| {
             let range = factors.scaredy_shroom.scare_range.clone() + *pos;
             let mut is_scaredy = false;
-            for zombie_pos in q_zombie.iter() {
-                if range.contains(zombie_pos) {
+            for (zombie_pos, zombie_hitbox) in q_zombie.iter() {
+                if range.contains(zombie_pos, zombie_hitbox) {
                     is_scaredy = true;
                     break;
                 }

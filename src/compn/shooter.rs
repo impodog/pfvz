@@ -74,8 +74,7 @@ fn shooter_work(
         &game::HitBox,
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
-    q_zpos: Query<&game::Position, With<game::Zombie>>,
-    level: Res<level::Level>,
+    q_zpos: Query<(&game::Position, &game::HitBox), With<game::Zombie>>,
 ) {
     q_shooter
         .par_iter_mut()
@@ -86,9 +85,8 @@ fn shooter_work(
                 let range = shooter.proj.range.clone() + pos;
                 if shooter.require_zombie {
                     let mut ok = false;
-                    for zpos in q_zpos.iter() {
-                        let zpos = level.config.layout.regularize(*zpos);
-                        if range.contains(&zpos) {
+                    for (zombie_pos, zombie_hitbox) in q_zpos.iter() {
+                        if range.contains(zombie_pos, zombie_hitbox) {
                             ok = true;
                             break;
                         }

@@ -172,8 +172,8 @@ cost = 100
 [torchwood]
 self_box = { width = 0.9, height = 1.1 }
 fire = { additional = 1.0, splash = 0.5, range = { x = [
-    -0.5,
-    0.5,
+    -0.3,
+    0.3,
 ], y = [
     -0.5,
     0.5,
@@ -184,6 +184,14 @@ fire = { additional = 1.0, splash = 0.5, range = { x = [
 health = 300
 cooldown = 15.0
 cost = 200
+[bonk_choy]
+self_box = { width = 1.0, height = 1.0 }
+range = [-1.8, 1.8]
+health = 300
+damage = 15
+interval = 0.4
+cooldown = 7.5
+cost = 150
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }

@@ -42,8 +42,14 @@ fn fire_proj_work(
         (Without<game::Plant>, Without<game::Zombie>),
     >,
     q_plant_rel: Query<(), (With<game::PlantRelevant>,)>,
-    q_plant: Query<(Entity, &game::Position), (With<game::Plant>, Without<game::Zombie>)>,
-    q_zombie: Query<(Entity, &game::Position), (With<game::Zombie>, Without<game::Plant>)>,
+    q_plant: Query<
+        (Entity, &game::Position, &game::HitBox),
+        (With<game::Plant>, Without<game::Zombie>),
+    >,
+    q_zombie: Query<
+        (Entity, &game::Position, &game::HitBox),
+        (With<game::Zombie>, Without<game::Plant>),
+    >,
 ) {
     let e_creature = Mutex::new(e_creature);
     e_action.par_read().for_each(|action| match action {
@@ -63,17 +69,19 @@ fn fire_proj_work(
                 let range = fire.range.clone() + *pos;
                 let damage = multiply_uf!(proj.damage, fire.splash);
                 if q_plant_rel.get(*entity).is_ok() {
-                    q_zombie.par_iter().for_each(|(zombie, zombie_pos)| {
-                        if range.contains(zombie_pos) {
-                            e_creature
-                                .lock()
-                                .unwrap()
-                                .send(game::CreatureAction::Damage(zombie, damage));
-                        }
-                    });
+                    q_zombie
+                        .par_iter()
+                        .for_each(|(zombie, zombie_pos, hitbox)| {
+                            if range.contains(zombie_pos, hitbox) {
+                                e_creature
+                                    .lock()
+                                    .unwrap()
+                                    .send(game::CreatureAction::Damage(zombie, damage));
+                            }
+                        });
                 } else {
-                    q_plant.par_iter().for_each(|(plant, plant_pos)| {
-                        if range.contains(plant_pos) {
+                    q_plant.par_iter().for_each(|(plant, plant_pos, hitbox)| {
+                        if range.contains(plant_pos, hitbox) {
                             e_creature
                                 .lock()
                                 .unwrap()

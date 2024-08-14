@@ -62,7 +62,7 @@ trashcan_health = [500, 0]
 damage = 60
 trashcan_damage = 150
 interval = 0.6
-cooldown = 5.0
+cooldown = 4.0
 cost = 125
 [hidden]
 velocity = [-0.105, -0.1]
@@ -81,7 +81,7 @@ underwater_box = { width = 0.4, height = 0.3 }
 self_health = [350, 70]
 damage = 60
 interval = 0.6
-cooldown = 2.0
+cooldown = 1.5
 cost = 75
 [zomboni]
 velocity = [-0.19, -0.185]
@@ -90,4 +90,17 @@ self_health = [1300, 200]
 damage = 2000
 interval = 0.6
 cooldown = 5.0
-cost = 225
+cost = 200
+[dancing]
+velocity_back = [-0.55, -0.545]
+velocity = [-0.085, -0.08]
+self_box = { width = 0.6, height = 1.2 }
+backup_box = { width = 0.5, height = 1.2 }
+self_health = [570, 70]
+backup_health = [200, 70]
+damage = 60
+interval = 0.6
+back_time = 5.5
+spawn_interval = 7.0
+cooldown = 4.0
+cost = 175

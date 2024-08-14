@@ -18,7 +18,7 @@ pub struct SquashStatus {
 
 fn squash_test(
     mut q_squash: Query<(&mut SquashStatus, &mut game::Velocity, &game::Position)>,
-    q_zombie: Query<&game::Position, With<game::Zombie>>,
+    q_zombie: Query<(&game::Position, &game::HitBox), With<game::Zombie>>,
     factors: Res<plants::PlantFactors>,
 ) {
     q_squash
@@ -26,8 +26,8 @@ fn squash_test(
         .for_each(|(mut status, mut velocity, pos)| {
             if status.is_none() {
                 let range = game::PositionRange::from(factors.squash.range) + *pos;
-                for zombie_pos in q_zombie.iter() {
-                    if range.contains(zombie_pos) {
+                for (zombie_pos, zombie_hitbox) in q_zombie.iter() {
+                    if range.contains(zombie_pos, zombie_hitbox) {
                         status.target = Some(*zombie_pos);
                         velocity.x = (zombie_pos.x - pos.x) / factors.squash.time;
                         velocity.z = factors.squash.jump_height / factors.squash.time * 2.0;

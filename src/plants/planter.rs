@@ -75,11 +75,13 @@ fn do_plant(
                             disp.z += top_pos.z;
                         }
                     }
+                    let logic = if disp.z != 0.0 {
+                        game::LogicPosition::from_base(pos).with_disp(disp)
+                    } else {
+                        game::LogicPosition::from_base(pos)
+                    };
                     sun.0 -= creature.cost;
-                    action.send(game::CreatureAction::Spawn(
-                        *id,
-                        game::LogicPosition::new(pos, disp),
-                    ));
+                    action.send(game::CreatureAction::Spawn(*id, logic));
                     planter.send(PlanterEvent {
                         index: select.0,
                         id: *id,

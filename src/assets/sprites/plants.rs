@@ -46,6 +46,9 @@ pub struct SpritePlants {
     pub spikeweed: Arc<sprite::FrameArr>,
     pub torchwood: Arc<sprite::FrameArr>,
     pub fire: Arc<sprite::FrameArr>,
+    pub bonk_choy: Arc<sprite::FrameArr>,
+    pub bonk_choy_left: Arc<sprite::FrameArr>,
+    pub bonk_choy_right: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -210,6 +213,21 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(150),
         ),
         fire: super::load_animation(&server, "sprites/plants/fire", Duration::from_millis(100)),
+        bonk_choy: super::load_animation(
+            &server,
+            "sprites/plants/bonk_choy",
+            Duration::from_millis(250),
+        ),
+        bonk_choy_left: super::load_animation(
+            &server,
+            "sprites/plants/bonk_choy_left",
+            Duration::from_millis(50),
+        ),
+        bonk_choy_right: super::load_animation(
+            &server,
+            "sprites/plants/bonk_choy_right",
+            Duration::from_millis(50),
+        ),
     };
     commands.insert_resource(plants);
 }

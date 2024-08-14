@@ -14,7 +14,7 @@ impl Plugin for GamePositionPlugin {
         // so it is not wrapped under play state
         app.add_systems(
             PostUpdate,
-            (add_position, convert_position, update_transform),
+            (add_position, convert_position, update_transform).chain(),
         );
         app.add_systems(
             PostUpdate,
@@ -104,7 +104,7 @@ impl std::ops::Add<Position> for PositionRange {
 }
 impl Default for PositionRange {
     fn default() -> Self {
-        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, -0.1..0.5)
+        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, -0.01..0.01)
     }
 }
 impl PositionRange {
@@ -112,8 +112,23 @@ impl PositionRange {
         Self { x, y, z }
     }
 
-    pub fn contains(&self, pos: &Position) -> bool {
-        self.x.contains(&pos.x) && self.y.contains(&pos.y) && self.z.contains(&pos.z)
+    /// x1 <= x2 && y1 <= y2 is required
+    fn intersects(x1: f32, x2: f32, y1: f32, y2: f32) -> bool {
+        x1 <= y2 && y1 <= x2
+    }
+
+    pub fn contains(&self, pos: &Position, hitbox: &HitBox) -> bool {
+        Self::intersects(
+            self.x.start,
+            self.x.end,
+            pos.x - hitbox.width / 2.0,
+            pos.x + hitbox.width / 2.0,
+        ) && Self::intersects(
+            self.z.start,
+            self.z.end,
+            pos.z - hitbox.height / 2.0,
+            pos.z + hitbox.height / 2.0,
+        ) && self.y.contains(&pos.y)
     }
 }
 

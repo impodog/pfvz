@@ -39,6 +39,11 @@ impl level::LayoutKind {
         }
     }
 
+    pub fn is_in_bound(&self, pos: &game::Position) -> bool {
+        let hsize = self.half_size_f32();
+        pos.x >= -hsize.0 && pos.x <= hsize.0 && pos.y >= -hsize.1 && pos.y <= hsize.1
+    }
+
     pub fn same_y(&self, lhs: &game::Position, rhs: &game::Position) -> bool {
         let hsize = self.half_size_f32();
         (lhs.y + hsize.1) as i32 == (rhs.y + hsize.1) as i32

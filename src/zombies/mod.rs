@@ -1,5 +1,6 @@
 mod all_star;
 mod basic;
+mod dance;
 mod factors;
 mod hidden;
 mod newspaper;
@@ -10,6 +11,7 @@ mod zomboni;
 
 pub use all_star::*;
 pub use basic::*;
+pub use dance::*;
 pub use factors::*;
 pub use hidden::*;
 pub use newspaper::*;

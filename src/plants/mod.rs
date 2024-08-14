@@ -1,3 +1,4 @@
+mod bonk_choy;
 mod bowling;
 mod buster;
 mod contact;
@@ -17,6 +18,7 @@ mod spike;
 mod spores;
 mod squash;
 
+pub use bonk_choy::*;
 pub use buster::*;
 pub use contact::*;
 pub use explode::*;

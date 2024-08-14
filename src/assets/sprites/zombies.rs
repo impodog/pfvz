@@ -41,6 +41,12 @@ pub struct SpriteZombies {
     pub zomboni_damaged: Arc<sprite::FrameArr>,
     pub zomboni_destroyed: Arc<sprite::FrameArr>,
     pub zomboni_dying: Arc<sprite::FrameArr>,
+    pub dancing_zombie: Arc<sprite::FrameArr>,
+    pub dancing_zombie_dying: Arc<sprite::FrameArr>,
+    pub dancing_zombie_back: Arc<sprite::FrameArr>,
+    pub dancing_zombie_summon: Arc<sprite::FrameArr>,
+    pub backup_dancer: Arc<sprite::FrameArr>,
+    pub backup_dancer_dying: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -203,6 +209,36 @@ pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/zombies/zomboni_dying",
             Duration::from_millis(200),
+        ),
+        dancing_zombie: super::load_animation(
+            &server,
+            "sprites/zombies/dancing_zombie",
+            Duration::from_millis(300),
+        ),
+        dancing_zombie_dying: super::load_animation(
+            &server,
+            "sprites/zombies/dancing_zombie_dying",
+            Duration::from_millis(300),
+        ),
+        dancing_zombie_back: super::load_animation(
+            &server,
+            "sprites/zombies/dancing_zombie_back",
+            Duration::from_millis(200),
+        ),
+        dancing_zombie_summon: super::load_animation(
+            &server,
+            "sprites/zombies/dancing_zombie_summon",
+            Duration::from_millis(500),
+        ),
+        backup_dancer: super::load_animation(
+            &server,
+            "sprites/zombies/backup_dancer",
+            Duration::from_millis(300),
+        ),
+        backup_dancer_dying: super::load_animation(
+            &server,
+            "sprites/zombies/backup_dancer_dying",
+            Duration::from_millis(300),
         ),
     };
     commands.insert_resource(zombies);
