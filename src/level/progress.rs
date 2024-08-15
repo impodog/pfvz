@@ -60,7 +60,7 @@ fn init_progress_bar(
         game::Position::from(&corner).move_by(-0.5, 0.0),
         Text2dBundle {
             text: Text::from_section(
-                format!("{} - {}", level_index.stage, level_index.level),
+                format!("{}", level_index.as_ref()),
                 TextStyle {
                     font: font.0.clone(),
                     font_size: display.ratio * PROGRESS_SIZE.y,

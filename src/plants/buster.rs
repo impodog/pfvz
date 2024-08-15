@@ -6,7 +6,7 @@ impl Plugin for PlantsBusterPlugin {
     fn build(&self, app: &mut App) {
         initialize(&grave_buster_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (bust_grave,));
+        app.add_systems(Update, (bust_grave,).run_if(when_state!(gaming)));
         *grave_buster_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_grave_buster),
             die: app.register_system(compn::default::die),

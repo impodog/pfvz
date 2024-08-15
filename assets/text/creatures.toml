@@ -113,3 +113,13 @@ name = "Centromadia pungens"
 short = "Damages zombies that walk over it, able to destroy zombonis"
 desc = """Damages zombies that walk over it, pokes a hole in zombonis' tires
 Damage: Regular"""
+[desc.bonk_choy]
+name = "Brassica rapa subsp. chinensis"
+short = "Punches zombies in front of or behind it"
+desc = """Punches zombies in front of or behind it, dealing high damage
+Damage: High"""
+[desc.jalapeno]
+name = "Capsicum annuum"
+short = "One-use, burns all zombies in one lane"
+desc = """One-use, burns all zombies in one lane
+Damage: SUPER"""

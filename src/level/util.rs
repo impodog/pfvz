@@ -49,3 +49,9 @@ impl level::LayoutKind {
         (lhs.y + hsize.1) as i32 == (rhs.y + hsize.1) as i32
     }
 }
+
+impl std::fmt::Display for level::LevelIndex {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} - {}", self.stage, self.level)
+    }
+}

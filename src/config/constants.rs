@@ -72,6 +72,8 @@ pub const SPARSENESS: u32 = 255;
 pub const WATER_PERCENTAGE: f32 = 0.7;
 /// The distance in tiles that plants move down
 pub const SHADOW_DISTANCE: f32 = 0.3;
+/// Zoom factor for Egui
+pub const UI_ZOOM_FACTOR: f32 = 1.0;
 
 /// This function defines the standard naming of creatures in configuration files and code
 pub fn id_name(id: Id) -> &'static str {

@@ -5,10 +5,7 @@ pub(super) struct CollectibleSpawnPlugin;
 impl Plugin for CollectibleSpawnPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(PostStartup, (init_timer,));
-        app.add_systems(
-            Update,
-            (spawn_sun,).run_if(when_state!(gaming)),
-        );
+        app.add_systems(Update, (spawn_sun,).run_if(when_state!(gaming)));
     }
 }
 
@@ -25,7 +22,6 @@ fn init_timer(mut commands: Commands, factors: Res<collectible::ItemFactors>) {
 fn spawn_sun(
     mut commands: Commands,
     factors: Res<collectible::ItemFactors>,
-    items: Res<assets::SpriteItems>,
     time: Res<config::FrameTime>,
     mut timer: ResMut<SunTimer>,
     level: Res<level::Level>,

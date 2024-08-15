@@ -4,7 +4,10 @@ pub(super) struct CompnWaterPlugin;
 
 impl Plugin for CompnWaterPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (add_in_water, put_in_water));
+        app.add_systems(
+            Update,
+            (add_in_water, put_in_water).run_if(when_state!(gaming)),
+        );
     }
 }
 

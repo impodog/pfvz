@@ -5,7 +5,10 @@ pub(super) struct GamePlantPlugin;
 impl Plugin for GamePlantPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<PlantLayout>();
-        app.add_systems(PostUpdate, (scan_plants, add_plants));
+        app.add_systems(
+            PostUpdate,
+            (scan_plants, add_plants).run_if(when_state!(gaming)),
+        );
         app.add_systems(OnEnter(info::GlobalStates::Play), (renew_layout,));
     }
 }

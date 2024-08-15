@@ -20,7 +20,7 @@ struct DespawnQueue(Vec<Entity>);
 fn despawn(mut commands: Commands, mut queue: ResMut<DespawnQueue>) {
     if !queue.is_empty() {
         for entity in queue.drain(..) {
-            if let Some(mut commands) = commands.get_entity(entity) {
+            if let Some(commands) = commands.get_entity(entity) {
                 commands.despawn_recursive();
             }
         }
@@ -40,7 +40,7 @@ fn proj_action(
     e_proj.par_read().for_each(|action| {
         let ok = match action {
             game::ProjectileAction::Damage(_entity, _other) => {
-                // TODO: Any good way to handle this?
+                // NOTE: Any good way to handle this?
                 true
             }
             game::ProjectileAction::Consumed(entity) => {

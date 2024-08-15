@@ -22,6 +22,7 @@ bevy = { version = "0.14.1", default-features = false, features = [
     # Optionally disable these when release
     "wayland",
 ] }
+bevy_egui = "0.28.0"
 bevy_framepace = "0.17.1"
 bevy_kira_audio = { version = "0.20.0", features = ["settings_loader"] }
 bitflags = "2.6.0"

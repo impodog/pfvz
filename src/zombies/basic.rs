@@ -10,7 +10,10 @@ impl Plugin for ZombiesBasicPlugin {
         initialize(&flag_zombie_systems);
         initialize(&screen_door_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (add_basic_zombie_arm, add_aquatic_zombie_tube));
+        app.add_systems(
+            Update,
+            (add_basic_zombie_arm, add_aquatic_zombie_tube).run_if(when_state!(gaming)),
+        );
         *basic_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_basic_zombie),
             die: app.register_system(compn::default::die),

@@ -6,7 +6,7 @@ impl Plugin for ZombiesSnorkelPlugin {
     fn build(&self, app: &mut App) {
         initialize(&snorkel_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (snorkel_enter,));
+        app.add_systems(Update, (snorkel_enter,).run_if(when_state!(gaming)));
         *snorkel_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_snorkel_zombie),
             die: app.register_system(compn::default::die),

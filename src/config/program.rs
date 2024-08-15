@@ -15,8 +15,8 @@ fn control_framerate(
     settings.limiter = bevy_framepace::Limiter::from_framerate(config.program.framerate.0 as f64);
 }
 
-fn quit(mut e_exit: EventWriter<AppExit>, button: Res<ButtonInput<KeyCode>>) {
+fn quit(mut state: ResMut<NextState<info::GlobalStates>>, button: Res<ButtonInput<KeyCode>>) {
     if button.just_pressed(KeyCode::Escape) {
-        e_exit.send(AppExit::Success);
+        state.set(info::GlobalStates::Menu);
     }
 }

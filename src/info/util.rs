@@ -12,4 +12,13 @@ macro_rules! when_state {
     (play) => {
         bevy::prelude::in_state($crate::info::GlobalStates::Play)
     };
+    (main) => {
+        bevy::prelude::in_state($crate::info::MenuStates::Main)
+    };
+    (adventure) => {
+        bevy::prelude::in_state($crate::info::MenuStates::Adventure)
+    };
+    (menu) => {
+        bevy::prelude::in_state($crate::info::GlobalStates::Menu)
+    };
 }

@@ -7,7 +7,10 @@ impl Plugin for ZombiesDancePlugin {
         initialize(&dancing_zombie_systems);
         initialize(&backup_dancer_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (dancing_finish_back, dancing_try_spawn));
+        app.add_systems(
+            Update,
+            (dancing_finish_back, dancing_try_spawn).run_if(when_state!(gaming)),
+        );
         *dancing_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_dancing_zombie),
             die: app.register_system(compn::default::die),

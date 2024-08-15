@@ -6,7 +6,7 @@ impl Plugin for ZombiesHiddenPlugin {
     fn build(&self, app: &mut App) {
         initialize(&hidden_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (hidden_zombie_move,));
+        app.add_systems(Update, (hidden_zombie_move,).run_if(when_state!(gaming)));
         *hidden_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_hidden_zombie),
             die: app.register_system(compn::default::die),

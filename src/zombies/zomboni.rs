@@ -6,7 +6,7 @@ impl Plugin for ZombiesZomboniPlugin {
     fn build(&self, app: &mut App) {
         initialize(&zomboni_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (zomboni_leave_trail,));
+        app.add_systems(Update, (zomboni_leave_trail,).run_if(when_state!(gaming)));
         *zomboni_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_zomboni),
             die: app.register_system(compn::default::die),

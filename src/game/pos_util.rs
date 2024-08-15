@@ -12,7 +12,8 @@ impl Plugin for GamePosUtilPlugin {
                 add_layer_disp,
                 update_transform_layer,
                 update_transform_layer_by_position,
-            ),
+            )
+                .run_if(when_state!(gaming)),
         );
     }
 }

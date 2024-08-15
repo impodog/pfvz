@@ -11,6 +11,7 @@ pub mod game;
 pub mod info;
 pub mod level;
 pub mod lose;
+pub mod menu;
 pub mod modes;
 pub mod plants;
 mod prelude;
@@ -26,6 +27,7 @@ pub fn start_pfvz() {
         DefaultPlugins,
         bevy_kira_audio::AudioPlugin,
         bevy_framepace::FramepacePlugin,
+        bevy_egui::EguiPlugin,
         assets::AssetsPlugin,
         collectible::CollectiblePlugin,
         config::ConfigPlugin,
@@ -44,6 +46,7 @@ pub fn start_pfvz() {
         modes::ModesPlugin,
         lose::LosePlugin,
         win::WinPlugin,
+        menu::MenuPlugin,
     ));
     app.run();
 }
