@@ -241,6 +241,17 @@ pub struct BonkChoy {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Jalapeno {
+    pub self_box: game::HitBox,
+    pub boom_box: game::HitBox,
+    pub health: u32,
+    pub damage: u32,
+    pub cooldown: f32,
+    pub countdown: f32,
+    pub animation_time: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -296,6 +307,7 @@ pub struct PlantFactors {
     pub spikeweed: Spikeweed,
     pub torchwood: Torchwood,
     pub bonk_choy: BonkChoy,
+    pub jalapeno: Jalapeno,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

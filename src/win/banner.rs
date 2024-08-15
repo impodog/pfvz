@@ -47,6 +47,7 @@ fn note_from_zombies(
         let texture = match level_index.stage {
             1 => chunks.note1.clone(),
             2 => chunks.note2.clone(),
+            3 => chunks.note3.clone(),
             _ => Default::default(),
         };
         commands.spawn((

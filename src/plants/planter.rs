@@ -72,7 +72,7 @@ fn do_plant(
                     let mut disp = game::Position::default();
                     if let Some(plant) = plants.top(index) {
                         if let Ok(top_pos) = q_pos.get(plant) {
-                            disp.z += top_pos.z;
+                            disp.z += top_pos.z + SHADOW_DISTANCE;
                         }
                     }
                     let logic = if disp.z != 0.0 {

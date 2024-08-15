@@ -6,12 +6,7 @@ impl Plugin for CompnWalkerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (
-                walker_lock_target,
-                walker_add_impl,
-                walker_deal_damage,
-                walker_unlock,
-            ),
+            (walker_lock_target, walker_add_impl, walker_deal_damage),
         );
     }
 }
@@ -52,7 +47,7 @@ fn walker_lock_target(
     collision: Res<game::Collision>,
     mut q_walker: Query<(&mut WalkerImpl, &mut game::Velocity, Entity)>,
     q_plant: Query<
-        (),
+        &game::Position,
         (
             With<game::Plant>,
             Without<game::NotPlanted>,
@@ -63,24 +58,34 @@ fn walker_lock_target(
     q_walker
         .par_iter_mut()
         .for_each(|(mut walker, mut velocity, entity)| {
-            if walker.target.is_none() {
+            if walker.target.is_none() || walker.timer.just_finished() {
+                let mut target: Option<(Entity, game::Position)> = None;
                 if let Some(set) = collision.get(&entity) {
                     for entity in set {
-                        if q_plant.get(*entity).is_ok() {
-                            walker.velocity = std::mem::take(velocity.as_mut());
-                            walker.target = Some(*entity);
-                            break;
+                        if let Ok(pos) = q_plant.get(*entity) {
+                            let replace = if let Some((_, prev)) = &target {
+                                pos.x > prev.x || (pos.x == prev.x && pos.z > prev.z)
+                            } else {
+                                true
+                            };
+                            if replace {
+                                target = Some((*entity, *pos));
+                            }
                         }
                     }
                 }
+                let target = target.map(|(entity, _)| entity);
+                if target != walker.target {
+                    if walker.target.is_none() {
+                        walker.velocity = std::mem::take(velocity.as_mut());
+                    }
+                    if target.is_none() {
+                        *velocity = walker.velocity;
+                    }
+                    walker.target = target;
+                }
             }
         });
-}
-
-fn walker_unlock(mut q_walker: Query<&mut WalkerImpl, Changed<Walker>>) {
-    q_walker.par_iter_mut().for_each(|mut walker_impl| {
-        walker_impl.target = None;
-    });
 }
 
 fn walker_deal_damage(

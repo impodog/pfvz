@@ -30,6 +30,7 @@ pub const TALL_NUT: Id = -20;
 pub const SPIKEWEED: Id = -21;
 pub const TORCHWOOD: Id = -22;
 pub const BONK_CHOY: Id = -23;
+pub const JALAPENO: Id = -24;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -63,7 +64,7 @@ pub const BUTTON_SIZE: Vec2 = Vec2::new(SLOT_SIZE.x * 2.0, SLOT_SIZE.y);
 pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
 
 /// abs(delta z) must be below (hitbox1.height + hitbox2.height) / 2.0 / `COLLISION_Z_FACTOR`
-pub const COLLISION_Z_FACTOR: f32 = 2.0;
+pub const COLLISION_Z_FACTOR: f32 = 1.5;
 /// "sparseness" is used in level::spawn module, where the probability increases by spawn turn,
 /// while having a maximum cap of sparseness, and when chosen, the probability falls back to zero
 pub const SPARSENESS: u32 = 255;
@@ -100,6 +101,7 @@ pub fn id_name(id: Id) -> &'static str {
         SPIKEWEED => "spikeweed",
         TORCHWOOD => "torchwood",
         BONK_CHOY => "bonk_choy",
+        JALAPENO => "jalapeno",
 
         BOWLING_NUT => "bowling_nut",
 

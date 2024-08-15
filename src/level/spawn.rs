@@ -121,7 +121,7 @@ fn by_probability(
         // Only 10 attempts allowed
         // When level creator mistakenly puts incompatible zombies, count will exceed this limit
         loop {
-            // Multiply all probability by 2(with caps)
+            // Multiply all probability(with caps)
             for value in prob.iter_mut() {
                 if *value < SPARSENESS {
                     *value = (*value * 3 / 2).min(SPARSENESS);
@@ -156,17 +156,15 @@ fn by_probability(
             } else {
                 !cost
             };
-            prob.0[index] = (prob.0[index].saturating_sub(creature.cost)).max(1);
+            prob.0[index] = (prob.0[index].saturating_sub(creature.cost * 3 / 2)).max(1);
 
             if ok {
+                let x = get_x();
+                let mut pos = level.config.layout.regularize(game::Position::new_xy(x, y));
+                pos.x = x;
                 action.send(game::CreatureAction::Spawn(
                     id,
-                    game::LogicPosition::from_base(
-                        level
-                            .config
-                            .layout
-                            .regularize(game::Position::new_xy(get_x(), y)),
-                    ),
+                    game::LogicPosition::from_base(pos),
                 ));
                 // Continue on to spawning
                 guard.0 = true;

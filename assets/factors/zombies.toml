@@ -103,4 +103,4 @@ interval = 0.6
 back_time = 5.5
 spawn_interval = 7.0
 cooldown = 4.0
-cost = 175
+cost = 250

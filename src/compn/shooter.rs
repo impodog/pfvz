@@ -81,7 +81,7 @@ fn shooter_work(
         .for_each(|(entity, overlay, shooter, mut work, pos, hitbox)| {
             work.timer.tick(overlay.delta());
             if work.timer.just_finished() {
-                let mut pos = (*pos).move_z(hitbox.height * -0.1);
+                let mut pos = (*pos).move_z(hitbox.height * -0.05);
                 let range = shooter.proj.range.clone() + pos;
                 if shooter.require_zombie {
                     let mut ok = false;

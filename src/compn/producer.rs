@@ -55,17 +55,21 @@ fn producer_work(
         &Producer,
         &mut ProducerImpl,
     )>,
+    display: Res<game::Display>,
 ) {
+    let max_height = LOGICAL_HEIGHT / display.ratio / 2.0;
     q_producer
         .iter_mut()
         .for_each(|(overlay, pos, producer, mut producer_impl)| {
             producer_impl.timer.tick(overlay.delta());
             if producer_impl.timer.just_finished() {
+                let mut velocity = game::Velocity::from(producer.velocity);
+                velocity.z *= (max_height - pos.y) / max_height / 2.0;
                 commands.spawn((
                     *pos,
-                    game::Velocity::from(producer.velocity),
+                    velocity,
                     producer.collectible.clone(),
-                    game::Gravity,
+                    game::GravityHalf,
                 ));
                 // This adds fun to the sunflower etc. :)
                 producer_impl.timer.set_duration(Duration::from_secs_f32(

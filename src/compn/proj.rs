@@ -20,7 +20,9 @@ struct DespawnQueue(Vec<Entity>);
 fn despawn(mut commands: Commands, mut queue: ResMut<DespawnQueue>) {
     if !queue.is_empty() {
         for entity in queue.drain(..) {
-            commands.entity(entity).despawn_recursive();
+            if let Some(mut commands) = commands.get_entity(entity) {
+                commands.despawn_recursive();
+            }
         }
     }
 }

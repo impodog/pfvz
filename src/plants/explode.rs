@@ -16,6 +16,11 @@ impl Plugin for PlantsExplodePlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
+        *jalapeno_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_jalapeno),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
     }
 }
 
@@ -23,6 +28,8 @@ game_conf!(explode CherryBombExplode);
 game_conf!(systems cherry_bomb_systems);
 game_conf!(explode PotatoMineExplode);
 game_conf!(systems potato_mine_systems);
+game_conf!(explode JalapenoExplode);
+game_conf!(systems jalapeno_systems);
 
 fn spawn_cherry_bomb(
     In(pos): In<game::LogicPosition>,
@@ -45,6 +52,31 @@ fn spawn_cherry_bomb(
             TimerMode::Once,
         )),
         game::Health::from(factors.cherry_bomb.health),
+        SpriteBundle::default(),
+    ));
+}
+
+fn spawn_jalapeno(
+    In(pos): In<game::LogicPosition>,
+    mut commands: Commands,
+    factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
+    map: Res<game::CreatureMap>,
+    explode: Res<JalapenoExplode>,
+) {
+    let creature = map.get(&JALAPENO).unwrap();
+    commands.spawn((
+        game::Plant,
+        creature.clone(),
+        pos,
+        sprite::Animation::new(plants.jalapeno.clone()),
+        creature.hitbox,
+        compn::Explode(explode.0.clone()),
+        compn::CherryBombTimer(Timer::new(
+            Duration::from_secs_f32(factors.jalapeno.countdown),
+            TimerMode::Once,
+        )),
+        game::Health::from(factors.jalapeno.health),
         SpriteBundle::default(),
     ));
 }
@@ -132,5 +164,30 @@ fn init_config(
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(POTATO_MINE, creature);
+    }
+    commands.insert_resource(JalapenoExplode(Arc::new(compn::ExplodeShared {
+        anim: plants.boom.clone(),
+        animation_time: Duration::from_secs_f32(factors.jalapeno.animation_time),
+        hitbox: factors.jalapeno.boom_box,
+        damage: factors.jalapeno.damage,
+    })));
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: jalapeno_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            image: plants
+                .jalapeno
+                .frames
+                .first()
+                .expect("Empty animation jalapeno")
+                .clone(),
+            cost: factors.jalapeno.cost,
+            cooldown: factors.jalapeno.cooldown,
+            hitbox: factors.jalapeno.self_box,
+            flags: level::CreatureFlags::TERRESTRIAL_PLANT,
+        }));
+        map.insert(JALAPENO, creature);
     }
 }

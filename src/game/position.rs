@@ -18,7 +18,13 @@ impl Plugin for GamePositionPlugin {
         );
         app.add_systems(
             PostUpdate,
-            (update_position, update_bare_position, update_velocity).run_if(when_state!(play)),
+            (
+                update_position,
+                update_bare_position,
+                update_velocity,
+                update_velocity_half,
+            )
+                .run_if(when_state!(play)),
         );
         app.add_systems(
             PostUpdate,
@@ -215,6 +221,9 @@ impl std::ops::Mul<f32> for Velocity {
 #[derive(Component, Default, Debug, Clone, Copy)]
 pub struct Gravity;
 
+#[derive(Component, Default, Debug, Clone, Copy)]
+pub struct GravityHalf;
+
 // This component marks that one entity should never be skipped while loss calculation
 #[derive(Component, Default, Clone, Copy)]
 pub struct NoCollisionLoss;
@@ -320,6 +329,16 @@ fn update_velocity(
 ) {
     q_vel.par_iter_mut().for_each(|mut vel| {
         vel.z -= time.diff() * config.gamerule.gravity.0 * config.gamerule.speed.0;
+    });
+}
+
+fn update_velocity_half(
+    config: Res<config::Config>,
+    time: Res<config::FrameTime>,
+    mut q_vel: Query<&mut Velocity, With<GravityHalf>>,
+) {
+    q_vel.par_iter_mut().for_each(|mut vel| {
+        vel.z -= time.diff() * config.gamerule.gravity.0 * config.gamerule.speed.0 / 2.0;
     });
 }
 
