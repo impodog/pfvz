@@ -8,7 +8,7 @@ sun = 50
 points = 0
 wait = 30.0
 big = false
-fixed = [[1, 1], [7, 1]]
+fixed = [[1, 2]]
 avail = []
 [[waves]]
 points = 0

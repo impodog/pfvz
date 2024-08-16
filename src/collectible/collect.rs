@@ -14,12 +14,15 @@ fn read_events(
     config: Res<config::Config>,
     mut sun: ResMut<game::Sun>,
     q_coll: Query<&collectible::Collectible>,
+    audio: Res<Audio>,
+    audio_items: Res<assets::AudioItems>,
 ) {
     e_coll.read().for_each(|event| {
         if let Ok(coll) = q_coll.get(event.entity) {
             match coll {
                 collectible::Collectible::Sun(value) => {
                     sun.0 += (config.gamerule.sun_value.0 as f32 * *value) as u32;
+                    audio.play(audio_items.sun.random());
                 }
             }
             commands.entity(event.entity).despawn_recursive();
