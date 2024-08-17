@@ -1,5 +1,3 @@
-use ::pfvz::*;
-
 fn main() {
-    start_pfvz();
+    ::pfvz::start_pfvz();
 }

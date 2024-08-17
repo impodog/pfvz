@@ -50,3 +50,9 @@ pub fn start_pfvz() {
     ));
     app.run();
 }
+
+use bevy::prelude::bevy_main;
+#[bevy_main]
+pub fn main() {
+    start_pfvz();
+}
