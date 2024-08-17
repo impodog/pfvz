@@ -26,6 +26,7 @@ impl Plugin for PlantsPlugin {
             spike::PlantsSpikePlugin,
             fire::PlantsFirePlugin,
             bonk_choy::PlantsBonkChoyPlugin,
+            plantern::PlantsPlanternPlugin,
         ));
     }
 }

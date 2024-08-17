@@ -4,11 +4,21 @@ pub struct CompnShooterPlugin;
 
 impl Plugin for CompnShooterPlugin {
     fn build(&self, app: &mut App) {
+        initialize(&shooter_sound);
+        app.add_systems(PostStartup, (init_shooter,));
         app.add_systems(
             PreUpdate,
             (add_shooter_impl, shooter_work).run_if(when_state!(gaming)),
         );
     }
+}
+
+lazy_static! {
+    static ref shooter_sound: RwLock<Option<assets::AudioList>> = RwLock::new(None);
+}
+
+fn init_shooter(audio_plants: Res<assets::AudioPlants>) {
+    *shooter_sound.write().unwrap() = Some(audio_plants.shooter.clone());
 }
 
 // Anything that uses this shoots projectile of their ally
@@ -23,6 +33,7 @@ pub struct ShooterShared {
     pub after: SystemId<Entity>,
     pub callback: SystemId<Entity>,
     pub shared: Arc<game::ProjectileShared>,
+    pub audio: assets::AudioList,
 }
 impl Default for ShooterShared {
     fn default() -> Self {
@@ -36,6 +47,11 @@ impl Default for ShooterShared {
             after: compn::default::system_do_nothing.read().unwrap().unwrap(),
             callback: compn::default::system_do_nothing.read().unwrap().unwrap(),
             shared: Default::default(),
+            audio: shooter_sound
+                .read()
+                .unwrap()
+                .clone()
+                .expect("shooter_sound is not initialized"),
         }
     }
 }
@@ -75,6 +91,7 @@ fn shooter_work(
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
     q_zpos: Query<(&game::Position, &game::HitBox), With<game::Zombie>>,
+    audio: Res<Audio>,
 ) {
     q_shooter
         .par_iter_mut()
@@ -125,6 +142,7 @@ fn shooter_work(
                     // NOTE: Do we need to make this customizable?
                     pos.x += 0.1 * shooter.velocity.x;
                 }
+                audio.play(shooter.audio.random());
             }
         })
 }

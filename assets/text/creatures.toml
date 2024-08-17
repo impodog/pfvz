@@ -123,3 +123,8 @@ name = "Capsicum annuum"
 short = "One-use, burns all zombies in one lane"
 desc = """One-use, burns all zombies in one lane
 Damage: SUPER"""
+[desc.plantern]
+name = "Idontknow nonplantae var. lucium"
+short = "Removes the fog in an area"
+desc = """Removes the fog in an area
+Damage: (U)nreasonable"""

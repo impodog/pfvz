@@ -41,7 +41,7 @@ map = [
     [
         { stage = 4, level = 1 },
         [
-            "That's all this version has got, thanks for playing!",
+            "When the night falls...",
         ],
     ],
 ]

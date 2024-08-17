@@ -156,7 +156,7 @@ fn by_probability(
             } else {
                 !cost
             };
-            prob.0[index] = (prob.0[index].saturating_sub(creature.cost * 3 / 2)).max(1);
+            prob.0[index] = (prob.0[index].saturating_sub(creature.cost * 2)).max(1);
 
             if ok {
                 let x = get_x();

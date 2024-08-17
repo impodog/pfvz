@@ -252,6 +252,14 @@ pub struct Jalapeno {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Plantern {
+    pub self_box: game::HitBox,
+    pub range: game::PositionRangeSerde,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -308,6 +316,7 @@ pub struct PlantFactors {
     pub torchwood: Torchwood,
     pub bonk_choy: BonkChoy,
     pub jalapeno: Jalapeno,
+    pub plantern: Plantern,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

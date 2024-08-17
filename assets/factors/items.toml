@@ -7,3 +7,5 @@ interval = 10.0
 self_box = { width = 0.3, height = 0.3 }
 damage = 300
 interval = [7.0, 12.0]
+[fog]
+start = 4

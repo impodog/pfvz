@@ -50,8 +50,6 @@ fn move_fume(
     In(entity): In<Entity>,
     factors: Res<plants::PlantFactors>,
     mut q_pos: Query<&mut game::LogicPosition>,
-    audio: Res<Audio>,
-    plants: Res<assets::AudioPlants>,
 ) {
     if let Ok(mut pos) = q_pos.get_mut(entity) {
         pos.plus_assign(game::Position::new_xy(
@@ -59,7 +57,6 @@ fn move_fume(
             0.0,
         ));
     }
-    audio.play(plants.fume_shroom.random());
 }
 
 fn play_shoot_animation(
@@ -79,6 +76,7 @@ fn init_config(
     mut commands: Commands,
     plants: Res<assets::SpritePlants>,
     factors: Res<plants::PlantFactors>,
+    audio_plants: Res<assets::AudioPlants>,
     mut map: ResMut<game::CreatureMap>,
 ) {
     let fume = Arc::new(game::ProjectileShared {
@@ -102,6 +100,7 @@ fn init_config(
             after: fume_shroom_after.read().unwrap().unwrap(),
             callback: fume_shroom_callback.read().unwrap().unwrap(),
             shared: fume.clone(),
+            audio: audio_plants.fume_shroom.clone(),
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {

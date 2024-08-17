@@ -22,11 +22,16 @@ pub struct Whack {
     pub damage: u32,
     pub interval: game::DurationRangeSecs,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Fog {
+    pub start: usize,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ItemFactors {
     pub sun: Sun,
     pub whack: Whack,
+    pub fog: Fog,
 }
 
 fn init_factors(mut commands: Commands) {

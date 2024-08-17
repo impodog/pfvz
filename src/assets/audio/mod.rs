@@ -24,7 +24,7 @@ impl Plugin for AssetsAudioPlugin {
 }
 
 #[derive(Debug, Clone, Deref, DerefMut)]
-pub struct AudioList(pub Vec<Handle<AudioSource>>);
+pub struct AudioList(pub Arc<Vec<Handle<AudioSource>>>);
 impl AudioList {
     fn load_result(server: &Res<AssetServer>, path: &str) -> std::io::Result<Self> {
         let mut list = Vec::new();
@@ -34,7 +34,7 @@ impl AudioList {
                 list.push(server.load(std::fs::canonicalize(path)?));
             }
         }
-        Ok(Self(list))
+        Ok(Self(Arc::new(list)))
     }
 
     /// Loads a source dir of audio, or report an error when no audio file available
@@ -43,7 +43,7 @@ impl AudioList {
             Ok(result) => result,
             Err(err) => {
                 error!("Failed to load audio source at {}: {}", path, err);
-                Self(vec![Default::default()])
+                Self(Arc::new(vec![Default::default()]))
             }
         }
     }

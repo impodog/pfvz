@@ -57,6 +57,7 @@ pub enum LayoutKind {
     Day,
     Night,
     Pool,
+    Fog,
 }
 impl LayoutKind {
     pub const fn size(&self) -> (usize, usize) {
@@ -64,6 +65,7 @@ impl LayoutKind {
             Self::Day => (9, 5),
             Self::Night => (9, 5),
             Self::Pool => (9, 6),
+            Self::Fog => (9, 6),
         }
     }
 
@@ -95,7 +97,7 @@ impl LayoutKind {
         match self {
             Self::Day => TileFeature::Grass,
             Self::Night => TileFeature::Grass,
-            Self::Pool => {
+            Self::Pool | Self::Fog => {
                 if (y == 2 || y == 3) && (0..=8).contains(&x) {
                     TileFeature::Water
                 } else {
@@ -111,7 +113,7 @@ impl LayoutKind {
         match self {
             Self::Day => TileFeature::Grass,
             Self::Night => TileFeature::Grass,
-            Self::Pool => {
+            Self::Pool | Self::Fog => {
                 if y == 2 || y == 3 {
                     TileFeature::Water
                 } else {
@@ -129,7 +131,7 @@ impl LayoutKind {
                 let pos = y * size.0 + x;
                 pos % 2
             }
-            Self::Pool => {
+            Self::Pool | Self::Fog => {
                 if y == 2 || y == 3 {
                     2
                 } else {
@@ -145,6 +147,7 @@ impl LayoutKind {
             Self::Day => true,
             Self::Night => false,
             Self::Pool => true,
+            Self::Fog => false,
         }
     }
 
@@ -153,6 +156,7 @@ impl LayoutKind {
             Self::Day => false,
             Self::Night => true,
             Self::Pool => false,
+            Self::Fog => false,
         }
     }
 
@@ -161,7 +165,12 @@ impl LayoutKind {
             Self::Day => false,
             Self::Night => true,
             Self::Pool => false,
+            Self::Fog => true,
         }
+    }
+
+    pub fn has_fog(&self) -> bool {
+        matches!(self, Self::Fog)
     }
 }
 

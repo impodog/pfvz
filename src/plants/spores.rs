@@ -117,6 +117,7 @@ fn init_config(
     mut commands: Commands,
     plants: Res<assets::SpritePlants>,
     factors: Res<plants::PlantFactors>,
+    audio_plants: Res<assets::AudioPlants>,
     mut map: ResMut<game::CreatureMap>,
 ) {
     let spore = Arc::new(game::ProjectileShared {
@@ -136,6 +137,7 @@ fn init_config(
             times: factors.puff_shroom.times,
             require_zombie: true,
             shared: spore.clone(),
+            audio: audio_plants.spore.clone(),
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
@@ -167,6 +169,7 @@ fn init_config(
             times: factors.scaredy_shroom.times,
             require_zombie: true,
             shared: spore.clone(),
+            audio: audio_plants.spore.clone(),
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {

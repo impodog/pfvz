@@ -4,4 +4,4 @@ mod plugin;
 mod util;
 
 pub use plugin::*;
-pub(super) use util::*;
+use util::*;

@@ -7,11 +7,15 @@ impl Plugin for InfoMousePlugin {
         app.init_resource::<CursorInfo>();
         app.add_systems(
             PreUpdate,
-            ((
-                update_cursor_info,
-                update_touch_as_cursor,
-                update_inbound.run_if(when_state!(gaming)),
-            ),),
+            (
+                init_cursor_info,
+                (
+                    update_cursor_info,
+                    update_touch_as_cursor,
+                    update_inbound.run_if(when_state!(gaming)),
+                ),
+            )
+                .chain(),
         );
     }
 }
@@ -23,6 +27,11 @@ pub struct CursorInfo {
     pub left: bool,
     pub right: bool,
     pub inbound: bool,
+}
+
+fn init_cursor_info(mut cursor: ResMut<CursorInfo>) {
+    cursor.left = false;
+    cursor.right = false;
 }
 
 fn update_cursor_info(
@@ -46,8 +55,8 @@ fn update_cursor_info(
             cursor.coord.y / display.ratio,
         );
     }
-    cursor.left = button.just_pressed(MouseButton::Left);
-    cursor.right = button.just_pressed(MouseButton::Right);
+    cursor.left |= button.just_pressed(MouseButton::Left);
+    cursor.right |= button.just_pressed(MouseButton::Right);
 }
 
 fn update_touch_as_cursor(
@@ -61,8 +70,6 @@ fn update_touch_as_cursor(
 
     let (camera, camera_transform) = q_camera.single();
 
-    cursor.left = false;
-    cursor.right = false;
     for touch in touch.read() {
         if let Some(world_position) = camera
             .viewport_to_world(camera_transform, touch.position)
