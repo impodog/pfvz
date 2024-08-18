@@ -47,6 +47,9 @@ pub struct SpriteZombies {
     pub dancing_zombie_summon: Arc<sprite::FrameArr>,
     pub backup_dancer: Arc<sprite::FrameArr>,
     pub backup_dancer_dying: Arc<sprite::FrameArr>,
+    pub jitb_zombie: Arc<sprite::FrameArr>,
+    pub jitb_zombie_dying: Arc<sprite::FrameArr>,
+    pub jitb_zombie_explode: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -239,6 +242,21 @@ pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/zombies/backup_dancer_dying",
             Duration::from_millis(300),
+        ),
+        jitb_zombie: super::load_animation(
+            &server,
+            "sprites/zombies/jitb_zombie",
+            Duration::from_millis(200),
+        ),
+        jitb_zombie_dying: super::load_animation(
+            &server,
+            "sprites/zombies/jitb_zombie_dying",
+            Duration::from_millis(200),
+        ),
+        jitb_zombie_explode: super::load_animation(
+            &server,
+            "sprites/zombies/jitb_zombie_explode",
+            Duration::from_millis(500),
         ),
     };
     commands.insert_resource(zombies);

@@ -30,7 +30,10 @@ impl AudioList {
         let mut list = Vec::new();
         for entry in std::fs::read_dir(format!("assets/{}", path))? {
             let path = entry?.path();
-            if path.extension().is_some_and(|ext| ext == "ogg") {
+            if path
+                .extension()
+                .is_some_and(|ext| ext == "ogg" || ext == "ron")
+            {
                 list.push(server.load(std::fs::canonicalize(path)?));
             }
         }

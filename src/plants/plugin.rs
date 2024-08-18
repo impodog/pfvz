@@ -27,6 +27,7 @@ impl Plugin for PlantsPlugin {
             fire::PlantsFirePlugin,
             bonk_choy::PlantsBonkChoyPlugin,
             plantern::PlantsPlanternPlugin,
+            hurrikale::PlantsHurrikalePlugin,
         ));
     }
 }

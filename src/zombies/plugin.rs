@@ -15,6 +15,7 @@ impl Plugin for ZombiesPlugin {
             snorkel::ZombiesSnorkelPlugin,
             zomboni::ZombiesZomboniPlugin,
             dance::ZombiesDancePlugin,
+            jitb::ZombiesJitbPlugin,
         ));
     }
 }

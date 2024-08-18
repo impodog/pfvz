@@ -76,7 +76,7 @@ cost = 800
 self_box = { width = 0.6, height = 0.3 }
 [snorkel]
 velocity = [-0.105, -0.1]
-self_box = { width = 0.4, height = 1.1 }
+self_box = { width = 0.5, height = 1.1 }
 underwater_box = { width = 0.4, height = 0.3 }
 self_health = [350, 70]
 damage = 60
@@ -104,3 +104,12 @@ back_time = 5.5
 spawn_interval = 7.0
 cooldown = 4.0
 cost = 250
+[jitb]
+velocity = [-0.19, -0.185]
+self_box = { width = 0.6, height = 1.1 }
+range = { x = [-1.0, 1.0], y = [-1.0, 1.0], z = [-0.01, 0.01] }
+self_health = [570, 70]
+damage = 2000
+animation_time = 3.0
+cooldown = 7.5
+cost = 200

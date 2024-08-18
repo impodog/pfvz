@@ -128,3 +128,8 @@ name = "Idontknow nonplantae var. lucium"
 short = "Removes the fog in an area"
 desc = """Removes the fog in an area
 Damage: (U)nreasonable"""
+[desc.hurrikale]
+name = "Brassica oleracea var. acephala"
+short = "Blows zombies in its lane back"
+desc = """Blows zombies in its lane back by 5 tiles
+Damage: None"""

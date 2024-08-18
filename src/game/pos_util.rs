@@ -102,6 +102,10 @@ impl LogicPosition {
         &self.base
     }
 
+    pub fn base_raw_mut(&mut self) -> &mut game::Position {
+        &mut self.base
+    }
+
     pub fn shadow(&self) -> game::Position {
         let mut pos = self.base;
         pos.z = -SHADOW_DISTANCE;

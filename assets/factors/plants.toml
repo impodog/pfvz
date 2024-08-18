@@ -207,6 +207,13 @@ range = { x = [-1.4, 1.4], y = [-1.4, 1.4], z = [-0.01, 0.01] }
 health = 300
 cooldown = 15.0
 cost = 25
+[hurrikale]
+self_box = { width = 1.0, height = 1.0 }
+blow_velocity = 2.0
+health = 300
+interval = 2.5
+cooldown = 30.0
+cost = 100
 [bowling_nut]
 velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
 self_box = { width = 0.7, height = 0.9 }
