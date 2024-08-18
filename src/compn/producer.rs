@@ -29,7 +29,7 @@ impl From<&Producer> for ProducerImpl {
     fn from(value: &Producer) -> Self {
         Self {
             timer: Timer::new(
-                Duration::from_secs_f32(value.interval.as_secs_f32() / 1.5),
+                Duration::from_secs_f32(value.interval.as_secs_f32() / 1.8),
                 TimerMode::Repeating,
             ),
         }
@@ -65,12 +65,7 @@ fn producer_work(
             if producer_impl.timer.just_finished() {
                 let mut velocity = game::Velocity::from(producer.velocity);
                 velocity.z *= (max_height - pos.y) / max_height / 2.0;
-                commands.spawn((
-                    *pos,
-                    velocity,
-                    producer.collectible.clone(),
-                    game::GravityHalf,
-                ));
+                commands.spawn((*pos, velocity, producer.collectible.clone()));
                 // This adds fun to the sunflower etc. :)
                 producer_impl.timer.set_duration(Duration::from_secs_f32(
                     producer.interval.as_secs_f32() * rand::thread_rng().gen_range(0.9..=1.1),
