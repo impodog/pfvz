@@ -52,6 +52,7 @@ pub struct SpritePlants {
     pub jalapeno: Arc<sprite::FrameArr>,
     pub plantern: Arc<sprite::FrameArr>,
     pub hurrikale: Arc<sprite::FrameArr>,
+    pub flower_pot: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -245,6 +246,11 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/plants/hurrikale",
             Duration::from_millis(100),
+        ),
+        flower_pot: super::load_animation(
+            &server,
+            "sprites/plants/flower_pot",
+            Duration::from_millis(300),
         ),
     };
     commands.insert_resource(plants);

@@ -34,16 +34,23 @@ fn add_in_water(
 }
 
 fn put_in_water(
-    mut q_zombie: Query<(&game::Position, &mut game::SizeCrop, &mut InWater), With<game::Zombie>>,
+    mut q_zombie: Query<
+        (&game::LogicPosition, &mut game::SizeCrop, &mut InWater),
+        With<game::Zombie>,
+    >,
     level: Res<level::Level>,
     audio: Res<Audio>,
     audio_zombies: Res<assets::AudioZombies>,
 ) {
     q_zombie
         .par_iter_mut()
-        .for_each(|(pos, mut size, mut in_water)| {
-            let (x, y) = level.config.layout.position_to_coordinates(pos);
-            let status = level.config.layout.get_tile(x, y) == level::TileFeature::Water;
+        .for_each(|(logic, mut size, mut in_water)| {
+            let (x, y) = level
+                .config
+                .layout
+                .position_to_coordinates(logic.base_raw());
+            let status = logic.base_raw().z + logic.disp.z <= f32::EPSILON
+                && level.config.layout.get_tile(x, y) == level::TileFeature::Water;
             if status != **in_water {
                 **in_water = status;
                 if status {

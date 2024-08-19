@@ -185,12 +185,12 @@ health = 300
 cooldown = 15.0
 cost = 200
 [bonk_choy]
+cooldown = 7.5
 self_box = { width = 1.0, height = 1.0 }
 range = [-1.8, 1.8]
 health = 300
 damage = 15
 interval = 0.4
-cooldown = 7.5
 cost = 150
 [jalapeno]
 self_box = { width = 0.5, height = 0.5 }
@@ -214,8 +214,13 @@ health = 300
 interval = 2.5
 cooldown = 30.0
 cost = 100
+[flower_pot]
+self_box = { width = 0.8, height = 0.8 }
+health = 300
+cooldown = 7.5
+cost = 25
 [bowling_nut]
-velocity = { x = 0.075, y = 0.05, z = 0.0, r = -0.15 }
+velocity = { x = 2.25, y = 1.5, z = 0.0, r = -4.5 }
 self_box = { width = 0.7, height = 0.9 }
 health = 4000
 damage = 300

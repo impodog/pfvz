@@ -33,6 +33,7 @@ pub const BONK_CHOY: Id = -23;
 pub const JALAPENO: Id = -24;
 pub const PLANTERN: Id = -25;
 pub const HURRIKALE: Id = -26;
+pub const FLOWER_POT: Id = -27;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -52,6 +53,7 @@ pub const SNORKEL_ZOMBIE: Id = 9;
 pub const ZOMBONI: Id = 10;
 pub const DANCING_ZOMBIE: Id = 11;
 pub const JITB_ZOMBIE: Id = 12;
+pub const BALLOON_ZOMBIE: Id = 13;
 
 pub const HIDDEN_ZOMBIE: Id = 101;
 
@@ -109,6 +111,7 @@ pub fn id_name(id: Id) -> &'static str {
         JALAPENO => "jalapeno",
         PLANTERN => "plantern",
         HURRIKALE => "hurrikale",
+        FLOWER_POT => "flower_pot",
 
         BOWLING_NUT => "bowling_nut",
 
@@ -127,6 +130,7 @@ pub fn id_name(id: Id) -> &'static str {
         ZOMBONI => "zomboni",
         DANCING_ZOMBIE => "dancing",
         JITB_ZOMBIE => "jitb",
+        BALLOON_ZOMBIE => "balloon",
 
         HIDDEN_ZOMBIE => "hidden",
 

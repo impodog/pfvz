@@ -44,4 +44,10 @@ map = [
             "When the night falls...",
         ],
     ],
+    [
+        { stage = 4, level = 3 },
+        [
+            "Pro tip #2: DO use flower pots to hit higher targets, and tall-nuts to defend against them.",
+        ],
+    ],
 ]

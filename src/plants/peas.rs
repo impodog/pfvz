@@ -255,9 +255,9 @@ fn init_config(
                 ..Default::default()
             },
             start: vec![
-                game::Position::new_xy(0.0, 0.0),
-                game::Position::new_xy(0.0, 1.0),
-                game::Position::new_xy(0.0, -1.0),
+                (game::Position::new_xy(0.0, 0.0), 0.0),
+                (game::Position::new_xy(0.0, 1.0), 0.0),
+                (game::Position::new_xy(0.0, -1.0), 0.0),
             ],
             times: factors.threepeater.times,
             require_zombie: true,

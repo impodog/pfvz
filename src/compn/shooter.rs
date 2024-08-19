@@ -5,7 +5,7 @@ pub struct CompnShooterPlugin;
 impl Plugin for CompnShooterPlugin {
     fn build(&self, app: &mut App) {
         initialize(&shooter_sound);
-        app.add_systems(PostStartup, (init_shooter,));
+        app.add_systems(PreStartup, (init_shooter,));
         app.add_systems(
             PreUpdate,
             (add_shooter_impl, shooter_work).run_if(when_state!(gaming)),
@@ -17,8 +17,9 @@ lazy_static! {
     static ref shooter_sound: RwLock<Option<assets::AudioList>> = RwLock::new(None);
 }
 
-fn init_shooter(audio_plants: Res<assets::AudioPlants>) {
-    *shooter_sound.write().unwrap() = Some(audio_plants.shooter.clone());
+fn init_shooter(server: Res<AssetServer>) {
+    *shooter_sound.write().unwrap() =
+        Some(assets::AudioList::load(&server, "audio/plants/shooter"));
 }
 
 // Anything that uses this shoots projectile of their ally
@@ -27,7 +28,7 @@ pub struct ShooterShared {
     pub interval: Duration,
     pub velocity: game::Velocity,
     pub proj: game::Projectile,
-    pub start: Vec<game::Position>,
+    pub start: Vec<(game::Position, f32)>,
     pub times: usize,
     pub require_zombie: bool,
     pub after: SystemId<Entity>,
@@ -41,7 +42,7 @@ impl Default for ShooterShared {
             interval: Default::default(),
             velocity: Default::default(),
             proj: Default::default(),
-            start: vec![game::Position::default()],
+            start: vec![Default::default()],
             times: 1,
             require_zombie: false,
             after: compn::default::system_do_nothing.read().unwrap().unwrap(),
@@ -113,15 +114,24 @@ fn shooter_work(
                     }
                 }
                 for _ in 0..shooter.times {
-                    for start in shooter.start.iter() {
+                    for (start, angle) in shooter.start.iter() {
                         let proj_entity = {
                             commands.command_scope(|mut commands| {
+                                let velocity = shooter.velocity;
+                                let angle = velocity.y.atan2(velocity.x) + angle;
+                                let len = velocity.x.hypot(velocity.y);
+                                let velocity = game::Velocity {
+                                    x: len * angle.cos(),
+                                    y: len * angle.sin(),
+                                    z: velocity.z,
+                                    r: velocity.r,
+                                };
                                 let mut commands = commands.spawn((
                                     game::LogicPosition::from_bottom(*start + pos),
                                     sprite::Animation::new(shooter.shared.anim.clone()),
                                     shooter.shared.hitbox,
                                     shooter.proj.clone(),
-                                    shooter.velocity,
+                                    velocity,
                                     game::LayerDisp(0.3),
                                     SpriteBundle::default(),
                                 ));
