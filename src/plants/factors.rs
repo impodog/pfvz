@@ -269,6 +269,20 @@ pub struct Hurrikale {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct FlowerPot {
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Pumpkin {
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -327,6 +341,8 @@ pub struct PlantFactors {
     pub jalapeno: Jalapeno,
     pub plantern: Plantern,
     pub hurrikale: Hurrikale,
+    pub flower_pot: FlowerPot,
+    pub pumpkin: Pumpkin,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

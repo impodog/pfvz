@@ -133,3 +133,8 @@ name = "Brassica oleracea var. acephala"
 short = "Blows zombies in its lane back"
 desc = """Blows zombies in its lane back by 5 tiles
 Damage: None"""
+[desc.flower_pot]
+name = "Idontknow nonplantae var. vasum"
+short = "Lets you plant on higher positions"
+desc = """Lets you plant on higher positions, or plant on the roof
+Damage: u32::Default()"""

@@ -4,8 +4,12 @@ pub(super) struct ModesFogPlugin;
 
 impl Plugin for ModesFogPlugin {
     fn build(&self, app: &mut App) {
+        app.add_event::<RecalculateFog>();
         app.add_systems(OnEnter(info::PlayStates::Gaming), (spawn_fog,));
-        app.add_systems(Update, (remove_fog,).run_if(when_state!(gaming)));
+        app.add_systems(
+            Update,
+            (test_fog_change, remove_fog).run_if(when_state!(gaming)),
+        );
     }
 }
 
@@ -14,6 +18,9 @@ pub struct RemoveFog(pub game::PositionRange);
 
 #[derive(Component)]
 pub struct FogMarker;
+
+#[derive(Event)]
+pub struct RecalculateFog;
 
 fn spawn_fog(
     mut commands: Commands,
@@ -41,12 +48,19 @@ fn spawn_fog(
     }
 }
 
-#[derive(Debug, Clone, Deref, DerefMut)]
-struct RemoveFogTimer(pub Timer);
+#[derive(Default, Deref, DerefMut)]
+struct FogRelevant(BTreeSet<Entity>);
 
-impl Default for RemoveFogTimer {
-    fn default() -> Self {
-        Self(Timer::from_seconds(1.0, TimerMode::Repeating))
+fn test_fog_change(
+    q_fog: Query<Entity, With<RemoveFog>>,
+    mut relevant: Local<FogRelevant>,
+    mut e_fog: EventWriter<RecalculateFog>,
+) {
+    let changed = q_fog.iter().any(|entity| !relevant.contains(&entity))
+        || relevant.iter().any(|entity| q_fog.get(*entity).is_err());
+    if changed {
+        **relevant = q_fog.iter().collect();
+        e_fog.send(RecalculateFog);
     }
 }
 
@@ -55,11 +69,9 @@ fn remove_fog(
     q_fog: Query<Entity, With<FogMarker>>,
     q_pos: Query<(&game::Position, &game::HitBox)>,
     mut q_vis: Query<&mut Visibility>,
-    mut timer: Local<RemoveFogTimer>,
-    time: Res<config::FrameTime>,
+    mut e_fog: EventReader<RecalculateFog>,
 ) {
-    timer.tick(time.delta());
-    if !timer.just_finished() {
+    if e_fog.read().next().is_none() {
         return;
     }
 

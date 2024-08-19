@@ -52,6 +52,10 @@ pub struct SpritePlants {
     pub jalapeno: Arc<sprite::FrameArr>,
     pub plantern: Arc<sprite::FrameArr>,
     pub hurrikale: Arc<sprite::FrameArr>,
+    pub flower_pot: Arc<sprite::FrameArr>,
+    pub pumpkin: Arc<sprite::FrameArr>,
+    pub pumpkin_damaged: Arc<sprite::FrameArr>,
+    pub pumpkin_destroyed: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -245,6 +249,26 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/plants/hurrikale",
             Duration::from_millis(100),
+        ),
+        flower_pot: super::load_animation(
+            &server,
+            "sprites/plants/flower_pot",
+            Duration::from_millis(300),
+        ),
+        pumpkin: super::load_animation(
+            &server,
+            "sprites/plants/pumpkin",
+            Duration::from_millis(300),
+        ),
+        pumpkin_damaged: super::load_animation(
+            &server,
+            "sprites/plants/pumpkin_damaged",
+            Duration::from_millis(300),
+        ),
+        pumpkin_destroyed: super::load_animation(
+            &server,
+            "sprites/plants/pumpkin_destroyed",
+            Duration::from_millis(300),
         ),
     };
     commands.insert_resource(plants);

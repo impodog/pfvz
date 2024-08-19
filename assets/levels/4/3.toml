@@ -1,0 +1,66 @@
+[config]
+selection = "Any"
+layout = "Fog"
+game = "Adventure"
+modify = { give = -28, next = { stage = 4, level = 4 } }
+sun = 50
+[[waves]]
+points = 0
+wait = 30.0
+big = false
+fixed = [[1, 2]]
+avail = []
+[[waves]]
+points = 150
+wait = 40.0
+big = false
+fixed = [[1, 1]]
+avail = [1, 2]
+[[waves]]
+points = 150
+wait = 50.0
+big = false
+fixed = [[7, 1]]
+avail = [1, 2, 3]
+[[waves]]
+points = 0
+wait = 40.0
+big = false
+fixed = [[1, 1], [13, 1]]
+avail = []
+[[waves]]
+points = 200
+wait = 60.0
+big = true
+fixed = [[4, 1], [8, 1], [9, 1]]
+avail = [1, 2, 7]
+[[waves]]
+points = 150
+wait = 50.0
+big = false
+fixed = [[1, 1], [6, 1]]
+avail = [1, 2]
+[[waves]]
+points = 200
+wait = 40.0
+big = false
+fixed = [[1, 1], [8, 1]]
+avail = [2, 3, 7, 9]
+[[waves]]
+points = 400
+wait = 40.0
+big = false
+fixed = []
+avail = [1, 2, 3, 6, 7, 8]
+[[waves]]
+points = 300
+wait = 0.0
+big = false
+fixed = [[7, 1], [6, 2]]
+avail = [1, 2, 3, 7]
+[[waves]]
+points = 350
+wait = 60.0
+big = true
+fixed = [[4, 2], [6, 1], [13, 2]]
+avail = [1, 2, 3, 7]

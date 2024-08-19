@@ -1,4 +1,5 @@
 mod all_star;
+mod balloon;
 mod basic;
 mod dance;
 mod factors;
@@ -11,6 +12,7 @@ mod trashcan;
 mod zomboni;
 
 pub use all_star::*;
+pub use balloon::*;
 pub use basic::*;
 pub use dance::*;
 pub use factors::*;

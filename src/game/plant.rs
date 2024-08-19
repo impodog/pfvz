@@ -19,6 +19,9 @@ pub struct Plant;
 #[derive(Component)]
 pub struct PlantRelevant;
 
+#[derive(Component)]
+pub struct PlantGoBelow;
+
 // Indicates a grave, or hole
 #[derive(Component)]
 pub struct NotPlanted;
@@ -73,6 +76,8 @@ fn add_plants(
     q_plant: Query<(Entity, &game::LogicPosition), Added<Plant>>,
     mut q_transform: Query<&mut Transform>,
     level: Res<level::Level>,
+    q_go_below: Query<(), With<PlantGoBelow>>,
+    q_creature: Query<&game::Creature>,
 ) {
     q_plant.iter().for_each(|(entity, logic)| {
         if !plants.in_layout.read().unwrap().contains(&entity) {
@@ -85,7 +90,27 @@ fn add_plants(
                             values[1].translation.z.max(values[0].translation.z + 0.1);
                     }
                 }
-                plants.write().unwrap().push(entity);
+                if q_go_below.get(entity).is_ok() {
+                    let index = plants
+                        .read()
+                        .unwrap()
+                        .iter()
+                        .enumerate()
+                        .rev()
+                        .find_map(|(index, plant)| {
+                            q_creature.get(*plant).ok().and_then(|creature| {
+                                if creature.flags.is_pad() {
+                                    Some(index)
+                                } else {
+                                    None
+                                }
+                            })
+                        })
+                        .unwrap_or_default();
+                    plants.write().unwrap().insert(index, entity);
+                } else {
+                    plants.write().unwrap().push(entity);
+                }
             } else {
                 error!(
                     "Plant at {:?} is outside the bounds and will not be monitored",

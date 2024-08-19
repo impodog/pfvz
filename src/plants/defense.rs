@@ -17,6 +17,11 @@ impl Plugin for PlantsDefensePlugin {
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
+        *pumpkin_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_pumpkin),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
     }
 }
 
@@ -24,6 +29,8 @@ game_conf!(breaks WallNutBreaks);
 game_conf!(systems wall_nut_systems);
 game_conf!(breaks TallNutBreaks);
 game_conf!(systems tall_nut_systems);
+game_conf!(breaks PumpkinBreaks);
+game_conf!(systems pumpkin_systems);
 
 fn spawn_wall_nut(
     In(pos): In<game::LogicPosition>,
@@ -63,6 +70,28 @@ fn spawn_tall_nut(
         creature.hitbox,
         compn::Breaks(breaks.0.clone()),
         game::Health::from(factors.tall_nut.health),
+        SpriteBundle::default(),
+    ));
+}
+
+fn spawn_pumpkin(
+    In(pos): In<game::LogicPosition>,
+    mut commands: Commands,
+    factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
+    map: Res<game::CreatureMap>,
+    breaks: Res<PumpkinBreaks>,
+) {
+    let creature = map.get(&PUMPKIN).unwrap();
+    commands.spawn((
+        game::Plant,
+        creature.clone(),
+        pos,
+        sprite::Animation::new(plants.pumpkin.clone()),
+        creature.hitbox,
+        compn::Breaks(breaks.0.clone()),
+        game::PlantGoBelow,
+        game::Health::from(factors.pumpkin.health),
         SpriteBundle::default(),
     ));
 }
@@ -126,5 +155,32 @@ fn init_config(
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
         map.insert(TALL_NUT, creature);
+    }
+    commands.insert_resource(PumpkinBreaks(Arc::new(compn::BreaksShared {
+        v: vec![
+            plants.pumpkin.clone(),
+            plants.pumpkin_damaged.clone(),
+            plants.pumpkin_destroyed.clone(),
+        ],
+        init: factors.pumpkin.health,
+    })));
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: pumpkin_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            image: plants
+                .pumpkin
+                .frames
+                .first()
+                .expect("Empty animation pumpkin")
+                .clone(),
+            cost: factors.pumpkin.cost,
+            cooldown: factors.pumpkin.cooldown,
+            hitbox: factors.pumpkin.self_box,
+            flags: level::CreatureFlags::PUMPKIN,
+        }));
+        map.insert(PUMPKIN, creature);
     }
 }
