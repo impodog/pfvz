@@ -25,6 +25,7 @@ bitflags! {
         const LILY_PAD = 0x0102;
         const FLOWER_POT = 0x0105;
         const WATER_POT = 0x0205;
+        const PUMPKIN = 0x0181;
 
         const GROUND_ZOMBIE = 0x0005;
         const GROUND_AQUATIC_ZOMBIE = 0x0007;
@@ -38,7 +39,7 @@ bitflags! {
 
 impl CreatureFlags {
     pub fn compat_bits(&self) -> u16 {
-        (self.bits() << 8) >> 8
+        self.bits() & 0x00ff
     }
 
     pub fn terrain_bits(&self) -> u16 {
@@ -48,5 +49,10 @@ impl CreatureFlags {
     // top is the flags provided by the top creature
     pub fn is_compat(&self, top: CreatureFlags) -> bool {
         self.compat_bits() & top.terrain_bits() != 0
+    }
+
+    pub fn is_pad(&self) -> bool {
+        let bits = self.terrain_bits();
+        bits == 0 || bits == CreatureFlags::MAKE_UNUSABLE.bits()
     }
 }

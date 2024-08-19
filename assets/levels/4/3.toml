@@ -2,7 +2,7 @@
 selection = "Any"
 layout = "Fog"
 game = "Adventure"
-modify = { give = -27, next = { stage = 4, level = 3 } }
+modify = { give = -28, next = { stage = 4, level = 4 } }
 sun = 50
 [[waves]]
 points = 0

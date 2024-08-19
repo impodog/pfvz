@@ -120,4 +120,4 @@ self_health = [200, 70]
 damage = 60
 interval = 0.6
 cooldown = 3.0
-cost = 100
+cost = 125

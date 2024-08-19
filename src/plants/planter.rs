@@ -32,6 +32,7 @@ fn do_plant(
     q_transform: Query<&Transform>,
     q_creature: Query<&game::Creature>,
     q_pos: Query<&game::Position>,
+    q_go_below: Query<(), With<game::PlantGoBelow>>,
 ) {
     if cursor.left && cursor.inbound {
         let coordinates = level.config.layout.position_to_coordinates(&cursor.pos);
@@ -71,8 +72,12 @@ fn do_plant(
                     // When planted on top, increase z height
                     let mut disp = game::Position::default();
                     if let Some(plant) = plants.top(index) {
-                        if let Ok(top_pos) = q_pos.get(plant) {
-                            disp.z += top_pos.z + SHADOW_DISTANCE;
+                        if q_go_below.get(plant).is_err()
+                            && creature.flags != level::CreatureFlags::PUMPKIN
+                        {
+                            if let Ok(top_pos) = q_pos.get(plant) {
+                                disp.z += top_pos.z + SHADOW_DISTANCE;
+                            }
                         }
                     }
                     let logic = if disp.z != 0.0 {
