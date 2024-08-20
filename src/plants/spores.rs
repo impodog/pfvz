@@ -135,7 +135,7 @@ fn init_config(
                 ..Default::default()
             },
             times: factors.puff_shroom.times,
-            require_zombie: true,
+            require_zombie: compn::RequireZombie::InRange,
             shared: spore.clone(),
             audio: audio_plants.spore.clone(),
             ..Default::default()
@@ -167,7 +167,7 @@ fn init_config(
                 ..Default::default()
             },
             times: factors.scaredy_shroom.times,
-            require_zombie: true,
+            require_zombie: compn::RequireZombie::InRange,
             shared: spore.clone(),
             audio: audio_plants.spore.clone(),
             ..Default::default()

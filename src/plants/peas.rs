@@ -156,7 +156,7 @@ fn init_config(
                 ..Default::default()
             },
             times: factors.peashooter.times,
-            require_zombie: true,
+            require_zombie: compn::RequireZombie::InRange,
             shared: pea.clone(),
             ..Default::default()
         })));
@@ -188,7 +188,7 @@ fn init_config(
                 ..Default::default()
             },
             times: factors.snow_pea.times,
-            require_zombie: true,
+            require_zombie: compn::RequireZombie::InRange,
             shared: snow.clone(),
             after: snow_pea_after.read().unwrap().unwrap(),
             ..Default::default()
@@ -220,7 +220,7 @@ fn init_config(
                 ..Default::default()
             },
             times: factors.repeater.times,
-            require_zombie: true,
+            require_zombie: compn::RequireZombie::InRange,
             shared: pea.clone(),
             ..Default::default()
         })));
@@ -260,7 +260,7 @@ fn init_config(
                 (game::Position::new_xy(0.0, -1.0), 0.0),
             ],
             times: factors.threepeater.times,
-            require_zombie: true,
+            require_zombie: compn::RequireZombie::InRange,
             shared: pea.clone(),
             ..Default::default()
         })));

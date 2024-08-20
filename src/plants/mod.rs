@@ -19,6 +19,7 @@ mod special;
 mod spike;
 mod spores;
 mod squash;
+mod starfruit;
 
 pub use bonk_choy::*;
 pub use buster::*;
@@ -39,3 +40,4 @@ pub use special::*;
 pub use spike::*;
 pub use spores::*;
 pub use squash::*;
+pub use starfruit::*;

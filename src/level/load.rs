@@ -37,8 +37,12 @@ fn load_level(
                         * 2.0
                         / 3.0;
                     level.config.selection.modify(selection.as_mut());
-                    commands
-                        .insert_resource(LevelSlots(save.slots.max(level.config.selection.len())));
+                    let slots = if let level::SelectionArr::All(ref vec) = level.config.selection {
+                        vec.len()
+                    } else {
+                        save.slots.max(level.config.selection.len())
+                    };
+                    commands.insert_resource(LevelSlots(slots));
                     commands.insert_resource(level);
                     commands.insert_resource(level_event.index);
                     commands.insert_resource(game::Display { ratio });

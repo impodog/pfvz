@@ -62,6 +62,7 @@ fn spawn_selection(
     save: Res<save::Save>,
     map: Res<game::CreatureMap>,
     level: Res<level::Level>,
+    chunks: Res<assets::SpriteChunks>,
     // Using this preserves the initial selection
     selection: Res<game::Selection>,
 ) {
@@ -109,10 +110,13 @@ fn spawn_selection(
                 } else {
                     Visibility::Hidden
                 },
-                texture: map
-                    .get(id)
-                    .map(|creature| creature.image.clone())
-                    .unwrap_or_default(),
+                texture: if level.config.is_compat(*id) {
+                    map.get(id)
+                        .map(|creature| creature.image.clone())
+                        .unwrap_or_default()
+                } else {
+                    chunks.cross.clone()
+                },
                 ..Default::default()
             },
         ));

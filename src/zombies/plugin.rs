@@ -17,6 +17,7 @@ impl Plugin for ZombiesPlugin {
             dance::ZombiesDancePlugin,
             jitb::ZombiesJitbPlugin,
             balloon::ZombiesBalloonPlugin,
+            digger::ZombiesDiggerPlugin,
         ));
     }
 }
