@@ -9,6 +9,7 @@ impl Plugin for ModesPlugin {
             whack::ModesWhackPlugin,
             quick_shot::ModesQuickShotPlugin,
             fog::ModesFogPlugin,
+            random::ModesRandomPlugin,
         ));
     }
 }

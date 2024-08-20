@@ -64,7 +64,7 @@ fn freeze_all(
     }
     q_zombie.iter().for_each(|zombie_entity| {
         if let Some(mut commands) = commands.get_entity(zombie_entity) {
-            commands.try_insert(compn::Snow::from(factors.ice_shroom.snow));
+            commands.try_insert(compn::ModifySnow::Add(factors.ice_shroom.snow.into()));
             action.send(game::CreatureAction::Damage(
                 zombie_entity,
                 multiply_uf!(factors.ice_shroom.damage, config.gamerule.damage.0),
