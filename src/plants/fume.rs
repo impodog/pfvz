@@ -96,7 +96,7 @@ fn init_config(
                 range: game::PositionRangeX(factors.fume_shroom.fume_box.width).into(),
             },
             times: factors.fume_shroom.times,
-            require_zombie: true,
+            require_zombie: compn::RequireZombie::InRange,
             after: fume_shroom_after.read().unwrap().unwrap(),
             callback: fume_shroom_callback.read().unwrap().unwrap(),
             shared: fume.clone(),

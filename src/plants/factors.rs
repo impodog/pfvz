@@ -283,6 +283,18 @@ pub struct Pumpkin {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Starfruit {
+    pub velocity: game::VelocityX,
+    pub self_box: game::HitBox,
+    pub star_box: game::HitBox,
+    pub times: usize,
+    pub health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -343,6 +355,7 @@ pub struct PlantFactors {
     pub hurrikale: Hurrikale,
     pub flower_pot: FlowerPot,
     pub pumpkin: Pumpkin,
+    pub starfruit: Starfruit,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

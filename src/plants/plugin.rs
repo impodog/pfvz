@@ -28,6 +28,7 @@ impl Plugin for PlantsPlugin {
             bonk_choy::PlantsBonkChoyPlugin,
             plantern::PlantsPlanternPlugin,
             hurrikale::PlantsHurrikalePlugin,
+            starfruit::PlantsStarfruitPlugin,
         ));
     }
 }

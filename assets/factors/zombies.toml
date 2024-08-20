@@ -121,3 +121,15 @@ damage = 60
 interval = 0.6
 cooldown = 3.0
 cost = 125
+[digger]
+dig_velocity = [-0.30, -0.295]
+velocity = [0.09, 0.095]
+self_box = { width = 0.5, height = 1.0 }
+underground_box = { width = 0.5, height = 0.2 }
+hard_cap_box = { width = 0.3, height = 0.2 }
+self_health = [200, 70]
+hard_cap_health = 100
+damage = 60
+interval = 0.6
+cooldown = 5.0
+cost = 125

@@ -21,6 +21,12 @@ fn init_shooter(server: Res<AssetServer>) {
     *shooter_sound.write().unwrap() =
         Some(assets::AudioList::load(&server, "audio/plants/shooter"));
 }
+#[derive(Debug, Clone, Copy)]
+pub enum RequireZombie {
+    No,
+    InRange,
+    RayCast,
+}
 
 // Anything that uses this shoots projectile of their ally
 #[derive(Debug, Clone)]
@@ -30,7 +36,7 @@ pub struct ShooterShared {
     pub proj: game::Projectile,
     pub start: Vec<(game::Position, f32)>,
     pub times: usize,
-    pub require_zombie: bool,
+    pub require_zombie: RequireZombie,
     pub after: SystemId<Entity>,
     pub callback: SystemId<Entity>,
     pub shared: Arc<game::ProjectileShared>,
@@ -44,7 +50,7 @@ impl Default for ShooterShared {
             proj: Default::default(),
             start: vec![Default::default()],
             times: 1,
-            require_zombie: false,
+            require_zombie: RequireZombie::No,
             after: compn::default::system_do_nothing.read().unwrap().unwrap(),
             callback: compn::default::system_do_nothing.read().unwrap().unwrap(),
             shared: Default::default(),
@@ -80,6 +86,26 @@ fn add_shooter_impl(mut commands: Commands, q_shooter: Query<(Entity, &Shooter),
     });
 }
 
+trait RayIntersectsAabb {
+    fn intersects(&self, aabb: &bevy::math::bounding::Aabb2d) -> bool;
+}
+
+impl RayIntersectsAabb for Ray2d {
+    fn intersects(&self, aabb: &bevy::math::bounding::Aabb2d) -> bool {
+        let inv_dir = Vec2::new(1.0 / self.direction.x, 1.0 / self.direction.y);
+
+        let t1 = (aabb.min.x - self.origin.x) * inv_dir.x;
+        let t2 = (aabb.max.x - self.origin.x) * inv_dir.x;
+        let t3 = (aabb.min.y - self.origin.y) * inv_dir.y;
+        let t4 = (aabb.max.y - self.origin.y) * inv_dir.y;
+
+        let tmin = t1.min(t2).max(t3.min(t4));
+        let tmax = t1.max(t2).min(t3.max(t4));
+
+        tmax >= tmin && tmax >= 0.0
+    }
+}
+
 fn shooter_work(
     commands: ParallelCommands,
     mut q_shooter: Query<(
@@ -101,17 +127,29 @@ fn shooter_work(
             if work.timer.just_finished() {
                 let mut pos = (*pos).move_z(hitbox.height * -0.05);
                 let range = shooter.proj.range.clone() + pos;
-                if shooter.require_zombie {
-                    let mut ok = false;
-                    for (zombie_pos, zombie_hitbox) in q_zpos.iter() {
-                        if range.contains(zombie_pos, zombie_hitbox) {
-                            ok = true;
-                            break;
-                        }
-                    }
-                    if !ok {
-                        return;
-                    }
+                let ok = match shooter.require_zombie {
+                    RequireZombie::No => true,
+                    RequireZombie::InRange => q_zpos.iter().any(|(zombie_pos, zombie_hitbox)| {
+                        range.contains(zombie_pos, zombie_hitbox)
+                    }),
+                    RequireZombie::RayCast => shooter.start.iter().any(|(start, angle)| {
+                        use bevy::math::{bounding::Aabb2d, Ray2d};
+                        let start = *start + pos;
+                        let ray = Ray2d::new(
+                            Vec2::new(start.x, start.y),
+                            Vec2::new(angle.cos(), angle.sin()),
+                        );
+                        q_zpos.iter().any(|(zombie_pos, zombie_hitbox)| {
+                            let aabb = Aabb2d::new(
+                                Vec2::new(zombie_pos.x, zombie_pos.y),
+                                Vec2::new(zombie_hitbox.width, 0.8),
+                            );
+                            ray.intersects(&aabb)
+                        })
+                    }),
+                };
+                if !ok {
+                    return;
                 }
                 for _ in 0..shooter.times {
                     for (start, angle) in shooter.start.iter() {

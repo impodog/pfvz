@@ -5,7 +5,7 @@ pub(super) struct GameSizePlugin;
 impl Plugin for GameSizePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(PostUpdate, (add_size, update_size).chain());
-        app.add_systems(PreUpdate, (modify_size, modify_relative));
+        app.add_systems(PreUpdate, (modify_size, modify_relative, add_hitbox));
     }
 }
 
@@ -101,8 +101,32 @@ impl RelativePosition {
     }
 }
 
+#[derive(Component, Debug, Clone, Copy, Deref, DerefMut)]
+struct RelativePositionHitbox(pub game::HitBox);
+
+fn add_hitbox(
+    commands: ParallelCommands,
+    q_rel: Query<(Entity, &Parent), Added<RelativePosition>>,
+    q_hitbox: Query<&game::HitBox>,
+) {
+    q_rel.par_iter().for_each(|(entity, parent)| {
+        if let Ok(hitbox) = q_hitbox.get(parent.get()) {
+            commands.command_scope(|mut commands| {
+                commands
+                    .entity(entity)
+                    .try_insert(RelativePositionHitbox(*hitbox));
+            });
+        }
+    });
+}
+
 fn modify_relative(
-    mut q_rel: Query<(&Parent, Ref<RelativePosition>, &mut game::Position)>,
+    mut q_rel: Query<(
+        &Parent,
+        Ref<RelativePosition>,
+        Option<&RelativePositionHitbox>,
+        &mut game::Position,
+    )>,
     q_size: Query<(&game::HitBox, Ref<SizeCrop>)>,
 ) {
     fn sign(v: f32) -> f32 {
@@ -113,13 +137,16 @@ fn modify_relative(
         }
     }
 
-    q_rel.par_iter_mut().for_each(|(parent, rel, mut pos)| {
-        if let Ok((hitbox, size)) = q_size.get(parent.get()) {
-            if rel.is_changed() || size.is_changed() {
-                *pos = rel.0;
-                pos.x -= sign(pos.x) * hitbox.width * (1.0 - size.x_crop.factor()) / 2.0;
-                pos.z -= sign(pos.z) * hitbox.height * (1.0 - size.y_crop.factor()) / 2.0;
+    q_rel
+        .par_iter_mut()
+        .for_each(|(parent, rel, rel_hitbox, mut pos)| {
+            if let Ok((hitbox, size)) = q_size.get(parent.get()) {
+                if rel.is_changed() || size.is_changed() {
+                    let hitbox = rel_hitbox.map(|hitbox| &hitbox.0).unwrap_or(hitbox);
+                    *pos = rel.0;
+                    pos.x -= sign(pos.x) * hitbox.width * (1.0 - size.x_crop.factor()) / 2.0;
+                    pos.z -= sign(pos.z) * hitbox.height * (1.0 - size.y_crop.factor()) / 2.0;
+                }
             }
-        }
-    });
+        });
 }
