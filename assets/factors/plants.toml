@@ -147,7 +147,7 @@ time = 1.0
 health = 4000
 damage = 1800
 cooldown = 50.0
-cost = 75
+cost = 50
 [threepeater]
 velocity = 3.0
 self_box = { width = 1.0, height = 1.0 }
@@ -233,7 +233,7 @@ health = 300
 damage = 20
 interval = 1.0
 cooldown = 7.5
-cost = 250
+cost = 225
 [bowling_nut]
 velocity = { x = 2.25, y = 1.5, z = 0.0, r = -4.5 }
 self_box = { width = 0.7, height = 0.9 }
