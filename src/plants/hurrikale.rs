@@ -77,7 +77,7 @@ fn hurrikale_work(
             if timer.just_finished() {
                 action.send(game::CreatureAction::Die(entity));
             } else {
-                let factor = time.diff();
+                let factor = overlay.factor() * time.diff();
                 timer.target.iter().for_each(|zombie| {
                     if let Ok(mut logic) = q_zombie.get_mut(*zombie) {
                         logic.plus_assign(game::Position::new_xy(

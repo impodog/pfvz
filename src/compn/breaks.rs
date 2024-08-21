@@ -25,7 +25,9 @@ pub struct BreaksImpl(pub usize);
 
 fn add_breaks_impl(mut commands: Commands, q_breaks: Query<Entity, Added<Breaks>>) {
     q_breaks.iter().for_each(|entity| {
-        commands.entity(entity).insert(BreaksImpl::default());
+        if let Some(mut commands) = commands.get_entity(entity) {
+            commands.try_insert(BreaksImpl::default());
+        }
     });
 }
 

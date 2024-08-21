@@ -1,3 +1,4 @@
+mod blover;
 mod bonk_choy;
 mod bowling;
 mod buster;
@@ -9,6 +10,7 @@ mod fire;
 mod fume;
 mod hurrikale;
 mod instant;
+mod magnet;
 mod pads;
 mod peas;
 mod planter;
@@ -21,6 +23,7 @@ mod spores;
 mod squash;
 mod starfruit;
 
+pub use blover::*;
 pub use bonk_choy::*;
 pub use buster::*;
 pub use contact::*;
@@ -30,6 +33,7 @@ pub use fire::*;
 pub use fume::*;
 pub use hurrikale::*;
 pub use instant::*;
+pub use magnet::*;
 pub use pads::*;
 pub use peas::*;
 pub use planter::*;

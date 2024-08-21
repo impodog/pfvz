@@ -295,6 +295,25 @@ pub struct Starfruit {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct MagnetShroom {
+    pub self_box: game::HitBox,
+    pub range: game::PositionRangeSerde,
+    pub objects: usize,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Blover {
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub velocity_factor: f32,
+    pub duration: f32,
+    pub fog_duration: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -356,6 +375,8 @@ pub struct PlantFactors {
     pub flower_pot: FlowerPot,
     pub pumpkin: Pumpkin,
     pub starfruit: Starfruit,
+    pub magnet_shroom: MagnetShroom,
+    pub blover: Blover,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

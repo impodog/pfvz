@@ -29,6 +29,8 @@ impl Plugin for PlantsPlugin {
             plantern::PlantsPlanternPlugin,
             hurrikale::PlantsHurrikalePlugin,
             starfruit::PlantsStarfruitPlugin,
+            magnet::PlantsMagnetPlugin,
+            blover::PlantsBloverPlugin,
         ));
     }
 }

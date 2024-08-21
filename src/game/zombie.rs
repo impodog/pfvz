@@ -7,7 +7,7 @@ impl Plugin for GameZombiePlugin {
         app.add_systems(OnEnter(info::GlobalStates::Play), (init_win_timer,));
         app.add_systems(
             PostUpdate,
-            (losing_test, winning_test).run_if(when_state!(gaming)),
+            (losing_test, winning_test, zombie_outbound).run_if(when_state!(gaming)),
         );
     }
 }
@@ -66,4 +66,21 @@ fn winning_test(
             state.set(info::GlobalStates::Win);
         }
     }
+}
+
+fn zombie_outbound(
+    action: EventWriter<game::CreatureAction>,
+    q_zombie: Query<(Entity, &game::Position, &game::HitBox), With<Zombie>>,
+    level: Res<level::Level>,
+) {
+    let bound = level.config.layout.half_size_f32().0 + 1.0;
+    let action = Mutex::new(action);
+    q_zombie.par_iter().for_each(|(entity, pos, hitbox)| {
+        if pos.x - hitbox.width / 2.0 >= bound {
+            action
+                .lock()
+                .unwrap()
+                .send(game::CreatureAction::Die(entity));
+        }
+    })
 }

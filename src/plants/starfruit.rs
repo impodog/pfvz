@@ -51,6 +51,7 @@ fn init_config(
     });
     commands.insert_resource(ProjectileStar(star.clone()));
     {
+        let front_angle = 1.0f32.atan2(2.0);
         commands.insert_resource(StarfruitShooter(Arc::new(compn::ShooterShared {
             interval: Duration::from_secs_f32(factors.starfruit.interval),
             velocity: factors.starfruit.velocity.into(),
@@ -59,8 +60,8 @@ fn init_config(
                 ..Default::default()
             },
             start: vec![
-                (game::Position::default(), std::f32::consts::FRAC_PI_4),
-                (game::Position::default(), -std::f32::consts::FRAC_PI_4),
+                (game::Position::default(), front_angle),
+                (game::Position::default(), -front_angle),
                 (game::Position::default(), std::f32::consts::FRAC_PI_2),
                 (game::Position::default(), -std::f32::consts::FRAC_PI_2),
                 (game::Position::default(), std::f32::consts::PI),

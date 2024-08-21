@@ -36,6 +36,8 @@ pub const HURRIKALE: Id = -26;
 pub const FLOWER_POT: Id = -27;
 pub const PUMPKIN: Id = -28;
 pub const STARFRUIT: Id = -29;
+pub const MAGNET_SHROOM: Id = -30;
+pub const BLOVER: Id = -31;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -117,6 +119,8 @@ pub fn id_name(id: Id) -> &'static str {
         FLOWER_POT => "flower_pot",
         PUMPKIN => "pumpkin",
         STARFRUIT => "starfruit",
+        MAGNET_SHROOM => "magnet_shroom",
+        BLOVER => "blover",
 
         BOWLING_NUT => "bowling_nut",
 
