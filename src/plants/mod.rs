@@ -1,3 +1,4 @@
+mod blover;
 mod bonk_choy;
 mod bowling;
 mod buster;
@@ -22,6 +23,7 @@ mod spores;
 mod squash;
 mod starfruit;
 
+pub use blover::*;
 pub use bonk_choy::*;
 pub use buster::*;
 pub use contact::*;

@@ -5,10 +5,12 @@ pub(super) struct ModesFogPlugin;
 impl Plugin for ModesFogPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<RecalculateFog>();
+        app.add_event::<RecalculateFogByTimer>();
+        app.init_resource::<RemoveFogTimer>();
         app.add_systems(OnEnter(info::PlayStates::Gaming), (spawn_fog,));
         app.add_systems(
             Update,
-            (test_fog_change, remove_fog).run_if(when_state!(gaming)),
+            (test_fog_change, remove_fog, timer_tick).run_if(when_state!(gaming)),
         );
     }
 }
@@ -16,11 +18,24 @@ impl Plugin for ModesFogPlugin {
 #[derive(Component, Debug, Clone, Deref, DerefMut)]
 pub struct RemoveFog(pub game::PositionRange);
 
+#[derive(Resource, Debug, Clone, Deref, DerefMut)]
+pub struct RemoveFogTimer(pub Timer);
+impl Default for RemoveFogTimer {
+    fn default() -> Self {
+        Self(Timer::new(Duration::from_secs_f32(0.0), TimerMode::Once))
+    }
+}
+
 #[derive(Component)]
 pub struct FogMarker;
 
 #[derive(Event)]
 pub struct RecalculateFog;
+
+/// This hides all fog if the blover timer is not complete
+/// When you add time to the timer, please send this event
+#[derive(Event)]
+pub struct RecalculateFogByTimer;
 
 fn spawn_fog(
     mut commands: Commands,
@@ -64,14 +79,33 @@ fn test_fog_change(
     }
 }
 
+fn timer_tick(
+    mut timer: ResMut<RemoveFogTimer>,
+    time: Res<config::FrameTime>,
+    mut e_fog_timer: EventReader<RecalculateFogByTimer>,
+    mut q_fog: Query<&mut Visibility, With<FogMarker>>,
+    mut e_fog: EventWriter<RecalculateFog>,
+) {
+    timer.tick(time.delta());
+    if e_fog_timer.read().next().is_some() {
+        q_fog.par_iter_mut().for_each(|mut vis| {
+            *vis = Visibility::Hidden;
+        });
+    }
+    if timer.just_finished() {
+        e_fog.send(RecalculateFog);
+    }
+}
+
 fn remove_fog(
     q_remove: Query<(&game::Position, &RemoveFog)>,
     q_fog: Query<Entity, With<FogMarker>>,
     q_pos: Query<(&game::Position, &game::HitBox)>,
     mut q_vis: Query<&mut Visibility>,
     mut e_fog: EventReader<RecalculateFog>,
+    timer: Res<RemoveFogTimer>,
 ) {
-    if e_fog.read().next().is_none() {
+    if !timer.finished() || e_fog.read().next().is_none() {
         return;
     }
 

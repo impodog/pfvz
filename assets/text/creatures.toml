@@ -153,3 +153,9 @@ name = "Cortinarius iodes"
 short = "Removes nearby magnetic items or pull up digger zombies"
 desc = """Removes nearby magnetic items or pull up digger zombies for limited times
 Damage: You can see the act of removing magnetic items as the "damage", but this does not work"""
+[desc.blover]
+name = "Trifolieae trifolium"
+short = "Blows away fog, and kills balloon zombies"
+desc = """Blows away fog and blows back zombies, works better for zombies in the air.
+Unlike Brassica oleracea var. acephala, this can kill higher zombies
+Damage: Maybe"""

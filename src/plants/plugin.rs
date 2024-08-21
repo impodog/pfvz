@@ -30,6 +30,7 @@ impl Plugin for PlantsPlugin {
             hurrikale::PlantsHurrikalePlugin,
             starfruit::PlantsStarfruitPlugin,
             magnet::PlantsMagnetPlugin,
+            blover::PlantsBloverPlugin,
         ));
     }
 }

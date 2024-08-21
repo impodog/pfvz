@@ -59,6 +59,7 @@ pub struct SpritePlants {
     pub starfruit: Arc<sprite::FrameArr>,
     pub star: Arc<sprite::FrameArr>,
     pub magnet_shroom: Arc<sprite::FrameArr>,
+    pub blover: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -284,6 +285,7 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/plants/magnet_shroom",
             Duration::from_millis(300),
         ),
+        blover: super::load_animation(&server, "sprites/plants/blover", Duration::from_millis(100)),
     };
     commands.insert_resource(plants);
 }
