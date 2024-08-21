@@ -26,7 +26,7 @@ fn spawn_balloon_zombie(
     walker: Res<BalloonZombieWalker>,
 ) {
     let creature = map.get(&BALLOON_ZOMBIE).unwrap();
-    let pos = pos.with_disp(pos.disp.move_z(0.8));
+    let pos = pos.with_disp(pos.disp.move_z(0.7));
     commands.spawn((
         game::Zombie,
         creature.clone(),

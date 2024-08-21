@@ -48,6 +48,7 @@ fn init_progress_bar(
         game::HitBox::from(&PROGRESS_SIZE).with_width(0.0),
         SpriteBundle {
             texture: chunks.white.clone(),
+            transform: Transform::from_xyz(0.0, 0.0, 1.0),
             sprite: Sprite {
                 anchor: Anchor::TopLeft,
                 color: Color::LinearRgba(LinearRgba::new(0.0, 1.0, 0.2, 1.0)),

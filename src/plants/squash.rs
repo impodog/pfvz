@@ -23,7 +23,7 @@ fn spawn_squash(
     plants: Res<assets::SpritePlants>,
     map: Res<game::CreatureMap>,
 ) {
-    let creature = map.get(&SUN_SHROOM).unwrap();
+    let creature = map.get(&SQUASH).unwrap();
     commands.spawn((
         game::Plant,
         creature.clone(),

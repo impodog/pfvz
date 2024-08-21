@@ -68,6 +68,12 @@ impl Position {
         self.z += z;
         self
     }
+
+    pub fn distance_squared(&self, other: &Position) -> Orderedf32 {
+        Orderedf32::from(
+            (self.x - other.x).powi(2) + (self.y - other.y).powi(2) + (self.z - other.z).powi(2),
+        )
+    }
 }
 impl From<&Vec2> for Position {
     fn from(value: &Vec2) -> Self {

@@ -7,6 +7,7 @@ impl Plugin for ZombiesDiggerPlugin {
         initialize(&digger_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
         app.add_systems(Update, (digger_work,).run_if(when_state!(gaming)));
+        app.init_resource::<DiggerPleaseGoUp>();
         *digger_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_digger_zombie),
             die: app.register_system(compn::default::die),
@@ -50,6 +51,8 @@ fn spawn_digger_zombie(
             compn::Dying::new(zombies.digger_dying.clone()),
             creature.hitbox,
             DiggerStatus::default(),
+            // Yes, diggers are magnetic by themselves
+            game::Magnetic,
             game::Health::from(factors.digger.self_health),
             SpriteBundle::default(),
         ))
@@ -68,6 +71,9 @@ fn spawn_digger_zombie(
         .set_parent(entity);
 }
 
+#[derive(Resource, Default, Debug, Deref, DerefMut)]
+pub struct DiggerPleaseGoUp(pub BTreeSet<Entity>);
+
 fn digger_work(
     commands: ParallelCommands,
     mut q_digger: Query<(
@@ -84,9 +90,11 @@ fn digger_work(
     level: Res<level::Level>,
     zombies: Res<assets::SpriteZombies>,
     walker: Res<DiggerZombieWalker>,
+    go_up: ResMut<DiggerPleaseGoUp>,
 ) {
     let stretch_factor = factors.digger.underground_box.height / factors.digger.self_box.height;
     let left_bound = factors.digger.self_box.width / 2.0 - level.config.layout.half_size_f32().0;
+    let go_up = Mutex::new(go_up);
     q_digger.par_iter_mut().for_each(
         |(entity, overlay, mut size, pos, mut hitbox, mut velocity, mut status, mut anim)| {
             match &mut *status {
@@ -100,17 +108,31 @@ fn digger_work(
                     }
                 }
                 DiggerStatus::Inside => {
-                    if pos.x <= left_bound {
+                    let flag = {
+                        let mut go_up = go_up.lock().unwrap();
+                        if go_up.contains(&entity) {
+                            go_up.remove(&entity);
+                            true
+                        } else {
+                            false
+                        }
+                    };
+                    if flag || pos.x <= left_bound {
                         *status = DiggerStatus::Outside;
                         *hitbox = factors.digger.self_box;
                         *velocity = factors.digger.velocity.into();
-                        anim.replace(zombies.digger_mirror.clone());
+                        if flag {
+                            velocity.x = -velocity.x.abs();
+                        } else {
+                            anim.replace(zombies.digger_mirror.clone());
+                        }
                         size.y_crop.divide(stretch_factor);
                         size.y_stretch.divide(1.0 / stretch_factor);
                         commands.command_scope(|mut commands| {
                             commands
                                 .entity(entity)
-                                .try_insert(compn::Walker(walker.0.clone()));
+                                .try_insert(compn::Walker(walker.0.clone()))
+                                .remove::<game::Magnetic>();
                         })
                     }
                 }

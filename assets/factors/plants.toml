@@ -215,7 +215,7 @@ interval = 2.5
 cooldown = 30.0
 cost = 100
 [flower_pot]
-self_box = { width = 0.8, height = 0.8 }
+self_box = { width = 0.7, height = 0.7 }
 health = 300
 cooldown = 7.5
 cost = 25
@@ -234,6 +234,13 @@ damage = 20
 interval = 1.0
 cooldown = 7.5
 cost = 250
+[magnet_shroom]
+self_box = { width = 0.9, height = 0.9 }
+health = 300
+range = { x = [-2.5, 2.5], y = [-2.5, 2.5], z = [-1.5, 1.5] }
+objects = 4
+cooldown = 15.0
+cost = 150
 [bowling_nut]
 velocity = { x = 2.25, y = 1.5, z = 0.0, r = -4.5 }
 self_box = { width = 0.7, height = 0.9 }

@@ -135,6 +135,21 @@ desc = """Blows zombies in its lane back by 5 tiles
 Damage: None"""
 [desc.flower_pot]
 name = "Idontknow nonplantae var. vasum"
-short = "Lets you plant on higher positions"
-desc = """Lets you plant on higher positions, or plant on the roof
+short = "Lets you plant on higher places"
+desc = """Lets you plant on higher places, or plant on the roof
 Damage: u32::Default()"""
+[desc.pumpkin]
+name = "Cucurbita pepo"
+short = "Protects plants/fungi inside it"
+desc = """Protects plants/fungi inside it
+Damage: Can you stop please?"""
+[desc.starfruit]
+name = "Averrhoa carambola"
+short = "Shoots stars at five directions"
+desc = """Shoots stars at arctan(1/2), arctan(-1/2), pi/2, -pi/2, and pi
+Damage: 1.5x"""
+[desc.magnet_shroom]
+name = "Cortinarius iodes"
+short = "Removes nearby magnetic items or pull up digger zombies"
+desc = """Removes nearby magnetic items or pull up digger zombies for limited times
+Damage: You can see the act of removing magnetic items as the "damage", but this does not work"""

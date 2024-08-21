@@ -57,6 +57,7 @@ fn spawn_all_star_zombie(
             factors.all_star.helmet_box,
             sprite::Animation::new(zombies.helmet.clone()),
             game::Armor::new(factors.all_star.helmet_health),
+            game::Magnetic,
             compn::Breaks(breaks.0.clone()),
             game::LayerDisp(0.1),
             SpriteBundle::default(),
