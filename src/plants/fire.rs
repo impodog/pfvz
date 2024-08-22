@@ -43,7 +43,10 @@ fn spawn_torchwood(
 fn torchwood_ignite(
     commands: ParallelCommands,
     q_torchwood: Query<Entity, With<TorchwoodMarker>>,
-    q_proj: Query<&game::HitBox, (With<game::Projectile>, Without<compn::FireProjectile>)>,
+    q_proj: Query<
+        (&game::HitBox, &game::Projectile),
+        (With<game::Projectile>, Without<compn::FireProjectile>),
+    >,
     collision: Res<game::Collision>,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
@@ -51,7 +54,10 @@ fn torchwood_ignite(
     q_torchwood.par_iter().for_each(|entity| {
         if let Some(coll) = collision.get(&entity) {
             for proj in coll.iter() {
-                if let Ok(hitbox) = q_proj.get(*proj) {
+                if let Ok((hitbox, projectile)) = q_proj.get(*proj) {
+                    if projectile.area {
+                        continue;
+                    }
                     commands.command_scope(|mut commands| {
                         commands
                             .entity(*proj)

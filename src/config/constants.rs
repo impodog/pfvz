@@ -38,6 +38,7 @@ pub const PUMPKIN: Id = -28;
 pub const STARFRUIT: Id = -29;
 pub const MAGNET_SHROOM: Id = -30;
 pub const BLOVER: Id = -31;
+pub const CACTUS: Id = -32;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -121,6 +122,7 @@ pub fn id_name(id: Id) -> &'static str {
         STARFRUIT => "starfruit",
         MAGNET_SHROOM => "magnet_shroom",
         BLOVER => "blover",
+        CACTUS => "cactus",
 
         BOWLING_NUT => "bowling_nut",
 

@@ -94,6 +94,7 @@ fn init_config(
                 // NOTE: Do we need to allow customizing the time fume stays on the ground?
                 time: Duration::from_secs_f32(0.4),
                 range: game::PositionRangeX(factors.fume_shroom.fume_box.width).into(),
+                ..Default::default()
             },
             times: factors.fume_shroom.times,
             require_zombie: compn::RequireZombie::InRange,

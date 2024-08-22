@@ -48,6 +48,7 @@ fn note_from_zombies(
             1 => chunks.note1.clone(),
             2 => chunks.note2.clone(),
             3 => chunks.note3.clone(),
+            4 => chunks.note4.clone(),
             _ => Default::default(),
         };
         commands.spawn((
