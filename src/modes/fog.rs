@@ -28,6 +28,8 @@ impl Default for RemoveFogTimer {
 
 #[derive(Component)]
 pub struct FogMarker;
+#[derive(Component)]
+pub struct FogBloverImmunity;
 
 #[derive(Event)]
 pub struct RecalculateFog;
@@ -43,7 +45,7 @@ fn spawn_fog(
     factors: Res<collectible::ItemFactors>,
     items: Res<assets::SpriteItems>,
 ) {
-    if level.config.layout.has_fog() {
+    if level.config.has_fog() {
         let size = level.config.layout.size();
         for row in factors.fog.start..=size.0 {
             for col in 0..size.1 {
@@ -82,16 +84,9 @@ fn test_fog_change(
 fn timer_tick(
     mut timer: ResMut<RemoveFogTimer>,
     time: Res<config::FrameTime>,
-    mut e_fog_timer: EventReader<RecalculateFogByTimer>,
-    mut q_fog: Query<&mut Visibility, With<FogMarker>>,
     mut e_fog: EventWriter<RecalculateFog>,
 ) {
     timer.tick(time.delta());
-    if e_fog_timer.read().next().is_some() {
-        q_fog.par_iter_mut().for_each(|mut vis| {
-            *vis = Visibility::Hidden;
-        });
-    }
     if timer.just_finished() {
         e_fog.send(RecalculateFog);
     }
@@ -101,11 +96,13 @@ fn remove_fog(
     q_remove: Query<(&game::Position, &RemoveFog)>,
     q_fog: Query<Entity, With<FogMarker>>,
     q_pos: Query<(&game::Position, &game::HitBox)>,
+    q_immune: Query<(), With<FogBloverImmunity>>,
     mut q_vis: Query<&mut Visibility>,
     mut e_fog: EventReader<RecalculateFog>,
+    mut e_fog_timer: EventReader<RecalculateFogByTimer>,
     timer: Res<RemoveFogTimer>,
 ) {
-    if !timer.finished() || e_fog.read().next().is_none() {
+    if e_fog.read().next().is_none() && e_fog_timer.read().next().is_none() {
         return;
     }
 
@@ -121,6 +118,11 @@ fn remove_fog(
             }
         }
     });
+    for (entity, vis) in fog.iter().zip(vis.iter_mut()) {
+        if !timer.finished() && q_immune.get(*entity).is_err() {
+            *vis = false;
+        }
+    }
     for (entity, vis) in fog.into_iter().zip(vis.into_iter()) {
         if let Ok(mut visibility) = q_vis.get_mut(entity) {
             *visibility = if vis {

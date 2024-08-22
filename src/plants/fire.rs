@@ -35,6 +35,7 @@ fn spawn_torchwood(
         sprite::Animation::new(plants.torchwood.clone()),
         creature.hitbox,
         TorchwoodMarker,
+        modes::RemoveFog(factors.torchwood.light_range.into()),
         game::Health::from(factors.torchwood.health),
         SpriteBundle::default(),
     ));

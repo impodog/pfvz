@@ -1,7 +1,6 @@
 [config]
 selection = "Any"
 layout = "Night"
-game = "Adventure"
 modify = { give = 0, next = { stage = 2, level = 5 } }
 sun = 50
 [[waves]]

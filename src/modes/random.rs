@@ -25,7 +25,7 @@ fn random_choose(
     level: Res<level::Level>,
     mut chances: ResMut<RandomChances>,
 ) {
-    if level.config.game == level::GameKind::Random {
+    if level.config.game.contains(&level::GameKind::Random) {
         let ok = planter.read().any(|event| {
             let plants::PlanterEvent { index, id: _id } = *event;
             if index == 0 || index == 1 {

@@ -1,7 +1,7 @@
 [config]
 selection = { "All" = [-17, -25, -10, -10, -10, -10, -10, -10] }
 layout = "Fog"
-game = "Random"
+game = ["Random"]
 modify = { give = -29, next = { stage = 4, level = 6 } }
 sun = 200
 [[waves]]

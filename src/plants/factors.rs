@@ -225,6 +225,7 @@ pub struct Spikeweed {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Torchwood {
     pub self_box: game::HitBox,
+    pub light_range: game::PositionRangeSerde,
     pub fire: compn::FireProjectileSerde,
     pub health: u32,
     pub cooldown: f32,
