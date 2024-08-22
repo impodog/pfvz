@@ -1,6 +1,5 @@
 [config]
 layout = "Day"
-game = "Adventure"
 selection = { "All" = [-1] }
 modify = { give = -2, next = { stage = 1, level = 2 } }
 sun = 150

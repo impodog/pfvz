@@ -25,7 +25,7 @@ fn spawn_whack(
     factors: Res<collectible::ItemFactors>,
     items: Res<assets::SpriteItems>,
 ) {
-    if level.config.game == level::GameKind::WhackAZombie {
+    if level.config.game.contains(&level::GameKind::WhackAZombie) {
         commands.spawn((
             WhackMarker,
             game::Position::default(),
@@ -66,7 +66,7 @@ fn move_to_grave(
     q_grave: Query<(&game::Position, &game::Creature), (With<game::Plant>, Without<game::Zombie>)>,
     level: Res<level::Level>,
 ) {
-    if level.config.game == level::GameKind::WhackAZombie {
+    if level.config.game.contains(&level::GameKind::WhackAZombie) {
         let mut graves = Vec::new();
         q_grave.iter().for_each(|(pos, creature)| {
             if creature.flags == level::CreatureFlags::GRAVE {
@@ -93,7 +93,7 @@ fn spawn_grave(
     time: Res<config::FrameTime>,
     level: Res<level::Level>,
 ) {
-    if level.config.game == level::GameKind::WhackAZombie {
+    if level.config.game.contains(&level::GameKind::WhackAZombie) {
         timer.tick(time.delta());
         if timer.just_finished() {
             timer.set_duration(Duration::from(factors.whack.interval));

@@ -1,7 +1,7 @@
 [config]
 selection = "Any"
 layout = "Pool"
-game = "QuickShot"
+game = ["QuickShot"]
 modify = { give = -21, next = { stage = 3, level = 6 } }
 sun = 100
 [[waves]]

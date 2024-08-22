@@ -26,12 +26,17 @@ pub struct Whack {
 pub struct Fog {
     pub start: usize,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Thunder {
+    pub interval: game::DurationRangeSecs,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ItemFactors {
     pub sun: Sun,
     pub whack: Whack,
     pub fog: Fog,
+    pub thunder: Thunder,
 }
 
 fn init_factors(mut commands: Commands) {

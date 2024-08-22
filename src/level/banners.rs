@@ -5,10 +5,7 @@ pub(super) struct LevelBannersPlugin;
 impl Plugin for LevelBannersPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, (banner_work,));
-        app.add_systems(
-            Update,
-            (spawn_wave_banners,).run_if(when_state!(gaming)),
-        );
+        app.add_systems(Update, (spawn_wave_banners,).run_if(when_state!(gaming)));
     }
 }
 
@@ -47,6 +44,7 @@ fn spawn_wave_banners(
                 Banner::new(Duration::from_millis(4000)),
                 SpriteBundle {
                     texture: chunks.final_wave.clone(),
+                    transform: Transform::from_xyz(0.0, 0.0, 14.37 + 1.0),
                     ..Default::default()
                 },
             ));
@@ -56,6 +54,7 @@ fn spawn_wave_banners(
                 Banner::new(Duration::from_millis(4000)),
                 SpriteBundle {
                     texture: chunks.alert.clone(),
+                    transform: Transform::from_xyz(0.0, 0.0, 14.37 + 1.0),
                     ..Default::default()
                 },
             ));

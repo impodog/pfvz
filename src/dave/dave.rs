@@ -54,7 +54,7 @@ fn spawn_dave(
             game::HitBox::new(scr.x / 3.0, scr.y),
             game::Velocity::default(),
             SpriteBundle {
-                transform: Transform::from_xyz(0.0, 0.0, 3.0),
+                transform: Transform::from_xyz(0.0, 0.0, 14.37),
                 texture: chunks.dave.clone(),
                 ..Default::default()
             },
@@ -97,7 +97,7 @@ fn spawn_text(
                             color: Color::LinearRgba(LinearRgba::new(0.3, 0.6, 0.6, 1.0)),
                         },
                     ),
-                    transform: Transform::from_xyz(0.0, 0.0, 4.0),
+                    transform: Transform::from_xyz(0.0, 0.0, 14.37 + 0.5),
                     text_2d_bounds: bevy::text::Text2dBounds { size: LOGICAL },
                     ..Default::default()
                 },

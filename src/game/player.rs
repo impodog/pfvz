@@ -319,6 +319,7 @@ fn init_sun(mut commands: Commands, display: Res<game::Display>, font: Res<asset
                     color: Color::LinearRgba(LinearRgba::new(1.0, 1.0, 1.0, 1.0)),
                 },
             ),
+            transform: Transform::from_xyz(0.0, 0.0, 14.37),
             ..Default::default()
         },
     ));

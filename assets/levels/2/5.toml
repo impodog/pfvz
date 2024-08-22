@@ -1,7 +1,7 @@
 [config]
 selection = { "All" = [-3, -11] }
 layout = "Night"
-game = "WhackAZombie"
+game = ["WhackAZombie"]
 modify = { give = -13, next = { stage = 2, level = 6 } }
 sun = 0
 [[waves]]

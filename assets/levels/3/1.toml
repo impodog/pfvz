@@ -1,7 +1,6 @@
 [config]
 selection = "Any"
 layout = "Pool"
-game = "Adventure"
 modify = { give = -18, next = { stage = 3, level = 2 } }
 sun = 50
 [[waves]]

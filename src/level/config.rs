@@ -169,18 +169,19 @@ impl LayoutKind {
         }
     }
 
-    pub fn has_fog(&self) -> bool {
+    fn has_fog(&self) -> bool {
         matches!(self, Self::Fog)
     }
 }
 
-#[derive(Serialize, Deserialize, Default, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum GameKind {
     #[default]
     Adventure,
     WhackAZombie,
     QuickShot,
     Random,
+    Thunder,
 }
 impl GameKind {
     fn is_sun_spawn(&self) -> bool {
@@ -189,6 +190,7 @@ impl GameKind {
             Self::WhackAZombie => false,
             Self::QuickShot => true,
             Self::Random => true,
+            Self::Thunder => true,
         }
     }
 
@@ -198,6 +200,7 @@ impl GameKind {
             Self::WhackAZombie => true,
             Self::QuickShot => true,
             Self::Random => true,
+            Self::Thunder => true,
         }
     }
 
@@ -205,19 +208,31 @@ impl GameKind {
         // TODO: ban some plants according to the game kind
         true
     }
+
+    fn has_fog(&self) -> bool {
+        !matches!(self, GameKind::Thunder)
+    }
+}
+#[derive(Serialize, Deserialize, Debug, Clone, Deref, DerefMut, PartialEq, Eq)]
+pub struct GameKindSet(BTreeSet<GameKind>);
+impl Default for GameKindSet {
+    fn default() -> Self {
+        Self(BTreeSet::from_iter([GameKind::default()]))
+    }
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub enum SelectionArr {
     #[default]
     Any,
+    ThisMany(usize),
     Few(Vec<Id>),
     All(Vec<Id>),
 }
 impl SelectionArr {
     pub fn modify(&self, selection: &mut game::Selection) {
         match self {
-            Self::Any => {
+            Self::Any | Self::ThisMany(_) => {
                 selection.0.clear();
             }
             Self::Few(ids) | Self::All(ids) => {
@@ -229,6 +244,7 @@ impl SelectionArr {
     pub fn len(&self) -> usize {
         match self {
             Self::Any => 0,
+            Self::ThisMany(len) => *len,
             Self::Few(v) | Self::All(v) => v.len(),
         }
     }
@@ -250,7 +266,8 @@ pub struct StateModify {
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct LevelConfig {
     pub layout: LayoutKind,
-    pub game: GameKind,
+    #[serde(default)]
+    pub game: GameKindSet,
     pub selection: SelectionArr,
     #[serde(default)]
     pub modify: Option<StateModify>,
@@ -258,20 +275,25 @@ pub struct LevelConfig {
 }
 impl LevelConfig {
     pub fn is_sun_spawn(&self) -> bool {
-        self.layout.is_sun_spawn() && self.game.is_sun_spawn()
+        self.layout.is_sun_spawn() && self.game.iter().all(GameKind::is_sun_spawn)
     }
 
     pub fn has_grave(&self) -> bool {
-        self.layout.has_grave() && self.game.has_grave()
+        self.layout.has_grave() && self.game.iter().all(GameKind::has_grave)
     }
 
     pub fn is_compat(&self, id: Id) -> bool {
-        self.game.is_compat(id)
+        self.game.iter().all(|game| game.is_compat(id))
+    }
+
+    pub fn has_fog(&self) -> bool {
+        self.layout.has_fog() && self.game.iter().all(GameKind::has_fog)
     }
 
     pub fn max_select(&self, slots: usize) -> usize {
         match &self.selection {
             SelectionArr::Any => slots,
+            SelectionArr::ThisMany(slots) => *slots,
             SelectionArr::Few(v) => slots.saturating_sub(v.len()),
             SelectionArr::All(_) => 0,
         }

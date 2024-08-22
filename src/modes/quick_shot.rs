@@ -9,7 +9,7 @@ impl Plugin for ModesQuickShotPlugin {
 }
 
 fn accelerate(level: Res<level::Level>, mut q_shooter: Query<&mut compn::ShooterImpl>) {
-    if level.config.game == level::GameKind::QuickShot {
+    if level.config.game.contains(&level::GameKind::QuickShot) {
         q_shooter.par_iter_mut().for_each(|mut shooter| {
             if shooter.just_finished() {
                 let mut duration = shooter.timer.duration();

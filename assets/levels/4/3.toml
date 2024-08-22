@@ -1,7 +1,6 @@
 [config]
 selection = "Any"
 layout = "Fog"
-game = "Adventure"
 modify = { give = -28, next = { stage = 4, level = 4 } }
 sun = 50
 [[waves]]

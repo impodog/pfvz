@@ -171,6 +171,7 @@ cooldown = 7.5
 cost = 100
 [torchwood]
 self_box = { width = 0.9, height = 1.1 }
+light_range = { x = [-0.4, 0.4], y = [-0.4, 0.4], z = [-0.01, inf] }
 fire = { additional = 1.0, splash = 0.5, range = { x = [
     -0.25,
     0.25,
@@ -203,7 +204,7 @@ animation_time = 3.0
 cost = 125
 [plantern]
 self_box = { width = 1.0, height = 1.0 }
-range = { x = [-1.4, 1.4], y = [-1.4, 1.4], z = [-0.01, 0.01] }
+range = { x = [-1.4, 1.4], y = [-1.4, 1.4], z = [-0.01, inf] }
 health = 300
 cooldown = 15.0
 cost = 25
@@ -232,7 +233,7 @@ times = 1
 health = 300
 damage = 20
 interval = 1.0
-cooldown = 15.0
+cooldown = 30.0
 cost = 225
 [magnet_shroom]
 self_box = { width = 0.9, height = 0.9 }
@@ -247,8 +248,19 @@ health = 4000
 velocity_factor = 1.0
 duration = 2.5
 fog_duration = 30.0
-cooldown = 30.0
+cooldown = 40.0
 cost = 100
+[cactus]
+velocity = 2.9
+self_box = { width = 1.0, height = 1.0 }
+spike_box = { width = 0.3, height = 0.2 }
+times = 1
+pierce = 3
+health = 300
+damage = 20
+interval = 2.0
+cooldown = 7.5
+cost = 200
 [bowling_nut]
 velocity = { x = 2.25, y = 1.5, z = 0.0, r = -4.5 }
 self_box = { width = 0.7, height = 0.9 }

@@ -1,11 +1,11 @@
 [config]
-layout = "Day"
-
 selection = "Any"
+layout = "Pool"
+modify = { give = 0, next = { stage = 5, level = 1 } }
 sun = 50
 [[waves]]
 points = 0
 wait = 0.0
 big = false
-fixed = []
+fixed = [[5, 100]]
 avail = []

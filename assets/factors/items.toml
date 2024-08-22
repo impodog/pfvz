@@ -9,3 +9,5 @@ damage = 300
 interval = [7.0, 12.0]
 [fog]
 start = 5
+[thunder]
+interval = [25.0, 30.0]

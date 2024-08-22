@@ -50,4 +50,11 @@ map = [
             "Pro tip #2: DO use flower pots to hit higher targets, and tall-nuts to defend against them.",
         ],
     ],
+    [
+        { stage = 4, level = 10 },
+        [
+            "Why'd it get so dark all of a sudden?",
+            "This can't be good.",
+        ],
+    ],
 ]

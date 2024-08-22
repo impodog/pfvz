@@ -117,6 +117,7 @@ fn spawn_selection(
                 } else {
                     chunks.cross.clone()
                 },
+                transform: Transform::from_xyz(0.0, 0.0, 14.37),
                 ..Default::default()
             },
         ));
@@ -172,6 +173,7 @@ fn spawn_zombies(
                     .get(&id)
                     .map(|creature| creature.image.clone())
                     .unwrap_or_default(),
+                transform: Transform::from_xyz(0.0, 0.0, 14.37),
                 ..Default::default()
             },
         ));
@@ -192,6 +194,7 @@ fn spawn_buttons(
         sprite::SlotIndex(slots.0 + 2).into_position(display.ratio),
         SpriteBundle {
             texture: chunks.next.clone(),
+            transform: Transform::from_xyz(0.0, 0.0, 14.37),
             ..Default::default()
         },
     ));
@@ -201,6 +204,7 @@ fn spawn_buttons(
         sprite::SlotIndex(slots.0 + 4).into_position(display.ratio),
         SpriteBundle {
             texture: chunks.start.clone(),
+            transform: Transform::from_xyz(0.0, 0.0, 14.37),
             ..Default::default()
         },
     ));

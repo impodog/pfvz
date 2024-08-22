@@ -10,6 +10,7 @@ impl Plugin for ModesPlugin {
             quick_shot::ModesQuickShotPlugin,
             fog::ModesFogPlugin,
             random::ModesRandomPlugin,
+            thunder::ModesThunderPlugin,
         ));
     }
 }
