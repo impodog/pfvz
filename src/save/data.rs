@@ -15,7 +15,7 @@ configuration!(SaveMoney, i32, 0);
 configuration!(
     SaveAdventure,
     level::LevelIndex,
-    level::LevelIndex { stage: 1, level: 1 }
+    level::LevelIndex { stage: 0, level: 0 }
 );
 #[derive(Serialize, Deserialize, Resource, Debug, Default, Clone)]
 pub struct Save {

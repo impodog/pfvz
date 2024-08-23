@@ -138,7 +138,7 @@ fn by_probability(
                 break;
             }
             count += 1;
-            if count >= 10 {
+            if count >= 15 {
                 break;
             }
         }
