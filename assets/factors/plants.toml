@@ -261,6 +261,16 @@ damage = 20
 interval = 2.0
 cooldown = 7.5
 cost = 200
+[cabbage_pult]
+velocity = [2.2, -2.0]
+self_box = { width = 0.9, height = 1.0 }
+cabbage_box = { width = 0.35, height = 0.35 }
+times = 1
+health = 300
+damage = 40
+interval = 3.0
+cooldown = 7.5
+cost = 100
 [bowling_nut]
 velocity = { x = 2.25, y = 1.5, z = 0.0, r = -4.5 }
 self_box = { width = 0.7, height = 0.9 }

@@ -1,6 +1,15 @@
 use crate::prelude::*;
 use serde::{Deserialize, Serialize};
 
+impl<T> From<T> for compn::ShooterVelocity
+where
+    T: Into<game::Velocity>,
+{
+    fn from(value: T) -> Self {
+        Self::Classic(value.into())
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct VelocityX(pub f32);
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
@@ -19,6 +28,17 @@ impl From<VelocityXRange> for game::Velocity {
             0.0,
             0.0,
         )
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub struct VelocityLobber(pub f32, pub f32);
+impl From<VelocityLobber> for compn::ShooterVelocity {
+    fn from(value: VelocityLobber) -> Self {
+        Self::Lobbed {
+            x: value.0,
+            r: value.1,
+        }
     }
 }
 

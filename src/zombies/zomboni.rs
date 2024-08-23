@@ -65,7 +65,7 @@ fn zomboni_leave_trail(
     q_zomboni.par_iter().for_each(|pos| {
         let mut pos = level.config.layout.regularize(*pos.base_raw());
         pos.z = 0.0;
-        let index = level.config.layout.position_to_index(&pos);
+        let index = level.config.layout.position_3d_to_index(&pos);
         if let Some(plants) = plants.plants.get(index) {
             if plants.read().unwrap().is_empty() {
                 commands.command_scope(|mut commands| {

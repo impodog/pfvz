@@ -27,12 +27,22 @@ pub enum RequireZombie {
     InRange,
     RayCast,
 }
+#[derive(Debug, Clone, Copy)]
+pub enum ShooterVelocity {
+    Classic(game::Velocity),
+    Lobbed { x: f32, r: f32 },
+}
+impl Default for ShooterVelocity {
+    fn default() -> Self {
+        Self::Classic(Default::default())
+    }
+}
 
 // Anything that uses this shoots projectile of their ally
 #[derive(Debug, Clone)]
 pub struct ShooterShared {
     pub interval: Duration,
-    pub velocity: game::Velocity,
+    pub velocity: ShooterVelocity,
     pub proj: game::Projectile,
     pub start: Vec<(game::Position, f32)>,
     pub times: usize,
@@ -106,6 +116,27 @@ impl RayIntersectsAabb for Ray2d {
     }
 }
 
+/// Calculates the initial velocity needed to hit an object at distance diff
+/// with gravity and the x orthogonal velocity of the initial specified
+struct TargetCalculator {
+    diff: game::Position,
+    x: f32,
+    r: f32,
+    g: f32,
+}
+impl TargetCalculator {
+    fn calc(self) -> game::Velocity {
+        let t = self.diff.x / self.x;
+        let z_velocity = (self.diff.z + 0.5 * self.g * t * t) / t;
+        game::Velocity {
+            x: self.x,
+            y: self.diff.y / t,
+            z: z_velocity,
+            r: self.r,
+        }
+    }
+}
+
 fn shooter_work(
     commands: ParallelCommands,
     mut q_shooter: Query<(
@@ -117,7 +148,9 @@ fn shooter_work(
         &game::HitBox,
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
-    q_zpos: Query<(&game::Position, &game::HitBox), With<game::Zombie>>,
+    q_zpos: Query<(&game::Position, &game::HitBox, &game::Velocity), With<game::Zombie>>,
+    time: Res<config::FrameTime>,
+    config: Res<config::Config>,
     audio: Res<Audio>,
 ) {
     q_shooter
@@ -126,12 +159,18 @@ fn shooter_work(
             work.timer.tick(overlay.delta());
             if work.timer.just_finished() {
                 let mut pos = (*pos).move_z(hitbox.height * -0.05);
+
+                // Test if the shooter should work
                 let range = shooter.proj.range.clone() + pos;
                 let ok = match shooter.require_zombie {
                     RequireZombie::No => true,
-                    RequireZombie::InRange => q_zpos.iter().any(|(zombie_pos, zombie_hitbox)| {
-                        range.contains(zombie_pos, zombie_hitbox)
-                    }),
+                    RequireZombie::InRange => {
+                        q_zpos
+                            .iter()
+                            .any(|(zombie_pos, zombie_hitbox, _zombie_velocity)| {
+                                range.contains(zombie_pos, zombie_hitbox)
+                            })
+                    }
                     RequireZombie::RayCast => shooter.start.iter().any(|(start, angle)| {
                         use bevy::math::{bounding::Aabb2d, Ray2d};
                         let start = *start + pos;
@@ -139,58 +178,97 @@ fn shooter_work(
                             Vec2::new(start.x, start.y),
                             Vec2::new(angle.cos(), angle.sin()),
                         );
-                        q_zpos.iter().any(|(zombie_pos, zombie_hitbox)| {
-                            let aabb = Aabb2d::new(
-                                Vec2::new(zombie_pos.x, zombie_pos.y),
-                                Vec2::new(zombie_hitbox.width, 0.8),
-                            );
-                            ray.intersects(&aabb)
-                        })
+                        q_zpos
+                            .iter()
+                            .any(|(zombie_pos, zombie_hitbox, _zombie_velocity)| {
+                                let aabb = Aabb2d::new(
+                                    Vec2::new(zombie_pos.x, zombie_pos.y),
+                                    Vec2::new(zombie_hitbox.width, 0.8),
+                                );
+                                ray.intersects(&aabb)
+                            })
                     }),
                 };
                 if !ok {
                     return;
                 }
-                for _ in 0..shooter.times {
-                    for (start, angle) in shooter.start.iter() {
-                        let proj_entity = {
-                            commands.command_scope(|mut commands| {
-                                let velocity = shooter.velocity;
-                                let angle = velocity.y.atan2(velocity.x) + angle;
-                                let len = velocity.x.hypot(velocity.y);
-                                let velocity = game::Velocity {
-                                    x: len * angle.cos(),
-                                    y: len * angle.sin(),
-                                    z: velocity.z,
-                                    r: velocity.r,
-                                };
-                                let mut commands = commands.spawn((
-                                    game::LogicPosition::from_bottom(*start + pos),
-                                    sprite::Animation::new(shooter.shared.anim.clone()),
-                                    shooter.shared.hitbox,
-                                    shooter.proj.clone(),
-                                    velocity,
-                                    game::LayerDisp(0.3),
-                                    SpriteBundle::default(),
-                                ));
-                                // Determines whether the projectile is plant(default) or zombie
-                                if q_zombie.get(entity).is_ok() {
-                                    commands.insert(game::ZombieRelevant);
+
+                // Calculate velocity
+
+                let velocity = match shooter.velocity {
+                    ShooterVelocity::Classic(velocity) => Some(velocity),
+                    ShooterVelocity::Lobbed { x, r } => {
+                        let target = q_zpos
+                            .iter()
+                            .filter_map(|(zombie_pos, zombie_hitbox, zombie_velocity)| {
+                                if range.contains(zombie_pos, zombie_hitbox) {
+                                    Some((*zombie_pos, *zombie_velocity))
                                 } else {
-                                    commands.insert(game::PlantRelevant);
+                                    None
                                 }
-                                commands.id()
                             })
-                        };
-                        commands.command_scope(|mut commands| {
-                            commands.run_system_with_input(shooter.callback, entity);
-                            commands.run_system_with_input(shooter.after, proj_entity);
-                        });
+                            .max_by(|(lhs, _), (rhs, _)| {
+                                // Reversed comparing makes sure the first zombie is hit
+                                rhs.x.partial_cmp(&lhs.x).unwrap()
+                            });
+                        target.map(|(target, velocity)| {
+                            let mut diff = target - pos;
+                            diff.x -= time.diff() * velocity.x;
+                            diff.y -= time.diff() * velocity.y;
+                            diff.z -= time.diff() * velocity.z;
+                            TargetCalculator {
+                                diff,
+                                x,
+                                r,
+                                g: config.gamerule.gravity.0,
+                            }
+                            .calc()
+                        })
                     }
-                    // NOTE: Do we need to make this customizable?
-                    pos.x += 0.1 * shooter.velocity.x;
+                };
+                if let Some(velocity) = velocity {
+                    for _ in 0..shooter.times {
+                        for (start, angle) in shooter.start.iter() {
+                            let proj_entity = {
+                                commands.command_scope(|mut commands| {
+                                    let angle = velocity.y.atan2(velocity.x) + angle;
+                                    let len = velocity.x.hypot(velocity.y);
+                                    let velocity = game::Velocity {
+                                        x: len * angle.cos(),
+                                        y: len * angle.sin(),
+                                        z: velocity.z,
+                                        r: velocity.r,
+                                    };
+                                    let mut commands = commands.spawn((
+                                        game::LogicPosition::from_bottom(*start + pos),
+                                        sprite::Animation::new(shooter.shared.anim.clone()),
+                                        shooter.shared.hitbox,
+                                        shooter.proj.clone(),
+                                        velocity,
+                                        game::LayerDisp(0.3),
+                                        SpriteBundle::default(),
+                                    ));
+                                    // Determines whether the projectile is plant(default) or zombie
+                                    if q_zombie.get(entity).is_ok() {
+                                        commands.insert(game::ZombieRelevant);
+                                    } else {
+                                        commands.insert(game::PlantRelevant);
+                                    }
+                                    commands.id()
+                                })
+                            };
+                            commands.command_scope(|mut commands| {
+                                commands.run_system_with_input(shooter.callback, entity);
+                                commands.run_system_with_input(shooter.after, proj_entity);
+                            });
+                        }
+                        // NOTE: Do we need to make this customizable?
+                        pos.x += 0.1 * velocity.x;
+                        pos.y += 0.1 * velocity.y;
+                        pos.z += 0.1 * velocity.z;
+                    }
+                    audio.play(shooter.audio.random());
                 }
-                audio.play(shooter.audio.random());
             }
         })
 }

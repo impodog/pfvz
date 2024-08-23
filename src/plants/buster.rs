@@ -54,7 +54,7 @@ fn bust_grave(
         .for_each(|(entity, overlay, pos, mut timer)| {
             timer.tick(overlay.delta());
             if timer.just_finished() {
-                let index = level.config.layout.position_to_index(pos);
+                let index = level.config.layout.position_3d_to_index(pos);
                 commands.entity(entity).despawn_recursive();
                 if let Some(list) = layout.plants.get(index) {
                     let list = list.read().unwrap();

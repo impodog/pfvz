@@ -11,6 +11,7 @@ impl Plugin for LevelPlugin {
             banners::LevelBannersPlugin,
             progress::LevelProgressPlugin,
             spawn::LevelSpawnPlugin,
+            disp::LevelDispPlugin,
         ));
     }
 }

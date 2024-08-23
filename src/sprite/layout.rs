@@ -48,6 +48,7 @@ fn spawn_layout(
             let pos = game::Position {
                 x: (row as f32 - half_x),
                 y: (lane as f32 - half_y),
+                z: level.config.layout.get_disp(row),
                 ..Default::default()
             };
             let index = level.config.layout.get_layout(row, lane);

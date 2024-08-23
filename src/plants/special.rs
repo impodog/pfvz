@@ -86,7 +86,7 @@ fn spawn_grave_any(
             rand::thread_rng().gen_range(0..size.1),
         );
         let pos = level.config.layout.coordinates_to_position(x, y);
-        let index = level.config.layout.position_to_index(&pos);
+        let index = level.config.layout.position_3d_to_index(&pos);
         let pos = game::LogicPosition::from_base(pos);
         if layout
             .plants

@@ -39,6 +39,7 @@ pub const STARFRUIT: Id = -29;
 pub const MAGNET_SHROOM: Id = -30;
 pub const BLOVER: Id = -31;
 pub const CACTUS: Id = -32;
+pub const CABBAGE_PULT: Id = -33;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -86,6 +87,10 @@ pub const SHADOW_DISTANCE: f32 = 0.3;
 /// Zoom factor for Egui
 pub const UI_ZOOM_FACTOR: f32 = 1.0;
 
+pub const ROOF_HIGHEST: usize = 5;
+pub const ROOF_PIVOT: usize = 4;
+pub const ROOF_SLOPE: f32 = 0.25;
+
 /// This function defines the standard naming of creatures in configuration files and code
 pub fn id_name(id: Id) -> &'static str {
     match id {
@@ -123,6 +128,7 @@ pub fn id_name(id: Id) -> &'static str {
         MAGNET_SHROOM => "magnet_shroom",
         BLOVER => "blover",
         CACTUS => "cactus",
+        CABBAGE_PULT => "cabbage_pult",
 
         BOWLING_NUT => "bowling_nut",
 

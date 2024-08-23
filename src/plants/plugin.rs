@@ -32,6 +32,7 @@ impl Plugin for PlantsPlugin {
             magnet::PlantsMagnetPlugin,
             blover::PlantsBloverPlugin,
             cactus::PlantsCactusPlugin,
+            lobber::PlantsLobberPlugin,
         ));
     }
 }

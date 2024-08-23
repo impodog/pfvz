@@ -97,6 +97,19 @@ impl std::ops::Add<Position> for Position {
         }
     }
 }
+impl std::ops::Sub<Position> for Position {
+    type Output = Position;
+
+    fn sub(self, rhs: Position) -> Self::Output {
+        Self::Output {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+            z: self.z - rhs.z,
+            r: self.r - rhs.r,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PositionRange {
     pub x: Range<f32>,
@@ -122,6 +135,14 @@ impl Default for PositionRange {
 impl PositionRange {
     pub fn new(x: Range<f32>, y: Range<f32>, z: Range<f32>) -> Self {
         Self { x, y, z }
+    }
+
+    pub fn with_inf_z(self) -> Self {
+        Self {
+            x: self.x,
+            y: self.y,
+            z: f32::NEG_INFINITY..f32::INFINITY,
+        }
     }
 
     /// x1 <= x2 && y1 <= y2 is required

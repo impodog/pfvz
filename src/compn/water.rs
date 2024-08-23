@@ -23,7 +23,7 @@ fn add_in_water(
         if level
             .config
             .layout
-            .get_lane(level.config.layout.position_to_coordinates(pos).1)
+            .get_lane(level.config.layout.position_3d_to_coordinates(pos).1)
             == level::TileFeature::Water
         {
             commands.command_scope(|mut commands| {
@@ -48,7 +48,7 @@ fn put_in_water(
             let (x, y) = level
                 .config
                 .layout
-                .position_to_coordinates(logic.base_raw());
+                .position_3d_to_coordinates(logic.base_raw());
             let status = logic.base_raw().z + logic.disp.z <= f32::EPSILON
                 && level.config.layout.get_tile(x, y) == level::TileFeature::Water;
             if status != **in_water {

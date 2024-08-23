@@ -9,11 +9,7 @@ impl Plugin for InfoMousePlugin {
             PreUpdate,
             (
                 init_cursor_info,
-                (
-                    update_cursor_info,
-                    update_touch_as_cursor,
-                    update_inbound.run_if(when_state!(gaming)),
-                ),
+                (update_cursor_info, update_touch_as_cursor),
             )
                 .chain(),
         );
@@ -26,7 +22,6 @@ pub struct CursorInfo {
     pub pos: game::Position,
     pub left: bool,
     pub right: bool,
-    pub inbound: bool,
 }
 
 fn init_cursor_info(mut cursor: ResMut<CursorInfo>) {
@@ -99,12 +94,4 @@ fn update_touch_as_cursor(
             }
         }
     }
-}
-
-fn update_inbound(mut cursor: ResMut<CursorInfo>, level: Res<level::Level>) {
-    let size = level.config.layout.size_f32();
-    cursor.inbound = cursor.pos.x >= -size.0 / 2.0
-        && cursor.pos.x <= size.0 / 2.0
-        && cursor.pos.y >= -size.1 / 2.0
-        && cursor.pos.y <= size.1 / 2.0;
 }
