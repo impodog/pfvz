@@ -60,7 +60,10 @@ fn snorkel_enter(
     q_snorkel
         .par_iter_mut()
         .for_each(|(entity, pos, mut status, mut hitbox, mut size)| {
-            let (x, y) = level.config.layout.position_to_coordinates(pos.base_raw());
+            let (x, y) = level
+                .config
+                .layout
+                .position_3d_to_coordinates(pos.base_raw());
             let diving = if level.config.layout.get_tile(x, y) == level::TileFeature::Water {
                 !q_walker_impl
                     .get(entity)

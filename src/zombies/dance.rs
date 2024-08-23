@@ -146,7 +146,12 @@ fn dancing_try_spawn(
                 for (index, (x, y)) in direction.into_iter().enumerate() {
                     if !is_ok(timer.backup.get(index).and_then(|inner| inner.as_ref())) {
                         let pos = pos.bottom().move_by(x, y);
-                        if level.config.layout.is_in_bound(&pos) {
+                        if level
+                            .config
+                            .layout
+                            .position_2d_to_coordinates_checked(&pos)
+                            .is_some()
+                        {
                             commands.command_scope(|mut commands| {
                                 commands.entity(entity).try_insert(compn::AnimationThenDo {
                                     anim: zombies.dancing_zombie_summon.clone(),

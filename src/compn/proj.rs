@@ -6,7 +6,7 @@ impl Plugin for CompnProjPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             PostUpdate,
-            (despawn, (proj_action, proj_timer_tick))
+            (despawn, (proj_action, proj_timer_tick, despawn_by_hit_roof))
                 .chain()
                 .run_if(when_state!(gaming)),
         );
@@ -25,6 +25,22 @@ fn despawn(mut commands: Commands, mut queue: ResMut<DespawnQueue>) {
             }
         }
     }
+}
+
+fn despawn_by_hit_roof(
+    q_proj: Query<(Entity, &game::LogicPosition, &game::Position), With<game::Projectile>>,
+    mut queue: ResMut<DespawnQueue>,
+    level: Res<level::Level>,
+) {
+    q_proj.iter().for_each(|(entity, logic, pos)| {
+        let (x, _y) = level
+            .config
+            .layout
+            .position_3d_to_coordinates(logic.base_raw());
+        if pos.z <= level.config.layout.get_disp(x) {
+            queue.push(entity);
+        }
+    });
 }
 
 #[derive(Component, Debug, Clone, Deref, DerefMut)]

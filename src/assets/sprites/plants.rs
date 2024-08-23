@@ -62,6 +62,9 @@ pub struct SpritePlants {
     pub blover: Arc<sprite::FrameArr>,
     pub cactus: Arc<sprite::FrameArr>,
     pub spike: Arc<sprite::FrameArr>,
+    pub cabbage_pult: Arc<sprite::FrameArr>,
+    pub cabbage: Arc<sprite::FrameArr>,
+    pub cabbage_pult_lob: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -290,6 +293,21 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
         blover: super::load_animation(&server, "sprites/plants/blover", Duration::from_millis(100)),
         cactus: super::load_animation(&server, "sprites/plants/cactus", Duration::from_millis(300)),
         spike: super::load_animation(&server, "sprites/plants/spike", Duration::from_millis(150)),
+        cabbage_pult: super::load_animation(
+            &server,
+            "sprites/plants/cabbage_pult",
+            Duration::from_millis(200),
+        ),
+        cabbage: super::load_animation(
+            &server,
+            "sprites/plants/cabbage",
+            Duration::from_millis(100),
+        ),
+        cabbage_pult_lob: super::load_animation(
+            &server,
+            "sprites/plants/cabbage_pult_lob",
+            Duration::from_millis(150),
+        ),
     };
     commands.insert_resource(plants);
 }

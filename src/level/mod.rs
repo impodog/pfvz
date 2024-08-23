@@ -1,5 +1,6 @@
 mod banners;
 mod config;
+mod disp;
 mod flags;
 mod load;
 mod plugin;
@@ -10,6 +11,7 @@ mod util;
 
 pub use banners::*;
 pub use config::*;
+pub use disp::*;
 pub use flags::*;
 pub use load::*;
 pub use plugin::*;

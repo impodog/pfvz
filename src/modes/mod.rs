@@ -3,6 +3,7 @@ mod intro;
 mod plugin;
 mod quick_shot;
 mod random;
+mod roof;
 mod thunder;
 mod whack;
 

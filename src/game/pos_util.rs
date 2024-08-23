@@ -106,9 +106,10 @@ impl LogicPosition {
         &mut self.base
     }
 
-    pub fn shadow(&self) -> game::Position {
+    pub fn shadow(&self, disp: f32) -> game::Position {
         let mut pos = self.base;
-        pos.z = -SHADOW_DISTANCE;
+        pos.z = -SHADOW_DISTANCE + disp;
+        pos.r = 0.0;
         pos
     }
 }
@@ -123,13 +124,18 @@ fn spawn_shadow(
         (Added<LogicPosition>, Without<Parent>),
     >,
     chunks: Res<assets::SpriteChunks>,
+    level: Res<level::Level>,
 ) {
     q_parent.iter().for_each(|(parent, logic_pos, hitbox)| {
+        let (x, _y) = level
+            .config
+            .layout
+            .position_3d_to_coordinates(logic_pos.base_raw());
         let height = hitbox.width * 0.3;
         commands.spawn((
             ShadowOf(parent),
             game::HitBox::new(hitbox.width, height),
-            logic_pos.shadow(),
+            logic_pos.shadow(level.config.layout.get_disp(x)),
             game::LayerDisp(-1.0),
             SpriteBundle {
                 texture: chunks.shadow.clone(),
@@ -144,14 +150,20 @@ fn move_shadow(
     mut q_shadow: Query<(Entity, &mut game::Position, &ShadowOf, &mut Visibility)>,
     q_parent: Query<Ref<LogicPosition>>,
     q_in_water: Query<&compn::InWater>,
+    level: Res<level::Level>,
 ) {
     q_shadow
         .par_iter_mut()
         .for_each(|(entity, mut pos, shadow, mut vis)| {
             if let Ok(logic_pos) = q_parent.get(shadow.0) {
                 if logic_pos.is_changed() || pos.is_added() {
-                    *pos = logic_pos.shadow();
-                    *vis = if logic_pos.base_raw().z < -f32::EPSILON
+                    let (x, _y) = level
+                        .config
+                        .layout
+                        .position_3d_to_coordinates(logic_pos.base_raw());
+                    let disp = level.config.layout.get_disp(x);
+                    *pos = logic_pos.shadow(disp);
+                    *vis = if logic_pos.base_raw().z - disp < -f32::EPSILON
                         || q_in_water.get(shadow.0).is_ok_and(|in_water| in_water.0)
                     {
                         Visibility::Hidden

@@ -87,7 +87,7 @@ fn add_aquatic_zombie_tube(
         let (_x, y) = level
             .config
             .layout
-            .position_to_coordinates(logic.base_raw());
+            .position_3d_to_coordinates(logic.base_raw());
         match level.config.layout.get_lane(y) {
             level::TileFeature::Water => {
                 commands

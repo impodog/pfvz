@@ -58,6 +58,7 @@ pub enum LayoutKind {
     Night,
     Pool,
     Fog,
+    Roof,
 }
 impl LayoutKind {
     pub const fn size(&self) -> (usize, usize) {
@@ -66,6 +67,7 @@ impl LayoutKind {
             Self::Night => (9, 5),
             Self::Pool => (9, 6),
             Self::Fog => (9, 6),
+            Self::Roof => (9, 5),
         }
     }
 
@@ -104,6 +106,7 @@ impl LayoutKind {
                     TileFeature::Grass
                 }
             }
+            Self::Roof => TileFeature::Dirt,
         }
     }
 
@@ -120,6 +123,7 @@ impl LayoutKind {
                     TileFeature::Grass
                 }
             }
+            Self::Roof => TileFeature::Grass,
         }
     }
 
@@ -139,6 +143,22 @@ impl LayoutKind {
                     pos % 2
                 }
             }
+            Self::Roof => {
+                let pos = y * size.0 + x;
+                if x < ROOF_HIGHEST {
+                    pos % 2 + 2
+                } else {
+                    pos % 2
+                }
+            }
+        }
+    }
+
+    /// Get the z-axis depth of a row
+    pub fn get_disp(&self, x: usize) -> f32 {
+        match self {
+            Self::Day | Self::Night | Self::Pool | Self::Fog => 0.0,
+            Self::Roof => (x.min(ROOF_HIGHEST) as f32 - ROOF_PIVOT as f32) * ROOF_SLOPE,
         }
     }
 
@@ -148,6 +168,7 @@ impl LayoutKind {
             Self::Night => false,
             Self::Pool => true,
             Self::Fog => false,
+            Self::Roof => true,
         }
     }
 
@@ -157,6 +178,7 @@ impl LayoutKind {
             Self::Night => true,
             Self::Pool => false,
             Self::Fog => false,
+            Self::Roof => false,
         }
     }
 
@@ -166,6 +188,7 @@ impl LayoutKind {
             Self::Night => true,
             Self::Pool => false,
             Self::Fog => true,
+            Self::Roof => false,
         }
     }
 
