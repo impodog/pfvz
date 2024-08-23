@@ -136,12 +136,14 @@ fn remove_banners(
 }
 
 fn title_timer_tick(
-    mut timer: ResMut<TitleTimer>,
+    timer: Option<ResMut<TitleTimer>>,
     time: Res<config::FrameTime>,
     mut state: ResMut<NextState<info::GlobalStates>>,
 ) {
-    timer.tick(time.delta());
-    if timer.just_finished() {
-        state.set(info::GlobalStates::Win);
+    if let Some(mut timer) = timer {
+        timer.tick(time.delta());
+        if timer.just_finished() {
+            state.set(info::GlobalStates::Win);
+        }
     }
 }
