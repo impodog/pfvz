@@ -29,6 +29,7 @@ pub enum PlayStates {
     NotPlaying,
     Dave,
     Cys,
+    Intro,
     Gaming,
 }
 

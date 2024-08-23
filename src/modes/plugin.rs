@@ -11,6 +11,7 @@ impl Plugin for ModesPlugin {
             fog::ModesFogPlugin,
             random::ModesRandomPlugin,
             thunder::ModesThunderPlugin,
+            intro::ModesIntroPlugin,
         ));
     }
 }

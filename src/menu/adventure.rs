@@ -4,7 +4,18 @@ pub(super) struct MenuAdventurePlugin;
 
 impl Plugin for MenuAdventurePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (adventure_menu,).run_if(when_state!(adventure)));
+        app.add_systems(
+            Update,
+            (adventure_menu, adventure_direct_start).run_if(when_state!(adventure)),
+        );
+    }
+}
+
+fn adventure_direct_start(mut e_level: EventWriter<level::LevelEvent>, save: Res<save::Save>) {
+    if save.adventure.stage == 0 {
+        e_level.send(level::LevelEvent {
+            index: save.adventure.0,
+        });
     }
 }
 
