@@ -1,7 +1,6 @@
 [config]
 selection = { "All" = [-1, -2, -3, -4, -5, -6, -7, -8] }
 layout = "Day"
-
 modify = { give = -9, next = { stage = 2, level = 1 }, slots = 7 }
 sun = 1000
 [[waves]]

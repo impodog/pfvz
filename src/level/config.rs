@@ -178,6 +178,7 @@ impl LayoutKind {
 pub enum GameKind {
     #[default]
     Adventure,
+    Intro,
     WhackAZombie,
     QuickShot,
     Random,
@@ -187,6 +188,7 @@ impl GameKind {
     fn is_sun_spawn(&self) -> bool {
         match self {
             Self::Adventure => true,
+            Self::Intro => false,
             Self::WhackAZombie => false,
             Self::QuickShot => true,
             Self::Random => true,
@@ -197,6 +199,7 @@ impl GameKind {
     fn has_grave(&self) -> bool {
         match self {
             Self::Adventure => true,
+            Self::Intro => false,
             Self::WhackAZombie => true,
             Self::QuickShot => true,
             Self::Random => true,

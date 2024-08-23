@@ -1,0 +1,12 @@
+[config]
+layout = "Pool"
+selection = { "All" = [] }
+game = ["Intro"]
+modify = { give = -1, next = { stage = 1, level = 1 } }
+sun = 0
+[[waves]]
+points = 0
+wait = 0.0
+big = false
+fixed = [[5, 10], [10, 4]]
+avail = []

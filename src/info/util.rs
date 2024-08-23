@@ -9,6 +9,9 @@ macro_rules! when_state {
     (dave) => {
         bevy::prelude::in_state($crate::info::PlayStates::Dave)
     };
+    (intro) => {
+        bevy::prelude::in_state($crate::info::PlayStates::Intro)
+    };
     (play) => {
         bevy::prelude::in_state($crate::info::GlobalStates::Play)
     };
