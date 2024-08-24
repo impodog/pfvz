@@ -262,7 +262,7 @@ interval = 2.0
 cooldown = 7.5
 cost = 200
 [cabbage_pult]
-velocity = [2.2, -2.0]
+velocity = [2.5, -2.0]
 self_box = { width = 0.9, height = 1.0 }
 cabbage_box = { width = 0.35, height = 0.35 }
 times = 1
@@ -271,6 +271,26 @@ damage = 40
 interval = 3.0
 cooldown = 7.5
 cost = 100
+[coffee_bean]
+self_box = { width = 0.6, height = 0.6 }
+health = 300
+interval = 2.0
+cooldown = 15.0
+cost = 75
+[kernel_pult]
+velocity = [2.4, -2.0]
+self_box = { width = 0.9, height = 1.0 }
+kernel_box = { width = 0.2, height = 0.2 }
+butter_box = { width = 0.3, height = 0.3 }
+snow = { duration = 5.0, factor = 0.0 }
+butter_every = 3
+times = 1
+health = 300
+kernel_damage = 20
+butter_damage = 40
+interval = 3.0
+cooldown = 7.5
+cost = 125
 [bowling_nut]
 velocity = { x = 2.25, y = 1.5, z = 0.0, r = -4.5 }
 self_box = { width = 0.7, height = 0.9 }

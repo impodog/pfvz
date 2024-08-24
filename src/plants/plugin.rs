@@ -33,6 +33,7 @@ impl Plugin for PlantsPlugin {
             blover::PlantsBloverPlugin,
             cactus::PlantsCactusPlugin,
             lobber::PlantsLobberPlugin,
+            kernel::PlantsKernelPlugin,
         ));
     }
 }

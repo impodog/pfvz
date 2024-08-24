@@ -27,8 +27,8 @@ pub struct Wave {
     Hash,
 )]
 pub struct LevelIndex {
-    pub stage: u8,
-    pub level: u8,
+    pub stage: u32,
+    pub level: u32,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

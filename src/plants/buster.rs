@@ -6,9 +6,17 @@ impl Plugin for PlantsBusterPlugin {
     fn build(&self, app: &mut App) {
         initialize(&grave_buster_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (bust_grave,).run_if(when_state!(gaming)));
+        app.add_systems(
+            Update,
+            (bust_grave, coffee_bean_work).run_if(when_state!(gaming)),
+        );
         *grave_buster_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_grave_buster),
+            die: app.register_system(compn::default::die),
+            damage: app.register_system(compn::default::damage),
+        });
+        *coffee_bean_systems.write().unwrap() = Some(game::CreatureSystems {
+            spawn: app.register_system(spawn_coffee_bean),
             die: app.register_system(compn::default::die),
             damage: app.register_system(compn::default::damage),
         });
@@ -19,6 +27,7 @@ impl Plugin for PlantsBusterPlugin {
 struct BusterTimer(Timer);
 
 game_conf!(systems grave_buster_systems);
+game_conf!(systems coffee_bean_systems);
 
 fn spawn_grave_buster(
     In(pos): In<game::LogicPosition>,
@@ -66,6 +75,67 @@ fn bust_grave(
         });
 }
 
+#[derive(Component, Deref, DerefMut)]
+struct CoffeeBeanTimer(Timer);
+
+fn spawn_coffee_bean(
+    In(pos): In<game::LogicPosition>,
+    mut commands: Commands,
+    factors: Res<plants::PlantFactors>,
+    plants: Res<assets::SpritePlants>,
+    map: Res<game::CreatureMap>,
+) {
+    let creature = map.get(&COFFEE_BEAN).unwrap();
+    commands.spawn((
+        game::Plant,
+        creature.clone(),
+        pos,
+        sprite::Animation::new(plants.coffee_bean.clone()),
+        creature.hitbox,
+        CoffeeBeanTimer(Timer::from_seconds(
+            factors.coffee_bean.interval,
+            TimerMode::Once,
+        )),
+        game::Health::from(factors.coffee_bean.health),
+        SpriteBundle::default(),
+    ));
+}
+
+fn coffee_bean_work(
+    mut action: EventWriter<game::CreatureAction>,
+    mut q_coffee_bean: Query<(
+        Entity,
+        &game::Overlay,
+        &mut CoffeeBeanTimer,
+        &game::LogicPosition,
+    )>,
+    level: Res<level::Level>,
+    plants: Res<game::PlantLayout>,
+    mut q_mushroom: Query<&mut compn::Mushroom>,
+) {
+    q_coffee_bean
+        .iter_mut()
+        .for_each(|(entity, overlay, mut timer, logic)| {
+            timer.tick(overlay.delta());
+            if timer.just_finished() {
+                let index = level.config.layout.position_3d_to_index(logic.base_raw());
+                if let Some(plants) = plants.plants.get(index) {
+                    plants
+                        .read()
+                        .unwrap()
+                        .iter()
+                        .filter(|plant| **plant != entity)
+                        .for_each(|plant| {
+                            if let Ok(mut mushroom) = q_mushroom.get_mut(*plant) {
+                                mushroom.0 = false;
+                            }
+                        })
+                }
+                action.send(game::CreatureAction::Die(entity));
+            }
+        });
+}
+
 fn init_config(
     mut _commands: Commands,
     plants: Res<assets::SpritePlants>,
@@ -90,5 +160,24 @@ fn init_config(
             flags: level::CreatureFlags::GRAVE_BUSTER,
         }));
         map.insert(GRAVE_BUSTER, creature);
+    }
+    {
+        let creature = game::Creature(Arc::new(game::CreatureShared {
+            systems: coffee_bean_systems
+                .read()
+                .unwrap()
+                .expect("systems are not initialized"),
+            image: plants
+                .coffee_bean
+                .frames
+                .first()
+                .expect("Empty animation coffee_bean")
+                .clone(),
+            cost: factors.coffee_bean.cost,
+            cooldown: factors.coffee_bean.cooldown,
+            hitbox: factors.coffee_bean.self_box,
+            flags: level::CreatureFlags::COFFEE_BEAN,
+        }));
+        map.insert(COFFEE_BEAN, creature);
     }
 }

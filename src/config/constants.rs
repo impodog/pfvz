@@ -40,6 +40,8 @@ pub const MAGNET_SHROOM: Id = -30;
 pub const BLOVER: Id = -31;
 pub const CACTUS: Id = -32;
 pub const CABBAGE_PULT: Id = -33;
+pub const COFFEE_BEAN: Id = -34;
+pub const KERNEL_PULT: Id = -35;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -61,6 +63,7 @@ pub const DANCING_ZOMBIE: Id = 11;
 pub const JITB_ZOMBIE: Id = 12;
 pub const BALLOON_ZOMBIE: Id = 13;
 pub const DIGGER_ZOMBIE: Id = 14;
+pub const POGO_ZOMBIE: Id = 15;
 
 pub const HIDDEN_ZOMBIE: Id = 101;
 
@@ -129,6 +132,8 @@ pub fn id_name(id: Id) -> &'static str {
         BLOVER => "blover",
         CACTUS => "cactus",
         CABBAGE_PULT => "cabbage_pult",
+        COFFEE_BEAN => "coffee_bean",
+        KERNEL_PULT => "kernel_pult",
 
         BOWLING_NUT => "bowling_nut",
 
@@ -149,6 +154,7 @@ pub fn id_name(id: Id) -> &'static str {
         JITB_ZOMBIE => "jitb",
         BALLOON_ZOMBIE => "balloon",
         DIGGER_ZOMBIE => "digger",
+        POGO_ZOMBIE => "pogo",
 
         HIDDEN_ZOMBIE => "hidden",
 

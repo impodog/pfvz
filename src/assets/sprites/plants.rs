@@ -65,6 +65,11 @@ pub struct SpritePlants {
     pub cabbage_pult: Arc<sprite::FrameArr>,
     pub cabbage: Arc<sprite::FrameArr>,
     pub cabbage_pult_lob: Arc<sprite::FrameArr>,
+    pub coffee_bean: Arc<sprite::FrameArr>,
+    pub kernel_pult: Arc<sprite::FrameArr>,
+    pub kernel: Arc<sprite::FrameArr>,
+    pub butter: Arc<sprite::FrameArr>,
+    pub kernel_pult_lob: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -306,6 +311,23 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
         cabbage_pult_lob: super::load_animation(
             &server,
             "sprites/plants/cabbage_pult_lob",
+            Duration::from_millis(150),
+        ),
+        coffee_bean: super::load_animation(
+            &server,
+            "sprites/plants/coffee_bean",
+            Duration::from_millis(100),
+        ),
+        kernel_pult: super::load_animation(
+            &server,
+            "sprites/plants/kernel_pult",
+            Duration::from_millis(200),
+        ),
+        kernel: super::load_animation(&server, "sprites/plants/kernel", Duration::from_millis(100)),
+        butter: super::load_animation(&server, "sprites/plants/butter", Duration::from_millis(100)),
+        kernel_pult_lob: super::load_animation(
+            &server,
+            "sprites/plants/kernel_pult_lob",
             Duration::from_millis(150),
         ),
     };

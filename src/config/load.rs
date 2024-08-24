@@ -33,7 +33,7 @@ pub struct ConfigProgram {
 configuration!(ConfigGameRuleSunValue, u32, 25);
 configuration!(ConfigGameRuleDamage, f32, 1.0);
 configuration!(ConfigGameRuleSpeed, f32, 1.0);
-configuration!(ConfigGameRuleGravity, f32, 2.5);
+configuration!(ConfigGameRuleGravity, f32, 2.8);
 #[derive(Default, Serialize, Deserialize)]
 pub struct ConfigGameRule {
     pub sun_value: ConfigGameRuleSunValue,

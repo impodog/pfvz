@@ -62,16 +62,18 @@ pub struct UnsnowParent {
 }
 
 fn snowy_bump(
-    mut commands: Commands,
+    commands: ParallelCommands,
     mut action: EventReader<game::ProjectileAction>,
     q_snow: Query<&SnowyProjectile>,
 ) {
-    action.read().for_each(|action| {
+    action.par_read().for_each(|action| {
         if let game::ProjectileAction::Damage(entity, other) = action {
             if let Ok(snowy) = q_snow.get(*entity) {
-                if let Some(mut commands) = commands.get_entity(*other) {
-                    commands.try_insert(ModifySnow::Add(snowy.snow.clone()));
-                }
+                commands.command_scope(|mut commands| {
+                    if let Some(mut commands) = commands.get_entity(*other) {
+                        commands.try_insert(ModifySnow::Add(snowy.snow.clone()));
+                    }
+                });
             }
         }
     });

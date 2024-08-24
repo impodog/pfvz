@@ -159,3 +159,18 @@ short = "Blows away fog, and kills balloon zombies"
 desc = """Blows away fog and blows back zombies, works better for zombies in the air.
 Unlike Brassica oleracea var. acephala, this can kill higher zombies
 Damage: Maybe"""
+[desc.cabbage_pult]
+name = "Brassica oleracea var. capitata"
+short = "Lobs cabbages at zombies"
+desc = """Lobs cabbages at zombies, unlike shooters, cabbages won't be blocked by terrain
+Damage: Regular"""
+[desc.coffee_bean]
+name = "Coffea arabica"
+short = "Wakes up fungi that sleep during the day"
+desc = """Wakes up fungi that sleep during the day
+Damage: In other words, the fungi it wakes may cause damage"""
+[desc.kernel_pult]
+name = "Zea mays"
+short = "Lobs kernels, 1 butter, and repeat"
+desc = """Lobs kernels at zombies, 1 butter, and repeat
+Damage: 0.5x(kernel) Regular(butter)"""
