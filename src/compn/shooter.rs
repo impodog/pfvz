@@ -74,6 +74,11 @@ impl Default for ShooterShared {
 }
 #[derive(Component, Debug, Clone, Deref)]
 pub struct Shooter(pub Arc<ShooterShared>);
+impl Shooter {
+    pub fn replace(&mut self, shared: Arc<ShooterShared>) {
+        self.0 = shared;
+    }
+}
 
 #[derive(Component, Debug, Clone, Deref, DerefMut)]
 pub struct ShooterImpl {
@@ -116,24 +121,22 @@ impl RayIntersectsAabb for Ray2d {
     }
 }
 
-/// Calculates the initial velocity needed to hit an object at distance diff
-/// with gravity and the x orthogonal velocity of the initial specified
+/// Calculates the initial velocity needed to hit an object at distance diff in 3d math
+/// with gravity, the velocity of the moving target, and the x orthogonal velocity of the initial specified
+#[derive(Debug)]
 struct TargetCalculator {
     diff: game::Position,
+    target_vel: game::Velocity,
     x: f32,
     r: f32,
     g: f32,
 }
 impl TargetCalculator {
     fn calc(self) -> game::Velocity {
-        let t = self.diff.x / self.x;
-        let z_velocity = (self.diff.z + 0.5 * self.g * t * t) / t;
-        game::Velocity {
-            x: self.x,
-            y: self.diff.y / t,
-            z: z_velocity,
-            r: self.r,
-        }
+        let time = self.diff.x / (self.x - self.target_vel.x);
+        let z = self.diff.z / time + 0.5 * self.g * time + self.target_vel.z;
+        let y = self.diff.y / time + self.target_vel.y;
+        game::Velocity::new(self.x, y, z, self.r)
     }
 }
 
@@ -149,7 +152,6 @@ fn shooter_work(
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
     q_zpos: Query<(&game::Position, &game::HitBox, &game::Velocity), With<game::Zombie>>,
-    time: Res<config::FrameTime>,
     config: Res<config::Config>,
     audio: Res<Audio>,
 ) {
@@ -202,7 +204,10 @@ fn shooter_work(
                             .iter()
                             .filter_map(|(zombie_pos, zombie_hitbox, zombie_velocity)| {
                                 if range.contains(zombie_pos, zombie_hitbox) {
-                                    Some((*zombie_pos, *zombie_velocity))
+                                    Some((
+                                        (*zombie_pos).move_z(zombie_hitbox.height / 3.0),
+                                        *zombie_velocity,
+                                    ))
                                 } else {
                                     None
                                 }
@@ -212,12 +217,10 @@ fn shooter_work(
                                 rhs.x.partial_cmp(&lhs.x).unwrap()
                             });
                         target.map(|(target, velocity)| {
-                            let mut diff = target - pos;
-                            diff.x -= time.diff() * velocity.x;
-                            diff.y -= time.diff() * velocity.y;
-                            diff.z -= time.diff() * velocity.z;
+                            let diff = target - pos;
                             TargetCalculator {
                                 diff,
+                                target_vel: velocity,
                                 x,
                                 r,
                                 g: config.gamerule.gravity.0,

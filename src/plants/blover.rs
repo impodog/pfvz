@@ -55,7 +55,12 @@ fn blover_work(
     mut action: EventWriter<game::CreatureAction>,
     mut q_blover: Query<(Entity, &game::Overlay, &mut BloverTimer)>,
     mut q_zombie: Query<
-        (&game::Position, &game::HitBox, &mut game::LogicPosition),
+        (
+            &game::Position,
+            &game::HitBox,
+            &mut game::LogicPosition,
+            Option<&game::Gravity>,
+        ),
         With<game::Zombie>,
     >,
     time: Res<config::FrameTime>,
@@ -71,17 +76,24 @@ fn blover_work(
                 action.send(game::CreatureAction::Die(entity));
             } else {
                 let factor = overlay.factor() * time.diff();
-                q_zombie.iter_mut().for_each(|(pos, hitbox, mut logic)| {
-                    let factor =
-                        factor * (pos.z.max(0.0) * 2.0).powi(2) * factors.blover.velocity_factor;
-                    logic.plus_assign(game::Position::new_xy(factor, 0.0));
-                    if pos.z <= 0.5 {
-                        let half_width = hitbox.width / 2.0;
-                        if logic.base_raw_mut().x - half_width > bound {
-                            logic.base_raw_mut().x = bound + half_width;
+                q_zombie
+                    .iter_mut()
+                    .for_each(|(pos, hitbox, mut logic, gravity)| {
+                        let base_factor = pos.z.max(0.0) * 2.0;
+                        let base_factor = if gravity.is_some() {
+                            base_factor * 0.25
+                        } else {
+                            base_factor * base_factor
+                        };
+                        let factor = factor * base_factor * factors.blover.velocity_factor;
+                        logic.plus_assign(game::Position::new_xy(factor, 0.0));
+                        if pos.z <= 0.5 {
+                            let half_width = hitbox.width / 2.0;
+                            if logic.base_raw_mut().x - half_width > bound {
+                                logic.base_raw_mut().x = bound + half_width;
+                            }
                         }
-                    }
-                });
+                    });
             }
         });
 }

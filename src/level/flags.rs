@@ -26,6 +26,7 @@ bitflags! {
         const FLOWER_POT = 0x0105;
         const WATER_POT = 0x0205;
         const PUMPKIN = 0x0181;
+        const COFFEE_BEAN = 0x0080;
 
         const GROUND_ZOMBIE = 0x0005;
         const GROUND_AQUATIC_ZOMBIE = 0x0007;

@@ -47,10 +47,12 @@ fn update_displace(
                 .layout
                 .position_3d_to_coordinates(logic.base_raw());
             let disp = level.config.layout.get_disp(x);
-            let diff = disp - displace.0;
-            if diff.abs() > f32::EPSILON {
-                logic.base_raw_mut().z += diff;
-                displace.0 = disp;
+            if logic.base_raw().z + logic.disp.z <= disp {
+                let diff = disp - displace.0;
+                if diff.abs() > f32::EPSILON {
+                    logic.base_raw_mut().z += diff;
+                    displace.0 = disp;
+                }
             }
         });
 }

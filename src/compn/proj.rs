@@ -37,7 +37,7 @@ fn despawn_by_hit_roof(
             .config
             .layout
             .position_3d_to_coordinates(logic.base_raw());
-        if pos.z <= level.config.layout.get_disp(x) {
+        if pos.z < level.config.layout.get_disp(x) {
             queue.push(entity);
         }
     });

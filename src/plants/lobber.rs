@@ -19,7 +19,7 @@ impl Plugin for PlantsLobberPlugin {
 game_conf!(projectile ProjectileCabbage);
 game_conf!(shooter CabbagePultShooter);
 game_conf!(systems cabbage_pult_systems);
-game_conf!(system add_gravity_system, Entity);
+game_conf!(pub system add_gravity_system, Entity);
 game_conf!(system cabbage_callback, Entity);
 
 fn add_gravity(In(entity): In<Entity>, mut commands: Commands) {
@@ -66,7 +66,6 @@ fn init_config(
     mut commands: Commands,
     plants: Res<assets::SpritePlants>,
     factors: Res<plants::PlantFactors>,
-    audio_plants: Res<assets::AudioPlants>,
     mut map: ResMut<game::CreatureMap>,
 ) {
     let cabbage = Arc::new(game::ProjectileShared {

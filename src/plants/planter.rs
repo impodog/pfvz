@@ -145,39 +145,40 @@ fn do_plant(
                     },
                     id: *id,
                 });
-            }
-        } else if select.0 == slots.0 {
-            let list = {
-                let index = level.config.layout.position_2d_to_index(&cursor.pos);
-                plants.plants.get(index)
-            };
-            if let Some(list) = list {
-                let list = list.read().unwrap();
-                // This makes sure that only the top level of plant is removed
-                let entity = list.iter().max_by(|left, right| {
-                    if let Ok(left) = q_transform.get(**left) {
-                        if let Ok(right) = q_transform.get(**right) {
-                            return left
-                                .translation
-                                .z
-                                .partial_cmp(&right.translation.z)
-                                .unwrap();
+                select.0 = usize::MAX;
+            } else if select.0 == slots.0 {
+                let list = {
+                    let index = level.config.layout.position_2d_to_index(&cursor.pos);
+                    plants.plants.get(index)
+                };
+                if let Some(list) = list {
+                    let list = list.read().unwrap();
+                    // This makes sure that only the top level of plant is removed
+                    let entity = list.iter().max_by(|left, right| {
+                        if let Ok(left) = q_transform.get(**left) {
+                            if let Ok(right) = q_transform.get(**right) {
+                                return left
+                                    .translation
+                                    .z
+                                    .partial_cmp(&right.translation.z)
+                                    .unwrap();
+                            }
                         }
-                    }
-                    std::cmp::Ordering::Less
-                });
-                if let Some(entity) = entity {
-                    if let Ok(creature) = q_creature.get(*entity) {
-                        // Filters undiggable creatures
-                        if (creature.flags & level::CreatureFlags::UNDIGGABLE).bits() == 0 {
-                            if let Some(commands) = commands.get_entity(*entity) {
-                                commands.despawn_recursive();
+                        std::cmp::Ordering::Less
+                    });
+                    if let Some(entity) = entity {
+                        if let Ok(creature) = q_creature.get(*entity) {
+                            // Filters undiggable creatures
+                            if (creature.flags & level::CreatureFlags::UNDIGGABLE).bits() == 0 {
+                                if let Some(commands) = commands.get_entity(*entity) {
+                                    commands.despawn_recursive();
+                                }
                             }
                         }
                     }
                 }
+                select.0 = usize::MAX;
             }
-            select.0 = usize::MAX;
         }
     }
 }
