@@ -3,6 +3,7 @@ selection = { "All" = [-2, -17, -18, -19, -20, -21, -22, -23, -24] }
 layout = "Pool"
 modify = { give = -25, next = { stage = 4, level = 1 }, slots = 9 }
 sun = 1500
+bgm = "Ub"
 [[waves]]
 points = 0
 wait = 0.0
