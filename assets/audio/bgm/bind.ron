@@ -1,0 +1,8 @@
+(
+    bind: {
+        "Rain": "audio/bgm/rain/rain.ron",
+    },
+    layout: {
+        
+    }
+)

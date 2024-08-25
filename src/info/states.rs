@@ -47,6 +47,7 @@ pub enum MenuStates {
     NotMenu,
     Main,
     Adventure,
+    Config,
 }
 
 fn change_to_main_menu(mut menu: ResMut<NextState<MenuStates>>) {

@@ -60,6 +60,31 @@ impl level::LayoutKind {
         (x, (pos.y + size.1) as usize)
     }
 
+    pub fn position_3d_to_coordinates_checked(
+        &self,
+        pos: &game::Position,
+    ) -> Option<(usize, usize)> {
+        let (rows, cols) = self.size();
+        let size = self.half_size_f32();
+        let x = pos.x + size.0;
+        if x >= 0.0 {
+            let x = x as usize;
+            let y = pos.y + size.1;
+            if y >= 0.0 {
+                let y = y as usize;
+                if x < rows && y < cols {
+                    Some((x, y))
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
+        } else {
+            None
+        }
+    }
+
     pub fn coordinates_to_position(&self, x: usize, y: usize) -> game::Position {
         let size = self.half_size_f32();
         game::Position {
@@ -70,7 +95,7 @@ impl level::LayoutKind {
         }
     }
 
-    pub fn regularize(&self, pos: game::Position) -> game::Position {
+    pub fn regularize_xy(&self, pos: game::Position) -> game::Position {
         let hsize = self.half_size_f32();
         let pos = pos.move_by(hsize.0, hsize.1);
         game::Position {
@@ -79,6 +104,11 @@ impl level::LayoutKind {
             z: pos.z,
             r: pos.r,
         }
+    }
+
+    pub fn regularize_xyzr(&self, pos: &game::Position) -> game::Position {
+        let (x, y) = self.position_3d_to_coordinates(pos);
+        self.coordinates_to_position(x, y)
     }
 
     pub fn same_y(&self, lhs: &game::Position, rhs: &game::Position) -> bool {

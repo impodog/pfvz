@@ -8,7 +8,7 @@ impl Plugin for PlantsPlanterPlugin {
         app.add_event::<PlanterCall>();
         app.add_systems(
             Update,
-            (do_plant, receive_planter_call).run_if(when_state!(gaming)),
+            (do_plant, receive_planter_call, add_layer_disp).run_if(when_state!(gaming)),
         );
     }
 }
@@ -181,4 +181,38 @@ fn do_plant(
             }
         }
     }
+}
+
+fn add_layer_disp(
+    commands: ParallelCommands,
+    q_plant: Query<(Entity, &game::LogicPosition), Added<game::Plant>>,
+    q_disp: Query<&game::LayerDisp>,
+    level: Res<level::Level>,
+    plants: Res<game::PlantLayout>,
+) {
+    q_plant.par_iter().for_each(|(entity, logic)| {
+        let initial_disp = q_disp.get(entity).map(|disp| disp.0).unwrap_or_default();
+        let index = level.config.layout.position_3d_to_index(logic.base_raw());
+        if let Some(plants) = plants.plants.get(index) {
+            let plants = plants.read().unwrap();
+            let mut iter = plants.iter().rev();
+            let top = if let Some(plant) = iter.next() {
+                if *plant != entity {
+                    Some(*plant)
+                } else {
+                    iter.next().copied()
+                }
+            } else {
+                None
+            };
+            let disp = top
+                .and_then(|top| q_disp.get(top).ok().map(|disp| disp.0 + 0.1))
+                .unwrap_or_default();
+            commands.command_scope(|mut commands| {
+                if let Some(mut commands) = commands.get_entity(entity) {
+                    commands.try_insert(game::LayerDisp(initial_disp + disp));
+                }
+            })
+        }
+    });
 }

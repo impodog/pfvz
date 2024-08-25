@@ -70,6 +70,9 @@ pub struct SpritePlants {
     pub kernel: Arc<sprite::FrameArr>,
     pub butter: Arc<sprite::FrameArr>,
     pub kernel_pult_lob: Arc<sprite::FrameArr>,
+    pub garlic: Arc<sprite::FrameArr>,
+    pub garlic_damaged: Arc<sprite::FrameArr>,
+    pub garlic_destroyed: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -329,6 +332,17 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/plants/kernel_pult_lob",
             Duration::from_millis(150),
+        ),
+        garlic: super::load_animation(&server, "sprites/plants/garlic", Duration::from_millis(100)),
+        garlic_damaged: super::load_animation(
+            &server,
+            "sprites/plants/garlic_damaged",
+            Duration::from_millis(150),
+        ),
+        garlic_destroyed: super::load_animation(
+            &server,
+            "sprites/plants/garlic_destroyed",
+            Duration::from_millis(175),
         ),
     };
     commands.insert_resource(plants);

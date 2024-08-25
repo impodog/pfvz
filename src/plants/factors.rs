@@ -364,6 +364,14 @@ pub struct KernelPult {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Garlic {
+    pub velocity: game::VelocityX,
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -431,6 +439,7 @@ pub struct PlantFactors {
     pub cabbage_pult: CabbagePult,
     pub coffee_bean: CoffeeBean,
     pub kernel_pult: KernelPult,
+    pub garlic: Garlic,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

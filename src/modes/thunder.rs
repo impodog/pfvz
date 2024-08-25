@@ -8,7 +8,14 @@ impl Plugin for ModesThunderPlugin {
         app.add_systems(OnEnter(info::GlobalStates::Play), (spawn_thunder,));
         app.add_systems(
             Update,
-            (modify_thunder_color, flash_timer_tick, flash_impl).run_if(when_state!(gaming)),
+            (
+                flash_play_sound,
+                flash_play_sound_delay,
+                modify_thunder_color,
+                flash_timer_tick,
+                flash_impl,
+            )
+                .run_if(when_state!(gaming)),
         );
     }
 }
@@ -92,13 +99,47 @@ fn flash_timer_tick(
     mut timer: Local<FlashingTimer>,
     factors: Res<collectible::ItemFactors>,
     mut flash: EventWriter<FlashEvent>,
+    level: Res<level::Level>,
 ) {
-    timer.tick(time.delta());
-    if timer.just_finished() {
-        flash.send(FlashEvent);
-        timer.set_duration(factors.thunder.interval.into());
-        timer.reset();
+    if level.config.game.contains(&level::GameKind::Thunder) {
+        timer.tick(time.delta());
+        if timer.just_finished() {
+            flash.send(FlashEvent);
+            timer.set_duration(factors.thunder.interval.into());
+            timer.reset();
+        }
     }
+}
+
+#[derive(Resource, Debug, Deref, DerefMut)]
+struct ThunderSoundDelay(Timer);
+impl Default for ThunderSoundDelay {
+    fn default() -> Self {
+        Self(Timer::from_seconds(
+            rand::thread_rng().gen_range(1.0..3.0),
+            TimerMode::Once,
+        ))
+    }
+}
+
+fn flash_play_sound(
+    delay: Option<ResMut<ThunderSoundDelay>>,
+    time: Res<config::FrameTime>,
+    audio: Res<Audio>,
+    audio_items: Res<assets::AudioItems>,
+) {
+    if let Some(mut delay) = delay {
+        delay.tick(time.delta());
+        if delay.just_finished() {
+            audio.play(audio_items.thunder.random());
+        }
+    }
+}
+
+fn flash_play_sound_delay(mut commands: Commands, mut flash: EventReader<FlashEvent>) {
+    flash.read().for_each(|_flash| {
+        commands.insert_resource(ThunderSoundDelay::default());
+    });
 }
 
 #[derive(Resource, Default, Debug, Clone, Copy)]
@@ -134,14 +175,14 @@ fn flash_impl(
             FlashPeriod::Paused => {}
             FlashPeriod::ToWhite => {
                 if color.0 < 0.5 {
-                    color.0 = (color.0 + 0.08).min(1.0);
+                    color.0 = (color.0 + 0.05).min(1.0);
                 } else {
                     *period = FlashPeriod::ToDark;
                 }
             }
             FlashPeriod::ToDark => {
                 if color.0 > 0.0 {
-                    color.0 = (color.0 - 0.05).max(0.0);
+                    color.0 = (color.0 - 0.03).max(0.0);
                     color.1 = (color.1 - 0.1).max(0.0);
                 } else {
                     *period = FlashPeriod::ToOpaque;
@@ -149,7 +190,7 @@ fn flash_impl(
             }
             FlashPeriod::ToOpaque => {
                 if color.1 < 1.0 {
-                    color.1 = (color.1 + 0.05).min(1.0);
+                    color.1 = (color.1 + 0.03).min(1.0);
                 } else {
                     *period = FlashPeriod::Paused;
                 }

@@ -305,12 +305,11 @@ fn convert_position(mut q_pos: Query<(&mut game::Position, &game::HitBox, &game:
 }
 
 fn update_position(
-    config: Res<config::Config>,
     time: Res<config::FrameTime>,
     mut q_pos: Query<(&Velocity, &mut game::LogicPosition), Without<game::Overlay>>,
 ) {
     q_pos.par_iter_mut().for_each(|(vel, mut pos)| {
-        let factor = time.diff() * config.gamerule.speed.0;
+        let factor = time.diff();
         pos.plus_assign(game::Position::new(
             vel.x * factor,
             vel.y * factor,
@@ -336,12 +335,11 @@ fn update_position_with_overlay(
 }
 
 fn update_bare_position(
-    config: Res<config::Config>,
     time: Res<config::FrameTime>,
     mut q_pos: Query<(&Velocity, &mut game::Position), Without<game::LogicPosition>>,
 ) {
     q_pos.par_iter_mut().for_each(|(vel, mut pos)| {
-        let factor = time.diff() * config.gamerule.speed.0;
+        let factor = time.diff();
         pos.x += vel.x * factor;
         pos.y += vel.y * factor;
         pos.z += vel.z * factor;
@@ -355,7 +353,7 @@ fn update_velocity(
     mut q_vel: Query<&mut Velocity, With<Gravity>>,
 ) {
     q_vel.par_iter_mut().for_each(|mut vel| {
-        vel.z -= time.diff() * config.gamerule.gravity.0 * config.gamerule.speed.0;
+        vel.z -= time.diff() * config.gamerule.gravity.0;
     });
 }
 
@@ -365,7 +363,7 @@ fn update_velocity_half(
     mut q_vel: Query<&mut Velocity, With<GravityHalf>>,
 ) {
     q_vel.par_iter_mut().for_each(|mut vel| {
-        vel.z -= time.diff() * config.gamerule.gravity.0 * config.gamerule.speed.0 / 2.0;
+        vel.z -= time.diff() * config.gamerule.gravity.0 / 2.0;
     });
 }
 

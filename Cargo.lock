@@ -3014,6 +3014,7 @@ dependencies = [
 name = "pfvz"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "bevy",
  "bevy_egui",
  "bevy_framepace",
@@ -3022,6 +3023,7 @@ dependencies = [
  "lazy_static",
  "ordered-float",
  "rand",
+ "ron",
  "serde",
  "serde_json",
  "smallvec",

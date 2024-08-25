@@ -1,4 +1,5 @@
 mod banners;
+mod bgm;
 mod config;
 mod disp;
 mod flags;
@@ -10,6 +11,7 @@ mod spawn;
 mod util;
 
 pub use banners::*;
+pub use bgm::*;
 pub use config::*;
 pub use disp::*;
 pub use flags::*;

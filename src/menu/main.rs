@@ -10,9 +10,12 @@ impl Plugin for MenuMainPlugin {
 
 fn main_menu(mut contexts: EguiContexts, mut menu: ResMut<NextState<info::MenuStates>>) {
     egui::CentralPanel::default().show(contexts.ctx_mut(), |ui| {
-        ui.label(egui::RichText::new("Plants & Fungi v.s. Zombies").size(50.0 * UI_ZOOM_FACTOR));
+        ui.label(super::title_text("Plants & Fungi vs. Zombies"));
         if ui.button(super::medium_text("Adventure")).clicked() {
             menu.set(info::MenuStates::Adventure);
+        }
+        if ui.button(super::medium_text("Config")).clicked() {
+            menu.set(info::MenuStates::Config);
         }
     });
 }

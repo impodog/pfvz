@@ -17,6 +17,7 @@ pub struct Overlay {
 }
 
 impl Overlay {
+    /// The factors multiplied to the overlay, NOT including config speed
     pub fn speed(&self) -> f32 {
         self.speed.factor()
     }

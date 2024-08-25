@@ -1,4 +1,5 @@
 mod adventure;
+mod config;
 mod main;
 mod plugin;
 mod util;

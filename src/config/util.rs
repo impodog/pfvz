@@ -28,7 +28,7 @@ impl FrameTime {
 }
 
 fn init_timer(mut commands: Commands, config: Res<config::Config>) {
-    let diff = 1.0 / config.program.framerate.0;
+    let diff = 1.0 / config.program.framerate.0 * config.gamerule.speed.0;
     commands.insert_resource(FrameTime {
         delta: Duration::from_secs_f32(diff),
         diff,

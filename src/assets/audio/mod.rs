@@ -1,7 +1,9 @@
+mod bgm;
 mod items;
 mod plants;
 mod zombies;
 
+pub use bgm::*;
 pub use items::*;
 pub use plants::*;
 pub use zombies::*;
@@ -18,6 +20,7 @@ impl Plugin for AssetsAudioPlugin {
                 items::load_items,
                 zombies::load_zombies,
                 plants::load_plants,
+                bgm::load_bgm,
             ),
         );
     }
@@ -34,7 +37,7 @@ impl AudioList {
                 .extension()
                 .is_some_and(|ext| ext == "ogg" || ext == "ron")
             {
-                list.push(server.load(std::fs::canonicalize(path)?));
+                list.push(server.load::<AudioSource>(std::fs::canonicalize(path)?));
             }
         }
         Ok(Self(Arc::new(list)))
