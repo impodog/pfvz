@@ -4,6 +4,7 @@ layout = "Fog"
 game = ["Random"]
 modify = { give = -29, next = { stage = 4, level = 6 } }
 sun = 200
+bgm = "Lb"
 [[waves]]
 points = 0
 wait = 30.0
