@@ -79,7 +79,13 @@ fn blover_work(
                 q_zombie
                     .iter_mut()
                     .for_each(|(pos, hitbox, mut logic, gravity)| {
-                        let base_factor = pos.z.max(0.0) * 2.0;
+                        let (x, y) = level
+                            .config
+                            .layout
+                            .position_3d_to_coordinates(logic.base_raw());
+                        let disp = pos.z - level.config.layout.get_disp(x);
+
+                        let base_factor = disp.max(0.0) * 2.0;
                         let base_factor = if gravity.is_some() {
                             base_factor * 0.25
                         } else {
@@ -87,7 +93,7 @@ fn blover_work(
                         };
                         let factor = factor * base_factor * factors.blover.velocity_factor;
                         logic.plus_assign(game::Position::new_xy(factor, 0.0));
-                        if pos.z <= 0.5 {
+                        if disp <= 0.5 {
                             let half_width = hitbox.width / 2.0;
                             if logic.base_raw_mut().x - half_width > bound {
                                 logic.base_raw_mut().x = bound + half_width;
