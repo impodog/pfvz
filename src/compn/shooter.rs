@@ -204,10 +204,7 @@ fn shooter_work(
                             .iter()
                             .filter_map(|(zombie_pos, zombie_hitbox, zombie_velocity)| {
                                 if range.contains(zombie_pos, zombie_hitbox) {
-                                    Some((
-                                        (*zombie_pos).move_z(zombie_hitbox.height / 3.0),
-                                        *zombie_velocity,
-                                    ))
+                                    Some((*zombie_pos, *zombie_velocity))
                                 } else {
                                     None
                                 }

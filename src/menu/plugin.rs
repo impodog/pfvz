@@ -9,6 +9,7 @@ impl Plugin for MenuPlugin {
             main::MenuMainPlugin,
             adventure::MenuAdventurePlugin,
             super::config::MenuConfigPlugin,
+            credits::MenuCreditsPlugin,
         ));
     }
 }

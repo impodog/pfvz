@@ -17,5 +17,8 @@ fn main_menu(mut contexts: EguiContexts, mut menu: ResMut<NextState<info::MenuSt
         if ui.button(super::medium_text("Config")).clicked() {
             menu.set(info::MenuStates::Config);
         }
+        if ui.button(super::medium_text("Credits & License")).clicked() {
+            menu.set(info::MenuStates::Credits);
+        }
     });
 }

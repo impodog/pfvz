@@ -190,7 +190,7 @@ cooldown = 7.5
 self_box = { width = 1.0, height = 1.0 }
 range = [-1.8, 1.8]
 health = 300
-damage = 15
+damage = 18
 interval = 0.4
 cost = 150
 [jalapeno]

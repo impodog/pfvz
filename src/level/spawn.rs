@@ -54,7 +54,7 @@ fn increase_points(
                     stack.push(fixed.0);
                 }
             }
-            stack.shuffle(&mut rand::thread_rng());
+            // stack.shuffle(&mut rand::thread_rng());
             **guard = true;
         }
         **current = wave.0;

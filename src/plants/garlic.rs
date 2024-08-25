@@ -50,6 +50,7 @@ fn garlic_divert(
     if let Some(coll) = collision.get(&entity) {
         for zombie in coll.iter() {
             if let Ok(pos) = q_zombie.get(*zombie) {
+                let pos = level.config.layout.regularize_xy(*pos);
                 let target = {
                     let mut diff = [1.0, -1.0]
                         .choose(&mut rand::thread_rng())

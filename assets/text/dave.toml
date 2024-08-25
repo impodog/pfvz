@@ -57,4 +57,10 @@ map = [
             "This can't be good.",
         ],
     ],
+    [
+        { stage = 5, level = 1 },
+        [
+            "Pro tip #3: Shooters will hit the roof. Use lobbers instead.",
+        ],
+    ],
 ]

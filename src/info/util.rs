@@ -27,4 +27,7 @@ macro_rules! when_state {
     (menu) => {
         bevy::prelude::in_state($crate::info::GlobalStates::Menu)
     };
+    (credits) => {
+        bevy::prelude::in_state($crate::info::MenuStates::Credits)
+    };
 }
