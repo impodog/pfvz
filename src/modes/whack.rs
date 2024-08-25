@@ -75,7 +75,7 @@ fn move_to_grave(
         });
         if !graves.is_empty() {
             q_zombie.par_iter_mut().for_each(|mut pos| {
-                let regular = level.config.layout.regularize(*pos.base_raw());
+                let regular = level.config.layout.regularize_xy(*pos.base_raw());
                 let grave = graves.choose(&mut rand::thread_rng()).unwrap();
                 pos.plus_assign(game::Position::new_xy(
                     grave.x - regular.x,

@@ -34,6 +34,7 @@ impl Plugin for PlantsPlugin {
             cactus::PlantsCactusPlugin,
             lobber::PlantsLobberPlugin,
             kernel::PlantsKernelPlugin,
+            garlic::PlantsGarlicPlugin,
         ));
     }
 }

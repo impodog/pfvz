@@ -21,7 +21,13 @@ macro_rules! when_state {
     (adventure) => {
         bevy::prelude::in_state($crate::info::MenuStates::Adventure)
     };
+    (config) => {
+        bevy::prelude::in_state($crate::info::MenuStates::Config)
+    };
     (menu) => {
         bevy::prelude::in_state($crate::info::GlobalStates::Menu)
+    };
+    (credits) => {
+        bevy::prelude::in_state($crate::info::MenuStates::Credits)
     };
 }

@@ -12,6 +12,7 @@ impl Plugin for LevelPlugin {
             progress::LevelProgressPlugin,
             spawn::LevelSpawnPlugin,
             disp::LevelDispPlugin,
+            bgm::LevelBgmPlugin,
         ));
     }
 }

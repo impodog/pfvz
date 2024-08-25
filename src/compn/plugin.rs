@@ -26,6 +26,7 @@ impl Plugin for CompnPlugin {
             mushroom::PlantsMushroomPlugin,
             water::CompnWaterPlugin,
             fire::CompnFirePlugin,
+            divert::CompnDivertPlugin,
         ));
     }
 }

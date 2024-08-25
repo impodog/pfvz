@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.86"
 bevy = { version = "0.14.1", default-features = false, features = [
     "multi_threaded",     # Run with multithreading
     "bevy_asset",         # Assets management
@@ -29,7 +30,8 @@ bitflags = "2.6.0"
 lazy_static = "1.5.0"
 ordered-float = "4.2.2"
 rand = "0.8.5"
-serde = { version = "1.0.208", features = ["derive"] }
-serde_json = "1.0.125"
+ron = "0.8.1"
+serde = { version = "1.0.209", features = ["derive"] }
+serde_json = "1.0.127"
 smallvec = "1.13.2"
 toml = "0.8.19"

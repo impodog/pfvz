@@ -22,6 +22,7 @@ fn adventure_direct_start(mut e_level: EventWriter<level::LevelEvent>, save: Res
 fn adventure_menu(
     mut contexts: EguiContexts,
     mut e_level: EventWriter<level::LevelEvent>,
+    mut menu: ResMut<NextState<info::MenuStates>>,
     mut stage: Local<String>,
     mut level: Local<String>,
     mut warning: Local<String>,
@@ -29,15 +30,15 @@ fn adventure_menu(
     save: Res<save::Save>,
 ) {
     egui::CentralPanel::default().show(contexts.ctx_mut(), |ui| {
-        ui.label(super::medium_text("Choose Adventure Menu"));
+        ui.label(super::title_text("Choose a level to play!"));
         ui.label(super::medium_text(format!(
             "You unlocked {}",
             save.adventure.0
         )));
         ui.label(super::small_text("Stage"));
-        ui.text_edit_singleline(&mut *stage);
+        ui.add(super::medium_edit(&mut stage));
         ui.label(super::small_text("Level"));
-        ui.text_edit_singleline(&mut *level);
+        ui.add(super::medium_edit(&mut level));
         if ui.button(super::medium_text("Start")).clicked() {
             let index = stage.parse().and_then(|stage| {
                 level
@@ -57,6 +58,9 @@ fn adventure_menu(
                     *warning = format!("{}", err);
                 }
             }
+        }
+        if ui.button(super::medium_text("Back to Main Menu")).clicked() {
+            menu.set(info::MenuStates::Main);
         }
         if *trigger {
             *warning = "No such level!".into();

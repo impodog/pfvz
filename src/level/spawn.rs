@@ -54,7 +54,7 @@ fn increase_points(
                     stack.push(fixed.0);
                 }
             }
-            stack.shuffle(&mut rand::thread_rng());
+            // stack.shuffle(&mut rand::thread_rng());
             **guard = true;
         }
         **current = wave.0;
@@ -160,7 +160,10 @@ fn by_probability(
 
             if ok {
                 let x = get_x();
-                let mut pos = level.config.layout.regularize(game::Position::new_xy(x, y));
+                let mut pos = level
+                    .config
+                    .layout
+                    .regularize_xyzr(&game::Position::new_xy(x, y));
                 pos.x = x;
                 action.send(game::CreatureAction::Spawn(
                     id,

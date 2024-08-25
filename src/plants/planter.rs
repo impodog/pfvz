@@ -8,7 +8,7 @@ impl Plugin for PlantsPlanterPlugin {
         app.add_event::<PlanterCall>();
         app.add_systems(
             Update,
-            (do_plant, receive_planter_call).run_if(when_state!(gaming)),
+            (do_plant, receive_planter_call, add_layer_disp).run_if(when_state!(gaming)),
         );
     }
 }
@@ -33,12 +33,9 @@ fn receive_planter_call(
     mut action: EventWriter<game::CreatureAction>,
     mut planter: EventWriter<PlanterEvent>,
     mut sun: ResMut<game::Sun>,
-    select: ResMut<game::Selecting>,
     map: Res<game::CreatureMap>,
     plants: Res<game::PlantLayout>,
-    cooldown: Res<game::SelectionCooldown>,
     level: Res<level::Level>,
-    cursor: Res<info::CursorInfo>,
     q_creature: Query<&game::Creature>,
     q_pos: Query<&game::Position>,
     q_go_below: Query<(), With<game::PlantGoBelow>>,
@@ -55,7 +52,7 @@ fn receive_planter_call(
             .coordinates_to_position(coordinates.0, coordinates.1);
 
         if let Some(creature) = map.get(id) {
-            let index = level.config.layout.position_2d_to_index(&cursor.pos);
+            let index = level.config.layout.position_3d_to_index(&pos);
 
             let ok = *id >= 0 || {
                 // Determines whether the plant is compatible with the tile selected
@@ -78,13 +75,7 @@ fn receive_planter_call(
                     )
                 }
             };
-            if ok
-                    // NOTE: We may use `Option::is_none_or` if possible in the future
-                    && !cooldown
-                        .get_option(select.0)
-                        .is_some_and(|timer| !timer.finished())
-                    && sun.0 >= creature.cost
-            {
+            if ok {
                 // When planted on top, increase z height
                 let mut disp = game::Position::default();
                 if let Some(plant) = plants.top(index) {
@@ -105,11 +96,11 @@ fn receive_planter_call(
                 action.send(game::CreatureAction::Spawn(*id, logic));
                 // If selection is available
                 if let Some(selection_index) = selection_index {
-                    sun.0 -= creature.cost;
                     planter.send(PlanterEvent {
                         index: *selection_index,
                         id: *id,
                     });
+                    sun.0 = sun.0.saturating_sub(creature.cost);
                 }
             }
         }
@@ -120,11 +111,14 @@ fn receive_planter_call(
 fn do_plant(
     mut commands: Commands,
     mut select: ResMut<game::Selecting>,
+    sun: Res<game::Sun>,
+    cooldown: Res<game::SelectionCooldown>,
     selection: Res<game::Selection>,
     plants: Res<game::PlantLayout>,
     level: Res<level::Level>,
     cursor: Res<info::CursorInfo>,
     slots: Res<level::LevelSlots>,
+    map: Res<game::CreatureMap>,
     q_transform: Query<&Transform>,
     q_creature: Query<&game::Creature>,
     mut call: EventWriter<PlanterCall>,
@@ -136,16 +130,24 @@ fn do_plant(
             .position_2d_to_coordinates_checked(&cursor.pos)
         {
             if let Some(id) = selection.get(select.0) {
-                call.send(PlanterCall {
-                    coordinates,
-                    selection_index: if select.0 < slots.0 {
-                        Some(select.0)
-                    } else {
-                        None
-                    },
-                    id: *id,
-                });
-                select.0 = usize::MAX;
+                if let Some(creature) = map.get(id) {
+                    if !cooldown
+                        .get_option(select.0)
+                        .is_some_and(|timer| !timer.finished())
+                        && sun.0 >= creature.cost
+                    {
+                        call.send(PlanterCall {
+                            coordinates,
+                            selection_index: if select.0 < slots.0 {
+                                Some(select.0)
+                            } else {
+                                None
+                            },
+                            id: *id,
+                        });
+                        select.0 = usize::MAX;
+                    }
+                }
             } else if select.0 == slots.0 {
                 let list = {
                     let index = level.config.layout.position_2d_to_index(&cursor.pos);
@@ -181,4 +183,38 @@ fn do_plant(
             }
         }
     }
+}
+
+fn add_layer_disp(
+    commands: ParallelCommands,
+    q_plant: Query<(Entity, &game::LogicPosition), Added<game::Plant>>,
+    q_disp: Query<&game::LayerDisp>,
+    level: Res<level::Level>,
+    plants: Res<game::PlantLayout>,
+) {
+    q_plant.par_iter().for_each(|(entity, logic)| {
+        let initial_disp = q_disp.get(entity).map(|disp| disp.0).unwrap_or_default();
+        let index = level.config.layout.position_3d_to_index(logic.base_raw());
+        if let Some(plants) = plants.plants.get(index) {
+            let plants = plants.read().unwrap();
+            let mut iter = plants.iter().rev();
+            let top = if let Some(plant) = iter.next() {
+                if *plant != entity {
+                    Some(*plant)
+                } else {
+                    iter.next().copied()
+                }
+            } else {
+                None
+            };
+            let disp = top
+                .and_then(|top| q_disp.get(top).ok().map(|disp| disp.0 + 0.1))
+                .unwrap_or_default();
+            commands.command_scope(|mut commands| {
+                if let Some(mut commands) = commands.get_entity(entity) {
+                    commands.try_insert(game::LayerDisp(initial_disp + disp));
+                }
+            })
+        }
+    });
 }

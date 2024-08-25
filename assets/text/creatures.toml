@@ -174,3 +174,8 @@ name = "Zea mays"
 short = "Lobs kernels, 1 butter, and repeat"
 desc = """Lobs kernels at zombies, 1 butter, and repeat
 Damage: 0.5x(kernel) Regular(butter)"""
+[desc.garlic]
+name = "Allium sativum"
+short = "Makes zombies go to other lanes when bitten"
+desc = """Makes zombies go to other lanes when bitten
+Damage: 0.0x(garlic)"""

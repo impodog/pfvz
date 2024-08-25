@@ -6,6 +6,7 @@ pub(super) struct ConfigLoadPlugin;
 impl Plugin for ConfigLoadPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(PreStartup, (load_config,));
+        app.add_systems(Last, (save_config,));
     }
 }
 
@@ -55,5 +56,12 @@ fn load_config(mut commands: Commands) {
     } else {
         warn!("Unable to find \"config.toml\", using default");
         commands.init_resource::<Config>();
+    }
+}
+
+fn save_config(mut exit: EventReader<AppExit>, config: Res<Config>) {
+    if exit.read().next().is_some() {
+        let str = toml::to_string(&*config).expect("cannot serialize configuration");
+        std::fs::write("config.toml", str).expect("cannot write configuration");
     }
 }

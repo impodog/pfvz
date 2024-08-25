@@ -51,7 +51,7 @@ impl TileFeature {
     }
 }
 
-#[derive(Serialize, Deserialize, Default, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum LayoutKind {
     #[default]
     Day,
@@ -297,6 +297,8 @@ pub struct LevelConfig {
     pub selection: SelectionArr,
     #[serde(default)]
     pub modify: Option<StateModify>,
+    #[serde(default)]
+    pub bgm: Option<String>,
     pub sun: u32,
 }
 impl LevelConfig {

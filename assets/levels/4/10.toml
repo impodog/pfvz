@@ -4,6 +4,7 @@ layout = "Fog"
 game = ["Thunder"]
 modify = { give = -33, next = { stage = 5, level = 1 }, slots = 10 }
 sun = 150
+bgm = "Rain"
 [[waves]]
 points = 0
 wait = 0.0

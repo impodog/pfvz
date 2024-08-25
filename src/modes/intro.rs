@@ -10,10 +10,8 @@ impl Plugin for ModesIntroPlugin {
         app.add_systems(OnExit(info::PlayStates::Intro), (despawn_present_by,));
         app.add_systems(OnExit(info::GlobalStates::Play), (despawn_present_by,));
         app.add_systems(OnEnter(info::PlayStates::Gaming), (spawn_title,));
-        app.add_systems(
-            Update,
-            (remove_banners, title_timer_tick).run_if(when_state!(gaming)),
-        );
+        app.add_systems(OnExit(info::PlayStates::Gaming), (title_jump,));
+        app.add_systems(Update, (remove_banners,).run_if(when_state!(gaming)));
     }
 }
 
@@ -25,16 +23,7 @@ struct PresentByTimer(Timer);
 
 impl Default for PresentByTimer {
     fn default() -> Self {
-        Self(Timer::from_seconds(4.0, TimerMode::Once))
-    }
-}
-
-#[derive(Resource, Deref, DerefMut)]
-struct TitleTimer(Timer);
-
-impl Default for TitleTimer {
-    fn default() -> Self {
-        Self(Timer::from_seconds(10.0, TimerMode::Once))
+        Self(Timer::from_seconds(5.0, TimerMode::Once))
     }
 }
 
@@ -101,10 +90,14 @@ fn despawn_present_by(mut commands: Commands, q_present_by: Query<Entity, With<P
 
 fn spawn_title(
     mut commands: Commands,
+    mut planter: EventWriter<plants::PlanterCall>,
     chunks: Res<assets::SpriteChunks>,
     level: Res<level::Level>,
+    audio: Res<Audio>,
+    audio_items: Res<assets::AudioItems>,
 ) {
     if level.config.game.contains(&level::GameKind::Intro) {
+        audio.play(audio_items.intro.random());
         commands.spawn((
             PresentBy,
             SpriteBundle {
@@ -117,7 +110,15 @@ fn spawn_title(
                 ..Default::default()
             },
         ));
-        commands.insert_resource(TitleTimer::default());
+        for row in 0..level.config.layout.size().0 {
+            for lane in 0..level.config.layout.size().1 {
+                planter.send(plants::PlanterCall {
+                    coordinates: (row, lane),
+                    id: rand::thread_rng().gen_range(GARLIC..=PEASHOOTER),
+                    ..Default::default()
+                });
+            }
+        }
     }
 }
 
@@ -135,15 +136,8 @@ fn remove_banners(
     }
 }
 
-fn title_timer_tick(
-    timer: Option<ResMut<TitleTimer>>,
-    time: Res<config::FrameTime>,
-    mut state: ResMut<NextState<info::GlobalStates>>,
-) {
-    if let Some(mut timer) = timer {
-        timer.tick(time.delta());
-        if timer.just_finished() {
-            state.set(info::GlobalStates::Win);
-        }
+fn title_jump(level: Res<level::Level>, mut state: ResMut<NextState<info::GlobalStates>>) {
+    if level.config.game.contains(&level::GameKind::Intro) {
+        state.set(info::GlobalStates::Win);
     }
 }
