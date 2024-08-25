@@ -1,8 +1,8 @@
 (
     bind: {
         "Rain": "audio/bgm/rain/rain.ron",
+        "Jitb": "audio/zombies/jitb/jitb.ron",
     },
     layout: {
-        
     }
 )

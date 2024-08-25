@@ -11,3 +11,5 @@ interval = [7.0, 12.0]
 start = 4
 [thunder]
 interval = [25.0, 30.0]
+[exciting]
+zombies = 12

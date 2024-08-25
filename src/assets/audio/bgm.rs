@@ -1,25 +1,36 @@
 use crate::prelude::*;
 use serde::Deserialize;
 
+pub struct LayoutBgm {
+    pub normal: Handle<AudioSource>,
+    pub exciting: Handle<AudioSource>,
+    pub begin: f64,
+}
 #[derive(Resource)]
 pub struct AudioBgm {
     map: BTreeMap<String, Handle<AudioSource>>,
-    layout: BTreeMap<level::LayoutKind, Handle<AudioSource>>,
+    layout: BTreeMap<level::LayoutKind, LayoutBgm>,
 }
 impl AudioBgm {
     pub fn get_name(&self, name: &str) -> Option<&Handle<AudioSource>> {
         self.map.get(name)
     }
 
-    pub fn get_layout(&self, layout: level::LayoutKind) -> Option<&Handle<AudioSource>> {
+    pub fn get_layout(&self, layout: level::LayoutKind) -> Option<&LayoutBgm> {
         self.layout.get(&layout)
     }
 }
 
 #[derive(Deserialize)]
+struct LayoutBind {
+    normal: String,
+    exciting: String,
+    begin: f64,
+}
+#[derive(Deserialize)]
 struct BgmBind {
     bind: BTreeMap<String, String>,
-    layout: BTreeMap<level::LayoutKind, String>,
+    layout: BTreeMap<level::LayoutKind, LayoutBind>,
 }
 
 pub(super) fn load_bgm(mut commands: Commands, server: Res<AssetServer>) {
@@ -34,7 +45,29 @@ pub(super) fn load_bgm(mut commands: Commands, server: Res<AssetServer>) {
                 .collect::<BTreeMap<_, _>>();
             let layout = layout
                 .into_iter()
-                .filter_map(|(layout, name)| map.get(&name).cloned().map(|handle| (layout, handle)))
+                .filter_map(
+                    |(
+                        layout,
+                        LayoutBind {
+                            normal,
+                            exciting,
+                            begin,
+                        },
+                    )| {
+                        map.get(&normal).cloned().and_then(|normal| {
+                            map.get(&exciting).cloned().map(|exciting| {
+                                (
+                                    layout,
+                                    LayoutBgm {
+                                        normal,
+                                        exciting,
+                                        begin,
+                                    },
+                                )
+                            })
+                        })
+                    },
+                )
                 .collect();
             commands.insert_resource(AudioBgm { map, layout });
         }

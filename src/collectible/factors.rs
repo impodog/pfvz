@@ -30,6 +30,10 @@ pub struct Fog {
 pub struct Thunder {
     pub interval: game::DurationRangeSecs,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Exciting {
+    pub zombies: usize,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ItemFactors {
@@ -37,6 +41,7 @@ pub struct ItemFactors {
     pub whack: Whack,
     pub fog: Fog,
     pub thunder: Thunder,
+    pub exciting: Exciting,
 }
 
 fn init_factors(mut commands: Commands) {
