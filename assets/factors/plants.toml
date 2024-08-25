@@ -290,7 +290,7 @@ kernel_damage = 20
 butter_damage = 40
 interval = 3.0
 cooldown = 7.5
-cost = 125
+cost = 100
 [garlic]
 velocity = 1.0
 self_box = { width = 1.0, height = 0.9 }

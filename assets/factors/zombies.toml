@@ -135,7 +135,7 @@ cooldown = 5.0
 cost = 125
 [pogo]
 jump_height = 1.2
-jump_velocity = -0.5
+jump_velocity = -0.4
 velocity = [-0.095, -0.09]
 self_box = { width = 0.5, height = 1.2 }
 self_health = [340, 70]
