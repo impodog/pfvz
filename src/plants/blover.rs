@@ -79,7 +79,7 @@ fn blover_work(
                 q_zombie
                     .iter_mut()
                     .for_each(|(pos, hitbox, mut logic, gravity)| {
-                        let (x, y) = level
+                        let (x, _y) = level
                             .config
                             .layout
                             .position_3d_to_coordinates(logic.base_raw());
