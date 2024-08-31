@@ -59,8 +59,13 @@ fn switch_exciting(
     handle: Option<ResMut<BgmHandle>>,
     mut audio_instances: ResMut<Assets<AudioInstance>>,
     q_zombies: Query<(), (With<game::Zombie>, Without<game::NotInvasive>)>,
+    mut e_wave: EventReader<level::RoomNextWave>,
 ) {
     if *status == BgmStatus::Single {
+        return;
+    }
+    // BGM is only swapped to normal during wave eventss
+    if *status == BgmStatus::Exciting && e_wave.read().next().is_none() {
         return;
     }
     if let Some(mut handle) = handle {

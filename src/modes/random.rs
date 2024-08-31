@@ -27,7 +27,11 @@ fn random_choose(
 ) {
     if level.config.game.contains(&level::GameKind::Random) {
         let ok = planter.read().any(|event| {
-            let plants::PlanterEvent { index, id: _id } = *event;
+            let plants::PlanterEvent {
+                index,
+                base: _base,
+                id: _id,
+            } = *event;
             if index == 0 || index == 1 {
                 false
             } else {
