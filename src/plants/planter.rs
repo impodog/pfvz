@@ -13,9 +13,11 @@ impl Plugin for PlantsPlanterPlugin {
     }
 }
 
+/// Event sent by player clicks that successfully plants something
 #[derive(Event, Debug, Clone)]
 pub struct PlanterEvent {
     pub index: usize,
+    pub base: game::Position,
     pub id: Id,
 }
 
@@ -98,6 +100,7 @@ fn receive_planter_call(
                 if let Some(selection_index) = selection_index {
                     planter.send(PlanterEvent {
                         index: *selection_index,
+                        base: pos,
                         id: *id,
                     });
                     sun.0 = sun.0.saturating_sub(creature.cost);

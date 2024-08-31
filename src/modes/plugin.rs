@@ -13,6 +13,7 @@ impl Plugin for ModesPlugin {
             thunder::ModesThunderPlugin,
             intro::ModesIntroPlugin,
             roof::ModesRoofPlugin,
+            columns::ModesColumnsPlugin,
         ));
     }
 }
