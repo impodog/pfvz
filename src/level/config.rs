@@ -206,6 +206,7 @@ pub enum GameKind {
     QuickShot,
     Random,
     Thunder,
+    Columns,
 }
 impl GameKind {
     fn is_sun_spawn(&self) -> bool {
@@ -216,6 +217,7 @@ impl GameKind {
             Self::QuickShot => true,
             Self::Random => true,
             Self::Thunder => true,
+            Self::Columns => false,
         }
     }
 
@@ -227,6 +229,7 @@ impl GameKind {
             Self::QuickShot => true,
             Self::Random => true,
             Self::Thunder => true,
+            Self::Columns => true,
         }
     }
 
