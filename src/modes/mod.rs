@@ -1,3 +1,4 @@
+mod columns;
 mod fog;
 mod intro;
 mod plugin;

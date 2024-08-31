@@ -14,6 +14,7 @@ struct ConfigData {
     sun_value: String,
     speed: String,
     damage: String,
+    framerate: String,
 }
 impl From<&config::Config> for ConfigData {
     fn from(value: &config::Config) -> Self {
@@ -21,6 +22,7 @@ impl From<&config::Config> for ConfigData {
             sun_value: value.gamerule.sun_value.0.to_string(),
             speed: value.gamerule.speed.0.to_string(),
             damage: value.gamerule.damage.0.to_string(),
+            framerate: value.program.framerate.to_string(),
         }
     }
 }
@@ -29,6 +31,7 @@ impl ConfigData {
         config.gamerule.sun_value.0 = self.sun_value.parse()?;
         config.gamerule.speed.0 = self.speed.parse()?;
         config.gamerule.damage.0 = self.damage.parse()?;
+        config.program.framerate.0 = self.framerate.parse()?;
         Ok(())
     }
 }
@@ -60,6 +63,9 @@ fn config_menu(
         ui.add(super::medium_edit(&mut data.damage));
 
         ui.label(super::large_text("Program-specific"));
+
+        ui.label(super::small_text("Target Framerate"));
+        ui.add(super::medium_edit(&mut data.framerate));
 
         ui.label(super::small_text(
             "(You need to restart the program to apply configurations.)",
