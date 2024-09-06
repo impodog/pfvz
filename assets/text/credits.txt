@@ -4,7 +4,6 @@ Plants & Fungi v.s. Zombies (pfvz)
  |         ----^^^^
  |         |
  |         helpless note: it is two dots here
- = note: this is a "music" build of the original game.
 
 
 

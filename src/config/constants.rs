@@ -79,6 +79,12 @@ pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.7);
 pub const BUTTON_SIZE: Vec2 = Vec2::new(SLOT_SIZE.x * 2.0, SLOT_SIZE.y);
 pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
 
+pub const ACH_SIZE_FACTOR: f32 = 0.15;
+pub const ACH_SIZE: Vec2 = Vec2::new(
+    LOGICAL_WIDTH * ACH_SIZE_FACTOR * 2.0,
+    LOGICAL_HEIGHT * ACH_SIZE_FACTOR * 3.0,
+);
+
 /// abs(delta z) must be below (hitbox1.height + hitbox2.height) / 2.0 / `COLLISION_Z_FACTOR`
 pub const COLLISION_Z_FACTOR: f32 = 1.5;
 /// "sparseness" is used in level::spawn module, where the probability increases by spawn turn,

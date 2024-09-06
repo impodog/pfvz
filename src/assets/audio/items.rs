@@ -7,6 +7,7 @@ pub struct AudioItems {
     pub sun: AudioList,
     pub thunder: AudioList,
     pub intro: AudioList,
+    pub ach: AudioList,
 }
 
 pub(super) fn load_items(mut commands: Commands, server: Res<AssetServer>) {
@@ -15,6 +16,7 @@ pub(super) fn load_items(mut commands: Commands, server: Res<AssetServer>) {
         sun: AudioList::load(&server, "audio/items/sun"),
         thunder: AudioList::load(&server, "audio/items/thunder"),
         intro: AudioList::load(&server, "audio/items/intro"),
+        ach: AudioList::load(&server, "audio/items/ach"),
     };
     commands.insert_resource(items);
 }

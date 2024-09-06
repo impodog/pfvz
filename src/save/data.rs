@@ -24,6 +24,7 @@ pub struct Save {
     pub money: SaveMoney,
     pub plants: BTreeSet<Id>,
     pub adventure: SaveAdventure,
+    pub ach: BTreeSet<ach::AchId>,
 }
 impl Save {
     fn new() -> Self {

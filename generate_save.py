@@ -24,5 +24,6 @@ with open(args.file, "w") as f:
         "money": 0,
         "plants": [i for i in range(-plants, 0)],
         "adventure": {"stage": args.stage, "level": args.level},
+        "ach": [],
     }
     json.dump(j, f)
