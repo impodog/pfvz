@@ -234,7 +234,7 @@ health = 300
 damage = 20
 interval = 1.0
 cooldown = 30.0
-cost = 250
+cost = 275
 [magnet_shroom]
 self_box = { width = 0.9, height = 0.9 }
 health = 300

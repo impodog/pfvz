@@ -7,11 +7,7 @@ impl Plugin for InfoMousePlugin {
         app.init_resource::<CursorInfo>();
         app.add_systems(
             PreUpdate,
-            (
-                init_cursor_info,
-                (update_cursor_info, update_touch_as_cursor),
-            )
-                .chain(),
+            (init_cursor_info, update_cursor_info, update_touch_as_cursor).chain(),
         );
     }
 }
