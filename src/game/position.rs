@@ -96,30 +96,30 @@ impl std::ops::Sub<Position> for Position {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct PositionRange {
-    pub x: Range<f32>,
-    pub y: Range<f32>,
-    pub z: Range<f32>,
+    pub x: (f32, f32),
+    pub y: (f32, f32),
+    pub z: (f32, f32),
 }
 impl std::ops::Add<Position> for PositionRange {
     type Output = PositionRange;
 
     fn add(self, rhs: Position) -> Self::Output {
         Self::Output {
-            x: self.x.start + rhs.x..self.x.end + rhs.x,
-            y: self.y.start + rhs.y..self.y.end + rhs.y,
-            z: self.z.start + rhs.z..self.z.end + rhs.z,
+            x: (self.x.0 + rhs.x, self.x.1 + rhs.x),
+            y: (self.y.0 + rhs.y, self.y.1 + rhs.y),
+            z: (self.z.0 + rhs.z, self.z.1 + rhs.z),
         }
     }
 }
 impl Default for PositionRange {
     fn default() -> Self {
-        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, -0.01..0.01)
+        game::PositionRange::new((0.0, f32::INFINITY), (-0.5, 0.5), (-0.01, 0.01))
     }
 }
 impl PositionRange {
-    pub fn new(x: Range<f32>, y: Range<f32>, z: Range<f32>) -> Self {
+    pub fn new(x: (f32, f32), y: (f32, f32), z: (f32, f32)) -> Self {
         Self { x, y, z }
     }
 
@@ -127,27 +127,36 @@ impl PositionRange {
         Self {
             x: self.x,
             y: self.y,
-            z: f32::NEG_INFINITY..f32::INFINITY,
+            z: (f32::NEG_INFINITY, f32::INFINITY),
         }
     }
 
-    /// x1 <= x2 && y1 <= y2 is required
     fn intersects(x1: f32, x2: f32, y1: f32, y2: f32) -> bool {
         x1 <= y2 && y1 <= x2
     }
 
+    pub fn merge(&mut self, range: &PositionRange) {
+        self.x.0 = self.x.0.min(range.x.0);
+        self.x.1 = self.x.1.max(range.x.1);
+        self.y.0 = self.y.0.min(range.y.0);
+        self.y.1 = self.y.1.max(range.y.1);
+        self.z.0 = self.z.0.min(range.z.0);
+        self.z.1 = self.z.1.max(range.z.1);
+    }
+
     pub fn contains(&self, pos: &Position, hitbox: &HitBox) -> bool {
         Self::intersects(
-            self.x.start,
-            self.x.end,
+            self.x.0,
+            self.x.1,
             pos.x - hitbox.width / 2.0,
             pos.x + hitbox.width / 2.0,
         ) && Self::intersects(
-            self.z.start,
-            self.z.end,
+            self.z.0,
+            self.z.1,
             pos.z - hitbox.height / 2.0,
             pos.z + hitbox.height / 2.0,
-        ) && self.y.contains(&pos.y)
+        ) && self.y.0 <= pos.y
+            && pos.y <= self.y.1
     }
 }
 

@@ -113,6 +113,11 @@ name = "Centromadia pungens"
 short = "Damages zombies that walk over it, able to destroy zombonis"
 desc = """Damages zombies that walk over it, pokes a hole in zombonis' tires
 Damage: Regular"""
+[desc.torchwood]
+name = "Burseraceae ??? "
+short = "Lits anything that passes through"
+desc = """Lits anything that passes through, doubling the damage, and deals splash damage
+Damage: Supplementary"""
 [desc.bonk_choy]
 name = "Brassica rapa subsp. chinensis"
 short = "Punches zombies in front of or behind it"
@@ -159,6 +164,11 @@ short = "Blows away fog, and kills balloon zombies"
 desc = """Blows away fog and blows back zombies, works better for zombies in the air.
 Unlike Brassica oleracea var. acephala, this can kill higher zombies
 Damage: Maybe"""
+[desc.cactus]
+name = "Carnegiea gigantea"
+short = "Shoots spikes that can go through zombies"
+desc = """Shoots spike that can go through zombies
+Damage: A little lower, but tripled"""
 [desc.cabbage_pult]
 name = "Brassica oleracea var. capitata"
 short = "Lobs cabbages at zombies"
@@ -179,3 +189,8 @@ name = "Allium sativum"
 short = "Makes zombies go to other lanes when bitten"
 desc = """Makes zombies go to other lanes when bitten
 Damage: 0.0x(garlic)"""
+[desc.melon_pult]
+name = "Citrullus lanatus"
+short = "Deals heavy damage to groups of zombies"
+desc = """Deals heavy damage, and has good splash damage
+Damage: High, but splash is low"""

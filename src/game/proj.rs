@@ -29,6 +29,10 @@ pub enum ProjectileAction {
     Consumed(Entity),
 }
 
+/// When this component is added, no further testing on this projectile(except for events) are allowed
+#[derive(Component)]
+pub struct DeadProjectile;
+
 #[derive(Component, Default, Debug, Clone)]
 pub struct Projectile {
     pub damage: u32,
@@ -57,7 +61,10 @@ fn test_plant_proj_zombie(
     collision: Res<game::Collision>,
     e_proj: EventWriter<ProjectileAction>,
     e_creature: EventWriter<game::CreatureAction>,
-    mut q_proj: Query<(Entity, &Projectile, &mut ProjectileImpl), With<game::PlantRelevant>>,
+    mut q_proj: Query<
+        (Entity, &Projectile, &mut ProjectileImpl),
+        (With<game::PlantRelevant>, Without<DeadProjectile>),
+    >,
     q_zombie: Query<Entity, With<game::Zombie>>,
 ) {
     let e_proj = Mutex::new(e_proj);
@@ -110,7 +117,10 @@ fn test_zombie_proj_plant(
     collision: Res<game::Collision>,
     e_proj: EventWriter<ProjectileAction>,
     e_creature: EventWriter<game::CreatureAction>,
-    mut q_proj: Query<(Entity, &Projectile, &mut ProjectileImpl), With<game::ZombieRelevant>>,
+    mut q_proj: Query<
+        (Entity, &Projectile, &mut ProjectileImpl),
+        (With<game::ZombieRelevant>, Without<DeadProjectile>),
+    >,
     q_plant: Query<Entity, With<game::Plant>>,
 ) {
     let e_proj = Mutex::new(e_proj);

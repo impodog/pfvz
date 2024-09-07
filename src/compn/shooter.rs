@@ -163,7 +163,7 @@ fn shooter_work(
                 let mut pos = (*pos).move_z(hitbox.height * -0.05);
 
                 // Test if the shooter should work
-                let range = shooter.proj.range.clone() + pos;
+                let range = shooter.proj.range + pos;
                 let ok = match shooter.require_zombie {
                     RequireZombie::No => true,
                     RequireZombie::InRange => {

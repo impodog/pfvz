@@ -65,7 +65,7 @@ pub struct PositionRangeX(pub f32);
 impl From<PositionRangeX> for game::PositionRange {
     fn from(value: PositionRangeX) -> Self {
         let mut range = game::PositionRange::default();
-        range.x.end = value.0;
+        range.x.1 = value.0;
         range
     }
 }
@@ -74,8 +74,8 @@ pub struct PositionRangeXStartEnd(pub f32, pub f32);
 impl From<PositionRangeXStartEnd> for game::PositionRange {
     fn from(value: PositionRangeXStartEnd) -> Self {
         let mut range = game::PositionRange::default();
-        range.x.start = value.0;
-        range.x.end = value.1;
+        range.x.0 = value.0;
+        range.x.1 = value.1;
         range
     }
 }
@@ -84,8 +84,8 @@ pub struct PositionRangeXY(pub f32, pub f32);
 impl From<PositionRangeXY> for game::PositionRange {
     fn from(value: PositionRangeXY) -> Self {
         let mut range = game::PositionRange::default();
-        range.x.end = value.0;
-        range.y.end = value.1;
+        range.x.1 = value.0;
+        range.y.1 = value.1;
         range
     }
 }
@@ -97,11 +97,7 @@ pub struct PositionRangeSerde {
 }
 impl From<PositionRangeSerde> for game::PositionRange {
     fn from(value: PositionRangeSerde) -> Self {
-        game::PositionRange {
-            x: value.x.0..value.x.1,
-            y: value.y.0..value.y.1,
-            z: value.z.0..value.z.1,
-        }
+        Self::new(value.x, value.y, value.z)
     }
 }
 

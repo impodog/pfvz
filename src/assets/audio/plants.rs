@@ -7,6 +7,7 @@ pub struct AudioPlants {
     pub spikeweed: AudioList,
     pub shooter: AudioList,
     pub spore: AudioList,
+    pub melon: AudioList,
 }
 
 pub(super) fn load_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -15,6 +16,7 @@ pub(super) fn load_plants(mut commands: Commands, server: Res<AssetServer>) {
         spikeweed: AudioList::load(&server, "audio/plants/spikeweed"),
         shooter: AudioList::load(&server, "audio/plants/shooter"),
         spore: AudioList::load(&server, "audio/plants/spore"),
+        melon: AudioList::load(&server, "audio/plants/melon"),
     };
     commands.insert_resource(plants);
 }

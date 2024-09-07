@@ -36,12 +36,14 @@ fn spawn_all_star_zombie(
     breaks: Res<HelmetBreaks>,
 ) {
     let creature = map.get(&ALL_STAR_ZOMBIE).unwrap();
+    let velocity = game::Velocity::from(factors.all_star.velocity);
     let entity = commands
         .spawn((
             game::Zombie,
             creature.clone(),
             pos,
             game::Velocity::from(factors.all_star.velocity_running),
+            game::VelocityBase(velocity),
             sprite::Animation::new(zombies.all_star_running.clone()),
             compn::Dying::new(zombies.all_star_dying.clone()),
             creature.hitbox,

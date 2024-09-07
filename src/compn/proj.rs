@@ -6,7 +6,15 @@ impl Plugin for CompnProjPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             PostUpdate,
-            (despawn, (proj_action, proj_timer_tick, despawn_by_hit_roof))
+            (
+                despawn,
+                (
+                    proj_action,
+                    proj_timer_tick,
+                    despawn_by_hit_roof,
+                    projectile_consume,
+                ),
+            )
                 .chain()
                 .run_if(when_state!(gaming)),
         );
@@ -55,10 +63,7 @@ fn proj_action(
     let queue = RwLock::new(queue);
     e_proj.par_read().for_each(|action| {
         let ok = match action {
-            game::ProjectileAction::Damage(_entity, _other) => {
-                // NOTE: Any good way to handle this?
-                true
-            }
+            game::ProjectileAction::Damage(entity, other) => true,
             game::ProjectileAction::Consumed(entity) => {
                 let ok = if let Ok(proj) = q_proj.get(*entity) {
                     if proj.time.as_millis() == 0 {
@@ -88,10 +93,7 @@ fn proj_action(
                 };
                 commands.command_scope(|mut commands| {
                     if let Some(mut commands) = commands.get_entity(*entity) {
-                        // Removing these identifiers makes sure that the projectile is no
-                        // longer tested or deals damage
-                        commands.remove::<game::PlantRelevant>();
-                        commands.remove::<game::ZombieRelevant>();
+                        commands.insert(game::DeadProjectile);
                     }
                 });
                 ok
@@ -113,6 +115,26 @@ fn proj_timer_tick(
         timer.tick(time.delta());
         if timer.just_finished() {
             commands.entity(entity).despawn_recursive();
+        }
+    });
+}
+
+/// Given the projectile on consumption, do some work
+#[derive(Component, Deref, DerefMut)]
+pub struct ProjectileConsume(pub SystemId<Entity>);
+
+fn projectile_consume(
+    commands: ParallelCommands,
+    mut e_action: EventReader<game::ProjectileAction>,
+    q_proj: Query<&ProjectileConsume>,
+) {
+    e_action.par_read().for_each(|action| {
+        if let game::ProjectileAction::Consumed(entity) = action {
+            if let Ok(consume) = q_proj.get(*entity) {
+                commands.command_scope(|mut commands| {
+                    commands.run_system_with_input(**consume, *entity);
+                });
+            }
         }
     });
 }

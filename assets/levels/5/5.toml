@@ -2,7 +2,7 @@
 selection = "Any"
 layout = "Roof"
 game = ["Columns"]
-modify = { give = 0, next = { stage = 5, level = 5 } }
+modify = { give = -37, next = { stage = 5, level = 6 } }
 sun = 150
 bgm = "Ub"
 [[waves]]
