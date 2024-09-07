@@ -282,7 +282,7 @@ velocity = [2.4, -2.0]
 self_box = { width = 0.9, height = 1.0 }
 kernel_box = { width = 0.2, height = 0.2 }
 butter_box = { width = 0.3, height = 0.3 }
-snow = { duration = 5.0, factor = 0.0 }
+snow = { duration = 4.0, factor = 0.0 }
 butter_every = 3
 times = 1
 health = 300

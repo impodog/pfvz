@@ -9,6 +9,7 @@ impl Plugin for AchPlugin {
             load::AchLoadPlugin,
             update::AchUpdatePlugin,
             listen::AchListenPlugin,
+            show::AchShowPlugin,
         ));
     }
 }

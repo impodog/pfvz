@@ -3042,6 +3042,7 @@ dependencies = [
  "bitflags 2.6.0",
  "enum-iterator",
  "lazy_static",
+ "num_enum",
  "ordered-float",
  "rand",
  "ron",

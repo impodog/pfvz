@@ -8,8 +8,9 @@ impl Plugin for PlantsPlanterPlugin {
         app.add_event::<PlanterCall>();
         app.add_systems(
             Update,
-            (do_plant, receive_planter_call, add_layer_disp).run_if(when_state!(gaming)),
+            (do_plant, receive_planter_call).run_if(when_state!(gaming)),
         );
+        app.add_systems(PostUpdate, (add_layer_disp,).run_if(when_state!(gaming)));
     }
 }
 

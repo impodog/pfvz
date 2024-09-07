@@ -1,7 +1,3 @@
-[default]
-name = "Default"
-desc = "This is a default achievement"
-vis = "Full"
 [getting_exciting]
 name = "Now This Is Getting Exciting"
 desc = "Get any exciting music triggered"

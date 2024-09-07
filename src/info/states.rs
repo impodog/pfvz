@@ -49,6 +49,7 @@ pub enum MenuStates {
     Adventure,
     Config,
     Credits,
+    Achievements,
 }
 
 fn change_to_main_menu(mut menu: ResMut<NextState<MenuStates>>) {

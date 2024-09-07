@@ -14,12 +14,18 @@ impl Plugin for AchUpdatePlugin {
 #[derive(Event, Debug, Clone, Copy)]
 pub struct NewAchievement(pub ach::AchId);
 
+#[derive(Debug, Clone, Copy)]
+pub enum SpawnAchievementOption {
+    Banner,
+    Page(usize),
+}
 #[derive(Event, Debug, Clone, Copy)]
 pub struct SpawnAchievement {
-    /// The bottom left corner of the achievement
-    pos: Vec3,
-    ach: ach::AchId,
-    banner: bool,
+    /// The anchored corner of the achievement
+    pub pos: Vec3,
+    pub ach: ach::AchId,
+    pub option: SpawnAchievementOption,
+    pub anchor: Anchor,
 }
 
 #[derive(Component)]
@@ -28,7 +34,7 @@ pub struct AchievementMarker;
 fn hide_string(pat: &str) -> String {
     let mut s = String::new();
     s.reserve(pat.len());
-    (0..s.len()).for_each(|_| {
+    (0..pat.len()).for_each(|_| {
         s.push('?');
     });
     s
@@ -49,7 +55,7 @@ fn spawn_achievement_info(
             let (name, name_color, desc, desc_color) = if save.ach.contains(&spawn.ach) {
                 (
                     format!("{}\n", ach.name),
-                    Color::LinearRgba(LinearRgba::new(0.0, 0.9, 0.9, 1.0)),
+                    Color::LinearRgba(LinearRgba::new(0.05, 1.0, 0.2, 1.0)),
                     ach.desc.clone(),
                     Color::WHITE,
                 )
@@ -79,7 +85,7 @@ fn spawn_achievement_info(
                             name,
                             TextStyle {
                                 font: font.0.clone(),
-                                font_size: ACH_SIZE.y / 10.0,
+                                font_size: ACH_SIZE.y / 7.0,
                                 color: name_color,
                             },
                         ),
@@ -87,13 +93,13 @@ fn spawn_achievement_info(
                             desc,
                             TextStyle {
                                 font: italic.0.clone(),
-                                font_size: ACH_SIZE.y / 12.0,
+                                font_size: ACH_SIZE.y / 8.0,
                                 color: desc_color,
                             },
                         ),
                     ]),
                     transform: Transform::from_translation(spawn.pos),
-                    text_anchor: Anchor::BottomLeft,
+                    text_anchor: spawn.anchor,
                     text_2d_bounds: bevy::text::Text2dBounds {
                         size: ACH_SIZE.with_y(f32::INFINITY),
                     },
@@ -101,8 +107,16 @@ fn spawn_achievement_info(
                 },
                 AchievementMarker,
             ));
-            if spawn.banner {
-                commands.insert(level::Banner::new(Duration::from_secs(5)));
+            match spawn.option {
+                SpawnAchievementOption::Banner => {
+                    commands.insert(level::Banner::new(Duration::from_secs(5)));
+                }
+                SpawnAchievementOption::Page(page) => {
+                    commands.insert(ach::show::AchPageIndex(page));
+                    if page != 0 {
+                        commands.insert(Visibility::Hidden);
+                    }
+                }
             }
         }
     });
@@ -127,7 +141,8 @@ fn update_achievement(
                     14.37 + 3.0,
                 ),
                 ach: ach.0,
-                banner: true,
+                option: SpawnAchievementOption::Banner,
+                anchor: Anchor::BottomLeft,
             });
             audio.play(audio_items.ach.random());
         }

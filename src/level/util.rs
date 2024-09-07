@@ -95,6 +95,11 @@ impl level::LayoutKind {
         }
     }
 
+    pub fn get_disp_of(&self, pos: &game::Position) -> f32 {
+        let (x, _y) = self.position_3d_to_coordinates(pos);
+        self.get_disp(x)
+    }
+
     pub fn regularize_xy(&self, pos: game::Position) -> game::Position {
         let hsize = self.half_size_f32();
         let pos = pos.move_by(hsize.0, hsize.1);

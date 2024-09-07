@@ -19,6 +19,7 @@ impl Plugin for ZombiesPlugin {
             balloon::ZombiesBalloonPlugin,
             digger::ZombiesDiggerPlugin,
             pogo::ZombiesPogoPlugin,
+            gargantuar::ZombiesGargantuarPlugin,
         ));
     }
 }

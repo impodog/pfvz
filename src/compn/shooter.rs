@@ -124,15 +124,15 @@ impl RayIntersectsAabb for Ray2d {
 /// Calculates the initial velocity needed to hit an object at distance diff in 3d math
 /// with gravity, the velocity of the moving target, and the x orthogonal velocity of the initial specified
 #[derive(Debug)]
-struct TargetCalculator {
-    diff: game::Position,
-    target_vel: game::Velocity,
-    x: f32,
-    r: f32,
-    g: f32,
+pub struct TargetCalculator {
+    pub diff: game::Position,
+    pub target_vel: game::Velocity,
+    pub x: f32,
+    pub r: f32,
+    pub g: f32,
 }
 impl TargetCalculator {
-    fn calc(self) -> game::Velocity {
+    pub fn calc(self) -> game::Velocity {
         let time = self.diff.x / (self.x - self.target_vel.x);
         let z = self.diff.z / time + 0.5 * self.g * time + self.target_vel.z;
         let y = self.diff.y / time + self.target_vel.y;
