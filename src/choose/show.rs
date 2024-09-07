@@ -6,7 +6,12 @@ impl Plugin for ChooseShowPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             OnEnter(info::PlayStates::Cys),
-            (spawn_selection, (spawn_zombies, spawn_buttons)).chain(),
+            (
+                spawn_selection,
+                load_saved_selection,
+                (spawn_zombies, spawn_buttons),
+            )
+                .chain(),
         );
         app.add_systems(
             Update,
@@ -54,6 +59,29 @@ pub struct SelectionPageSize {
     pub each: Vec2,
     // The left top corner of the beginning of selection
     pub begin: game::Position,
+}
+
+fn load_saved_selection(
+    mut commands: Commands,
+    save: Res<save::Save>,
+    level: Res<level::Level>,
+    mut event: EventWriter<game::ShowSelectionEvent>,
+    mut menu: ResMut<choose::ChooseMenu>,
+) {
+    if let level::SelectionArr::Any = &level.config.selection {
+        let selection = save
+            .selection
+            .iter()
+            .filter(|id| level.config.is_compat(**id))
+            .take(level.config.selection.slots(save.slots.0))
+            .cloned()
+            .collect::<Vec<_>>();
+        selection.iter().for_each(|id| {
+            menu.add(*id);
+        });
+        commands.insert_resource(game::Selection(selection));
+        event.send(game::ShowSelectionEvent);
+    }
 }
 
 fn spawn_selection(

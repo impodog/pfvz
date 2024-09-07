@@ -278,6 +278,15 @@ impl SelectionArr {
         }
     }
 
+    pub fn slots(&self, slots: usize) -> usize {
+        match self {
+            Self::Any => slots,
+            Self::ThisMany(len) => *len,
+            Self::Few(v) => v.len().max(slots),
+            Self::All(v) => v.len(),
+        }
+    }
+
     pub fn is_empty(&self) -> bool {
         matches!(self, Self::Any)
     }

@@ -13,7 +13,6 @@ pub(crate) use rand::distributions::WeightedIndex;
 pub(crate) use rand::prelude::*;
 pub(crate) use smallvec::SmallVec;
 pub(crate) use std::collections::{BTreeMap, BTreeSet, HashMap};
-pub(crate) use std::ops::Range;
 pub(crate) use std::sync::{Arc, Mutex, RwLock};
 pub(crate) use std::time::Duration;
 

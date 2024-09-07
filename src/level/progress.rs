@@ -13,7 +13,7 @@ impl Plugin for LevelProgressPlugin {
 }
 
 #[derive(Resource, Debug, Clone, Copy)]
-struct ProgressBarRect(game::Position, game::Position);
+struct ProgressBarRect(game::Position);
 
 #[derive(Component)]
 struct ProgressBarOverlayMarker;
@@ -28,7 +28,7 @@ fn init_progress_bar(
 ) {
     let mut corner = level.config.layout.half_size_vec2() + Vec2::new(0.2, 0.2);
     corner.y = -corner.y;
-    commands.insert_resource(ProgressBarRect((&corner).into(), (&PROGRESS_SIZE).into()));
+    commands.insert_resource(ProgressBarRect((&PROGRESS_SIZE).into()));
     commands.spawn((
         game::Position::from(&corner),
         game::HitBox::from(&PROGRESS_SIZE),
@@ -85,7 +85,7 @@ fn modify_progress_bar(
     next_wave.read().for_each(|wave| {
         let wave = wave.0;
         q_overlay.iter_mut().for_each(|mut hitbox| {
-            hitbox.width = (rect.1.x * (wave + 1) as f32) / level.waves.len() as f32;
+            hitbox.width = (rect.0.x * (wave + 1) as f32) / level.waves.len() as f32;
         });
     });
 }

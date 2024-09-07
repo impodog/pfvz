@@ -110,6 +110,6 @@ avail = [1, 2, 3, 5, 6, 7]
 [[waves]]
 points = 2000
 wait = 30.0
-big = false
+big = true
 fixed = [[4, 3], [6, 1]]
 avail = [1, 2, 3, 5, 6, 7]
