@@ -1,6 +1,7 @@
 #![allow(clippy::type_complexity)]
 #![allow(clippy::too_many_arguments)]
 
+pub mod ach;
 pub mod assets;
 pub mod choose;
 pub mod collectible;
@@ -47,6 +48,7 @@ pub fn start_pfvz() {
         lose::LosePlugin,
         win::WinPlugin,
         menu::MenuPlugin,
+        ach::AchPlugin,
     ));
     app.run();
 }

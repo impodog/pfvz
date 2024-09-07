@@ -60,6 +60,11 @@ pub struct SpriteZombies {
     pub pogo_zombie: Arc<sprite::FrameArr>,
     pub pogo_zombie_only: Arc<sprite::FrameArr>,
     pub pogo_zombie_dying: Arc<sprite::FrameArr>,
+    pub gargantuar: Arc<sprite::FrameArr>,
+    pub gargantuar_smash: Arc<sprite::FrameArr>,
+    pub bandaid: Arc<sprite::FrameArr>,
+    pub imp: Arc<sprite::FrameArr>,
+    pub imp_dying: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -317,6 +322,28 @@ pub(super) fn init_zombies(mut commands: Commands, server: Res<AssetServer>) {
             &server,
             "sprites/zombies/pogo_zombie_dying",
             Duration::from_millis(250),
+        ),
+        gargantuar: super::load_animation(
+            &server,
+            "sprites/zombies/gargantuar",
+            Duration::from_millis(500),
+        ),
+        gargantuar_smash: super::load_animation_then(
+            &server,
+            "sprites/zombies/gargantuar_smash",
+            Duration::from_millis(300),
+            |frames| frames.then_reverse(),
+        ),
+        bandaid: super::load_animation(
+            &server,
+            "sprites/zombies/bandaid",
+            Duration::from_millis(100),
+        ),
+        imp: super::load_animation(&server, "sprites/zombies/imp", Duration::from_millis(300)),
+        imp_dying: super::load_animation(
+            &server,
+            "sprites/zombies/imp_dying",
+            Duration::from_millis(400),
         ),
     };
     commands.insert_resource(zombies);

@@ -40,6 +40,8 @@ fn spawn_pogo_zombie(
         creature.clone(),
         pos,
         game::Velocity::default(),
+        // This makes sure the walker of the zombie works normally
+        game::VelocityBase(factors.pogo.velocity.into()),
         sprite::Animation::new(zombies.pogo_zombie.clone()),
         compn::Dying::new(zombies.pogo_zombie_dying.clone()),
         creature.hitbox,

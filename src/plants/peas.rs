@@ -249,7 +249,7 @@ fn init_config(
             proj: game::Projectile {
                 damage: factors.threepeater.damage,
                 range: game::PositionRange {
-                    y: -1.5..1.5,
+                    y: (-1.5, 1.5),
                     ..Default::default()
                 },
                 ..Default::default()

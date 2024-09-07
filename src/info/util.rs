@@ -30,4 +30,7 @@ macro_rules! when_state {
     (credits) => {
         bevy::prelude::in_state($crate::info::MenuStates::Credits)
     };
+    (achievements) => {
+        bevy::prelude::in_state($crate::info::MenuStates::Achievements)
+    };
 }

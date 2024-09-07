@@ -10,6 +10,7 @@ impl Plugin for GamePlugin {
             overlay::GameOverlayPlugin,
             creature::GameCreaturePlugin,
             position::GamePositionPlugin,
+            velocity::GameVelocityPlugin,
             status::GameStatusPlugin,
             plant::GamePlantPlugin,
             proj::GameProjPlugin,

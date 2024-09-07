@@ -22,6 +22,14 @@ impl Default for FrameArr {
         }
     }
 }
+impl FrameArr {
+    /// Append the reversed frames to the end of the array, doubling is size
+    pub fn then_reverse(mut self) -> FrameArr {
+        let frames = self.frames.clone();
+        self.frames.extend(frames.into_iter().rev());
+        self
+    }
+}
 
 #[derive(Component, Debug, Clone)]
 pub struct Animation {

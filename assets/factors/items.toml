@@ -12,4 +12,4 @@ start = 5
 [thunder]
 interval = [25.0, 30.0]
 [exciting]
-zombies = 12
+zombies = 10

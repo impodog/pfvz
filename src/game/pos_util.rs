@@ -121,7 +121,7 @@ fn spawn_shadow(
     mut commands: Commands,
     q_parent: Query<
         (Entity, &LogicPosition, &game::HitBox),
-        (Added<LogicPosition>, Without<Parent>),
+        (Or<(Added<LogicPosition>, Changed<Parent>)>, Without<Parent>),
     >,
     chunks: Res<assets::SpriteChunks>,
     level: Res<level::Level>,

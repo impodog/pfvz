@@ -3,6 +3,7 @@ layout = "Day"
 selection = { "All" = [-2, -3, -101] }
 modify = { give = -5, next = { stage = 1, level = 6 } }
 sun = 125
+bgm = "Lb"
 [[waves]]
 points = 0
 wait = 20.0

@@ -43,6 +43,7 @@ pub const CABBAGE_PULT: Id = -33;
 pub const COFFEE_BEAN: Id = -34;
 pub const KERNEL_PULT: Id = -35;
 pub const GARLIC: Id = -36;
+pub const MELON_PULT: Id = -37;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -65,11 +66,13 @@ pub const JITB_ZOMBIE: Id = 12;
 pub const BALLOON_ZOMBIE: Id = 13;
 pub const DIGGER_ZOMBIE: Id = 14;
 pub const POGO_ZOMBIE: Id = 15;
+pub const GARGANTUAR: Id = 16;
 
 pub const HIDDEN_ZOMBIE: Id = 101;
 
 pub const TRASHCAN: Id = 201;
 pub const BACKUP_DANCER: Id = 202;
+pub const IMP: Id = 203;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
@@ -78,6 +81,12 @@ pub const LOGICAL: Vec2 = Vec2::new(LOGICAL_WIDTH, LOGICAL_HEIGHT);
 pub const SLOT_SIZE: Vec2 = Vec2::new(0.6, 0.7);
 pub const BUTTON_SIZE: Vec2 = Vec2::new(SLOT_SIZE.x * 2.0, SLOT_SIZE.y);
 pub const PROGRESS_SIZE: Vec2 = Vec2::new(1.5, 0.3);
+
+pub const ACH_SIZE_FACTOR: f32 = 0.15;
+pub const ACH_SIZE: Vec2 = Vec2::new(
+    LOGICAL_WIDTH * ACH_SIZE_FACTOR * 2.0,
+    LOGICAL_HEIGHT * ACH_SIZE_FACTOR * 2.0,
+);
 
 /// abs(delta z) must be below (hitbox1.height + hitbox2.height) / 2.0 / `COLLISION_Z_FACTOR`
 pub const COLLISION_Z_FACTOR: f32 = 1.5;
@@ -136,6 +145,7 @@ pub fn id_name(id: Id) -> &'static str {
         COFFEE_BEAN => "coffee_bean",
         KERNEL_PULT => "kernel_pult",
         GARLIC => "garlic",
+        MELON_PULT => "melon_pult",
 
         BOWLING_NUT => "bowling_nut",
 
@@ -157,11 +167,13 @@ pub fn id_name(id: Id) -> &'static str {
         BALLOON_ZOMBIE => "balloon",
         DIGGER_ZOMBIE => "digger",
         POGO_ZOMBIE => "pogo",
+        GARGANTUAR => "gargantuar",
 
         HIDDEN_ZOMBIE => "hidden",
 
         TRASHCAN => "trashcan_item",
         BACKUP_DANCER => "backup_dancer",
+        IMP => "imp",
 
         _ => "unknown",
     }

@@ -188,6 +188,28 @@ pub struct PogoZombie {
     pub cooldown: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Gargantuar {
+    pub velocity: game::VelocityXRange,
+    pub throw_velocity: game::VelocityX,
+    pub self_box: game::HitBox,
+    pub bandaid_box: game::HitBox,
+    pub throw_distance: f32,
+    pub self_health: (u32, u32),
+    pub damage: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Imp {
+    pub velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
@@ -208,6 +230,8 @@ pub struct ZombieFactors {
     pub balloon: BalloonZombie,
     pub digger: DiggerZombie,
     pub pogo: PogoZombie,
+    pub gargantuar: Gargantuar,
+    pub imp: Imp,
 }
 
 fn init_factors(mut commands: Commands) {

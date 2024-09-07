@@ -25,7 +25,7 @@ avail = [1, 2, 3]
 points = 300
 wait = 80.0
 big = true
-fixed = [[1, 2], [4, 1], [5, 1], [6, 1]]
+fixed = [[4, 1], [1, 2], [4, 1], [5, 1], [6, 1]]
 avail = [1, 2, 3, 7]
 [[waves]]
 points = 200

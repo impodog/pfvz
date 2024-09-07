@@ -14,6 +14,9 @@ fn main_menu(mut contexts: EguiContexts, mut menu: ResMut<NextState<info::MenuSt
         if ui.button(super::medium_text("Adventure")).clicked() {
             menu.set(info::MenuStates::Adventure);
         }
+        if ui.button(super::medium_text("Achievements")).clicked() {
+            menu.set(info::MenuStates::Achievements);
+        }
         if ui.button(super::medium_text("Config")).clicked() {
             menu.set(info::MenuStates::Config);
         }

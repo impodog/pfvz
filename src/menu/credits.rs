@@ -53,8 +53,9 @@ fn scroll_credits(
 fn exit_credits_by_esc(
     mut menu: ResMut<NextState<info::MenuStates>>,
     key: Res<ButtonInput<KeyCode>>,
+    cursor: Res<info::CursorInfo>,
 ) {
-    if key.just_pressed(KeyCode::Escape) {
+    if key.just_pressed(KeyCode::Escape) || cursor.right {
         menu.set(info::MenuStates::Main);
     }
 }

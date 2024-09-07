@@ -47,7 +47,9 @@ fn add_components(
         .for_each(|(entity, collectible)| match collectible {
             Collectible::Sun(sun) => {
                 commands.entity(entity).insert((
-                    factors.sun.self_box * *sun,
+                    // The square root makes the size of the box represent the value, rather than
+                    // the side length
+                    factors.sun.self_box * (*sun).abs().sqrt(),
                     sprite::Animation::new(items.sun.clone()),
                     SpriteBundle {
                         transform: Transform::from_xyz(0.0, 0.0, 14.37 - 1.0),

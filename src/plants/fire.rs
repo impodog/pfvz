@@ -41,17 +41,22 @@ fn spawn_torchwood(
     ));
 }
 
+#[derive(Component)]
+pub struct IgnitionMarker;
+
 fn torchwood_ignite(
     commands: ParallelCommands,
     q_torchwood: Query<Entity, With<TorchwoodMarker>>,
     q_proj: Query<
         (&game::HitBox, &game::Projectile),
-        (With<game::Projectile>, Without<compn::FireProjectile>),
+        (With<game::Projectile>, Without<IgnitionMarker>),
     >,
     collision: Res<game::Collision>,
     factors: Res<plants::PlantFactors>,
     plants: Res<assets::SpritePlants>,
+    e_fire: EventWriter<compn::ModifyFire>,
 ) {
+    let e_fire = Mutex::new(e_fire);
     q_torchwood.par_iter().for_each(|entity| {
         if let Some(coll) = collision.get(&entity) {
             for proj in coll.iter() {
@@ -60,9 +65,13 @@ fn torchwood_ignite(
                         continue;
                     }
                     commands.command_scope(|mut commands| {
-                        commands
-                            .entity(*proj)
-                            .insert(compn::FireProjectile::from(factors.torchwood.fire));
+                        if let Some(mut commands) = commands.get_entity(*proj) {
+                            commands.try_insert(IgnitionMarker);
+                            e_fire
+                                .lock()
+                                .unwrap()
+                                .send(compn::ModifyFire::Add(*proj, factors.torchwood.fire.into()));
+                        }
                         commands
                             .spawn((
                                 game::Position::default(),

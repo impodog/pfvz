@@ -22,7 +22,6 @@ pub struct Walker(pub Arc<WalkerShared>);
 #[derive(Component, Default, Debug, Clone)]
 pub struct WalkerImpl {
     timer: Timer,
-    velocity: game::Velocity,
     pub target: Option<Entity>,
 }
 impl From<&Walker> for WalkerImpl {
@@ -45,7 +44,12 @@ fn walker_add_impl(mut commands: Commands, q_walker: Query<(Entity, &Walker), Ch
 
 fn walker_lock_target(
     collision: Res<game::Collision>,
-    mut q_walker: Query<(&mut WalkerImpl, &mut game::Velocity, Entity)>,
+    mut q_walker: Query<(
+        &mut WalkerImpl,
+        &mut game::Velocity,
+        &game::VelocityBase,
+        Entity,
+    )>,
     q_plant: Query<
         &game::Position,
         (
@@ -57,7 +61,7 @@ fn walker_lock_target(
 ) {
     q_walker
         .par_iter_mut()
-        .for_each(|(mut walker, mut velocity, entity)| {
+        .for_each(|(mut walker, mut velocity, velocity_base, entity)| {
             if walker.target.is_none() || walker.timer.just_finished() {
                 let mut target: Option<(Entity, game::Position)> = None;
                 if let Some(set) = collision.get(&entity) {
@@ -76,11 +80,10 @@ fn walker_lock_target(
                 }
                 let target = target.map(|(entity, _)| entity);
                 if target != walker.target {
-                    if walker.target.is_none() {
-                        walker.velocity = std::mem::take(velocity.as_mut());
-                    }
                     if target.is_none() {
-                        *velocity = walker.velocity;
+                        *velocity = **velocity_base;
+                    } else {
+                        *velocity = game::Velocity::default();
                     }
                     walker.target = target;
                 }
@@ -93,6 +96,7 @@ fn walker_deal_damage(
         &game::Overlay,
         &mut WalkerImpl,
         &mut game::Velocity,
+        &game::VelocityBase,
         &Walker,
     )>,
     q_plant: Query<(), With<game::Plant>>,
@@ -101,9 +105,8 @@ fn walker_deal_damage(
     audio_zombies: Res<assets::AudioZombies>,
 ) {
     // NOTE: This is not parallel! Fix?
-    q_walker
-        .iter_mut()
-        .for_each(|(overlay, mut walker_impl, mut velocity, walker)| {
+    q_walker.iter_mut().for_each(
+        |(overlay, mut walker_impl, mut velocity, velocity_base, walker)| {
             if let Some(entity) = walker_impl.target {
                 walker_impl.timer.tick(overlay.delta());
                 if walker_impl.timer.just_finished() {
@@ -111,10 +114,11 @@ fn walker_deal_damage(
                         action.send(game::CreatureAction::Damage(entity, walker.damage));
                         audio.play(audio_zombies.bite.random());
                     } else {
-                        *velocity = std::mem::take(&mut walker_impl.velocity);
+                        *velocity = **velocity_base;
                         walker_impl.target = None;
                     }
                 }
             }
-        });
+        },
+    );
 }

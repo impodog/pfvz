@@ -1,0 +1,8 @@
+(
+    file: "audio/bgm/gtr/data/gtr1.ogg",
+    loop_region: Some(Region(
+        start: Seconds(3.49),
+        end: EndOfAudio,
+    )),
+    volume: 0.7,
+)

@@ -32,6 +32,7 @@ pub use instant::*;
 pub use mushroom::*;
 pub use plugin::*;
 pub use producer::*;
+pub use proj::*;
 pub use shooter::*;
 pub use snow::*;
 pub use squash::*;

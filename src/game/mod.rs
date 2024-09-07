@@ -14,6 +14,7 @@ mod spawn;
 mod special;
 mod status;
 mod util;
+mod velocity;
 mod zombie;
 
 pub use creature::*;
@@ -30,4 +31,5 @@ pub use size::*;
 pub use special::*;
 pub use status::*;
 pub use util::*;
+pub use velocity::*;
 pub use zombie::*;

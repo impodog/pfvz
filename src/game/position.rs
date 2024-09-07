@@ -16,20 +16,6 @@ impl Plugin for GamePositionPlugin {
             PostUpdate,
             (add_position, convert_position, update_transform).chain(),
         );
-        app.add_systems(
-            PostUpdate,
-            (
-                update_position,
-                update_bare_position,
-                update_velocity,
-                update_velocity_half,
-            )
-                .run_if(when_state!(play)),
-        );
-        app.add_systems(
-            PostUpdate,
-            (update_position_with_overlay,).run_if(when_state!(gaming)),
-        );
     }
 }
 
@@ -110,30 +96,30 @@ impl std::ops::Sub<Position> for Position {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct PositionRange {
-    pub x: Range<f32>,
-    pub y: Range<f32>,
-    pub z: Range<f32>,
+    pub x: (f32, f32),
+    pub y: (f32, f32),
+    pub z: (f32, f32),
 }
 impl std::ops::Add<Position> for PositionRange {
     type Output = PositionRange;
 
     fn add(self, rhs: Position) -> Self::Output {
         Self::Output {
-            x: self.x.start + rhs.x..self.x.end + rhs.x,
-            y: self.y.start + rhs.y..self.y.end + rhs.y,
-            z: self.z.start + rhs.z..self.z.end + rhs.z,
+            x: (self.x.0 + rhs.x, self.x.1 + rhs.x),
+            y: (self.y.0 + rhs.y, self.y.1 + rhs.y),
+            z: (self.z.0 + rhs.z, self.z.1 + rhs.z),
         }
     }
 }
 impl Default for PositionRange {
     fn default() -> Self {
-        game::PositionRange::new(0.0..f32::INFINITY, -0.5..0.5, -0.01..0.01)
+        game::PositionRange::new((0.0, f32::INFINITY), (-0.5, 0.5), (-0.01, 0.01))
     }
 }
 impl PositionRange {
-    pub fn new(x: Range<f32>, y: Range<f32>, z: Range<f32>) -> Self {
+    pub fn new(x: (f32, f32), y: (f32, f32), z: (f32, f32)) -> Self {
         Self { x, y, z }
     }
 
@@ -141,27 +127,36 @@ impl PositionRange {
         Self {
             x: self.x,
             y: self.y,
-            z: f32::NEG_INFINITY..f32::INFINITY,
+            z: (f32::NEG_INFINITY, f32::INFINITY),
         }
     }
 
-    /// x1 <= x2 && y1 <= y2 is required
     fn intersects(x1: f32, x2: f32, y1: f32, y2: f32) -> bool {
         x1 <= y2 && y1 <= x2
     }
 
+    pub fn merge(&mut self, range: &PositionRange) {
+        self.x.0 = self.x.0.min(range.x.0);
+        self.x.1 = self.x.1.max(range.x.1);
+        self.y.0 = self.y.0.min(range.y.0);
+        self.y.1 = self.y.1.max(range.y.1);
+        self.z.0 = self.z.0.min(range.z.0);
+        self.z.1 = self.z.1.max(range.z.1);
+    }
+
     pub fn contains(&self, pos: &Position, hitbox: &HitBox) -> bool {
         Self::intersects(
-            self.x.start,
-            self.x.end,
+            self.x.0,
+            self.x.1,
             pos.x - hitbox.width / 2.0,
             pos.x + hitbox.width / 2.0,
         ) && Self::intersects(
-            self.z.start,
-            self.z.end,
+            self.z.0,
+            self.z.1,
             pos.z - hitbox.height / 2.0,
             pos.z + hitbox.height / 2.0,
-        ) && self.y.contains(&pos.y)
+        ) && self.y.0 <= pos.y
+            && pos.y <= self.y.1
     }
 }
 
@@ -220,37 +215,6 @@ impl HitBox {
     }
 }
 
-#[derive(Component, Serialize, Deserialize, Default, Debug, Clone, Copy)]
-pub struct Velocity {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
-    pub r: f32,
-}
-impl Velocity {
-    pub fn new(x: f32, y: f32, z: f32, r: f32) -> Self {
-        Self { x, y, z, r }
-    }
-}
-impl std::ops::Mul<f32> for Velocity {
-    type Output = Self;
-
-    fn mul(self, rhs: f32) -> Self::Output {
-        Self {
-            x: self.x * rhs,
-            y: self.y * rhs,
-            z: self.z * rhs,
-            r: self.r * rhs,
-        }
-    }
-}
-/// This component allows an object to fall in z coordinates due to gravity
-#[derive(Component, Default, Debug, Clone, Copy)]
-pub struct Gravity;
-
-#[derive(Component, Default, Debug, Clone, Copy)]
-pub struct GravityHalf;
-
 // This component marks that one entity should never be skipped while loss calculation
 #[derive(Component, Default, Clone, Copy)]
 pub struct NoCollisionLoss;
@@ -287,90 +251,26 @@ fn update_transform(
 
 fn add_position(
     mut commands: Commands,
-    q_pos: Query<Entity, (Added<game::LogicPosition>, Without<game::Position>)>,
+    q_pos: Query<
+        (Entity, &game::LogicPosition, &game::HitBox),
+        (Added<game::LogicPosition>, Without<game::Position>),
+    >,
 ) {
-    q_pos.iter().for_each(|entity| {
-        commands
-            .entity(entity)
-            .try_insert(game::Position::default());
+    q_pos.iter().for_each(|(entity, logic, hitbox)| {
+        commands.entity(entity).try_insert(logic.center_of(hitbox));
     });
 }
 
 fn convert_position(mut q_pos: Query<(&mut game::Position, &game::HitBox, &game::LogicPosition)>) {
-    q_pos
-        .par_iter_mut()
-        .for_each(|(mut pos, hitbox, logic_pos)| {
-            *pos = logic_pos.center_of(hitbox);
-        });
-}
-
-fn update_position(
-    time: Res<config::FrameTime>,
-    mut q_pos: Query<(&Velocity, &mut game::LogicPosition), Without<game::Overlay>>,
-) {
-    q_pos.par_iter_mut().for_each(|(vel, mut pos)| {
-        let factor = time.diff();
-        pos.plus_assign(game::Position::new(
-            vel.x * factor,
-            vel.y * factor,
-            vel.z * factor,
-            vel.r * factor,
-        ));
-    });
-}
-
-fn update_position_with_overlay(
-    time: Res<config::FrameTime>,
-    mut q_pos: Query<(&game::Overlay, &Velocity, &mut game::LogicPosition)>,
-) {
-    q_pos.par_iter_mut().for_each(|(overlay, vel, mut pos)| {
-        let factor = time.diff() * overlay.speed();
-        pos.plus_assign(game::Position::new(
-            vel.x * factor,
-            vel.y * factor,
-            vel.z * factor,
-            vel.r * factor,
-        ));
-    });
-}
-
-fn update_bare_position(
-    time: Res<config::FrameTime>,
-    mut q_pos: Query<(&Velocity, &mut game::Position), Without<game::LogicPosition>>,
-) {
-    q_pos.par_iter_mut().for_each(|(vel, mut pos)| {
-        let factor = time.diff();
-        pos.x += vel.x * factor;
-        pos.y += vel.y * factor;
-        pos.z += vel.z * factor;
-        pos.r += vel.r * factor;
-    });
-}
-
-fn update_velocity(
-    config: Res<config::Config>,
-    time: Res<config::FrameTime>,
-    mut q_vel: Query<&mut Velocity, With<Gravity>>,
-) {
-    q_vel.par_iter_mut().for_each(|mut vel| {
-        vel.z -= time.diff() * config.gamerule.gravity.0;
-    });
-}
-
-fn update_velocity_half(
-    config: Res<config::Config>,
-    time: Res<config::FrameTime>,
-    mut q_vel: Query<&mut Velocity, With<GravityHalf>>,
-) {
-    q_vel.par_iter_mut().for_each(|mut vel| {
-        vel.z -= time.diff() * config.gamerule.gravity.0 / 2.0;
+    q_pos.par_iter_mut().for_each(|(mut pos, hitbox, logic)| {
+        *pos = logic.center_of(hitbox);
     });
 }
 
 fn update_collision(
     mut collision: ResMut<Collision>,
     config: Res<config::Config>,
-    q_pos: Query<(Entity, &Position, &HitBox)>,
+    q_pos: Query<(Entity, &Position, &HitBox), Without<Parent>>,
     q_no_loss: Query<&NoCollisionLoss>,
     level: Res<level::Level>,
     mut commands: Commands,

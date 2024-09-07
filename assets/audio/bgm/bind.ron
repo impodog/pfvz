@@ -2,7 +2,43 @@
     bind: {
         "Rain": "audio/bgm/rain/rain.ron",
         "Jitb": "audio/zombies/jitb/jitb.ron",
+        "Gw1": "audio/bgm/gw/gw1.ron",
+        "Gw2": "audio/bgm/gw/gw2.ron",
+        "Mg": "audio/bgm/mg/mg.ron",
+        "Wg1": "audio/bgm/wg/wg1.ron",
+        "Wg2": "audio/bgm/wg/wg2.ron",
+        "Rm1": "audio/bgm/rm/rm1.ron",
+        "Rm2": "audio/bgm/rm/rm2.ron",
+        "Gtr1": "audio/bgm/gtr/gtr1.ron",
+        "Gtr2": "audio/bgm/gtr/gtr2.ron",
+        "Lb": "audio/bgm/lb/lb.ron",
+        "Ub": "audio/bgm/ub/ub.ron",
     },
     layout: {
-    }
+        Day: (
+            normal: "Gw1",
+            exciting: "Gw2",
+            begin: 0.0,
+        ),
+        Night: (
+            normal: "Mg",
+            exciting: "Mg",
+            begin: 0.0,
+        ),
+        Pool: (
+            normal: "Wg1",
+            exciting: "Wg2",
+            begin: 0.0,
+        ),
+        Fog: (
+            normal: "Rm1",
+            exciting: "Rm2",
+            begin: 2.19,
+        ),
+        Roof: (
+            normal: "Gtr1",
+            exciting: "Gtr2",
+            begin: 3.49,
+        ),
+    },
 )

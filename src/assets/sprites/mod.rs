@@ -29,12 +29,15 @@ impl Plugin for AssetsSpritesPlugin {
     }
 }
 
-/// Load an animation from directory
-pub(super) fn load_animation(
+pub(super) fn load_animation_then<F>(
     server: &Res<AssetServer>,
     base: &str,
     delta: Duration,
-) -> Arc<sprite::FrameArr> {
+    f: F,
+) -> Arc<sprite::FrameArr>
+where
+    F: FnOnce(sprite::FrameArr) -> sprite::FrameArr,
+{
     let mut i = 1;
     let mut frames = SmallVec::new();
     loop {
@@ -53,5 +56,14 @@ pub(super) fn load_animation(
             base
         );
     }
-    Arc::new(sprite::FrameArr { frames, delta })
+    Arc::new(f(sprite::FrameArr { frames, delta }))
+}
+
+/// Load an animation from directory
+pub(super) fn load_animation(
+    server: &Res<AssetServer>,
+    base: &str,
+    delta: Duration,
+) -> Arc<sprite::FrameArr> {
+    load_animation_then(server, base, delta, |frames| frames)
 }
