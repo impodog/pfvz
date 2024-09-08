@@ -75,7 +75,7 @@ fn torchwood_ignite(
                         commands
                             .spawn((
                                 game::Position::default(),
-                                game::LayerDisp(0.1),
+                                game::LayerDisp(0.01),
                                 *hitbox,
                                 sprite::Animation::new(plants.fire.clone()),
                                 SpriteBundle::default(),

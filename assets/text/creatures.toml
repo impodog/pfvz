@@ -194,3 +194,8 @@ name = "Citrullus lanatus"
 short = "Deals heavy damage to groups of zombies"
 desc = """Deals heavy damage, and has good splash damage
 Damage: High, but splash is low"""
+[desc.ethylene]
+name = "Compressed Ethylene"
+short = "Speeds up cooldown of plants"
+desc = """Speeds cooldown of plants, and plants only
+Damage: Basically nothing"""

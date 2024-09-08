@@ -8,8 +8,10 @@ impl Plugin for AchPlugin {
         app.add_plugins((
             load::AchLoadPlugin,
             update::AchUpdatePlugin,
-            listen::AchListenPlugin,
             show::AchShowPlugin,
+            listen::AchListenPlugin,
+            winning::AchWinningPlugin,
+            count::AchCountPlugin,
         ));
     }
 }

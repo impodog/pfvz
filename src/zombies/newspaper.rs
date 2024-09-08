@@ -81,7 +81,10 @@ fn newspaper_rage(
         .iter_mut()
         .for_each(|(entity, rage, mut walker, mut velocity)| {
             if commands.get_entity(rage.0).is_none() {
-                commands.entity(entity).remove::<NewspaperRage>();
+                commands
+                    .entity(entity)
+                    .remove::<NewspaperRage>()
+                    .insert(game::VelocityBase(factors.newspaper.rage_velocity.into()));
                 walker.0.clone_from(&rage_walker.0);
                 *velocity = factors.newspaper.rage_velocity.into();
             }

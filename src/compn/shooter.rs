@@ -245,7 +245,7 @@ fn shooter_work(
                                         shooter.shared.hitbox,
                                         shooter.proj.clone(),
                                         velocity,
-                                        game::LayerDisp(0.3),
+                                        game::LayerDisp(0.03),
                                         SpriteBundle::default(),
                                     ));
                                     // Determines whether the projectile is plant(default) or zombie

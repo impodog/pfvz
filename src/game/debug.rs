@@ -13,7 +13,7 @@ fn skip_level(
     key: Res<ButtonInput<KeyCode>>,
     level_index: Res<level::LevelIndex>,
 ) {
-    if key.just_pressed(KeyCode::Enter) && level_index.stage == 0 {
+    if key.just_pressed(KeyCode::Enter) && level_index.stage == 4 {
         state.set(info::GlobalStates::Win);
     }
 }

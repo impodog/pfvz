@@ -44,6 +44,7 @@ pub const COFFEE_BEAN: Id = -34;
 pub const KERNEL_PULT: Id = -35;
 pub const GARLIC: Id = -36;
 pub const MELON_PULT: Id = -37;
+pub const ETHYLENE: Id = -38;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -146,6 +147,7 @@ pub fn id_name(id: Id) -> &'static str {
         KERNEL_PULT => "kernel_pult",
         GARLIC => "garlic",
         MELON_PULT => "melon_pult",
+        ETHYLENE => "ethylene",
 
         BOWLING_NUT => "bowling_nut",
 
@@ -176,6 +178,30 @@ pub fn id_name(id: Id) -> &'static str {
         IMP => "imp",
 
         _ => "unknown",
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[repr(u8)]
+pub enum IdFeature {
+    Default,
+    Plant,
+    Fungi,
+    Nonplantae,
+    Zombie,
+}
+
+impl From<Id> for IdFeature {
+    fn from(id: Id) -> IdFeature {
+        match id {
+            0 => IdFeature::Default,
+            GRAVE_BUSTER | PLANTERN | FLOWER_POT | ETHYLENE => IdFeature::Nonplantae,
+            PUFF_SHROOM | SUN_SHROOM | DOOM_SHROOM..=FUME_SHROOM | MAGNET_SHROOM => {
+                IdFeature::Fungi
+            }
+            ..=-1 => IdFeature::Plant,
+            _ => IdFeature::Zombie,
+        }
     }
 }
 

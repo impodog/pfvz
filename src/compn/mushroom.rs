@@ -59,7 +59,7 @@ fn modify_zzz(
                         game::Position::default(),
                         *hitbox,
                         sprite::Animation::new(plants.zzz.clone()),
-                        game::LayerDisp(0.2),
+                        game::LayerDisp(0.02),
                         SpriteBundle::default(),
                     ))
                     .set_parent(entity);

@@ -65,7 +65,7 @@ fn spawn_digger_zombie(
             sprite::Animation::new(zombies.hard_cap.clone()),
             game::Armor::new(factors.digger.hard_cap_health),
             compn::Breaks(breaks.0.clone()),
-            game::LayerDisp(0.1),
+            game::LayerDisp(0.01),
             SpriteBundle::default(),
         ))
         .set_parent(entity);

@@ -160,7 +160,7 @@ cost = 350
 [tall_nut]
 self_box = { width = 0.9, height = 1.5 }
 health = 8000
-cooldown = 50.0
+cooldown = 40.0
 cost = 125
 [spikeweed]
 self_box = { width = 1.0, height = 0.3 }
@@ -316,7 +316,14 @@ health = 300
 damage = 80
 interval = 3.0
 cooldown = 7.5
-cost = 325
+cost = 375
+[ethylene]
+self_box = { width = 0.7, height = 1.0 }
+health = 300
+duration = 10.0
+factor = 1.0
+cooldown = 7.5
+cost = 100
 [bowling_nut]
 velocity = { x = 2.25, y = 1.5, z = 0.0, r = -4.5 }
 self_box = { width = 0.7, height = 0.9 }

@@ -87,7 +87,7 @@ fn blover_work(
 
                         let base_factor = disp.max(0.0) * 2.0;
                         let base_factor = if gravity.is_some() {
-                            base_factor * 0.25
+                            base_factor * 0.3
                         } else {
                             base_factor * base_factor
                         };
