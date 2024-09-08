@@ -14,8 +14,9 @@ impl Plugin for AchListenPlugin {
 fn listen_getting_exciting(
     mut e_ach: EventWriter<ach::NewAchievement>,
     bgm: Res<level::BgmStatus>,
+    index: Res<level::LevelIndex>,
 ) {
-    if bgm.is_changed() && *bgm == level::BgmStatus::Exciting {
+    if bgm.is_changed() && *bgm == level::BgmStatus::Exciting && index.stage > 0 {
         e_ach.send(ach::NewAchievement(ach::AchId::GettingExciting));
     }
 }
@@ -24,16 +25,19 @@ fn listen_impulsive_killer(
     mut e_ach: EventWriter<ach::NewAchievement>,
     mut e_action: EventReader<game::CreatureAction>,
     q_all_star: Query<&zombies::AllStarZombieRunning>,
+    index: Res<level::LevelIndex>,
 ) {
-    let ok = Mutex::new(false);
-    e_action.par_read().for_each(|action| {
-        if let game::CreatureAction::Die(entity) = action {
-            if q_all_star.get(*entity).is_ok_and(|running| running.0) {
-                *ok.lock().unwrap() = true;
+    if index.stage > 0 {
+        let ok = Mutex::new(false);
+        e_action.par_read().for_each(|action| {
+            if let game::CreatureAction::Die(entity) = action {
+                if q_all_star.get(*entity).is_ok_and(|running| running.0) {
+                    *ok.lock().unwrap() = true;
+                }
             }
+        });
+        if Mutex::into_inner(ok).unwrap() {
+            e_ach.send(ach::NewAchievement(ach::AchId::ImpulsiveKiller));
         }
-    });
-    if Mutex::into_inner(ok).unwrap() {
-        e_ach.send(ach::NewAchievement(ach::AchId::ImpulsiveKiller));
     }
 }
