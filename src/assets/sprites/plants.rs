@@ -76,6 +76,7 @@ pub struct SpritePlants {
     pub melon_pult: Arc<sprite::FrameArr>,
     pub melon_pult_lob: Arc<sprite::FrameArr>,
     pub melon: Arc<sprite::FrameArr>,
+    pub ethylene: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -358,6 +359,11 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             Duration::from_millis(150),
         ),
         melon: super::load_animation(&server, "sprites/plants/melon", Duration::from_millis(100)),
+        ethylene: super::load_animation(
+            &server,
+            "sprites/plants/ethylene",
+            Duration::from_millis(100),
+        ),
     };
     commands.insert_resource(plants);
 }

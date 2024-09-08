@@ -8,7 +8,7 @@ impl Plugin for LevelBgmPlugin {
             OnEnter(info::PlayStates::Gaming),
             (init_status, start_playing).chain(),
         );
-        app.add_systems(OnExit(info::PlayStates::Gaming), (close_all_music,));
+        app.add_systems(OnExit(info::GlobalStates::Play), (close_all_music,));
         app.add_systems(PostUpdate, (switch_exciting,).run_if(when_state!(gaming)));
     }
 }

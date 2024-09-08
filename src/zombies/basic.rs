@@ -69,7 +69,7 @@ fn add_basic_zombie_arm(
                 factors.basic.arm_box,
                 sprite::Animation::new(zombies.arm.clone()),
                 game::Armor::new(factors.basic.arm_health),
-                game::LayerDisp(0.1),
+                game::LayerDisp(0.01),
                 SpriteBundle::default(),
             ))
             .set_parent(entity);
@@ -95,7 +95,7 @@ fn add_aquatic_zombie_tube(
                         game::Position::new_xyz(0.0, 0.0, -0.2),
                         factors.tube.self_box,
                         sprite::Animation::new(zombies.tube.clone()),
-                        game::LayerDisp(0.1),
+                        game::LayerDisp(0.01),
                         SpriteBundle::default(),
                     ))
                     .set_parent(entity);
@@ -164,7 +164,7 @@ fn spawn_roadcone_zombie(
             sprite::Animation::new(zombies.roadcone.clone()),
             game::Armor::new(factors.roadcone.roadcone_health),
             compn::Breaks(breaks.0.clone()),
-            game::LayerDisp(0.1),
+            game::LayerDisp(0.01),
             SpriteBundle::default(),
         ))
         .set_parent(entity);
@@ -204,7 +204,7 @@ fn spawn_bucket_zombie(
             game::Armor::new(factors.bucket.bucket_health),
             game::Magnetic,
             compn::Breaks(breaks.0.clone()),
-            game::LayerDisp(0.1),
+            game::LayerDisp(0.01),
             SpriteBundle::default(),
         ))
         .set_parent(entity);
@@ -241,7 +241,7 @@ fn spawn_flag_zombie(
             factors.flag.flag_box,
             sprite::Animation::new(zombies.flag.clone()),
             game::Armor::new(factors.flag.flag_health),
-            game::LayerDisp(0.1),
+            game::LayerDisp(0.01),
             SpriteBundle::default(),
         ))
         .set_parent(entity);
@@ -282,7 +282,7 @@ fn spawn_screen_door_zombie(
             game::Magnetic,
             compn::Breaks(breaks.0.clone()),
             compn::UnsnowParent { absolute: false },
-            game::LayerDisp(0.1),
+            game::LayerDisp(0.01),
             SpriteBundle::default(),
         ))
         .set_parent(entity);

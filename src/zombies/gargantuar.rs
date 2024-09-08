@@ -78,8 +78,9 @@ fn spawn_gargantuar(
     commands
         .entity(imp)
         .set_parent(entity)
+        .remove::<game::Zombie>()
         .insert(game::Velocity::default())
-        .insert(game::LayerDisp(-0.1));
+        .insert(game::LayerDisp(-0.01));
 }
 
 #[derive(Component)]
@@ -260,7 +261,7 @@ fn gargantuar_add_bandaid(
                             game::RelativePosition::new(x, 0.0, z, r),
                             factors.gargantuar.bandaid_box,
                             sprite::Animation::new(zombies.bandaid.clone()),
-                            game::LayerDisp(0.1),
+                            game::LayerDisp(0.01),
                             SpriteBundle::default(),
                         ))
                         .set_parent(entity);
@@ -316,6 +317,7 @@ fn gargantuar_throw_imp(
                                 }
                                 if let Some(mut commands) = commands.get_entity(*imp) {
                                     commands
+                                        .try_insert(game::Zombie)
                                         .try_insert(game::LogicPosition::from_base(base))
                                         .try_insert(game::LayerDisp(0.0))
                                         .try_insert(game::Gravity)

@@ -45,7 +45,7 @@ pub struct Selection(pub Vec<Id>);
 #[derive(Resource, Debug, Clone, Copy, Deref, DerefMut)]
 pub struct Selecting(pub usize);
 
-#[derive(Resource, Default, Debug, Clone)]
+#[derive(Resource, Default, Debug, Clone, Deref, DerefMut)]
 pub struct SelectionCooldown(pub Vec<Timer>);
 impl SelectionCooldown {
     pub fn get(&mut self, index: usize) -> &mut Timer {

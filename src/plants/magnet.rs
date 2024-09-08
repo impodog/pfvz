@@ -114,7 +114,7 @@ fn magnet_work(
                                         texture: image.clone(),
                                         ..Default::default()
                                     },
-                                    game::LayerDisp(-0.1),
+                                    game::LayerDisp(-0.01),
                                 ))
                                 .set_parent(entity);
                             commands.entity(magnetic).despawn_recursive();

@@ -385,6 +385,15 @@ pub struct MelonPult {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Ethylene {
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub duration: f32,
+    pub factor: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -454,6 +463,7 @@ pub struct PlantFactors {
     pub kernel_pult: KernelPult,
     pub garlic: Garlic,
     pub melon_pult: MelonPult,
+    pub ethylene: Ethylene,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

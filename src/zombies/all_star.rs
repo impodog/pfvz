@@ -61,7 +61,7 @@ fn spawn_all_star_zombie(
             game::Armor::new(factors.all_star.helmet_health),
             game::Magnetic,
             compn::Breaks(breaks.0.clone()),
-            game::LayerDisp(0.1),
+            game::LayerDisp(0.01),
             SpriteBundle::default(),
         ))
         .set_parent(entity);

@@ -56,6 +56,7 @@ fn spawn_dancing_zombie(
         creature.clone(),
         pos,
         game::Velocity::from(factors.dancing.velocity_back),
+        game::VelocityBase(factors.dancing.velocity.into()),
         sprite::Animation::new(zombies.dancing_zombie_back.clone()),
         compn::Dying::new(zombies.dancing_zombie_dying.clone()),
         creature.hitbox,

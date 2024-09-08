@@ -53,17 +53,22 @@ fn update_cursor_info(
 fn update_touch_as_cursor(
     mut cursor: ResMut<CursorInfo>,
     display: Res<game::Display>,
-    mut touch: EventReader<TouchInput>,
     q_camera: Query<(&Camera, &GlobalTransform), With<config::MainCamera>>,
-    mut start_pos: Local<BTreeMap<u64, Vec2>>,
+    touches: Res<Touches>,
 ) {
-    use bevy::input::touch::TouchPhase;
-
     let (camera, camera_transform) = q_camera.single();
 
-    for touch in touch.read() {
+    touches.iter_just_released().for_each(|touch| {
+        let pos = touch.position();
+        let start = touch.start_position();
+        if pos.distance_squared(start) >= LOGICAL_BOUND.length_squared() / 4.0 {
+            cursor.right = true;
+        } else {
+            cursor.left = true;
+        }
+
         if let Some(world_position) = camera
-            .viewport_to_world(camera_transform, touch.position)
+            .viewport_to_world(camera_transform, pos)
             .map(|ray| ray.origin.truncate())
         {
             cursor.coord = world_position;
@@ -71,23 +76,6 @@ fn update_touch_as_cursor(
                 cursor.coord.x / display.ratio,
                 cursor.coord.y / display.ratio,
             );
-            match touch.phase {
-                TouchPhase::Started => {
-                    start_pos.insert(touch.id, world_position);
-                }
-                TouchPhase::Ended => {
-                    if let Some(pos) = start_pos.remove(&touch.id) {
-                        let diff = touch.position - pos;
-                        let diff = diff.length();
-                        if diff / LOGICAL.length() >= 0.5 {
-                            cursor.right = true;
-                        } else {
-                            cursor.left = true;
-                        }
-                    }
-                }
-                _ => {}
-            }
         }
-    }
+    });
 }

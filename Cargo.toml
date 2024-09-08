@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.86"
-bevy = { version = "0.14.1", default-features = false, features = [
+anyhow = "1.0.87"
+bevy = { version = "0.14.2", default-features = false, features = [
     "multi_threaded",     # Run with multithreading
     "bevy_asset",         # Assets management
     "bevy_audio",         # Builtin audio
@@ -33,8 +33,8 @@ num_enum = "0.7.3"
 ordered-float = "4.2.2"
 rand = "0.8.5"
 ron = "0.8.1"
-serde = { version = "1.0.209", features = ["derive"] }
-serde_json = "1.0.127"
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.128"
 serde_repr = "0.1.19"
 smallvec = "1.13.2"
 toml = "0.8.19"

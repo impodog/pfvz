@@ -36,6 +36,7 @@ impl Plugin for PlantsPlugin {
             kernel::PlantsKernelPlugin,
             garlic::PlantsGarlicPlugin,
             melon::PlantsMelonPlugin,
+            ethylene::PlantsEthylenePlugin,
         ));
     }
 }

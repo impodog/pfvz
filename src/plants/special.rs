@@ -58,7 +58,7 @@ fn spawn_grave(
         sprite::Animation::new(anim),
         creature.hitbox,
         game::Health::from(factors.grave.health),
-        game::LayerDisp(-0.1),
+        game::LayerDisp(-0.01),
         SpriteBundle::default(),
     ));
 }
