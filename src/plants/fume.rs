@@ -10,8 +10,8 @@ impl Plugin for PlantsFumePlugin {
         app.add_systems(PostStartup, (init_config,));
         *fume_shroom_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_fume_shroom),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *fume_shroom_after.write().unwrap() = Some(app.register_system(move_fume));
         *fume_shroom_callback.write().unwrap() = Some(app.register_system(play_shoot_animation));

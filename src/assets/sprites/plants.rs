@@ -77,6 +77,9 @@ pub struct SpritePlants {
     pub melon_pult_lob: Arc<sprite::FrameArr>,
     pub melon: Arc<sprite::FrameArr>,
     pub ethylene: Arc<sprite::FrameArr>,
+    pub pine: Arc<sprite::FrameArr>,
+    pub sap_fling: Arc<sprite::FrameArr>,
+    pub sap_fling_lob: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -315,10 +318,11 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/plants/cabbage",
             Duration::from_millis(100),
         ),
-        cabbage_pult_lob: super::load_animation(
+        cabbage_pult_lob: super::load_animation_then(
             &server,
             "sprites/plants/cabbage_pult_lob",
             Duration::from_millis(150),
+            sprite::FrameArr::then_reverse,
         ),
         coffee_bean: super::load_animation(
             &server,
@@ -332,10 +336,11 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
         ),
         kernel: super::load_animation(&server, "sprites/plants/kernel", Duration::from_millis(100)),
         butter: super::load_animation(&server, "sprites/plants/butter", Duration::from_millis(100)),
-        kernel_pult_lob: super::load_animation(
+        kernel_pult_lob: super::load_animation_then(
             &server,
             "sprites/plants/kernel_pult_lob",
             Duration::from_millis(150),
+            sprite::FrameArr::then_reverse,
         ),
         garlic: super::load_animation(&server, "sprites/plants/garlic", Duration::from_millis(100)),
         garlic_damaged: super::load_animation(
@@ -353,16 +358,29 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/plants/melon_pult",
             Duration::from_millis(175),
         ),
-        melon_pult_lob: super::load_animation(
+        melon_pult_lob: super::load_animation_then(
             &server,
             "sprites/plants/melon_pult_lob",
             Duration::from_millis(150),
+            sprite::FrameArr::then_reverse,
         ),
         melon: super::load_animation(&server, "sprites/plants/melon", Duration::from_millis(100)),
         ethylene: super::load_animation(
             &server,
             "sprites/plants/ethylene",
             Duration::from_millis(100),
+        ),
+        pine: super::load_animation(&server, "sprites/plants/pine", Duration::from_millis(100)),
+        sap_fling: super::load_animation(
+            &server,
+            "sprites/plants/sap_fling",
+            Duration::from_millis(175),
+        ),
+        sap_fling_lob: super::load_animation_then(
+            &server,
+            "sprites/plants/sap_fling_lob",
+            Duration::from_millis(150),
+            sprite::FrameArr::then_reverse,
         ),
     };
     commands.insert_resource(plants);

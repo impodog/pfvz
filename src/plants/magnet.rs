@@ -9,8 +9,8 @@ impl Plugin for PlantsMagnetPlugin {
         app.add_systems(Update, (magnet_work,).run_if(when_state!(gaming)));
         *magnet_shroom_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_magnet_shroom),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
     }
 }

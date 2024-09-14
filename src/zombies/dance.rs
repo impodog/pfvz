@@ -13,13 +13,13 @@ impl Plugin for ZombiesDancePlugin {
         );
         *dancing_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_dancing_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *backup_dancer_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_backup_dancer),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *summon_backup_system.write().unwrap() = Some(app.register_system(summon_backup));
     }

@@ -9,8 +9,8 @@ impl Plugin for PlantsSpikePlugin {
         app.add_systems(PostStartup, (init_config,));
         *spikeweed_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_spikeweed),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *spikeweed_contact_many.write().unwrap() = Some(app.register_system(spikeweed_work));
     }

@@ -37,9 +37,9 @@ pub fn start_pfvz() {
         sprite::SpritePlugin,
         level::LevelPlugin,
         save::SavePlugin,
+        compn::CompnPlugin,
         plants::PlantsPlugin,
         zombies::ZombiesPlugin,
-        compn::CompnPlugin,
     ));
     app.add_plugins((
         choose::ChoosePlugin,

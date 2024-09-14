@@ -16,28 +16,28 @@ impl Plugin for ZombiesBasicPlugin {
         );
         *basic_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_basic_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *roadcone_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_roadcone_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *bucket_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_bucket_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *flag_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_flag_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *screen_door_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_screen_door_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
     }
 }

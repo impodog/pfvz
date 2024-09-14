@@ -22,6 +22,15 @@ pub struct CreatureSystems {
     pub die: SystemId<Entity>,
     pub damage: SystemId<(Entity, u32)>,
 }
+impl Default for CreatureSystems {
+    fn default() -> Self {
+        Self {
+            spawn: compn::default::system_spawn_not.read().unwrap().unwrap(),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
+        }
+    }
+}
 
 #[derive(Debug, Clone, Deref, DerefMut)]
 pub struct CreatureShared {

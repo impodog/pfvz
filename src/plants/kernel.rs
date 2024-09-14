@@ -9,8 +9,8 @@ impl Plugin for PlantsKernelPlugin {
         app.add_systems(PostStartup, (init_config,));
         *kernel_pult_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_kernel_pult),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            die: compn::default::system_die.read().unwrap().unwrap(),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *kernel_after.write().unwrap() = Some(app.register_system(add_gravity_and_butter));
         *kernel_callback.write().unwrap() = Some(app.register_system(kernel_play_animation));
@@ -59,6 +59,7 @@ fn add_gravity_and_butter(
         commands.try_insert(game::Gravity);
         commands.try_insert(compn::SnowyProjectile {
             snow: factors.kernel_pult.snow.into(),
+            ..Default::default()
         });
     }
 }

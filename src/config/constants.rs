@@ -45,6 +45,7 @@ pub const KERNEL_PULT: Id = -35;
 pub const GARLIC: Id = -36;
 pub const MELON_PULT: Id = -37;
 pub const ETHYLENE: Id = -38;
+pub const SAP_FLING: Id = -39;
 
 pub const BOWLING_NUT: Id = -101;
 
@@ -148,6 +149,7 @@ pub fn id_name(id: Id) -> &'static str {
         GARLIC => "garlic",
         MELON_PULT => "melon_pult",
         ETHYLENE => "ethylene",
+        SAP_FLING => "sap_fling",
 
         BOWLING_NUT => "bowling_nut",
 

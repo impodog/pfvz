@@ -233,8 +233,8 @@ times = 1
 health = 300
 damage = 20
 interval = 1.0
-cooldown = 30.0
-cost = 275
+cooldown = 7.5
+cost = 300
 [magnet_shroom]
 self_box = { width = 0.9, height = 0.9 }
 health = 300
@@ -320,10 +320,22 @@ cost = 375
 [ethylene]
 self_box = { width = 0.7, height = 1.0 }
 health = 300
-duration = 10.0
-factor = 1.0
-cooldown = 7.5
+duration = 5.0
+factor = 2.0
+cooldown = 50.0
 cost = 100
+[sap_fling]
+velocity = [2.5, -2.3]
+self_box = { width = 0.9, height = 1.1 }
+pine_box = { width = 0.35, height = 0.35 }
+range = { x = [-0.5, 0.5], y = [-0.5, 0.5], z = [-0.3, 0.3] }
+snow = { duration = 4.0, factor = 0.5 }
+times = 1
+health = 300
+damage = 0
+interval = 3.0
+cooldown = 7.5
+cost = 125
 [bowling_nut]
 velocity = { x = 2.25, y = 1.5, z = 0.0, r = -4.5 }
 self_box = { width = 0.7, height = 0.9 }

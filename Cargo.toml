@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.87"
+anyhow = "1.0.88"
 bevy = { version = "0.14.2", default-features = false, features = [
     "multi_threaded",     # Run with multithreading
     "bevy_asset",         # Assets management
