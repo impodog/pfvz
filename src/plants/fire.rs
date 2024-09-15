@@ -9,8 +9,7 @@ impl Plugin for PlantsFirePlugin {
         app.add_systems(Update, (torchwood_ignite,));
         *torchwood_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_torchwood),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

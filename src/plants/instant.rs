@@ -9,14 +9,12 @@ impl Plugin for PlantsInstantPlugin {
         app.add_systems(PostStartup, (init_config,));
         *ice_shroom_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_ice_shroom),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *ice_shroom_work.write().unwrap() = Some(app.register_system(freeze_all));
         *doom_shroom_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_doom_shroom),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *doom_shroom_work.write().unwrap() = Some(app.register_system(doom_all));
     }

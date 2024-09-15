@@ -9,8 +9,7 @@ impl Plugin for ZombiesHiddenPlugin {
         app.add_systems(Update, (hidden_zombie_move,).run_if(when_state!(gaming)));
         *hidden_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_hidden_zombie),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

@@ -8,8 +8,7 @@ impl Plugin for PlantsStarfruitPlugin {
         app.add_systems(PostStartup, (init_config,));
         *starfruit_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_puff_shroom),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

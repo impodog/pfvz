@@ -9,8 +9,7 @@ impl Plugin for ZombiesPogoPlugin {
         app.add_systems(Update, (pogo_zombie_jump,).run_if(when_state!(gaming)));
         *pogo_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_pogo_zombie),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

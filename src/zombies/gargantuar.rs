@@ -20,14 +20,12 @@ impl Plugin for ZombiesGargantuarPlugin {
         );
         *gargantuar_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_gargantuar),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *gargantuar_smash_system.write().unwrap() = Some(app.register_system(gargantuar_smash));
         *imp_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_imp),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

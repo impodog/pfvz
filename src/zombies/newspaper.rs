@@ -9,8 +9,7 @@ impl Plugin for ZombiesNewspaperPlugin {
         app.add_systems(Update, (newspaper_rage,));
         *newspaper_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_newspaper_zombie),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

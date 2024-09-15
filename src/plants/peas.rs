@@ -11,24 +11,20 @@ impl Plugin for PlantsPeaPlugin {
         app.add_systems(PostStartup, (init_config,));
         *peashooter_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_peashooter),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *snow_pea_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_snow_pea),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *snow_pea_after.write().unwrap() = Some(app.register_system(add_snow));
         *repeater_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_repeater),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *threepeater_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_threepeater),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

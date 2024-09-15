@@ -8,8 +8,7 @@ impl Plugin for PlantsSquashPlugin {
         app.add_systems(PostStartup, (init_config,));
         *squash_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_squash),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

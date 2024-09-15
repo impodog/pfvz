@@ -301,7 +301,7 @@ cost = 75
 velocity = [2.6, -2.5]
 self_box = { width = 0.9, height = 1.1 }
 melon_box = { width = 0.5, height = 0.5 }
-fire = { additional = 0.0, splash = 0.25, range = { x = [
+fire = { additional = 0.0, splash = 0.5, range = { x = [
     -1.5,
     1.5,
 ], y = [

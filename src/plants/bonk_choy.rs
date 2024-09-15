@@ -9,8 +9,7 @@ impl Plugin for PlantsBonkChoyPlugin {
         app.add_systems(Update, (beat_zombie,));
         *bonk_choy_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_bonk_choy),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

@@ -9,13 +9,11 @@ impl Plugin for PlantsPadsPlugin {
         app.add_systems(PostStartup, (init_config,));
         *lily_pad_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_lily_pad),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *flower_pot_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_flower_pot),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

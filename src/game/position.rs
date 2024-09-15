@@ -131,6 +131,14 @@ impl PositionRange {
         }
     }
 
+    pub fn with_inverted_x(self) -> Self {
+        Self {
+            x: (-self.x.1, -self.x.0),
+            y: self.y,
+            z: self.z,
+        }
+    }
+
     fn intersects(x1: f32, x2: f32, y1: f32, y2: f32) -> bool {
         x1 <= y2 && y1 <= x2
     }

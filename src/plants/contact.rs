@@ -12,15 +12,13 @@ impl Plugin for PlantsContactPlugin {
         app.add_systems(Update, (sun_bean_tick,));
         *iceberg_lettuce_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_iceberg_lettuce),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *iceberg_lettuce_contact.write().unwrap() =
             Some(app.register_system(iceberg_lettuce_freeze));
         *sun_bean_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_sun_bean),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *sun_bean_contact.write().unwrap() = Some(app.register_system(sun_bean_collect));
     }

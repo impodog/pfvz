@@ -1,5 +1,6 @@
 mod all_star;
 mod balloon;
+mod baseball;
 mod basic;
 mod dance;
 mod digger;
@@ -16,6 +17,7 @@ mod zomboni;
 
 pub use all_star::*;
 pub use balloon::*;
+pub use baseball::*;
 pub use basic::*;
 pub use dance::*;
 pub use digger::*;

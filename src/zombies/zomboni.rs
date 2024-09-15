@@ -9,8 +9,7 @@ impl Plugin for ZombiesZomboniPlugin {
         app.add_systems(Update, (zomboni_leave_trail,).run_if(when_state!(gaming)));
         *zomboni_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_zomboni),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

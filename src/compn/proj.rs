@@ -63,7 +63,7 @@ fn proj_action(
     let queue = RwLock::new(queue);
     e_proj.par_read().for_each(|action| {
         let ok = match action {
-            game::ProjectileAction::Damage(entity, other) => true,
+            game::ProjectileAction::Damage(_entity, _other) => true,
             game::ProjectileAction::Consumed(entity) => {
                 let ok = if let Ok(proj) = q_proj.get(*entity) {
                     if proj.time.as_millis() == 0 {

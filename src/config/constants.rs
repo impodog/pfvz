@@ -69,6 +69,7 @@ pub const BALLOON_ZOMBIE: Id = 13;
 pub const DIGGER_ZOMBIE: Id = 14;
 pub const POGO_ZOMBIE: Id = 15;
 pub const GARGANTUAR: Id = 16;
+pub const BASEBALL_ZOMBIE: Id = 17;
 
 pub const HIDDEN_ZOMBIE: Id = 101;
 
@@ -172,6 +173,7 @@ pub fn id_name(id: Id) -> &'static str {
         DIGGER_ZOMBIE => "digger",
         POGO_ZOMBIE => "pogo",
         GARGANTUAR => "gargantuar",
+        BASEBALL_ZOMBIE => "baseball",
 
         HIDDEN_ZOMBIE => "hidden",
 

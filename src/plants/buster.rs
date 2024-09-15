@@ -12,13 +12,11 @@ impl Plugin for PlantsBusterPlugin {
         );
         *grave_buster_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_grave_buster),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *coffee_bean_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_coffee_bean),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }

@@ -10,8 +10,7 @@ impl Plugin for ZombiesDiggerPlugin {
         app.init_resource::<DiggerPleaseGoUp>();
         *digger_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_digger_zombie),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }
