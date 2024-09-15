@@ -33,6 +33,8 @@ pub struct Thunder {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Exciting {
     pub zombies: usize,
+    pub standard: usize,
+    pub sun_standard: u32,
 }
 
 #[derive(Debug, Resource, Serialize, Deserialize)]

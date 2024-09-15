@@ -13,3 +13,5 @@ start = 4
 interval = [25.0, 30.0]
 [exciting]
 zombies = 10
+standard = 450
+sun_standard = 50

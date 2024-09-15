@@ -39,5 +39,6 @@ impl Plugin for PlantsPlugin {
             ethylene::PlantsEthylenePlugin,
             pine::PlantsPinePlugin,
         ));
+        app.add_plugins((gold_bloom::PlantsGoldBloomPlugin,));
     }
 }

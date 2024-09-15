@@ -80,6 +80,7 @@ pub struct SpritePlants {
     pub pine: Arc<sprite::FrameArr>,
     pub sap_fling: Arc<sprite::FrameArr>,
     pub sap_fling_lob: Arc<sprite::FrameArr>,
+    pub gold_bloom: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
@@ -381,6 +382,11 @@ pub(super) fn init_plants(mut commands: Commands, server: Res<AssetServer>) {
             "sprites/plants/sap_fling_lob",
             Duration::from_millis(150),
             sprite::FrameArr::then_reverse,
+        ),
+        gold_bloom: super::load_animation(
+            &server,
+            "sprites/plants/gold_bloom",
+            Duration::from_millis(250),
         ),
     };
     commands.insert_resource(plants);

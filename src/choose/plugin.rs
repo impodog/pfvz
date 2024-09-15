@@ -5,6 +5,10 @@ pub struct ChoosePlugin;
 
 impl Plugin for ChoosePlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((show::ChooseShowPlugin, exit::ChooseExitPlugin));
+        app.add_plugins((
+            show::ChooseShowPlugin,
+            exit::ChooseExitPlugin,
+            super::info::ChooseInfoPlugin,
+        ));
     }
 }

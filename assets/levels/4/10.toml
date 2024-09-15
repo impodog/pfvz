@@ -1,7 +1,7 @@
 [config]
 selection = { "ThisMany" = 11 }
 layout = "Fog"
-game = ["Thunder"]
+game = ["Adventure", "Thunder"]
 modify = { give = -33, next = { stage = 5, level = 1 }, slots = 10 }
 sun = 150
 bgm = "Rain"

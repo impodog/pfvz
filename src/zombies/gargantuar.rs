@@ -253,7 +253,7 @@ fn gargantuar_add_bandaid(
                     let z = rand::thread_rng().gen_range(-hitbox.height / 2.0..hitbox.height / 2.0);
                     let r =
                         rand::thread_rng().gen_range(-std::f32::consts::PI..std::f32::consts::PI);
-                    commands
+                    let child = commands
                         .spawn((
                             game::Position::default(),
                             game::RelativePosition::new(x, 0.0, z, r),
@@ -262,7 +262,10 @@ fn gargantuar_add_bandaid(
                             game::LayerDisp(0.01),
                             SpriteBundle::default(),
                         ))
-                        .set_parent(entity);
+                        .id();
+                    if let Some(mut commands) = commands.get_entity(entity) {
+                        commands.add_child(child);
+                    }
                 });
             });
             if diff > 0 {

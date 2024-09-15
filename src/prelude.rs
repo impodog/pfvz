@@ -25,4 +25,7 @@ macro_rules! multiply_uf {
     ($x: expr, $y: expr) => {
         ($x as f32 * $y as f32) as u32
     };
+    ($t: ty, $x: expr, $y: expr) => {
+        ($x as f32 * $y as f32) as $t
+    };
 }

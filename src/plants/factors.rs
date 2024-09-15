@@ -408,6 +408,17 @@ pub struct SapFling {
     pub cost: u32,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct GoldBloom {
+    pub velocity: game::VelocityAny,
+    pub self_box: game::HitBox,
+    pub health: u32,
+    pub times: usize,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+    pub multiplier: f32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BowlingNut {
     pub velocity: game::Velocity,
     pub self_box: game::HitBox,
@@ -479,6 +490,7 @@ pub struct PlantFactors {
     pub melon_pult: MelonPult,
     pub ethylene: Ethylene,
     pub sap_fling: SapFling,
+    pub gold_bloom: GoldBloom,
     pub bowling_nut: BowlingNut,
     pub grave: Grave,
     pub crater: Crater,

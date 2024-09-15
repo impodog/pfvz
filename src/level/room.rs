@@ -36,6 +36,14 @@ impl Default for RoomStatus {
     }
 }
 
+#[derive(Resource, Debug, Clone)]
+pub struct RoomDifficulty {
+    pub sum: u32,
+    /// The number of zombies to reach to play exciting music
+    pub exciting: usize,
+    pub factor: f32,
+}
+
 #[derive(Event)]
 pub struct RoomNextWave(pub usize);
 
