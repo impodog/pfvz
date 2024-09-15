@@ -51,7 +51,7 @@ fn adventure_menu(
                         e_level.send(level::LevelEvent { index });
                         *trigger = true;
                     } else {
-                        *warning = "You haven't unlock this level yet!".into();
+                        *warning = "You haven't unlocked this level yet!".into();
                     }
                 }
                 Err(err) => {

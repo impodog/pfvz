@@ -9,7 +9,7 @@ impl Plugin for PlantsGarlicPlugin {
         *garlic_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_garlic),
             damage: app.register_system(garlic_divert),
-            die: app.register_system(compn::default::die),
+            die: compn::default::system_die.read().unwrap().unwrap(),
         });
     }
 }

@@ -20,14 +20,12 @@ impl Plugin for ZombiesGargantuarPlugin {
         );
         *gargantuar_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_gargantuar),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *gargantuar_smash_system.write().unwrap() = Some(app.register_system(gargantuar_smash));
         *imp_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_imp),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }
@@ -255,7 +253,7 @@ fn gargantuar_add_bandaid(
                     let z = rand::thread_rng().gen_range(-hitbox.height / 2.0..hitbox.height / 2.0);
                     let r =
                         rand::thread_rng().gen_range(-std::f32::consts::PI..std::f32::consts::PI);
-                    commands
+                    let child = commands
                         .spawn((
                             game::Position::default(),
                             game::RelativePosition::new(x, 0.0, z, r),
@@ -264,7 +262,10 @@ fn gargantuar_add_bandaid(
                             game::LayerDisp(0.01),
                             SpriteBundle::default(),
                         ))
-                        .set_parent(entity);
+                        .id();
+                    if let Some(mut commands) = commands.get_entity(entity) {
+                        commands.add_child(child);
+                    }
                 });
             });
             if diff > 0 {

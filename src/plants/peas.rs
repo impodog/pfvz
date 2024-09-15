@@ -11,24 +11,20 @@ impl Plugin for PlantsPeaPlugin {
         app.add_systems(PostStartup, (init_config,));
         *peashooter_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_peashooter),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *snow_pea_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_snow_pea),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *snow_pea_after.write().unwrap() = Some(app.register_system(add_snow));
         *repeater_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_repeater),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *threepeater_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_threepeater),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }
@@ -91,6 +87,7 @@ fn spawn_snow_pea(
 fn add_snow(In(entity): In<Entity>, mut commands: Commands, factors: Res<plants::PlantFactors>) {
     commands.entity(entity).insert(compn::SnowyProjectile {
         snow: compn::Snow::from(factors.snow_pea.snow),
+        ..Default::default()
     });
 }
 

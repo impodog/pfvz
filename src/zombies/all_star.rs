@@ -9,8 +9,7 @@ impl Plugin for ZombiesAllStarPlugin {
         app.add_systems(Update, (all_star_tackle,).run_if(when_state!(gaming)));
         *all_star_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_all_star_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }

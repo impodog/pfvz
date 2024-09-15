@@ -22,7 +22,9 @@ fn load_level(
     mut e_level: EventReader<LevelEvent>,
     mut state: ResMut<NextState<info::GlobalStates>>,
     mut selection: ResMut<game::Selection>,
+    map: Res<game::CreatureMap>,
     save: Res<save::Save>,
+    items: Res<collectible::ItemFactors>,
 ) {
     if let Some(level_event) = e_level.read().last() {
         let path = format!(
@@ -36,6 +38,8 @@ fn load_level(
                     let ratio = (LOGICAL_WIDTH / size.0 as f32).min(LOGICAL_HEIGHT / size.1 as f32)
                         * 2.0
                         / 3.0;
+                    commands.insert_resource(game::Display { ratio });
+
                     level.config.selection.modify(selection.as_mut());
                     let slots = if let level::SelectionArr::All(ref vec) = level.config.selection {
                         vec.len()
@@ -43,9 +47,32 @@ fn load_level(
                         save.slots.max(level.config.selection.len())
                     };
                     commands.insert_resource(LevelSlots(slots));
+
+                    let sum = level.waves.iter().fold(0, |acc, wave| {
+                        acc + wave.points
+                            + wave.fixed.iter().fold(0, |acc, (id, num)| {
+                                acc + map
+                                    .get(id)
+                                    .map(|creature| creature.cost)
+                                    .unwrap_or_default()
+                                    * (*num) as u32
+                            })
+                    });
+                    let factor = sum as f32
+                        / items.exciting.standard as f32
+                        / (level.waves.len() as f32).powf(1.05)
+                        / (level.config.sun as f32 / items.exciting.sun_standard as f32).powf(0.12);
+                    let exciting = multiply_uf!(usize, items.exciting.zombies, factor.max(1.0));
+                    let difficulty = level::RoomDifficulty {
+                        sum,
+                        exciting,
+                        factor,
+                    };
+                    info!("Room difficulty: {:?}", difficulty);
+                    commands.insert_resource(difficulty);
+
                     commands.insert_resource(level);
                     commands.insert_resource(level_event.index);
-                    commands.insert_resource(game::Display { ratio });
                     state.set(info::GlobalStates::Play);
                     info!("Loaded level and starting Play state");
                 }

@@ -8,18 +8,15 @@ impl Plugin for PlantsExplodePlugin {
         app.add_systems(PostStartup, (init_config,));
         *cherry_bomb_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_cherry_bomb),
-            die: app.register_system(compn::default::die_not),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *potato_mine_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_potato_mine),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *jalapeno_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_jalapeno),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }

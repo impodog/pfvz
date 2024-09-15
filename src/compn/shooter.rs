@@ -27,6 +27,18 @@ pub enum RequireZombie {
     InRange,
     RayCast,
 }
+/// The higher the return value of the predicate is, the more priority this target gets
+#[derive(Clone)]
+pub struct ShooterPredicate(
+    pub  Arc<
+        dyn Fn(
+                (&game::Position, &game::Creature),
+                (&game::Position, &game::Creature),
+            ) -> std::cmp::Ordering
+            + Send
+            + Sync,
+    >,
+);
 #[derive(Debug, Clone, Copy)]
 pub enum ShooterVelocity {
     Classic(game::Velocity),
@@ -39,7 +51,7 @@ impl Default for ShooterVelocity {
 }
 
 // Anything that uses this shoots projectile of their ally
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ShooterShared {
     pub interval: Duration,
     pub velocity: ShooterVelocity,
@@ -47,6 +59,9 @@ pub struct ShooterShared {
     pub start: Vec<(game::Position, f32)>,
     pub times: usize,
     pub require_zombie: RequireZombie,
+    /// Setting this to None(default) uses the default comparision
+    /// Or, the one that returns the highest ordering is returned
+    pub predicate: Option<ShooterPredicate>,
     pub after: SystemId<Entity>,
     pub callback: SystemId<Entity>,
     pub shared: Arc<game::ProjectileShared>,
@@ -61,6 +76,7 @@ impl Default for ShooterShared {
             start: vec![Default::default()],
             times: 1,
             require_zombie: RequireZombie::No,
+            predicate: None,
             after: compn::default::system_do_nothing.read().unwrap().unwrap(),
             callback: compn::default::system_do_nothing.read().unwrap().unwrap(),
             shared: Default::default(),
@@ -72,7 +88,7 @@ impl Default for ShooterShared {
         }
     }
 }
-#[derive(Component, Debug, Clone, Deref)]
+#[derive(Component, Clone, Deref)]
 pub struct Shooter(pub Arc<ShooterShared>);
 impl Shooter {
     pub fn replace(&mut self, shared: Arc<ShooterShared>) {
@@ -151,7 +167,25 @@ fn shooter_work(
         &game::HitBox,
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
-    q_zpos: Query<(&game::Position, &game::HitBox, &game::Velocity), With<game::Zombie>>,
+    q_zpos: Query<(&game::Position, &game::HitBox), With<game::Zombie>>,
+    q_zombie_creature: Query<
+        (
+            &game::Position,
+            &game::HitBox,
+            Option<&game::Velocity>,
+            &game::Creature,
+        ),
+        With<game::Zombie>,
+    >,
+    q_plant_creature: Query<
+        (
+            &game::Position,
+            &game::HitBox,
+            Option<&game::Velocity>,
+            &game::Creature,
+        ),
+        With<game::Plant>,
+    >,
     config: Res<config::Config>,
     audio: Res<Audio>,
 ) {
@@ -161,18 +195,15 @@ fn shooter_work(
             work.timer.tick(overlay.delta());
             if work.timer.just_finished() {
                 let mut pos = (*pos).move_z(hitbox.height * -0.05);
+                let is_zombie = q_zombie.get(entity).is_ok();
 
                 // Test if the shooter should work
                 let range = shooter.proj.range + pos;
                 let ok = match shooter.require_zombie {
                     RequireZombie::No => true,
-                    RequireZombie::InRange => {
-                        q_zpos
-                            .iter()
-                            .any(|(zombie_pos, zombie_hitbox, _zombie_velocity)| {
-                                range.contains(zombie_pos, zombie_hitbox)
-                            })
-                    }
+                    RequireZombie::InRange => q_zpos.iter().any(|(zombie_pos, zombie_hitbox)| {
+                        range.contains(zombie_pos, zombie_hitbox)
+                    }),
                     RequireZombie::RayCast => shooter.start.iter().any(|(start, angle)| {
                         use bevy::math::{bounding::Aabb2d, Ray2d};
                         let start = *start + pos;
@@ -180,15 +211,19 @@ fn shooter_work(
                             Vec2::new(start.x, start.y),
                             Vec2::new(angle.cos(), angle.sin()),
                         );
-                        q_zpos
-                            .iter()
-                            .any(|(zombie_pos, zombie_hitbox, _zombie_velocity)| {
+                        q_zpos.iter().any(|(zombie_pos, zombie_hitbox)| {
+                            if shooter.proj.range.z.0 <= zombie_pos.z
+                                && zombie_pos.z <= shooter.proj.range.z.1
+                            {
                                 let aabb = Aabb2d::new(
                                     Vec2::new(zombie_pos.x, zombie_pos.y),
                                     Vec2::new(zombie_hitbox.width, 0.8),
                                 );
                                 ray.intersects(&aabb)
-                            })
+                            } else {
+                                false
+                            }
+                        })
                     }),
                 };
                 if !ok {
@@ -200,20 +235,62 @@ fn shooter_work(
                 let velocity = match shooter.velocity {
                     ShooterVelocity::Classic(velocity) => Some(velocity),
                     ShooterVelocity::Lobbed { x, r } => {
-                        let target = q_zpos
-                            .iter()
-                            .filter_map(|(zombie_pos, zombie_hitbox, zombie_velocity)| {
-                                if range.contains(zombie_pos, zombie_hitbox) {
-                                    Some((*zombie_pos, *zombie_velocity))
-                                } else {
-                                    None
-                                }
-                            })
-                            .max_by(|(lhs, _), (rhs, _)| {
+                        // Selects a target entity to lob at
+                        type CompareElem<'a, 'b> = &'a (
+                            game::Position,
+                            game::Velocity,
+                            &'b game::HitBox,
+                            &'b game::Creature,
+                        );
+                        let compare =
+                            |(lhs_pos, _, _, lhs_creature): CompareElem,
+                             (rhs_pos, _, _, rhs_creature): CompareElem| {
                                 // Reversed comparing makes sure the first zombie is hit
-                                rhs.x.partial_cmp(&lhs.x).unwrap()
-                            });
-                        target.map(|(target, velocity)| {
+                                if let Some(ref predicate) = shooter.predicate {
+                                (*predicate.0)((lhs_pos, lhs_creature), (rhs_pos, rhs_creature))
+                                } else {
+                                    rhs_pos.x.partial_cmp(&lhs_pos.x).unwrap()
+                                }
+                            };
+                        let target = if is_zombie {
+                            q_plant_creature
+                                .iter()
+                                .filter_map(
+                                    |(other_pos, other_hitbox, other_velocity, other_creature)| {
+                                        if range.contains(other_pos, other_hitbox) {
+                                            Some((
+                                                *other_pos,
+                                                other_velocity.copied().unwrap_or_default(),
+                                                other_hitbox,
+                                                other_creature,
+                                            ))
+                                        } else {
+                                            None
+                                        }
+                                    },
+                                )
+                                .max_by(compare)
+                        } else {
+                            q_zombie_creature
+                                .iter()
+                                .filter_map(
+                                    |(other_pos, other_hitbox, other_velocity, other_creature)| {
+                                        if range.contains(other_pos, other_hitbox) {
+                                            Some((
+                                                *other_pos,
+                                                other_velocity.copied().unwrap_or_default(),
+                                                other_hitbox,
+                                                other_creature,
+                                            ))
+                                        } else {
+                                            None
+                                        }
+                                    },
+                                )
+                                .max_by(compare)
+                        };
+                        // Calculate the required velocity
+                        target.map(|(target, velocity, _, _)| {
                             let diff = target - pos;
                             TargetCalculator {
                                 diff,
@@ -249,7 +326,7 @@ fn shooter_work(
                                         SpriteBundle::default(),
                                     ));
                                     // Determines whether the projectile is plant(default) or zombie
-                                    if q_zombie.get(entity).is_ok() {
+                                    if is_zombie {
                                         commands.insert(game::ZombieRelevant);
                                     } else {
                                         commands.insert(game::PlantRelevant);

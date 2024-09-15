@@ -37,6 +37,8 @@ impl Plugin for PlantsPlugin {
             garlic::PlantsGarlicPlugin,
             melon::PlantsMelonPlugin,
             ethylene::PlantsEthylenePlugin,
+            pine::PlantsPinePlugin,
         ));
+        app.add_plugins((gold_bloom::PlantsGoldBloomPlugin,));
     }
 }

@@ -9,8 +9,7 @@ impl Plugin for PlantsEthylenePlugin {
         app.add_systems(Update, (ethylene_work,).run_if(when_state!(gaming)));
         *ethylene_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_ethylene),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         })
     }
 }

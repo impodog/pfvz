@@ -16,8 +16,7 @@ impl Plugin for PlantsCactusPlugin {
         );
         *cactus_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_cactus),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *cactus_after.write().unwrap() = Some(app.register_system(add_spike_use));
     }

@@ -10,7 +10,7 @@ impl Plugin for ZombiesJitbPlugin {
         *jitb_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_jitb_zombie),
             die: app.register_system(jitb_zombie_die),
-            damage: app.register_system(compn::default::damage),
+            damage: compn::default::system_damage.read().unwrap().unwrap(),
         });
         *jitb_zombie_explode.write().unwrap() = Some(app.register_system(jitb_explode));
     }

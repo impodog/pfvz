@@ -14,19 +14,16 @@ impl Plugin for PlantsSpecialPlugin {
         );
         *grave_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_grave),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *grave_spawn_anywhere.write().unwrap() = Some(app.register_system(spawn_grave_any));
         *crater_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_crater),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *ice_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_ice),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }

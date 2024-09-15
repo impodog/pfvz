@@ -20,6 +20,7 @@ impl Plugin for ZombiesPlugin {
             digger::ZombiesDiggerPlugin,
             pogo::ZombiesPogoPlugin,
             gargantuar::ZombiesGargantuarPlugin,
+            baseball::ZombiesBaseballPlugin,
         ));
     }
 }

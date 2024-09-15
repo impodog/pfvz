@@ -233,7 +233,7 @@ times = 1
 health = 300
 damage = 20
 interval = 1.0
-cooldown = 30.0
+cooldown = 7.5
 cost = 250
 [magnet_shroom]
 self_box = { width = 0.9, height = 0.9 }
@@ -301,7 +301,7 @@ cost = 75
 velocity = [2.6, -2.5]
 self_box = { width = 0.9, height = 1.1 }
 melon_box = { width = 0.5, height = 0.5 }
-fire = { additional = 0.0, splash = 0.25, range = { x = [
+fire = { additional = 0.0, splash = 0.5, range = { x = [
     -1.5,
     1.5,
 ], y = [
@@ -316,14 +316,35 @@ health = 300
 damage = 80
 interval = 3.0
 cooldown = 7.5
-cost = 375
+cost = 325
 [ethylene]
 self_box = { width = 0.7, height = 1.0 }
 health = 300
-duration = 10.0
-factor = 1.0
+duration = 5.0
+factor = 2.0
+cooldown = 50.0
+cost = 75
+[sap_fling]
+velocity = [2.5, -2.3]
+self_box = { width = 0.9, height = 1.1 }
+pine_box = { width = 0.35, height = 0.35 }
+range = { x = [-0.5, 0.5], y = [-0.5, 0.5], z = [-0.3, 0.3] }
+snow = { duration = 4.0, factor = 0.5 }
+times = 1
+health = 300
+damage = 0
+interval = 3.0
 cooldown = 7.5
 cost = 100
+[gold_bloom]
+velocity = { x = [-0.5, 0.5], y = [-0.5, 0.5], z = 0, r = 3.14 }
+self_box = { width = 0.9, height = 1.0 }
+health = 300
+times = 5
+interval = 0.5
+cooldown = 75.0
+cost = 0
+multiplier = 1.0
 [bowling_nut]
 velocity = { x = 2.25, y = 1.5, z = 0.0, r = -4.5 }
 self_box = { width = 0.7, height = 0.9 }

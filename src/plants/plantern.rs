@@ -8,8 +8,7 @@ impl Plugin for PlantsPlanternPlugin {
         app.add_systems(PostStartup, (init_config,));
         *plantern_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_plantern),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }

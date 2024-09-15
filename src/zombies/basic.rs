@@ -16,28 +16,23 @@ impl Plugin for ZombiesBasicPlugin {
         );
         *basic_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_basic_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *roadcone_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_roadcone_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *bucket_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_bucket_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *flag_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_flag_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *screen_door_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_screen_door_zombie),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }

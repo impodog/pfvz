@@ -9,18 +9,15 @@ impl Plugin for PlantsDefensePlugin {
         app.add_systems(PostStartup, (init_config,));
         *wall_nut_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_wall_nut),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *tall_nut_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_tall_nut),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *pumpkin_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_pumpkin),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }

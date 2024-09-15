@@ -8,8 +8,7 @@ impl Plugin for PlantsLobberPlugin {
         app.add_systems(PostStartup, (init_config,));
         *cabbage_pult_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_cabbage_pult),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *add_gravity_system.write().unwrap() = Some(app.register_system(add_gravity));
         *cabbage_callback.write().unwrap() = Some(app.register_system(cabbage_play_animation));

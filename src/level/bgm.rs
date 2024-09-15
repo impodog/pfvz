@@ -55,22 +55,22 @@ fn switch_exciting(
     bgm: Res<assets::AudioBgm>,
     level: Res<level::Level>,
     audio: Res<Audio>,
-    factors: Res<collectible::ItemFactors>,
     handle: Option<ResMut<BgmHandle>>,
     mut audio_instances: ResMut<Assets<AudioInstance>>,
     q_zombies: Query<(), (With<game::Zombie>, Without<game::NotInvasive>)>,
     mut e_wave: EventReader<level::RoomNextWave>,
+    difficulty: Res<level::RoomDifficulty>,
 ) {
     if *status == BgmStatus::Single {
         return;
     }
-    // BGM is only swapped to normal during wave eventss
+    // BGM is only swapped to normal during wave events
     if *status == BgmStatus::Exciting && e_wave.read().next().is_none() {
         return;
     }
     if let Some(mut handle) = handle {
         let count = q_zombies.iter().count();
-        let next_status = if count >= factors.exciting.zombies {
+        let next_status = if count >= difficulty.exciting {
             BgmStatus::Exciting
         } else {
             BgmStatus::Normal

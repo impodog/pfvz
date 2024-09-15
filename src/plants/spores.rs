@@ -10,13 +10,11 @@ impl Plugin for PlantsSporesPlugin {
         app.add_systems(Update, (modify_scaredy,));
         *puff_shroom_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_puff_shroom),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
         *scaredy_shroom_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_scaredy_shroom),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }

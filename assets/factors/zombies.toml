@@ -161,3 +161,16 @@ damage = 60
 interval = 0.6
 cooldown = 1.0
 cost = 50
+[baseball]
+velocity = [-0.1, -0.095]
+baseball_velocity = [-3.0, -2.6]
+self_box = { width = 0.6, height = 1.2 }
+baseball_box = { width = 0.3, height = 0.3 }
+times = 1
+self_health = [570, 70]
+damage = 60
+baseball_damage = 60
+interval = 0.6
+baseball_interval = 3.0
+cooldown = 3.0
+cost = 125

@@ -18,6 +18,14 @@ pub struct Snow {
     // The speed factor to multiply, e.g. 0.5
     pub factor: f32,
 }
+impl Default for Snow {
+    fn default() -> Self {
+        Self {
+            duration: Duration::default(),
+            factor: 1.0,
+        }
+    }
+}
 #[derive(Component, Debug, Clone)]
 pub enum ModifySnow {
     Add(Snow),
@@ -38,9 +46,10 @@ impl From<SnowSerde> for Snow {
     }
 }
 
-#[derive(Component, Debug, Clone)]
+#[derive(Default, Component, Debug, Clone)]
 pub struct SnowyProjectile {
     pub snow: Snow,
+    pub range: Option<game::PositionRange>,
 }
 
 #[derive(Component, Debug, Clone)]
@@ -65,9 +74,13 @@ fn snowy_bump(
     commands: ParallelCommands,
     mut action: EventReader<game::ProjectileAction>,
     q_snow: Query<&SnowyProjectile>,
+    q_plant_relevant: Query<(), With<game::PlantRelevant>>,
+    q_pos: Query<&game::Position>,
+    q_zombie: Query<(Entity, &game::Position, &game::HitBox), With<game::Zombie>>,
+    q_plant: Query<(Entity, &game::Position, &game::HitBox), With<game::Plant>>,
 ) {
-    action.par_read().for_each(|action| {
-        if let game::ProjectileAction::Damage(entity, other) = action {
+    action.par_read().for_each(|action| match action {
+        game::ProjectileAction::Damage(entity, other) => {
             if let Ok(snowy) = q_snow.get(*entity) {
                 commands.command_scope(|mut commands| {
                     if let Some(mut commands) = commands.get_entity(*other) {
@@ -76,6 +89,31 @@ fn snowy_bump(
                 });
             }
         }
+        game::ProjectileAction::Consumed(entity) => {
+            if let Some((snowy, range)) = q_snow
+                .get(*entity)
+                .ok()
+                .and_then(|snowy| snowy.range.map(|range| (snowy, range)))
+                .and_then(|(snowy, range)| q_pos.get(*entity).ok().map(|pos| (snowy, range + *pos)))
+            {
+                let visit = |(enemy, pos, hitbox)| {
+                    if range.contains(pos, hitbox) {
+                        commands.command_scope(|mut commands| {
+                            if let Some(mut commands) = commands.get_entity(enemy) {
+                                commands.try_insert(ModifySnow::Add(snowy.snow.clone()));
+                            }
+                        });
+                    }
+                };
+                if q_plant_relevant.get(*entity).is_ok() {
+                    q_zombie.iter().for_each(visit);
+                } else {
+                    q_plant.iter().for_each(visit);
+                }
+            }
+        }
+        #[allow(unreachable_patterns)]
+        _ => {}
     });
 }
 

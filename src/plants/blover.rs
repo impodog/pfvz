@@ -9,8 +9,7 @@ impl Plugin for PlantsBloverPlugin {
         app.add_systems(Update, (blover_work,).run_if(when_state!(gaming)));
         *blover_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_blover),
-            die: app.register_system(compn::default::die),
-            damage: app.register_system(compn::default::damage),
+            ..Default::default()
         });
     }
 }
