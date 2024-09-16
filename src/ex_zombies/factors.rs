@@ -22,9 +22,18 @@ pub struct RallyZombie {
     pub cost: u32,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct BrickZombie {
+    pub brick_box: game::HitBox,
+    pub brick_health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+
 #[derive(Resource, Serialize, Deserialize, Debug)]
 pub struct ExZombieFactors {
     pub rally: RallyZombie,
+    pub brick: BrickZombie,
 }
 
 fn init_factors(mut commands: Commands) {

@@ -80,6 +80,7 @@ pub const BACKUP_DANCER: Id = 202;
 pub const IMP: Id = 203;
 
 pub const RALLY_ZOMBIE: Id = 301;
+pub const BRICK_ZOMBIE: Id = 302;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
@@ -187,6 +188,7 @@ pub fn id_name(id: Id) -> &'static str {
         IMP => "imp",
 
         RALLY_ZOMBIE => "rally",
+        BRICK_ZOMBIE => "brick",
 
         _ => "unknown",
     }

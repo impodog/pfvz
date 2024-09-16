@@ -6,5 +6,10 @@ boost = 1.5
 rally_flag_health = 400
 damage = 60
 interval = 0.4
-cooldown = 1.0
+cooldown = 5.0
 cost = 125
+[brick]
+brick_box = { width = 0.5, height = 0.5 }
+brick_health = 2200
+cooldown = 5.0
+cost = 175

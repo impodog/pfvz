@@ -35,14 +35,12 @@ fn spawn_all_star_zombie(
     breaks: Res<HelmetBreaks>,
 ) {
     let creature = map.get(&ALL_STAR_ZOMBIE).unwrap();
-    let velocity = game::Velocity::from(factors.all_star.velocity);
     let entity = commands
         .spawn((
             game::Zombie,
             creature.clone(),
             pos,
             game::Velocity::from(factors.all_star.velocity_running),
-            game::VelocityBase::new(velocity),
             sprite::Animation::new(zombies.all_star_running.clone()),
             compn::Dying::new(zombies.all_star_dying.clone()),
             creature.hitbox,
@@ -78,14 +76,14 @@ fn all_star_tackle(
         Entity,
         &mut AllStarZombieRunning,
         &mut sprite::Animation,
-        &mut game::Velocity,
+        &mut game::VelocityBase,
     )>,
     q_zombie: Query<(), With<game::Zombie>>,
     q_plant: Query<(), (With<game::Plant>, Without<game::NotPlanted>)>,
 ) {
     q_all_star
         .iter_mut()
-        .for_each(|(entity, mut running, mut anim, mut velocity)| {
+        .for_each(|(entity, mut running, mut anim, mut velocity_base)| {
             if !running.0 {
                 return;
             }
@@ -124,7 +122,7 @@ fn all_star_tackle(
                     commands
                         .entity(entity)
                         .insert(compn::Walker(walker.0.clone()));
-                    *velocity = factors.all_star.velocity.into();
+                    velocity_base.replace(factors.all_star.velocity.into());
                 }
             }
         });
