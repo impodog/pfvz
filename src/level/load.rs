@@ -48,20 +48,28 @@ fn load_level(
                     };
                     commands.insert_resource(LevelSlots(slots));
 
-                    let sum = level.waves.iter().fold(0, |acc, wave| {
-                        acc + wave.points
-                            + wave.fixed.iter().fold(0, |acc, (id, num)| {
-                                acc + map
-                                    .get(id)
-                                    .map(|creature| creature.cost)
-                                    .unwrap_or_default()
-                                    * (*num) as u32
-                            })
-                    });
-                    let factor = sum as f32
+                    let sun_factor =
+                        (level.config.sun as f32 / items.exciting.sun_standard as f32).powf(0.13);
+                    let sum = level
+                        .waves
+                        .iter()
+                        .fold((0.0, 0.0), |(acc, time), wave| {
+                            let points = wave.points
+                                + wave.fixed.iter().fold(0, |acc, (id, num)| {
+                                    acc + map
+                                        .get(id)
+                                        .map(|creature| creature.cost)
+                                        .unwrap_or_default()
+                                        * (*num) as u32
+                                });
+                            let acc =
+                                acc + points as f32 * (2.0 + 30.0 / (time + 10.0) - sun_factor);
+                            (acc, time + wave.wait)
+                        })
+                        .0;
+                    let factor = sum
                         / items.exciting.standard as f32
-                        / (level.waves.len() as f32).powf(1.05)
-                        / (level.config.sun as f32 / items.exciting.sun_standard as f32).powf(0.12);
+                        / (level.waves.len() as f32).powf(1.05);
                     let exciting = multiply_uf!(usize, items.exciting.zombies, factor.max(1.0));
                     let difficulty = level::RoomDifficulty {
                         sum,
@@ -69,6 +77,7 @@ fn load_level(
                         factor,
                     };
                     info!("Room difficulty: {:?}", difficulty);
+
                     commands.insert_resource(difficulty);
 
                     commands.insert_resource(level);

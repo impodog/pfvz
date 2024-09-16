@@ -100,7 +100,7 @@ fn spawn_imp_with(
             creature.clone(),
             pos,
             velocity,
-            game::VelocityBase(velocity),
+            game::VelocityBase::new(velocity),
             sprite::Animation::new(zombies.imp.clone()),
             compn::Dying::new(zombies.imp_dying.clone()),
             creature.hitbox,
@@ -166,7 +166,7 @@ fn gargantuar_smash(
                 target,
                 factors.gargantuar.damage,
             ));
-            *velocity = **velocity_base;
+            *velocity = velocity_base.get();
             if let Some(mut commands) = commands.get_entity(entity) {
                 commands.try_insert(GargantuarInterval::default());
             }

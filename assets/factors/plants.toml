@@ -342,7 +342,7 @@ self_box = { width = 0.9, height = 1.0 }
 health = 300
 times = 5
 interval = 0.5
-cooldown = 75.0
+cooldown = 80.0
 cost = 0
 multiplier = 1.0
 [bowling_nut]

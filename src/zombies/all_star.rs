@@ -42,7 +42,7 @@ fn spawn_all_star_zombie(
             creature.clone(),
             pos,
             game::Velocity::from(factors.all_star.velocity_running),
-            game::VelocityBase(velocity),
+            game::VelocityBase::new(velocity),
             sprite::Animation::new(zombies.all_star_running.clone()),
             compn::Dying::new(zombies.all_star_dying.clone()),
             creature.hitbox,

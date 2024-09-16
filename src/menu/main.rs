@@ -4,8 +4,18 @@ pub(super) struct MenuMainPlugin;
 
 impl Plugin for MenuMainPlugin {
     fn build(&self, app: &mut App) {
+        app.add_systems(PostStartup, (setup,));
         app.add_systems(Update, (main_menu,).run_if(when_state!(main)));
     }
+}
+
+fn setup(mut contexts: EguiContexts) {
+    contexts.ctx_mut().style_mut(|style| {
+        style.text_styles.insert(
+            egui::TextStyle::Button,
+            egui::FontId::new(30.0, egui::FontFamily::Monospace),
+        );
+    });
 }
 
 fn main_menu(mut contexts: EguiContexts, mut menu: ResMut<NextState<info::MenuStates>>) {

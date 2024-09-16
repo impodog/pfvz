@@ -8,6 +8,7 @@ pub mod collectible;
 pub mod compn;
 pub mod config;
 mod dave;
+pub mod ex_zombies;
 pub mod game;
 pub mod info;
 pub mod level;
@@ -42,6 +43,7 @@ pub fn start_pfvz() {
         zombies::ZombiesPlugin,
     ));
     app.add_plugins((
+        ex_zombies::ExZombiesPlugin,
         choose::ChoosePlugin,
         dave::DavePlugin,
         modes::ModesPlugin,

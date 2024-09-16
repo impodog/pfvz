@@ -212,8 +212,9 @@ fn shooter_work(
                             Vec2::new(angle.cos(), angle.sin()),
                         );
                         q_zpos.iter().any(|(zombie_pos, zombie_hitbox)| {
-                            if shooter.proj.range.z.0 <= zombie_pos.z
-                                && zombie_pos.z <= shooter.proj.range.z.1
+                            if shooter.proj.range.z.0 <= zombie_pos.z + zombie_hitbox.height / 2.0
+                                && zombie_pos.z - zombie_hitbox.height / 2.0
+                                    <= shooter.proj.range.z.1
                             {
                                 let aabb = Aabb2d::new(
                                     Vec2::new(zombie_pos.x, zombie_pos.y),

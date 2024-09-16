@@ -1,0 +1,47 @@
+[config]
+layout = "Day"
+selection = "Any"
+modify = { give = -301, next = { stage = 1, level = 12 } }
+sun = 75
+[[waves]]
+points = 0
+wait = 30.0
+big = false
+fixed = [[1, 2], [2, 1]]
+avail = []
+[[waves]]
+points = 0
+wait = 40.0
+big = false
+fixed = [[2, 1], [3, 2]]
+avail = []
+[[waves]]
+points = 200
+wait = 30.0
+big = false
+fixed = [[1, 3], [3, 1]]
+avail = [2, 3]
+[[waves]]
+points = 300
+wait = 40.0
+big = false
+fixed = [[2, 1], [3, 2]]
+avail = [1, 2]
+[[waves]]
+points = 350
+wait = 30.0
+big = false
+fixed = [[1, 2], [3, 1]]
+avail = [1, 2, 3]
+[[waves]]
+points = 400
+wait = 30.0
+big = false
+fixed = [[1, 3], [3, 5]]
+avail = [1, 2]
+[[waves]]
+points = 700
+wait = 50.0
+big = true
+fixed = [[301, 1], [1, 5]]
+avail = [2, 3]

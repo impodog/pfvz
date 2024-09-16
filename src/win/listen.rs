@@ -21,9 +21,8 @@ fn despawn_win_stuff(mut commands: Commands, q_pos: Query<Entity, With<game::Pos
 
 fn update_save(level: Res<level::Level>, mut save: ResMut<save::Save>) {
     if let Some(modify) = &level.config.modify {
-        if modify.next > save.adventure.0 {
-            save.adventure.0 = modify.next;
-        }
+        save.adventure.insert(modify.next);
+        save.adventure.extend(modify.unlock.iter());
         if modify.slots > save.slots.0 {
             save.slots.0 = modify.slots;
         }

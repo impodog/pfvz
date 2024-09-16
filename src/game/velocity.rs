@@ -13,6 +13,7 @@ impl Plugin for GameVelocityPlugin {
                 update_velocity,
                 update_velocity_half,
                 insert_velocity_base,
+                modify_velocity_by_base,
             )
                 .run_if(when_state!(play)),
         );
@@ -117,8 +118,32 @@ fn update_velocity_half(
     });
 }
 
-#[derive(Component, Debug, Clone, Copy, Deref, DerefMut)]
-pub struct VelocityBase(pub Velocity);
+#[derive(Component, Debug, Clone, Deref, DerefMut)]
+pub struct VelocityBase {
+    base: Velocity,
+    #[deref]
+    pub factor: game::Factor,
+}
+impl VelocityBase {
+    pub fn new(base: Velocity) -> Self {
+        Self {
+            base,
+            factor: Default::default(),
+        }
+    }
+
+    pub fn get(&self) -> Velocity {
+        self.base * self.factor.factor()
+    }
+
+    pub fn get_without_factor(&self) -> &Velocity {
+        &self.base
+    }
+
+    pub fn replace(&mut self, base: Velocity) -> Velocity {
+        std::mem::replace(&mut self.base, base)
+    }
+}
 
 fn insert_velocity_base(
     commands: ParallelCommands,
@@ -128,9 +153,19 @@ fn insert_velocity_base(
         if velocity.is_added() {
             commands.command_scope(|mut commands| {
                 if let Some(mut commands) = commands.get_entity(entity) {
-                    commands.insert(VelocityBase(*velocity));
+                    commands.insert(VelocityBase::new(*velocity));
                 }
             });
         }
     })
+}
+
+fn modify_velocity_by_base(mut q_vel: Query<(&mut Velocity, Ref<VelocityBase>)>) {
+    q_vel
+        .par_iter_mut()
+        .for_each(|(mut velocity, velocity_base)| {
+            if !velocity_base.is_added() && velocity_base.is_changed() {
+                *velocity = velocity_base.get();
+            }
+        });
 }

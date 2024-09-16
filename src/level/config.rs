@@ -299,6 +299,8 @@ pub struct StateModify {
     pub next: LevelIndex,
     #[serde(default)]
     pub slots: usize,
+    #[serde(default)]
+    pub unlock: Vec<LevelIndex>,
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
