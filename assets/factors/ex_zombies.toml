@@ -1,0 +1,15 @@
+[rally]
+velocity = [-0.27, -0.265]
+rally_flag_box = { width = 0.7, height = 1.0 }
+range = { x = [-1.5, 1.5], y = [-1.5, 1.5], z = [-0.5, 0.5] }
+boost = 1.5
+rally_flag_health = 400
+damage = 60
+interval = 0.4
+cooldown = 5.0
+cost = 125
+[brick]
+brick_box = { width = 0.5, height = 0.5 }
+brick_health = 2200
+cooldown = 5.0
+cost = 175

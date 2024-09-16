@@ -81,7 +81,7 @@ fn walker_lock_target(
                 let target = target.map(|(entity, _)| entity);
                 if target != walker.target {
                     if target.is_none() {
-                        *velocity = **velocity_base;
+                        *velocity = velocity_base.get();
                     } else {
                         *velocity = game::Velocity::default();
                     }
@@ -114,7 +114,7 @@ fn walker_deal_damage(
                         action.send(game::CreatureAction::Damage(entity, walker.damage));
                         audio.play(audio_zombies.bite.random());
                     } else {
-                        *velocity = **velocity_base;
+                        *velocity = velocity_base.get();
                         walker_impl.target = None;
                     }
                 }

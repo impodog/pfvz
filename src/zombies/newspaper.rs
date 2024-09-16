@@ -66,7 +66,7 @@ fn spawn_newspaper_zombie(
 }
 
 fn newspaper_rage(
-    mut commands: Commands,
+    commands: ParallelCommands,
     factors: Res<zombies::ZombieFactors>,
     rage_walker: Res<NewspaperZombieRageWalker>,
     mut q_rage: Query<(
@@ -74,20 +74,26 @@ fn newspaper_rage(
         &NewspaperRage,
         &mut compn::Walker,
         &mut game::Velocity,
+        &mut game::VelocityBase,
     )>,
 ) {
-    q_rage
-        .iter_mut()
-        .for_each(|(entity, rage, mut walker, mut velocity)| {
-            if commands.get_entity(rage.0).is_none() {
-                commands
-                    .entity(entity)
-                    .remove::<NewspaperRage>()
-                    .insert(game::VelocityBase(factors.newspaper.rage_velocity.into()));
+    q_rage.par_iter_mut().for_each(
+        |(entity, rage, mut walker, mut velocity, mut velocity_base)| {
+            let ok = commands.command_scope(|mut commands| {
+                if commands.get_entity(rage.0).is_none() {
+                    commands.entity(entity).remove::<NewspaperRage>();
+                    true
+                } else {
+                    false
+                }
+            });
+            if ok {
                 walker.0.clone_from(&rage_walker.0);
                 *velocity = factors.newspaper.rage_velocity.into();
+                velocity_base.replace(*velocity);
             }
-        });
+        },
+    );
 }
 
 fn init_config(

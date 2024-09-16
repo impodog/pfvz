@@ -12,18 +12,13 @@ impl Plugin for SaveDataPlugin {
 
 configuration!(SaveSlots, usize, 6);
 configuration!(SaveMoney, i32, 0);
-configuration!(
-    SaveAdventure,
-    level::LevelIndex,
-    level::LevelIndex { stage: 0, level: 0 }
-);
 #[derive(Serialize, Deserialize, Resource, Debug, Default, Clone)]
 pub struct Save {
     pub slots: SaveSlots,
     pub selection: game::Selection,
     pub money: SaveMoney,
     pub plants: BTreeSet<Id>,
-    pub adventure: SaveAdventure,
+    pub adventure: BTreeSet<level::LevelIndex>,
     pub ach: BTreeSet<ach::AchId>,
 }
 impl Save {

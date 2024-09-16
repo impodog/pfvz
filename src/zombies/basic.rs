@@ -51,23 +51,25 @@ game_conf!(breaks ScreenDoorBreaks);
 pub struct BasicZombieMarker;
 
 fn add_basic_zombie_arm(
-    mut commands: Commands,
+    commands: ParallelCommands,
     q_basic: Query<Entity, Added<BasicZombieMarker>>,
     factors: Res<zombies::ZombieFactors>,
     zombies: Res<assets::SpriteZombies>,
 ) {
-    q_basic.iter().for_each(|entity| {
-        commands
-            .spawn((
-                game::Position::default(),
-                game::RelativePosition::new(0.1, 0.0, 0.0, 0.0),
-                factors.basic.arm_box,
-                sprite::Animation::new(zombies.arm.clone()),
-                game::Armor::new(factors.basic.arm_health),
-                game::LayerDisp(0.01),
-                SpriteBundle::default(),
-            ))
-            .set_parent(entity);
+    q_basic.par_iter().for_each(|entity| {
+        commands.command_scope(|mut commands| {
+            commands
+                .spawn((
+                    game::Position::default(),
+                    game::RelativePosition::new(0.1, 0.0, 0.0, 0.0),
+                    factors.basic.arm_box,
+                    sprite::Animation::new(zombies.arm.clone()),
+                    game::Armor::new(factors.basic.arm_health),
+                    game::LayerDisp(0.01),
+                    SpriteBundle::default(),
+                ))
+                .set_parent(entity);
+        });
     });
 }
 

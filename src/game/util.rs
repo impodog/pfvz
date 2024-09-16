@@ -4,27 +4,27 @@ use crate::prelude::*;
 macro_rules! game_conf {
     (projectile $name: ident) => {
         #[derive(Resource, Clone, Deref, DerefMut)]
-        pub struct $name(Arc<$crate::game::ProjectileShared>);
+        pub struct $name(pub Arc<$crate::game::ProjectileShared>);
     };
     (shooter $name: ident) => {
         #[derive(Resource, Clone, Deref, DerefMut)]
-        pub struct $name(Arc<$crate::compn::ShooterShared>);
+        pub struct $name(pub Arc<$crate::compn::ShooterShared>);
     };
     (producer $name: ident) => {
         #[derive(Resource, Clone, Deref, DerefMut)]
-        pub struct $name(Arc<$crate::compn::ProducerShared>);
+        pub struct $name(pub Arc<$crate::compn::ProducerShared>);
     };
     (walker $name: ident) => {
         #[derive(Resource, Clone, Deref, DerefMut)]
-        pub struct $name(Arc<$crate::compn::WalkerShared>);
+        pub struct $name(pub Arc<$crate::compn::WalkerShared>);
     };
     (breaks $name: ident) => {
         #[derive(Resource, Clone, Deref, DerefMut)]
-        pub struct $name(Arc<$crate::compn::BreaksShared>);
+        pub struct $name(pub Arc<$crate::compn::BreaksShared>);
     };
     (explode $name: ident) => {
         #[derive(Resource, Clone, Deref, DerefMut)]
-        pub struct $name(Arc<$crate::compn::ExplodeShared>);
+        pub struct $name(pub Arc<$crate::compn::ExplodeShared>);
     };
     (systems $name: ident) => {
         lazy_static! {

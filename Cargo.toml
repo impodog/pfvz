@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.88"
+anyhow = "1.0.89"
 bevy = { version = "0.14.2", default-features = false, features = [
     "multi_threaded",     # Run with multithreading
     "bevy_asset",         # Assets management
@@ -27,6 +27,7 @@ bevy_egui = "0.29.0"
 bevy_framepace = "0.17.1"
 bevy_kira_audio = { version = "0.20.0", features = ["settings_loader"] }
 bitflags = "2.6.0"
+egui_extras = "0.28.1"
 enum-iterator = "2.1.0"
 lazy_static = "1.5.0"
 num_enum = "0.7.3"
