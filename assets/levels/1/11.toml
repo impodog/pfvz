@@ -44,4 +44,4 @@ points = 700
 wait = 50.0
 big = true
 fixed = [[301, 1], [1, 5]]
-avail = [2, 3]
+avail = [1, 2, 3]

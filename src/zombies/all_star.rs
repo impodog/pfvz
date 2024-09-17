@@ -64,14 +64,13 @@ fn spawn_all_star_zombie(
         .set_parent(entity);
 }
 
-#[allow(clippy::too_many_arguments)]
 fn all_star_tackle(
-    mut commands: Commands,
+    commands: ParallelCommands,
     zombies: Res<assets::SpriteZombies>,
     factors: Res<zombies::ZombieFactors>,
     collision: Res<game::Collision>,
     walker: Res<AllStarZombieWalker>,
-    mut action: EventWriter<game::CreatureAction>,
+    action: EventWriter<game::CreatureAction>,
     mut q_all_star: Query<(
         Entity,
         &mut AllStarZombieRunning,
@@ -81,8 +80,9 @@ fn all_star_tackle(
     q_zombie: Query<(), With<game::Zombie>>,
     q_plant: Query<(), (With<game::Plant>, Without<game::NotPlanted>)>,
 ) {
+    let action = Mutex::new(action);
     q_all_star
-        .iter_mut()
+        .par_iter_mut()
         .for_each(|(entity, mut running, mut anim, mut velocity_base)| {
             if !running.0 {
                 return;
@@ -93,7 +93,7 @@ fn all_star_tackle(
                         .iter()
                         .find_map(|plant| q_plant.get(*plant).ok().map(|_| *plant))
                     {
-                        action.send(game::CreatureAction::Damage(
+                        action.lock().unwrap().send(game::CreatureAction::Damage(
                             plant,
                             factors.all_star.tackle_damage,
                         ));
@@ -107,7 +107,7 @@ fn all_star_tackle(
                         .iter()
                         .find_map(|zombie| q_zombie.get(*zombie).ok().map(|_| *zombie))
                     {
-                        action.send(game::CreatureAction::Damage(
+                        action.lock().unwrap().send(game::CreatureAction::Damage(
                             zombie,
                             factors.all_star.tackle_damage,
                         ));
@@ -119,9 +119,11 @@ fn all_star_tackle(
                 if ok {
                     running.0 = false;
                     anim.replace(zombies.all_star.clone());
-                    commands
-                        .entity(entity)
-                        .insert(compn::Walker(walker.0.clone()));
+                    commands.command_scope(|mut commands| {
+                        if let Some(mut commands) = commands.get_entity(entity) {
+                            commands.insert(compn::Walker(walker.0.clone()));
+                        }
+                    });
                     velocity_base.replace(factors.all_star.velocity.into());
                 }
             }

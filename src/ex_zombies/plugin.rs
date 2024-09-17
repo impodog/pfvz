@@ -9,6 +9,7 @@ impl Plugin for ExZombiesPlugin {
             ExZombiesFactorsPlugin,
             ExZombiesRallyPlugin,
             ExZombiesBrickPlugin,
+            ExZombiesGigaPlugin,
         ));
     }
 }

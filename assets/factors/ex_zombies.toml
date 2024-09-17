@@ -13,3 +13,16 @@ brick_box = { width = 0.5, height = 0.5 }
 brick_health = 2200
 cooldown = 5.0
 cost = 175
+[giga]
+velocity_running = [-1.7, -1.695]
+velocity = [-0.095, -0.09]
+self_box = { width = 0.7, height = 1.2 }
+helmet_box = { width = 0.4, height = 0.4 }
+slide_distance = 2.8
+self_health = [250, 50]
+helmet_health = 1500
+damage = 60
+interval = 0.8
+tackle_damage = 2000
+cooldown = 7.5
+cost = 250
