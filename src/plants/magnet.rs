@@ -137,6 +137,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: MAGNET_SHROOM,
             systems: magnet_shroom_systems
                 .read()
                 .unwrap()
@@ -152,6 +153,6 @@ fn init_config(
             hitbox: factors.magnet_shroom.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(MAGNET_SHROOM, creature);
+        map.insert(creature);
     }
 }

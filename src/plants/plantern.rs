@@ -43,6 +43,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: PLANTERN,
             systems: plantern_systems
                 .read()
                 .unwrap()
@@ -58,6 +59,6 @@ fn init_config(
             hitbox: factors.plantern.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(PLANTERN, creature);
+        map.insert(creature);
     }
 }

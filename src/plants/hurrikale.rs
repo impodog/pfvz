@@ -103,6 +103,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: HURRIKALE,
             systems: hurrikale_systems
                 .read()
                 .unwrap()
@@ -118,6 +119,6 @@ fn init_config(
             hitbox: factors.hurrikale.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(HURRIKALE, creature);
+        map.insert(creature);
     }
 }

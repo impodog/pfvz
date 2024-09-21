@@ -157,6 +157,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: DIGGER_ZOMBIE,
             systems: digger_zombie_systems
                 .read()
                 .unwrap()
@@ -172,6 +173,6 @@ fn init_config(
             hitbox: factors.digger.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(DIGGER_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

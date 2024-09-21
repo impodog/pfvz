@@ -58,17 +58,45 @@ fn init_progress_bar(
             ..Default::default()
         },
     ));
+
+    let name = level
+        .config
+        .publish
+        .name
+        .clone()
+        .unwrap_or_else(|| format!("{}", level_index.as_ref()));
+    let font_size = display.ratio * PROGRESS_SIZE.y;
+    let mut text = vec![TextSection::new(
+        name,
+        TextStyle {
+            font: font.0.clone(),
+            font_size,
+            color: Color::LinearRgba(LinearRgba::WHITE),
+        },
+    )];
+    if let Some(ref creator) = level.config.publish.creator {
+        text.push(TextSection::new(
+            " by ".to_owned(),
+            TextStyle {
+                font: font.0.clone(),
+                font_size,
+                color: Color::WHITE,
+            },
+        ));
+        text.push(TextSection::new(
+            creator.clone(),
+            TextStyle {
+                font: font.0.clone(),
+                font_size,
+                color: Color::LinearRgba(LinearRgba::new(0.0, 1.0, 1.0, 1.0)),
+            },
+        ));
+    }
+
     commands.spawn((
         game::Position::from(&corner).move_by(-0.5, 0.0),
         Text2dBundle {
-            text: Text::from_section(
-                format!("{}", level_index.as_ref()),
-                TextStyle {
-                    font: font.0.clone(),
-                    font_size: display.ratio * PROGRESS_SIZE.y,
-                    color: Color::LinearRgba(LinearRgba::WHITE),
-                },
-            ),
+            text: Text::from_sections(text),
             text_anchor: Anchor::TopRight,
             transform: Transform::from_xyz(0.0, 0.0, 14.37),
             ..Default::default()

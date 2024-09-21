@@ -8,6 +8,7 @@ pub mod collectible;
 pub mod compn;
 pub mod config;
 mod dave;
+pub mod ex_plants;
 pub mod ex_zombies;
 pub mod game;
 pub mod info;
@@ -44,6 +45,7 @@ pub fn start_pfvz() {
     ));
     app.add_plugins((
         ex_zombies::ExZombiesPlugin,
+        ex_plants::ExPlantsPlugin,
         choose::ChoosePlugin,
         dave::DavePlugin,
         modes::ModesPlugin,

@@ -67,6 +67,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: LILY_PAD,
             systems: lily_pad_systems
                 .read()
                 .unwrap()
@@ -82,10 +83,11 @@ fn init_config(
             hitbox: factors.lily_pad.self_box,
             flags: level::CreatureFlags::LILY_PAD,
         }));
-        map.insert(LILY_PAD, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: FLOWER_POT,
             systems: flower_pot_systems
                 .read()
                 .unwrap()
@@ -101,6 +103,6 @@ fn init_config(
             hitbox: factors.flower_pot.self_box,
             flags: level::CreatureFlags::FLOWER_POT,
         }));
-        map.insert(FLOWER_POT, creature);
+        map.insert(creature);
     }
 }

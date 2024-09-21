@@ -86,6 +86,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: GOLD_BLOOM,
             systems: gold_bloom_systems
                 .read()
                 .unwrap()
@@ -101,6 +102,6 @@ fn init_config(
             hitbox: factors.gold_bloom.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(GOLD_BLOOM, creature);
+        map.insert(creature);
     }
 }

@@ -156,6 +156,7 @@ fn init_config(
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: GIGA_ALL_STAR_ZOMBIE,
             systems: giga_all_star_zombie_systems
                 .read()
                 .unwrap()
@@ -166,6 +167,6 @@ fn init_config(
             hitbox: ex_factors.giga.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(GIGA_ALL_STAR_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

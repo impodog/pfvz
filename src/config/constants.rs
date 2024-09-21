@@ -55,6 +55,8 @@ pub const GRAVE: Id = -201;
 pub const CRATER: Id = -202;
 pub const ICE: Id = -203;
 
+pub const TWIN_SUNFLOWER: Id = -301;
+
 pub const BASIC_ZOMBIE: Id = 1;
 pub const ROADCONE_ZOMBIE: Id = 2;
 pub const BUCKET_ZOMBIE: Id = 3;
@@ -108,6 +110,8 @@ pub const WATER_PERCENTAGE: f32 = 0.7;
 pub const SHADOW_DISTANCE: f32 = 0.3;
 /// Zoom factor for Egui
 pub const UI_ZOOM_FACTOR: f32 = 1.0;
+/// The "magic number" that makes the sun show as infinity
+pub const SUN_MAGIC: u32 = 0xbadeffec;
 
 pub const ROOF_HIGHEST: usize = 5;
 pub const ROOF_PIVOT: usize = 4;
@@ -163,6 +167,8 @@ pub fn id_name(id: Id) -> &'static str {
 
         GRAVE => "grave",
         CRATER => "crater",
+
+        TWIN_SUNFLOWER => "twin_sunflower",
 
         BASIC_ZOMBIE => "basic",
         ROADCONE_ZOMBIE => "roadcone",

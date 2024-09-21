@@ -20,6 +20,7 @@ fn read_events(
     e_coll.read().for_each(|event| {
         if let Ok(coll) = q_coll.get(event.entity) {
             match coll {
+                collectible::Collectible::Nothing => {}
                 collectible::Collectible::Sun(value) => {
                     sun.0 += (config.gamerule.sun_value.0 as f32 * *value) as u32;
                     audio.play(audio_items.sun.random());

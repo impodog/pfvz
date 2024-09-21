@@ -353,11 +353,16 @@ fn init_sun(mut commands: Commands, display: Res<game::Display>, font: Res<asset
 
 fn update_sun(mut sun: ResMut<Sun>, mut q_sun: Query<&mut Text, With<SunIndicator>>) {
     if sun.is_changed() {
-        if sun.0 > 99999 {
-            sun.0 = 99999;
-        }
+        let value = if sun.0 == SUN_MAGIC {
+            "inf".to_owned()
+        } else {
+            if sun.0 > 99999 {
+                sun.0 = 99999;
+            }
+            format!("{}", sun.0)
+        };
         if let Ok(mut text) = q_sun.get_single_mut() {
-            text.sections[0].value = format!("{}", sun.0);
+            text.sections[0].value = value;
         }
     }
 }

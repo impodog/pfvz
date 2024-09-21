@@ -183,6 +183,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: GRAVE,
             systems: grave_systems
                 .read()
                 .unwrap()
@@ -198,10 +199,11 @@ fn init_config(
             hitbox: factors.grave.self_box,
             flags: level::CreatureFlags::GRAVE,
         }));
-        map.insert(GRAVE, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: CRATER,
             systems: crater_systems
                 .read()
                 .unwrap()
@@ -217,10 +219,11 @@ fn init_config(
             hitbox: factors.crater.self_box,
             flags: level::CreatureFlags::CRATER,
         }));
-        map.insert(CRATER, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: ICE,
             systems: ice_systems
                 .read()
                 .unwrap()
@@ -236,6 +239,6 @@ fn init_config(
             hitbox: factors.ice.self_box,
             flags: level::CreatureFlags::CRATER,
         }));
-        map.insert(ICE, creature);
+        map.insert(creature);
     }
 }

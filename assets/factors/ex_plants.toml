@@ -1,0 +1,9 @@
+[twin_sunflower]
+velocity = { x = [-1.5, 1.5], y = [-1.0, 1.0], z = 2, r = 3.14 }
+self_box = { width = 1.0, height = 1.0 }
+times = 2
+health = 300
+interval = 32.0
+cooldown = 15.0
+cost = 125
+multiplier = 1.0

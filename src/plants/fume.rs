@@ -104,6 +104,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: FUME_SHROOM,
             systems: fume_shroom_systems
                 .read()
                 .unwrap()
@@ -119,6 +120,6 @@ fn init_config(
             hitbox: factors.fume_shroom.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(FUME_SHROOM, creature);
+        map.insert(creature);
     }
 }

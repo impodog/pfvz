@@ -14,6 +14,7 @@ impl Plugin for ModesPlugin {
             intro::ModesIntroPlugin,
             roof::ModesRoofPlugin,
             columns::ModesColumnsPlugin,
+            infi_sun::ModesInfiSunPlugin,
         ));
     }
 }

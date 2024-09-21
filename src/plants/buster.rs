@@ -142,6 +142,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: GRAVE_BUSTER,
             systems: grave_buster_systems
                 .read()
                 .unwrap()
@@ -157,10 +158,11 @@ fn init_config(
             hitbox: factors.grave_buster.self_box,
             flags: level::CreatureFlags::GRAVE_BUSTER,
         }));
-        map.insert(GRAVE_BUSTER, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: COFFEE_BEAN,
             systems: coffee_bean_systems
                 .read()
                 .unwrap()
@@ -176,6 +178,6 @@ fn init_config(
             hitbox: factors.coffee_bean.self_box,
             flags: level::CreatureFlags::COFFEE_BEAN,
         }));
-        map.insert(COFFEE_BEAN, creature);
+        map.insert(creature);
     }
 }

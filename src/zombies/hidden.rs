@@ -83,6 +83,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: HIDDEN_ZOMBIE,
             systems: hidden_zombie_systems
                 .read()
                 .unwrap()
@@ -98,6 +99,6 @@ fn init_config(
             hitbox: factors.hidden.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(HIDDEN_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

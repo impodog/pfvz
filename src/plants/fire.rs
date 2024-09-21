@@ -95,6 +95,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: TORCHWOOD,
             systems: torchwood_systems
                 .read()
                 .unwrap()
@@ -110,6 +111,6 @@ fn init_config(
             hitbox: factors.torchwood.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(TORCHWOOD, creature);
+        map.insert(creature);
     }
 }

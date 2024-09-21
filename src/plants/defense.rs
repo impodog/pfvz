@@ -109,6 +109,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: WALL_NUT,
             systems: wall_nut_systems
                 .read()
                 .unwrap()
@@ -124,7 +125,7 @@ fn init_config(
             hitbox: factors.wall_nut.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(WALL_NUT, creature);
+        map.insert(creature);
     }
     commands.insert_resource(TallNutBreaks(Arc::new(compn::BreaksShared {
         v: vec![
@@ -136,6 +137,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: TALL_NUT,
             systems: tall_nut_systems
                 .read()
                 .unwrap()
@@ -151,7 +153,7 @@ fn init_config(
             hitbox: factors.tall_nut.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(TALL_NUT, creature);
+        map.insert(creature);
     }
     commands.insert_resource(PumpkinBreaks(Arc::new(compn::BreaksShared {
         v: vec![
@@ -163,6 +165,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: PUMPKIN,
             systems: pumpkin_systems
                 .read()
                 .unwrap()
@@ -178,6 +181,6 @@ fn init_config(
             hitbox: factors.pumpkin.self_box,
             flags: level::CreatureFlags::PUMPKIN,
         }));
-        map.insert(PUMPKIN, creature);
+        map.insert(creature);
     }
 }

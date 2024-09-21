@@ -147,6 +147,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: ICEBERG_LETTUCE,
             systems: iceberg_lettuce_systems
                 .read()
                 .unwrap()
@@ -162,10 +163,11 @@ fn init_config(
             hitbox: factors.iceberg_lettuce.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(ICEBERG_LETTUCE, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: SUN_BEAN,
             systems: sun_bean_systems
                 .read()
                 .unwrap()
@@ -181,6 +183,6 @@ fn init_config(
             hitbox: factors.sun_bean.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(SUN_BEAN, creature);
+        map.insert(creature);
     }
 }

@@ -17,6 +17,7 @@ pub struct ProducerShared {
     pub interval: Duration,
     pub velocity: game::VelocityAny,
     pub collectible: collectible::Collectible,
+    pub times: usize,
 }
 #[derive(Component, Debug, Clone, Deref)]
 pub struct Producer(pub Arc<ProducerShared>);
@@ -63,18 +64,20 @@ fn producer_work(
         .for_each(|(overlay, pos, producer, mut producer_impl)| {
             producer_impl.timer.tick(overlay.delta());
             if producer_impl.timer.just_finished() {
-                let mut velocity = game::Velocity::from(producer.velocity);
-                velocity.z *= (max_height - pos.y) / max_height / 2.0;
-                commands.spawn((
-                    *pos,
-                    velocity,
-                    producer.collectible.clone(),
-                    game::GravityHalf,
-                ));
-                // This adds fun to the sunflower etc. :)
-                producer_impl.timer.set_duration(Duration::from_secs_f32(
-                    producer.interval.as_secs_f32() * rand::thread_rng().gen_range(0.9..=1.1),
-                ));
+                (0..producer.times).for_each(|_| {
+                    let mut velocity = game::Velocity::from(producer.velocity);
+                    velocity.z *= (max_height - pos.y) / max_height / 2.0;
+                    commands.spawn((
+                        *pos,
+                        velocity,
+                        producer.collectible.clone(),
+                        game::GravityHalf,
+                    ));
+                    // This adds fun to the sunflower etc. :)
+                    producer_impl.timer.set_duration(Duration::from_secs_f32(
+                        producer.interval.as_secs_f32() * rand::thread_rng().gen_range(0.9..=1.1),
+                    ));
+                });
             }
         });
 }

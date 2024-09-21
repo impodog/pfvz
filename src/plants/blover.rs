@@ -113,6 +113,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: BLOVER,
             systems: blover_systems
                 .read()
                 .unwrap()
@@ -128,6 +129,6 @@ fn init_config(
             hitbox: factors.blover.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(BLOVER, creature);
+        map.insert(creature);
     }
 }

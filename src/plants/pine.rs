@@ -101,6 +101,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: SAP_FLING,
             systems: sap_fling_systems
                 .read()
                 .unwrap()
@@ -116,6 +117,6 @@ fn init_config(
             hitbox: factors.sap_fling.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(SAP_FLING, creature);
+        map.insert(creature);
     }
 }

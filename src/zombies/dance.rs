@@ -216,6 +216,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: DANCING_ZOMBIE,
             systems: dancing_zombie_systems
                 .read()
                 .unwrap()
@@ -231,10 +232,11 @@ fn init_config(
             hitbox: factors.dancing.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(DANCING_ZOMBIE, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: BACKUP_DANCER,
             systems: backup_dancer_systems
                 .read()
                 .unwrap()
@@ -250,6 +252,6 @@ fn init_config(
             hitbox: factors.dancing.backup_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(BACKUP_DANCER, creature);
+        map.insert(creature);
     }
 }

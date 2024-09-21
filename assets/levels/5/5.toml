@@ -5,6 +5,7 @@ game = ["Columns"]
 modify = { give = -37, next = { stage = 5, level = 6 } }
 sun = 150
 bgm = "Ub"
+publish = { name = "Columns Like You See 'Em" }
 [[waves]]
 points = 0
 wait = 10.0

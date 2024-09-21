@@ -207,6 +207,7 @@ pub enum GameKind {
     Random,
     Thunder,
     Columns,
+    InfiSun,
 }
 impl GameKind {
     fn is_sun_spawn(&self) -> bool {
@@ -218,6 +219,7 @@ impl GameKind {
             Self::Random => true,
             Self::Thunder => true,
             Self::Columns => false,
+            Self::InfiSun => false,
         }
     }
 
@@ -230,12 +232,18 @@ impl GameKind {
             Self::Random => true,
             Self::Thunder => true,
             Self::Columns => true,
+            Self::InfiSun => true,
         }
     }
 
     fn is_compat(&self, id: Id) -> bool {
-        // TODO: ban some plants according to the game kind
-        true
+        match self {
+            Self::InfiSun => !matches!(
+                id,
+                SUNFLOWER | SUN_SHROOM | SUN_BEAN | ETHYLENE | GOLD_BLOOM
+            ),
+            _ => true,
+        }
     }
 
     fn has_fog(&self) -> bool {
@@ -304,6 +312,12 @@ pub struct StateModify {
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
+pub struct LevelPublish {
+    pub name: Option<String>,
+    pub creator: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct LevelConfig {
     pub layout: LayoutKind,
     #[serde(default)]
@@ -314,6 +328,8 @@ pub struct LevelConfig {
     #[serde(default)]
     pub bgm: Option<String>,
     pub sun: u32,
+    #[serde(default)]
+    pub publish: LevelPublish,
 }
 impl LevelConfig {
     pub fn is_sun_spawn(&self) -> bool {

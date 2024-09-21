@@ -317,6 +317,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: BASIC_ZOMBIE,
             systems: basic_zombie_systems
                 .read()
                 .unwrap()
@@ -332,10 +333,11 @@ fn init_config(
             hitbox: factors.basic.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(BASIC_ZOMBIE, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: ROADCONE_ZOMBIE,
             systems: roadcone_zombie_systems
                 .read()
                 .unwrap()
@@ -346,10 +348,11 @@ fn init_config(
             hitbox: factors.basic.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(ROADCONE_ZOMBIE, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: BUCKET_ZOMBIE,
             systems: bucket_zombie_systems
                 .read()
                 .unwrap()
@@ -360,10 +363,11 @@ fn init_config(
             hitbox: factors.basic.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(BUCKET_ZOMBIE, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: FLAG_ZOMBIE,
             systems: flag_zombie_systems
                 .read()
                 .unwrap()
@@ -374,10 +378,11 @@ fn init_config(
             hitbox: factors.basic.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(FLAG_ZOMBIE, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: SCREEN_DOOR_ZOMBIE,
             systems: screen_door_zombie_systems
                 .read()
                 .unwrap()
@@ -388,6 +393,6 @@ fn init_config(
             hitbox: factors.basic.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(SCREEN_DOOR_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

@@ -1,4 +1,5 @@
 mod chunks;
+mod ex_plants;
 mod ex_zombies;
 mod items;
 mod layouts;
@@ -6,6 +7,7 @@ mod plants;
 mod zombies;
 
 pub use chunks::*;
+pub use ex_plants::*;
 pub use ex_zombies::*;
 pub use items::*;
 pub use layouts::*;
@@ -27,6 +29,7 @@ impl Plugin for AssetsSpritesPlugin {
                 init_zombies,
                 init_items,
                 init_ex_zombies,
+                init_ex_plants,
             ),
         );
     }

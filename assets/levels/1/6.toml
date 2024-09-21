@@ -37,5 +37,5 @@ avail = [2, 3]
 points = 900
 wait = 70.0
 big = true
-fixed = []
+fixed = [[4, 1]]
 avail = [1, 2, 3]

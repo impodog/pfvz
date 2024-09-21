@@ -48,8 +48,9 @@ fn load_level(
                     };
                     commands.insert_resource(LevelSlots(slots));
 
-                    let sun_factor =
-                        (level.config.sun as f32 / items.exciting.sun_standard as f32).powf(0.13);
+                    let sun_factor = (level.config.sun as f32 / items.exciting.sun_standard as f32)
+                        .powf(0.13)
+                        .min(1.0);
                     let sum = level
                         .waves
                         .iter()

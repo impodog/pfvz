@@ -10,13 +10,11 @@ impl Plugin for PlantsProducersPlugin {
         app.add_systems(Update, (sun_shroom_grow,));
         *sunflower_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_sunflower),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
         *sun_shroom_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_sun_shroom),
-            die: compn::default::system_die.read().unwrap().unwrap(),
-            damage: compn::default::system_damage.read().unwrap().unwrap(),
+            ..Default::default()
         });
     }
 }
@@ -110,9 +108,11 @@ fn init_config(
         interval: Duration::from_secs_f32(factors.sunflower.interval),
         velocity: factors.sunflower.velocity,
         collectible: collectible::Collectible::Sun(factors.sunflower.multiplier),
+        times: 1,
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: SUNFLOWER,
             systems: sunflower_systems
                 .read()
                 .unwrap()
@@ -128,20 +128,23 @@ fn init_config(
             hitbox: factors.sunflower.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(SUNFLOWER, creature);
+        map.insert(creature);
     }
     commands.insert_resource(SunShroomSmallProducer(Arc::new(compn::ProducerShared {
         interval: Duration::from_secs_f32(factors.sun_shroom.interval),
         velocity: factors.sun_shroom.velocity,
         collectible: collectible::Collectible::Sun(factors.sun_shroom.small_multiplier),
+        times: 1,
     })));
     commands.insert_resource(SunShroomBigProducer(Arc::new(compn::ProducerShared {
         interval: Duration::from_secs_f32(factors.sun_shroom.interval),
         velocity: factors.sun_shroom.velocity,
         collectible: collectible::Collectible::Sun(factors.sun_shroom.big_multiplier),
+        times: 1,
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: SUN_SHROOM,
             systems: sun_shroom_systems
                 .read()
                 .unwrap()
@@ -157,6 +160,6 @@ fn init_config(
             hitbox: factors.sun_shroom.big_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(SUN_SHROOM, creature);
+        map.insert(creature);
     }
 }

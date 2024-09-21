@@ -78,6 +78,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: SPIKEWEED,
             systems: spikeweed_systems
                 .read()
                 .unwrap()
@@ -93,6 +94,6 @@ fn init_config(
             hitbox: factors.spikeweed.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(SPIKEWEED, creature);
+        map.insert(creature);
     }
 }

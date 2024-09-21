@@ -4,6 +4,7 @@ selection = { "All" = [-2, -3, -18, -101] }
 modify = { give = 0, next = { stage = 1, level = 16 } }
 sun = 200
 bgm = "Lb"
+publish = { name = "Bowling (Ex)" }
 [[waves]]
 points = 0
 wait = 20.0

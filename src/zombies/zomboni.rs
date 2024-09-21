@@ -98,6 +98,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: ZOMBONI,
             systems: zomboni_systems
                 .read()
                 .unwrap()
@@ -113,6 +114,6 @@ fn init_config(
             hitbox: factors.zomboni.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(ZOMBONI, creature);
+        map.insert(creature);
     }
 }

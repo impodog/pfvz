@@ -116,6 +116,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: NEWSPAPER_ZOMBIE,
             systems: newspaper_zombie_systems
                 .read()
                 .unwrap()
@@ -131,6 +132,6 @@ fn init_config(
             hitbox: factors.newspaper.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(NEWSPAPER_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

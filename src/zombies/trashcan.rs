@@ -116,6 +116,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: TRASHCAN_ZOMBIE,
             systems: trashcan_zombie_systems
                 .read()
                 .unwrap()
@@ -131,10 +132,11 @@ fn init_config(
             hitbox: factors.trashcan.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(TRASHCAN_ZOMBIE, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: TRASHCAN,
             systems: trashcan_systems
                 .read()
                 .unwrap()
@@ -150,6 +152,6 @@ fn init_config(
             hitbox: factors.trashcan.trashcan_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(TRASHCAN, creature);
+        map.insert(creature);
     }
 }

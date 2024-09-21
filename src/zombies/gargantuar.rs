@@ -364,6 +364,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: GARGANTUAR,
             systems: gargantuar_systems
                 .read()
                 .unwrap()
@@ -379,7 +380,7 @@ fn init_config(
             hitbox: factors.gargantuar.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(GARGANTUAR, creature);
+        map.insert(creature);
     }
     commands.insert_resource(ImpWalker(Arc::new(compn::WalkerShared {
         interval: Duration::from_secs_f32(factors.imp.interval),
@@ -387,6 +388,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: IMP,
             systems: imp_systems
                 .read()
                 .unwrap()
@@ -402,6 +404,6 @@ fn init_config(
             hitbox: factors.imp.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(IMP, creature);
+        map.insert(creature);
     }
 }

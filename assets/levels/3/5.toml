@@ -5,6 +5,7 @@ game = ["QuickShot"]
 modify = { give = -21, next = { stage = 3, level = 6 } }
 sun = 100
 bgm = "Lb"
+publish = { name = "Crazy Shooterz" }
 [[waves]]
 points = 0
 wait = 30.0
