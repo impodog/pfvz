@@ -36,6 +36,7 @@ fn spawn_ice_shroom(
     commands.spawn((
         game::Plant,
         compn::Mushroom::default(),
+        compn::NeverKillWhenActive,
         creature.clone(),
         pos,
         sprite::Animation::new(plants.ice_shroom.clone()),
@@ -85,6 +86,7 @@ fn spawn_doom_shroom(
     commands.spawn((
         game::Plant,
         compn::Mushroom::default(),
+        compn::NeverKillWhenActive,
         creature.clone(),
         pos,
         sprite::Animation::new(plants.doom_shroom.clone()),

@@ -26,6 +26,10 @@ impl Factor {
         self.factor
     }
 
+    pub fn is_zero(&self) -> bool {
+        self.factor.abs() < f32::EPSILON
+    }
+
     // Whenever a division by 0.0 occurs, use this to get the accurate result of speed
     pub fn recalculate(&mut self) {
         self.factor = 1.0;

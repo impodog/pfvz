@@ -51,19 +51,21 @@ fn modify_zzz(
         .iter_mut()
         .for_each(|(entity, children, mushroom, hitbox, mut overlay)| {
             if mushroom.0 {
-                commands
-                    .spawn((
-                        MushroomZzzMarker,
-                        // This overlay prevents animation freezing from the parent overlay
-                        game::Overlay::default(),
-                        game::Position::default(),
-                        *hitbox,
-                        sprite::Animation::new(plants.zzz.clone()),
-                        game::LayerDisp(0.02),
-                        SpriteBundle::default(),
-                    ))
-                    .set_parent(entity);
-                overlay.multiply(0.0);
+                if !overlay.is_zero() {
+                    commands
+                        .spawn((
+                            MushroomZzzMarker,
+                            // This overlay prevents animation freezing from the parent overlay
+                            game::Overlay::default(),
+                            game::Position::default(),
+                            *hitbox,
+                            sprite::Animation::new(plants.zzz.clone()),
+                            game::LayerDisp(0.02),
+                            SpriteBundle::default(),
+                        ))
+                        .set_parent(entity);
+                    overlay.multiply(0.0);
+                }
             } else {
                 #[allow(clippy::collapsible_else_if)]
                 if let Some(children) = children {

@@ -31,6 +31,7 @@ fn spawn_blover(
     let creature = map.get(&BLOVER).unwrap();
     commands.spawn((
         game::Plant,
+        compn::NeverKillWhenActive,
         creature.clone(),
         pos,
         sprite::Animation::new(plants.blover.clone()),
@@ -52,7 +53,7 @@ fn spawn_blover(
 
 fn blover_work(
     mut action: EventWriter<game::CreatureAction>,
-    mut q_blover: Query<(Entity, &game::Overlay, &mut BloverTimer)>,
+    mut q_blover: Query<(Entity, &mut game::Overlay, &mut BloverTimer)>,
     mut q_zombie: Query<
         (
             &game::Position,
@@ -69,9 +70,10 @@ fn blover_work(
     let bound = level.config.layout.half_size_f32().0;
     q_blover
         .iter_mut()
-        .for_each(|(entity, overlay, mut timer)| {
+        .for_each(|(entity, mut overlay, mut timer)| {
             timer.tick(overlay.delta());
             if timer.just_finished() {
+                overlay.multiply(0.0);
                 action.send(game::CreatureAction::Die(entity));
             } else {
                 let factor = overlay.factor() * time.diff();

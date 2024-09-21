@@ -9,6 +9,9 @@ impl Plugin for CompnDyingPlugin {
 }
 
 #[derive(Component, Debug, Clone)]
+pub struct NeverKillWhenActive;
+
+#[derive(Component, Debug, Clone)]
 pub struct Dying {
     anim: Arc<sprite::FrameArr>,
 }
@@ -35,16 +38,16 @@ fn dying_work(
         &mut DyingImpl,
         &mut game::Health,
         &mut sprite::Animation,
-        &mut game::Velocity,
+        &mut game::VelocityBase,
     )>,
 ) {
     q_dying.par_iter_mut().for_each(
-        |(dying, mut dying_impl, mut health, mut anim, mut velocity)| {
+        |(dying, mut dying_impl, mut health, mut anim, mut velocity_base)| {
             if dying_impl.triggered {
                 health.true_decr(1)
             } else if health.is_dying() {
                 dying_impl.triggered = true;
-                velocity.x = 0.0;
+                velocity_base.get_mut().x = 0.0;
                 anim.replace(dying.anim.clone());
             }
         },

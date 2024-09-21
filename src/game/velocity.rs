@@ -143,6 +143,10 @@ impl VelocityBase {
     pub fn replace(&mut self, base: Velocity) -> Velocity {
         std::mem::replace(&mut self.base, base)
     }
+
+    pub fn get_mut(&mut self) -> &mut Velocity {
+        &mut self.base
+    }
 }
 
 fn insert_velocity_base(

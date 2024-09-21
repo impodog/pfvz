@@ -17,13 +17,19 @@ pub struct SquashStatus {
 }
 
 fn squash_test(
-    mut q_squash: Query<(&mut SquashStatus, &mut game::Velocity, &game::Position)>,
+    commands: ParallelCommands,
+    mut q_squash: Query<(
+        Entity,
+        &mut SquashStatus,
+        &mut game::Velocity,
+        &game::Position,
+    )>,
     q_zombie: Query<(&game::Position, &game::HitBox), With<game::Zombie>>,
     factors: Res<plants::PlantFactors>,
 ) {
     q_squash
         .par_iter_mut()
-        .for_each(|(mut status, mut velocity, pos)| {
+        .for_each(|(entity, mut status, mut velocity, pos)| {
             if status.is_none() {
                 let range = game::PositionRange::from(factors.squash.range) + *pos;
                 for (zombie_pos, zombie_hitbox) in q_zombie.iter() {
@@ -35,6 +41,11 @@ fn squash_test(
                             Duration::from_secs_f32(factors.squash.time),
                             TimerMode::Once,
                         );
+                        commands.command_scope(|mut commands| {
+                            if let Some(mut commands) = commands.get_entity(entity) {
+                                commands.try_insert(compn::NeverKillWhenActive);
+                            }
+                        });
                         break;
                     }
                 }
@@ -44,6 +55,7 @@ fn squash_test(
 
 fn goto_peak(
     commands: ParallelCommands,
+    mut action: EventWriter<game::CreatureAction>,
     mut q_squash: Query<(
         Entity,
         &game::Overlay,
@@ -54,7 +66,6 @@ fn goto_peak(
     collision: Res<game::Collision>,
     q_zombie: Query<(), With<game::Zombie>>,
     q_plant: Query<(), With<game::Plant>>,
-    mut action: EventWriter<game::CreatureAction>,
 ) {
     let events = RwLock::new(Vec::new());
     q_squash
@@ -84,8 +95,14 @@ fn goto_peak(
                             });
                         }
                         commands.command_scope(|mut commands| {
-                            commands.entity(entity).despawn_recursive();
+                            if let Some(mut commands) = commands.get_entity(entity) {
+                                commands.remove::<compn::NeverKillWhenActive>();
+                            }
                         });
+                        events
+                            .write()
+                            .unwrap()
+                            .push(game::CreatureAction::Die(entity));
                     }
                 } else if !status.peak && status.timer.remaining_secs() <= factors.squash.time / 2.0
                 {

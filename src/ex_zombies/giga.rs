@@ -18,7 +18,7 @@ impl Plugin for ExZombiesGigaPlugin {
 pub enum GigaAllStarZombieStatus {
     #[default]
     Running,
-    Sliding(f32),
+    Sliding,
     Walking,
 }
 
@@ -79,7 +79,6 @@ fn giga_tackle(
         &mut game::Velocity,
         &mut game::VelocityBase,
         &mut sprite::Animation,
-        &game::Position,
     )>,
     q_creature: Query<(), With<game::Creature>>,
     q_zombie: Query<(), With<game::Zombie>>,
@@ -91,41 +90,41 @@ fn giga_tackle(
 ) {
     let action = Mutex::new(action);
     q_giga.par_iter_mut().for_each(
-        |(entity, overlay, mut status, mut velocity, mut velocity_base, mut anim, pos)| {
-            match *status {
-                GigaAllStarZombieStatus::Running => {
-                    let is_zombie = q_zombie.get(entity).is_ok();
-                    let target = collision.get(&entity).and_then(|coll| {
-                        coll.iter().find(|other| {
-                            q_creature.get(**other).is_ok()
-                                && (q_zombie.get(**other).is_ok() ^ is_zombie)
-                        })
-                    });
-                    if let Some(target) = target {
-                        action.lock().unwrap().send(game::CreatureAction::Damage(
-                            *target,
-                            ex_factors.giga.tackle_damage,
-                        ));
-                        *status = GigaAllStarZombieStatus::Sliding(pos.x);
-                        anim.replace(ex_zombies.giga_all_star_sliding.clone());
-                    }
+        |(entity, overlay, mut status, mut velocity, mut velocity_base, mut anim)| match *status {
+            GigaAllStarZombieStatus::Running => {
+                let is_zombie = q_zombie.get(entity).is_ok();
+                let target = collision.get(&entity).and_then(|coll| {
+                    coll.iter().find(|other| {
+                        q_creature.get(**other).is_ok()
+                            && (q_zombie.get(**other).is_ok() ^ is_zombie)
+                    })
+                });
+                if let Some(target) = target {
+                    action.lock().unwrap().send(game::CreatureAction::Damage(
+                        *target,
+                        ex_factors.giga.tackle_damage,
+                    ));
+                    *status = GigaAllStarZombieStatus::Sliding;
+                    anim.replace(ex_zombies.giga_all_star_sliding.clone());
                 }
-                GigaAllStarZombieStatus::Sliding(begin) => {
-                    if (pos.x - begin).abs() >= ex_factors.giga.slide_distance {
-                        *status = GigaAllStarZombieStatus::Walking;
-                        velocity_base.replace(ex_factors.giga.velocity.into());
-                        anim.replace(ex_zombies.giga_all_star.clone());
-                        commands.command_scope(|mut commands| {
-                            if let Some(mut commands) = commands.get_entity(entity) {
-                                commands.try_insert(compn::Walker(walker.0.clone()));
-                            }
-                        });
-                    } else {
-                        velocity.x -= info.acc.copysign(velocity.x) * overlay.delta_secs();
-                    }
-                }
-                GigaAllStarZombieStatus::Walking => {}
             }
+            GigaAllStarZombieStatus::Sliding => {
+                if (velocity.x.abs() - ex_factors.giga.velocity_running.0 .1.abs()).abs()
+                    >= (ex_factors.giga.velocity_running.0 .0 - ex_factors.giga.velocity.0 .0).abs()
+                {
+                    *status = GigaAllStarZombieStatus::Walking;
+                    velocity_base.replace(ex_factors.giga.velocity.into());
+                    anim.replace(ex_zombies.giga_all_star.clone());
+                    commands.command_scope(|mut commands| {
+                        if let Some(mut commands) = commands.get_entity(entity) {
+                            commands.try_insert(compn::Walker(walker.0.clone()));
+                        }
+                    });
+                } else {
+                    velocity.x -= info.acc.copysign(velocity.x) * overlay.delta_secs();
+                }
+            }
+            GigaAllStarZombieStatus::Walking => {}
         },
     );
 }

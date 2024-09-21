@@ -10,6 +10,7 @@ impl Plugin for CompnExplodePlugin {
             (
                 add_no_loss,
                 explode_work,
+                add_never_kill_for_bomb,
                 cherry_bomb_timer_work,
                 potato_mine_timer_work,
             )
@@ -95,8 +96,21 @@ fn explode_work(
 #[derive(Component, Debug, Clone, Deref, DerefMut)]
 pub struct CherryBombTimer(pub Timer);
 
+fn add_never_kill_for_bomb(
+    commands: ParallelCommands,
+    q_bomb: Query<Entity, Added<CherryBombTimer>>,
+) {
+    q_bomb.par_iter().for_each(|entity| {
+        commands.command_scope(|mut commands| {
+            if let Some(mut commands) = commands.get_entity(entity) {
+                commands.try_insert(compn::NeverKillWhenActive);
+            }
+        });
+    });
+}
+
 fn cherry_bomb_timer_work(
-    mut explode_event: EventWriter<ExplodeEvent>,
+    explode_event: EventWriter<ExplodeEvent>,
     mut q_timer: Query<(
         Entity,
         &game::Overlay,
@@ -106,6 +120,7 @@ fn cherry_bomb_timer_work(
         &Explode,
     )>,
 ) {
+    let explode_event = Mutex::new(explode_event);
     q_timer.iter_mut().for_each(
         |(entity, overlay, mut timer, mut hitbox, mut pos, explode)| {
             timer.tick(overlay.delta());
@@ -113,7 +128,7 @@ fn cherry_bomb_timer_work(
             *hitbox = explode.hitbox * rate;
             pos.disp.z = -hitbox.height / 2.0 + 0.5;
             if timer.just_finished() {
-                explode_event.send(ExplodeEvent { entity });
+                explode_event.lock().unwrap().send(ExplodeEvent { entity });
             }
         },
     );

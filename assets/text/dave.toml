@@ -69,4 +69,11 @@ map = [
             "This level lets you plant 5 creatures in a row!",
         ],
     ],
+    [
+        { stage = 1, level = 11 },
+        [
+            "Welcome to expansion levels.",
+            "This pack of levels is intended for hardcore players, thus casual players may find their gaming experience unpleasant. Be warned.",
+        ],
+    ],
 ]
