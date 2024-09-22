@@ -76,4 +76,10 @@ map = [
             "This pack of levels is intended for hardcore players, thus casual players may find their gaming experience unpleasant. Be warned.",
         ],
     ],
+    [
+        { stage = 2, level = 11 },
+        [
+            "So we've got a survivor.",
+        ],
+    ],
 ]
