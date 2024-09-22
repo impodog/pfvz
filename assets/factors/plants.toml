@@ -340,7 +340,8 @@ cost = 125
 velocity = { x = [-2.5, 2.5], y = [-2.5, 2.5], z = 0, r = 3.14 }
 self_box = { width = 0.9, height = 1.0 }
 health = 300
-times = 5
+times = 4
+night_times = 3
 interval = 0.5
 cooldown = 80.0
 cost = 0

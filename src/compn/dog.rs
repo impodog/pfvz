@@ -8,13 +8,14 @@ impl Plugin for CompnDogPlugin {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone, Default)]
 pub struct DogShared {
-    pub angry_speed: f32,
-    pub angry_anim: Arc<sprite::FrameArr>,
+    pub angry_velocity: game::VelocityFunctor,
+    pub angry_walker: Option<Arc<compn::WalkerShared>>,
+    pub angry_anim: Option<Arc<sprite::FrameArr>>,
 }
 
-#[derive(Component, Debug, Clone, Deref, DerefMut)]
+#[derive(Component, Clone, Deref, DerefMut)]
 pub struct Dog {
     #[deref]
     pub shared: Arc<DogShared>,
@@ -26,28 +27,43 @@ pub struct DogImpl {
     pub angry: bool,
 }
 
-fn add_dog_impl(mut commands: Commands, q_dog: Query<Entity, Added<Dog>>) {
-    q_dog.iter().for_each(|entity| {
-        commands.entity(entity).insert(DogImpl::default());
+fn add_dog_impl(commands: ParallelCommands, q_dog: Query<Entity, Added<Dog>>) {
+    q_dog.par_iter().for_each(|entity| {
+        commands.command_scope(|mut commands| {
+            if let Some(mut commands) = commands.get_entity(entity) {
+                commands.try_insert(DogImpl::default());
+            }
+        });
     });
 }
 
 fn dog_work(
-    mut commands: Commands,
+    commands: ParallelCommands,
     mut q_dog: Query<(
-        &mut game::Overlay,
+        Entity,
         &mut sprite::Animation,
+        &mut game::VelocityBase,
         &Dog,
         &mut DogImpl,
     )>,
+    q_nothing: Query<()>,
 ) {
     q_dog
         .iter_mut()
-        .for_each(|(mut overlay, mut anim, dog, mut dog_impl)| {
-            if !dog_impl.angry && commands.get_entity(dog.owner).is_none() {
+        .for_each(|(entity, mut anim, mut velocity_base, dog, mut dog_impl)| {
+            if !dog_impl.angry && q_nothing.get(dog.owner).is_err() {
                 dog_impl.angry = true;
-                overlay.multiply(dog.angry_speed);
-                anim.replace(dog.angry_anim.clone());
+                if let Some(ref walker) = dog.angry_walker {
+                    commands.command_scope(|mut commands| {
+                        if let Some(mut commands) = commands.get_entity(entity) {
+                            commands.try_insert(compn::Walker(walker.clone()));
+                        }
+                    });
+                }
+                velocity_base.replace((&dog.angry_velocity).into());
+                if let Some(ref angry_anim) = dog.angry_anim {
+                    anim.replace(angry_anim.clone());
+                }
             }
         });
 }

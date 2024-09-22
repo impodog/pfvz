@@ -240,7 +240,7 @@ impl GameKind {
         match self {
             Self::InfiSun => !matches!(
                 id,
-                SUNFLOWER | SUN_SHROOM | SUN_BEAN | ETHYLENE | GOLD_BLOOM
+                SUNFLOWER | SUN_SHROOM | SUN_BEAN | ETHYLENE | GOLD_BLOOM | TWIN_SUNFLOWER
             ),
             _ => true,
         }

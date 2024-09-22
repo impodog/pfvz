@@ -209,3 +209,8 @@ name = "Chrysogonum virginianum"
 short = "Gives a burst of sun"
 desc = """Gives you a burst of sun when planted
 Damage: This is non-attacking"""
+[desc.twin_sunflower]
+name = "Helianthus annuus var. dihelio"
+short = "Gives you more sun, more than just one"
+desc = """Throws sun that you can pick up, or not, I do not care, seriously
+Damage: It's getting more ridiculus"""

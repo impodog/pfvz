@@ -5,6 +5,7 @@ pub struct LayoutBgm {
     pub normal: Handle<AudioSource>,
     pub exciting: Handle<AudioSource>,
     pub begin: f64,
+    pub start_over: bool,
 }
 #[derive(Resource)]
 pub struct AudioBgm {
@@ -21,11 +22,13 @@ impl AudioBgm {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Default)]
 struct LayoutBind {
     normal: String,
     exciting: String,
     begin: f64,
+    #[serde(default)]
+    start_over: bool,
 }
 #[derive(Deserialize)]
 struct BgmBind {
@@ -52,6 +55,7 @@ pub(super) fn load_bgm(mut commands: Commands, server: Res<AssetServer>) {
                             normal,
                             exciting,
                             begin,
+                            start_over,
                         },
                     )| {
                         map.get(&normal).cloned().and_then(|normal| {
@@ -62,6 +66,7 @@ pub(super) fn load_bgm(mut commands: Commands, server: Res<AssetServer>) {
                                         normal,
                                         exciting,
                                         begin,
+                                        start_over,
                                     },
                                 )
                             })

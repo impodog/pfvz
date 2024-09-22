@@ -46,11 +46,27 @@ pub struct GigaAllStarZombie {
     pub cost: u32,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SundayEditionZombie {
+    pub velocity: game::VelocityXRange,
+    pub rage_velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub sunedit_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub sunedit_health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub rage_interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+
 #[derive(Resource, Serialize, Deserialize, Debug)]
 pub struct ExZombieFactors {
     pub rally: RallyZombie,
     pub brick: BrickZombie,
     pub giga: GigaAllStarZombie,
+    pub sunedit: SundayEditionZombie,
 }
 
 fn init_factors(mut commands: Commands) {

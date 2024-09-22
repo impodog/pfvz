@@ -10,6 +10,7 @@ impl Plugin for LevelBgmPlugin {
         );
         app.add_systems(OnExit(info::GlobalStates::Play), (close_all_music,));
         app.add_systems(PostUpdate, (switch_exciting,).run_if(when_state!(gaming)));
+        app.init_resource::<BgmReplayTiming>();
     }
 }
 
@@ -24,9 +25,13 @@ pub enum BgmStatus {
     Exciting,
 }
 
+#[derive(Resource, Default, Deref, DerefMut)]
+pub struct BgmReplayTiming(pub f64);
+
 fn init_status(mut commands: Commands) {
     commands.remove_resource::<BgmHandle>();
     commands.insert_resource(BgmStatus::default());
+    commands.insert_resource(BgmReplayTiming::default());
 }
 
 fn start_playing(
@@ -60,6 +65,7 @@ fn switch_exciting(
     q_zombies: Query<(), (With<game::Zombie>, Without<game::NotInvasive>)>,
     mut e_wave: EventReader<level::RoomNextWave>,
     difficulty: Res<level::RoomDifficulty>,
+    mut replay: ResMut<BgmReplayTiming>,
 ) {
     if *status == BgmStatus::Single {
         return;
@@ -78,18 +84,24 @@ fn switch_exciting(
         if *status != next_status {
             if let Some(layout) = bgm.get_layout(level.config.layout) {
                 if let Some(instance) = audio_instances.get_mut(handle.id()) {
-                    let mut time = instance.state().position().unwrap_or_default();
-                    if next_status == BgmStatus::Normal {
-                        time += layout.begin;
+                    let position = instance.state().position().unwrap_or_default();
+                    let time = if layout.start_over {
+                        std::mem::replace(&mut replay.0, position)
                     } else {
-                        time -= layout.begin;
-                        if time < 0.0 {
-                            time = 0.0;
+                        let mut time = position;
+                        if next_status == BgmStatus::Normal {
+                            time += layout.begin;
+                        } else {
+                            time -= layout.begin;
+                            if time < 0.0 {
+                                time = 0.0;
+                            }
                         }
-                    }
+                        time
+                    };
 
                     instance.stop(AudioTween::new(
-                        Duration::from_secs_f32(0.5),
+                        Duration::from_secs_f32(1.0),
                         AudioEasing::OutPowi(1),
                     ));
                     let music = if next_status == BgmStatus::Normal {
@@ -97,7 +109,14 @@ fn switch_exciting(
                     } else {
                         layout.exciting.clone()
                     };
-                    handle.0 = audio.play(music).start_from(time).handle();
+                    handle.0 = audio
+                        .play(music)
+                        .fade_in(AudioTween::new(
+                            Duration::from_secs_f32(0.5),
+                            AudioEasing::InPowi(1),
+                        ))
+                        .start_from(time)
+                        .handle();
                 }
             }
             *status = next_status;

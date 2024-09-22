@@ -413,6 +413,7 @@ pub struct GoldBloom {
     pub self_box: game::HitBox,
     pub health: u32,
     pub times: usize,
+    pub night_times: usize,
     pub interval: f32,
     pub cooldown: f32,
     pub cost: u32,

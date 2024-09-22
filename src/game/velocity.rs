@@ -173,3 +173,43 @@ fn modify_velocity_by_base(mut q_vel: Query<(&mut Velocity, Ref<VelocityBase>)>)
             }
         });
 }
+
+pub trait ToVelocity: Send + Sync {
+    fn to_velocity(&self) -> Velocity;
+}
+
+impl<T> ToVelocity for T
+where
+    T: Sized + Send + Sync + Clone + Copy + Into<Velocity>,
+{
+    fn to_velocity(&self) -> Velocity {
+        (*self).into()
+    }
+}
+
+#[derive(Clone)]
+pub enum VelocityFunctor {
+    Fixed(Velocity),
+    Func(Arc<dyn ToVelocity>),
+}
+impl Default for VelocityFunctor {
+    fn default() -> Self {
+        Self::Fixed(Velocity::default())
+    }
+}
+impl From<&VelocityFunctor> for Velocity {
+    fn from(func: &VelocityFunctor) -> Velocity {
+        match func {
+            VelocityFunctor::Fixed(velocity) => *velocity,
+            VelocityFunctor::Func(func) => func.to_velocity(),
+        }
+    }
+}
+impl<T> From<T> for VelocityFunctor
+where
+    T: ToVelocity + 'static,
+{
+    fn from(func: T) -> Self {
+        Self::Func(Arc::new(func))
+    }
+}

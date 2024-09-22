@@ -1,5 +1,5 @@
 (
-    file: "audio/bgm/mg/data/mg.ogg",
+    file: "audio/bgm/mg/data/mg1.ogg",
     loop_region: Some(Region(
         start: Seconds(0.0),
         end: EndOfAudio,

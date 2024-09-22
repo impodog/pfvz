@@ -10,6 +10,7 @@ impl Plugin for ExZombiesPlugin {
             ExZombiesRallyPlugin,
             ExZombiesBrickPlugin,
             ExZombiesGigaPlugin,
+            ExZombiesSuneditPlugin,
         ));
     }
 }

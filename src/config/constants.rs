@@ -84,6 +84,7 @@ pub const IMP: Id = 203;
 pub const RALLY_ZOMBIE: Id = 301;
 pub const BRICK_ZOMBIE: Id = 302;
 pub const GIGA_ALL_STAR_ZOMBIE: Id = 303;
+pub const SUNDAY_EDITION_ZOMBIE: Id = 304;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
@@ -197,6 +198,7 @@ pub fn id_name(id: Id) -> &'static str {
         RALLY_ZOMBIE => "rally",
         BRICK_ZOMBIE => "brick",
         GIGA_ALL_STAR_ZOMBIE => "giga",
+        SUNDAY_EDITION_ZOMBIE => "sunedit",
 
         _ => "unknown",
     }

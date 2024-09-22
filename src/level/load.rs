@@ -50,7 +50,7 @@ fn load_level(
 
                     let sun_factor = (level.config.sun as f32 / items.exciting.sun_standard as f32)
                         .powf(0.13)
-                        .min(1.0);
+                        .min(2.0);
                     let sum = level
                         .waves
                         .iter()

@@ -18,6 +18,11 @@ pub struct SpriteExZombies {
     pub giga_helmet_damaged: Arc<sprite::FrameArr>,
     pub giga_helmet_destroyed: Arc<sprite::FrameArr>,
     pub giga_all_star_concept: Handle<Image>,
+    pub sunday_edition: Arc<sprite::FrameArr>,
+    pub sunday_edition_damaged: Arc<sprite::FrameArr>,
+    pub sunday_edition_destroyed: Arc<sprite::FrameArr>,
+    pub sunday_edition_zombie: Arc<sprite::FrameArr>,
+    pub sunday_edition_zombie_dying: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_ex_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -86,6 +91,31 @@ pub(super) fn init_ex_zombies(mut commands: Commands, server: Res<AssetServer>) 
             Duration::from_millis(400),
         ),
         giga_all_star_concept: server.load("sprites/zombies/giga_all_star/concept.png"),
+        sunday_edition: super::load_animation(
+            &server,
+            "sprites/zombies/sunday_edition",
+            Duration::from_millis(150),
+        ),
+        sunday_edition_damaged: super::load_animation(
+            &server,
+            "sprites/zombies/sunday_edition_damaged",
+            Duration::from_millis(150),
+        ),
+        sunday_edition_destroyed: super::load_animation(
+            &server,
+            "sprites/zombies/sunday_edition_destroyed",
+            Duration::from_millis(150),
+        ),
+        sunday_edition_zombie: super::load_animation(
+            &server,
+            "sprites/zombies/sunday_edition_zombie",
+            Duration::from_millis(350),
+        ),
+        sunday_edition_zombie_dying: super::load_animation(
+            &server,
+            "sprites/zombies/sunday_edition_zombie_dying",
+            Duration::from_millis(375),
+        ),
     };
     commands.insert_resource(ex_zombies);
 }
