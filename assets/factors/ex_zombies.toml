@@ -38,3 +38,8 @@ interval = 0.6
 rage_interval = 0.15
 cooldown = 7.5
 cost = 250
+[mirror]
+mirror_box = { width = 0.5, height = 1.0 }
+mirror_health = 550
+cooldown = 5.0
+cost = 200

@@ -69,18 +69,20 @@ fn load_saved_selection(
     mut menu: ResMut<choose::ChooseMenu>,
 ) {
     if let level::SelectionArr::Any = &level.config.selection {
-        let selection = save
-            .selection
-            .iter()
-            .filter(|id| level.config.is_compat(**id))
-            .take(level.config.selection.slots(save.slots.0))
-            .cloned()
-            .collect::<Vec<_>>();
-        selection.iter().for_each(|id| {
-            menu.add(*id);
-        });
-        commands.insert_resource(game::Selection(selection));
-        event.send(game::ShowSelectionEvent);
+        if level.conveyor.is_none() {
+            let selection = save
+                .selection
+                .iter()
+                .filter(|id| level.config.is_compat(**id))
+                .take(level.config.selection.slots(save.slots.0))
+                .cloned()
+                .collect::<Vec<_>>();
+            selection.iter().for_each(|id| {
+                menu.add(*id);
+            });
+            commands.insert_resource(game::Selection(selection));
+            event.send(game::ShowSelectionEvent);
+        }
     }
 }
 

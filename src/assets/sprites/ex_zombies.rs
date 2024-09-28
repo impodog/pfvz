@@ -23,6 +23,9 @@ pub struct SpriteExZombies {
     pub sunday_edition_destroyed: Arc<sprite::FrameArr>,
     pub sunday_edition_zombie: Arc<sprite::FrameArr>,
     pub sunday_edition_zombie_dying: Arc<sprite::FrameArr>,
+    pub mirror: Arc<sprite::FrameArr>,
+    pub mirror_damaged: Arc<sprite::FrameArr>,
+    pub mirror_zombie_concept: Handle<Image>,
 }
 
 pub(super) fn init_ex_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -116,6 +119,13 @@ pub(super) fn init_ex_zombies(mut commands: Commands, server: Res<AssetServer>) 
             "sprites/zombies/sunday_edition_zombie_dying",
             Duration::from_millis(375),
         ),
+        mirror: super::load_animation(&server, "sprites/zombies/mirror", Duration::from_millis(33)),
+        mirror_damaged: super::load_animation(
+            &server,
+            "sprites/zombies/mirror_damaged",
+            Duration::from_millis(50),
+        ),
+        mirror_zombie_concept: server.load("sprites/zombies/mirror/concept.png"),
     };
     commands.insert_resource(ex_zombies);
 }

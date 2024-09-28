@@ -210,6 +210,7 @@ pub enum GameKind {
     Columns,
     InfiSun,
     NoSun,
+    Zomboss,
 }
 impl GameKind {
     fn is_sun_spawn(&self) -> bool {
@@ -223,6 +224,7 @@ impl GameKind {
             Self::Columns => false,
             Self::InfiSun => true,
             Self::NoSun => false,
+            Self::Zomboss => true,
         }
     }
 
@@ -237,6 +239,7 @@ impl GameKind {
             Self::Columns => true,
             Self::InfiSun => true,
             Self::NoSun => true,
+            Self::Zomboss => true,
         }
     }
 
@@ -389,6 +392,8 @@ pub struct Level {
     pub config: LevelConfig,
     #[serde(default)]
     pub conveyor: Option<LevelConveyor>,
+    #[serde(default)]
+    pub zomboss: Option<zombies::ZombossConfig>,
 }
 impl Level {
     pub fn hide_sun(&self) -> bool {

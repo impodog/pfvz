@@ -301,7 +301,7 @@ fn gargantuar_throw_imp(
                         if let Ok(imp_logic) = q_logic.get(*imp) {
                             let base = *imp_logic.base_raw() + *logic.base_raw();
                             let target_x = (base.x - factors.gargantuar.throw_distance)
-                                .max(-level.config.layout.half_size_f32().0 + 0.5);
+                                .max(-level.config.layout.half_size_f32().0 + 1.0);
                             let target = game::Position::new(target_x, base.y, base.z, base.r);
                             let target = level.config.layout.regularize_xyzr(&target);
                             let velocity = compn::TargetCalculator {

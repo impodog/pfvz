@@ -225,6 +225,15 @@ pub struct BaseballZombie {
     pub cooldown: f32,
     pub cost: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Zomboss {
+    pub head_box: game::HitBox,
+    pub body_box: game::HitBox,
+    pub arm_box: game::HitBox,
+    pub legs_box: game::HitBox,
+    pub cooldown: f32,
+    pub cost: u32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ZombieFactors {
@@ -248,6 +257,7 @@ pub struct ZombieFactors {
     pub gargantuar: Gargantuar,
     pub imp: Imp,
     pub baseball: BaseballZombie,
+    pub zomboss: Zomboss,
 }
 
 fn init_factors(mut commands: Commands) {

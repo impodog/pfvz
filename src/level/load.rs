@@ -6,6 +6,7 @@ impl Plugin for LevelLoadPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<LevelEvent>();
         app.add_systems(PreUpdate, (load_level,));
+        app.add_systems(OnEnter(info::GlobalStates::Play), (insert_zomboss_config,));
     }
 }
 
@@ -94,5 +95,11 @@ fn load_level(
                 error!("Failed to open level: {}", err);
             }
         }
+    }
+}
+
+pub fn insert_zomboss_config(mut commands: Commands, level: Res<level::Level>) {
+    if let Some(ref zomboss) = level.zomboss {
+        commands.insert_resource(zomboss.clone());
     }
 }

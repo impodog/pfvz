@@ -5,6 +5,8 @@ pub(super) struct LevelConveyorPlugin;
 impl Plugin for LevelConveyorPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<ConveyorNewCall>();
+        app.init_resource::<ConveyorTimer>()
+            .init_resource::<ConveyorDisplace>();
         app.add_systems(OnEnter(info::PlayStates::Cys), (close_cys,));
         app.add_systems(OnEnter(info::PlayStates::Gaming), (setup_conveyor,));
         app.add_systems(
@@ -36,10 +38,10 @@ fn setup_conveyor(mut commands: Commands, level: Res<level::Level>) {
     }
 }
 
-#[derive(Resource, Deref, DerefMut)]
+#[derive(Resource, Deref, DerefMut, Default)]
 pub struct ConveyorTimer(pub Timer);
 
-#[derive(Resource, Deref, DerefMut)]
+#[derive(Resource, Deref, DerefMut, Default)]
 pub struct ConveyorDisplace(pub f32);
 
 #[derive(Event)]
@@ -51,13 +53,13 @@ fn spawn_new_slot_test(
     mut selection: ResMut<game::Selection>,
     level: Res<level::Level>,
     mut call: EventWriter<ConveyorNewCall>,
+    slots: Res<level::LevelSlots>,
 ) {
     if level.conveyor.is_some() {
         timer.tick(time.delta());
         if timer.just_finished() {
-            let len = level.config.selection.len();
-            if selection.len() < len {
-                selection.resize(len, 0);
+            if selection.len() < slots.0 {
+                selection.resize(slots.0, 0);
             }
             call.send(ConveyorNewCall);
         }
@@ -139,8 +141,13 @@ fn conveyor_displace(
             displace.0 = 0.0;
         } else {
             q_selection.par_iter_mut().for_each(|(mut pos,)| {
-                if pos.x > sprite::SlotIndex(0).into_position(display.ratio).x {
-                    pos.x -= diff;
+                if let Some(index) = sprite::SlotIndex::from_position(*pos, display.ratio) {
+                    if !selection
+                        .get(index.0.saturating_sub(1))
+                        .is_some_and(|id| *id != 0)
+                    {
+                        pos.x -= diff;
+                    }
                 }
             });
         }
@@ -149,17 +156,26 @@ fn conveyor_displace(
 
 fn highlighter_displace(
     mut q_highlighter: Query<(&mut game::Position,), With<game::SelectionHighlighter>>,
+    selection: Res<game::Selection>,
     selecting: Res<game::Selecting>,
     displace: Res<ConveyorDisplace>,
     level: Res<level::Level>,
     time: Res<config::FrameTime>,
+    display: Res<game::Display>,
 ) {
     if let Some(ref conveyor) = level.conveyor {
         if let Ok((mut pos,)) = q_highlighter.get_single_mut() {
-            if selecting.is_changed() {
-                pos.x -= displace.0;
-            } else {
-                pos.x -= time.diff() * conveyor.speed;
+            if let Some(index) = sprite::SlotIndex::from_position(*pos, display.ratio) {
+                if !selection
+                    .get(index.0.saturating_sub(1))
+                    .is_some_and(|id| *id != 0)
+                {
+                    if selecting.is_changed() {
+                        pos.x -= displace.0;
+                    } else {
+                        pos.x -= time.diff() * conveyor.speed;
+                    }
+                }
             }
         }
     }
@@ -168,10 +184,13 @@ fn highlighter_displace(
 fn conveyor_used(
     mut planter: EventReader<plants::PlanterEvent>,
     mut selection: ResMut<game::Selection>,
+    level: Res<level::Level>,
 ) {
-    planter.read().for_each(|planter| {
-        if let Some(id) = selection.get_mut(planter.index) {
-            *id = 0;
-        }
-    });
+    if level.conveyor.is_some() {
+        planter.read().for_each(|planter| {
+            if let Some(id) = selection.get_mut(planter.index) {
+                *id = 0;
+            }
+        });
+    }
 }
