@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use serde::{ser::SerializeSeq, Deserialize, Deserializer, Serialize, Serializer};
 
 impl level::LayoutKind {
     /// This returns a index applicable to `PlantLayout`, or usize::MAX if conversion is not
@@ -125,5 +126,41 @@ impl level::LayoutKind {
 impl std::fmt::Display for level::LevelIndex {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{} - {}", self.stage, self.level)
+    }
+}
+
+#[derive(Default, Debug, Clone, Deref, DerefMut)]
+pub struct BTreeMapSerde<K, V>(BTreeMap<K, V>)
+where
+    K: std::cmp::Ord;
+
+impl<K, V> Serialize for BTreeMapSerde<K, V>
+where
+    K: std::cmp::Ord + Serialize,
+    V: Serialize,
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let mut seq = serializer.serialize_seq(Some(self.len()))?;
+        for (k, v) in self.iter() {
+            seq.serialize_element(&(k, v))?;
+        }
+        seq.end()
+    }
+}
+impl<'de, K, V> Deserialize<'de> for BTreeMapSerde<K, V>
+where
+    K: std::cmp::Ord + Deserialize<'de>,
+    V: Deserialize<'de>,
+{
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let list = Vec::<(K, V)>::deserialize(deserializer)?;
+        let map = list.into_iter().collect::<BTreeMap<_, _>>();
+        Ok(Self(map))
     }
 }

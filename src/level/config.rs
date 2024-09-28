@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use level::util::BTreeMapSerde;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
@@ -208,6 +209,7 @@ pub enum GameKind {
     Thunder,
     Columns,
     InfiSun,
+    NoSun,
 }
 impl GameKind {
     fn is_sun_spawn(&self) -> bool {
@@ -219,7 +221,8 @@ impl GameKind {
             Self::Random => true,
             Self::Thunder => true,
             Self::Columns => false,
-            Self::InfiSun => false,
+            Self::InfiSun => true,
+            Self::NoSun => false,
         }
     }
 
@@ -233,12 +236,13 @@ impl GameKind {
             Self::Thunder => true,
             Self::Columns => true,
             Self::InfiSun => true,
+            Self::NoSun => true,
         }
     }
 
     fn is_compat(&self, id: Id) -> bool {
         match self {
-            Self::InfiSun => !matches!(
+            Self::NoSun => !matches!(
                 id,
                 SUNFLOWER | SUN_SHROOM | SUN_BEAN | ETHYLENE | GOLD_BLOOM | TWIN_SUNFLOWER
             ),
@@ -318,6 +322,27 @@ pub struct LevelPublish {
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
+pub struct LevelConveyorItem {
+    pub max: usize,
+    pub weight: f32,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct LevelConveyor {
+    pub items: BTreeMapSerde<Id, LevelConveyorItem>,
+    pub interval: f32,
+    pub speed: f32,
+}
+impl Default for LevelConveyor {
+    fn default() -> Self {
+        Self {
+            items: Default::default(),
+            interval: 10.0,
+            speed: 0.25,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct LevelConfig {
     pub layout: LayoutKind,
     #[serde(default)]
@@ -362,4 +387,11 @@ impl LevelConfig {
 pub struct Level {
     pub waves: Vec<Wave>,
     pub config: LevelConfig,
+    #[serde(default)]
+    pub conveyor: Option<LevelConveyor>,
+}
+impl Level {
+    pub fn hide_sun(&self) -> bool {
+        self.conveyor.is_some()
+    }
 }

@@ -16,6 +16,7 @@ impl Plugin for GamePlayerPlugin {
                 init_sun,
                 init_highlighter,
                 spawn_cooldown_rect,
+                show_shovel,
             ),
         );
         app.add_systems(
@@ -70,10 +71,10 @@ impl Default for Selecting {
 }
 
 #[derive(Component)]
-struct SelectionMarker;
+pub struct SelectionMarker;
 
 #[derive(Component)]
-struct SelectionHighlighter;
+pub struct SelectionHighlighter;
 
 #[derive(Component)]
 struct SunIndicator;
@@ -139,9 +140,8 @@ fn show_selection(
     map: Res<game::CreatureMap>,
     font: Res<assets::DefaultFont>,
     display: Res<game::Display>,
-    chunks: Res<assets::SpriteChunks>,
-    slots: Res<level::LevelSlots>,
     q_sel: Query<Entity, With<SelectionMarker>>,
+    level: Res<level::Level>,
 ) {
     // Only spawn on incoming events, usually sent by `show_selection_on_startup`
     if event.read().next().is_none() {
@@ -168,30 +168,39 @@ fn show_selection(
                     sprite::SlotIndex(i).into_position(display.ratio),
                 ))
                 .id();
-            commands
-                .spawn((
-                    game::Position::new(0.0, -0.25, 0.0, 0.0),
-                    Text2dBundle {
-                        text: Text::from_section(
-                            format!("{}", creature.cost),
-                            TextStyle {
-                                font: font.0.clone(),
-                                font_size: 30.0,
-                                color: Color::LinearRgba(LinearRgba::new(0.1, 1.0, 1.0, 0.8)),
-                            },
-                        ),
-                        // z=1.0 makes sure that the cost is shown above the selection image
-                        transform: Transform::from_xyz(0.0, 0.0, 1.0),
-                        ..Default::default()
-                    },
-                ))
-                .set_parent(parent);
-        } else {
+            if !level.hide_sun() {
+                commands
+                    .spawn((
+                        game::Position::new(0.0, -0.25, 0.0, 0.0),
+                        Text2dBundle {
+                            text: Text::from_section(
+                                format!("{}", creature.cost),
+                                TextStyle {
+                                    font: font.0.clone(),
+                                    font_size: 30.0,
+                                    color: Color::LinearRgba(LinearRgba::new(0.1, 1.0, 1.0, 0.8)),
+                                },
+                            ),
+                            // z=1.0 makes sure that the cost is shown above the selection image
+                            transform: Transform::from_xyz(0.0, 0.0, 1.0),
+                            ..Default::default()
+                        },
+                    ))
+                    .set_parent(parent);
+            }
+        } else if *id != 0 {
             warn!("Attempting to show non-existing id in slots bar: {}", id);
         }
     }
+}
+
+fn show_shovel(
+    mut commands: Commands,
+    display: Res<game::Display>,
+    chunks: Res<assets::SpriteChunks>,
+    slots: Res<level::LevelSlots>,
+) {
     commands.spawn((
-        SelectionMarker,
         SpriteBundle {
             texture: chunks.shovel.clone(),
             transform: Transform::from_xyz(0.0, 0.0, 14.37 + 1.0),
@@ -279,12 +288,13 @@ fn update_highlight(
     mut q_highlight: Query<(&mut game::Position, &mut Visibility), With<SelectionHighlighter>>,
 ) {
     if selecting.is_changed() {
-        let (mut pos, mut visibility) = q_highlight.single_mut();
-        if selecting.0 == usize::MAX {
-            *visibility = Visibility::Hidden;
-        } else {
-            *visibility = Visibility::Visible;
-            *pos = sprite::SlotIndex(selecting.0).into_position(display.ratio);
+        if let Ok((mut pos, mut visibility)) = q_highlight.get_single_mut() {
+            if selecting.0 == usize::MAX {
+                *visibility = Visibility::Hidden;
+            } else {
+                *visibility = Visibility::Visible;
+                *pos = sprite::SlotIndex(selecting.0).into_position(display.ratio);
+            }
         }
     }
 }
@@ -330,28 +340,43 @@ fn update_select(
     });
 }
 
-fn init_sun(mut commands: Commands, display: Res<game::Display>, font: Res<assets::DefaultFont>) {
-    let mut pos = sprite::SlotIndex(0).into_position(display.ratio);
-    pos.x -= SLOT_SIZE.x;
-    commands.spawn((
-        SunIndicator,
-        pos,
-        Text2dBundle {
-            text: Text::from_section(
-                "CYAN",
-                TextStyle {
-                    font: font.0.clone(),
-                    font_size: 40.0,
-                    color: Color::LinearRgba(LinearRgba::new(1.0, 1.0, 1.0, 1.0)),
-                },
-            ),
-            transform: Transform::from_xyz(0.0, 0.0, 14.37),
-            ..Default::default()
-        },
-    ));
+fn init_sun(
+    mut commands: Commands,
+    display: Res<game::Display>,
+    font: Res<assets::DefaultFont>,
+    level: Res<level::Level>,
+) {
+    if !level.hide_sun() {
+        let mut pos = sprite::SlotIndex(0).into_position(display.ratio);
+        pos.x -= SLOT_SIZE.x;
+        commands.spawn((
+            SunIndicator,
+            pos,
+            Text2dBundle {
+                text: Text::from_section(
+                    "CYAN",
+                    TextStyle {
+                        font: font.0.clone(),
+                        font_size: 40.0,
+                        color: Color::LinearRgba(LinearRgba::new(1.0, 1.0, 1.0, 1.0)),
+                    },
+                ),
+                transform: Transform::from_xyz(0.0, 0.0, 14.37),
+                ..Default::default()
+            },
+        ));
+    }
 }
 
-fn update_sun(mut sun: ResMut<Sun>, mut q_sun: Query<&mut Text, With<SunIndicator>>) {
+fn update_sun(
+    mut sun: ResMut<Sun>,
+    mut q_sun: Query<&mut Text, With<SunIndicator>>,
+    level: Res<level::Level>,
+) {
+    if level.hide_sun() {
+        sun.0 = SUN_MAGIC;
+        return;
+    }
     if sun.is_changed() {
         let value = if sun.0 == SUN_MAGIC {
             "inf".to_owned()

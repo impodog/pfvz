@@ -13,6 +13,7 @@ impl Plugin for LevelPlugin {
             spawn::LevelSpawnPlugin,
             disp::LevelDispPlugin,
             bgm::LevelBgmPlugin,
+            conveyor::LevelConveyorPlugin,
         ));
     }
 }
