@@ -69,6 +69,20 @@ pub struct MirrorZombie {
     pub cost: u32,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FoodcanZombie {
+    pub velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub foodcan_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub foodcan_health: (u32, u32),
+    pub damage: u32,
+    pub foodcan_damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+
 #[derive(Resource, Serialize, Deserialize, Debug)]
 pub struct ExZombieFactors {
     pub rally: RallyZombie,
@@ -76,6 +90,7 @@ pub struct ExZombieFactors {
     pub giga: GigaAllStarZombie,
     pub sunedit: SundayEditionZombie,
     pub mirror: MirrorZombie,
+    pub foodcan: FoodcanZombie,
 }
 
 fn init_factors(mut commands: Commands) {

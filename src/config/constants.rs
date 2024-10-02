@@ -6,7 +6,8 @@ use crate::prelude::*;
 // (+/-) 1..100 => adventure creatures
 // (+/-) 101..200 => mini game creatures
 // (+/-) 201..300 => adventure non-player non-individual creatures
-// (+/-) 301..400 => adventure expansion creatures
+// (+/-) 301..400 => expansion creatures
+// (+/-) 401..500 => expansion non-player non-individual creatures
 
 pub const PEASHOOTER: Id = -1;
 pub const SUNFLOWER: Id = -2;
@@ -87,6 +88,9 @@ pub const BRICK_ZOMBIE: Id = 302;
 pub const GIGA_ALL_STAR_ZOMBIE: Id = 303;
 pub const SUNDAY_EDITION_ZOMBIE: Id = 304;
 pub const MIRROR_ZOMBIE: Id = 305;
+pub const FOODCAN_ZOMBIE: Id = 306;
+
+pub const FOODCAN: Id = 401;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
@@ -203,6 +207,9 @@ pub fn id_name(id: Id) -> &'static str {
         GIGA_ALL_STAR_ZOMBIE => "giga",
         SUNDAY_EDITION_ZOMBIE => "sunedit",
         MIRROR_ZOMBIE => "mirror",
+        FOODCAN_ZOMBIE => "foodcan",
+
+        FOODCAN => "foodcan_item",
 
         _ => "unknown",
     }

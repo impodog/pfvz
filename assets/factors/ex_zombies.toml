@@ -43,3 +43,14 @@ mirror_box = { width = 0.5, height = 1.0 }
 mirror_health = 550
 cooldown = 5.0
 cost = 200
+[foodcan]
+velocity = [-0.155, -0.15]
+self_box = { width = 0.6, height = 1.1 }
+foodcan_box = { width = 0.4, height = 0.4 }
+self_health = [350, 70]
+foodcan_health = [200, 0]
+damage = 60
+foodcan_damage = 150
+interval = 0.6
+cooldown = 4.0
+cost = 175

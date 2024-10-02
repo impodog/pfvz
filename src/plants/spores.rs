@@ -89,7 +89,7 @@ fn modify_scaredy(
     q_scaredy
         .iter_mut()
         .for_each(|(entity, pos, mut scaredy, mut velocity)| {
-            let range = factors.scaredy_shroom.scare_range.clone() + *pos;
+            let range = factors.scaredy_shroom.scare_range + *pos;
             let mut is_scaredy = false;
             for (zombie_pos, zombie_hitbox) in q_zombie.iter() {
                 if range.contains(zombie_pos, zombie_hitbox) {

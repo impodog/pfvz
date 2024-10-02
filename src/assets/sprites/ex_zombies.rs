@@ -26,6 +26,10 @@ pub struct SpriteExZombies {
     pub mirror: Arc<sprite::FrameArr>,
     pub mirror_damaged: Arc<sprite::FrameArr>,
     pub mirror_zombie_concept: Handle<Image>,
+    pub foodcan: Arc<sprite::FrameArr>,
+    pub foodcan_damaged: Arc<sprite::FrameArr>,
+    pub foodcan_zombie: Arc<sprite::FrameArr>,
+    pub foodcan_zombie_dying: Arc<sprite::FrameArr>,
 }
 
 pub(super) fn init_ex_zombies(mut commands: Commands, server: Res<AssetServer>) {
@@ -126,6 +130,26 @@ pub(super) fn init_ex_zombies(mut commands: Commands, server: Res<AssetServer>) 
             Duration::from_millis(50),
         ),
         mirror_zombie_concept: server.load("sprites/zombies/mirror/concept.png"),
+        foodcan: super::load_animation(
+            &server,
+            "sprites/zombies/foodcan",
+            Duration::from_millis(150),
+        ),
+        foodcan_damaged: super::load_animation(
+            &server,
+            "sprites/zombies/foodcan_damaged",
+            Duration::from_millis(175),
+        ),
+        foodcan_zombie: super::load_animation(
+            &server,
+            "sprites/zombies/foodcan_zombie",
+            Duration::from_millis(250),
+        ),
+        foodcan_zombie_dying: super::load_animation(
+            &server,
+            "sprites/zombies/foodcan_zombie",
+            Duration::from_millis(300),
+        ),
     };
     commands.insert_resource(ex_zombies);
 }

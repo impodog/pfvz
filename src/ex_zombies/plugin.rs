@@ -12,6 +12,7 @@ impl Plugin for ExZombiesPlugin {
             ExZombiesGigaPlugin,
             ExZombiesSuneditPlugin,
             ExZombiesMirrorPlugin,
+            ExZombiesFoodcanPlugin,
         ));
     }
 }

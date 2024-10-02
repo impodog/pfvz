@@ -80,7 +80,7 @@ fn giga_tackle(
         &mut game::VelocityBase,
         &mut sprite::Animation,
     )>,
-    q_creature: Query<(), With<game::Creature>>,
+    q_creature: Query<(), (With<game::Creature>, Without<game::NotPlanted>)>,
     q_zombie: Query<(), With<game::Zombie>>,
     collision: Res<game::Collision>,
     ex_factors: Res<ex_zombies::ExZombieFactors>,
