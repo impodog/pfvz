@@ -82,13 +82,13 @@ fn trashcan_stop(
         Entity,
         &TrashcanBind,
         &mut compn::WalkerImpl,
-        &mut game::Velocity,
+        &mut game::VelocityBase,
     )>,
     commands: ParallelCommands,
 ) {
     q_trashcan
         .par_iter_mut()
-        .for_each(|(entity, bind, mut walker_impl, mut velocity)| {
+        .for_each(|(entity, bind, mut walker_impl, mut velocity_base)| {
             if !q_health.get(bind.0).is_ok_and(|health| !health.is_dying()) {
                 commands.command_scope(|mut commands| {
                     if let Some(mut commands) = commands.get_entity(entity) {
@@ -96,7 +96,7 @@ fn trashcan_stop(
                     }
                 });
                 walker_impl.target = None;
-                velocity.x = 0.0;
+                velocity_base.get_mut().x = 0.0;
             }
         });
 }

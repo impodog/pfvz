@@ -51,6 +51,11 @@ fn switch_to_creature(
                 state.set(almanac::AlmanacStates::Creature);
                 page.0 = usize::MAX;
             }
+        } else {
+            page.0 += 1;
+            if page.0 >= info.pages {
+                page.0 = 0;
+            }
         }
     }
 }
@@ -121,7 +126,7 @@ fn spawn_creature_info(
                 ]),
                 text_2d_bounds: bevy::text::Text2dBounds {
                     size: Vec2::new(
-                        LOGICAL.x - display.ratio * info.begin.x * 2.0,
+                        LOGICAL.x + display.ratio * info.begin.x * 2.0,
                         f32::INFINITY,
                     ),
                 },

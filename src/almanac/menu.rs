@@ -84,6 +84,7 @@ fn init_menu(
             column += 1;
             if column >= info.y {
                 page += 1;
+                column = 0;
             }
         }
     }
