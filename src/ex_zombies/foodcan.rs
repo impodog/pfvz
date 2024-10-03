@@ -94,6 +94,7 @@ fn foodcan_damage(
         commands.spawn((
             *pos,
             *hitbox,
+            game::LayerDisp(0.1),
             level::Banner::new(Duration::from_millis(100)),
             SpriteBundle {
                 texture: chunks.cross.clone(),

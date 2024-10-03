@@ -164,3 +164,25 @@ where
         Ok(Self(map))
     }
 }
+
+impl Serialize for level::LevelIndex {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        [self.stage, self.level].serialize(serializer)
+    }
+}
+
+impl<'de> Deserialize<'de> for level::LevelIndex {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let vec = <[u32; 2]>::deserialize(deserializer)?;
+        Ok(Self {
+            stage: vec[0],
+            level: vec[1],
+        })
+    }
+}

@@ -1,7 +1,7 @@
 [config]
 layout = "Day"
 selection = "Any"
-modify = { give = 0, next = { stage = 1, level = 12 } }
+modify = { give = 0, next = [1, 12] }
 sun = 75
 [[waves]]
 points = 0

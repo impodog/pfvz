@@ -13,20 +13,7 @@ pub struct Wave {
     pub avail: Vec<Id>,
 }
 
-#[derive(
-    Serialize,
-    Deserialize,
-    Resource,
-    Default,
-    Debug,
-    Clone,
-    Copy,
-    PartialEq,
-    Eq,
-    PartialOrd,
-    Ord,
-    Hash,
-)]
+#[derive(Resource, Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct LevelIndex {
     pub stage: u32,
     pub level: u32,

@@ -2,7 +2,7 @@
 selection = "Any"
 layout = "Pool"
 game = ["QuickShot"]
-modify = { give = -21, next = { stage = 3, level = 6 } }
+modify = { give = -21, next = [3, 6] }
 sun = 100
 bgm = "Lb"
 publish = { name = "Crazy Shooterz" }

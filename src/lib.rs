@@ -2,6 +2,7 @@
 #![allow(clippy::too_many_arguments)]
 
 pub mod ach;
+pub mod almanac;
 pub mod assets;
 pub mod choose;
 pub mod collectible;
@@ -53,6 +54,7 @@ pub fn start_pfvz() {
         win::WinPlugin,
         menu::MenuPlugin,
         ach::AchPlugin,
+        almanac::AlmanacPlugin,
     ));
     app.run();
 }

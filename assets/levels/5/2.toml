@@ -1,7 +1,7 @@
 [config]
 selection = "Any"
 layout = "Roof"
-modify = { give = -35, next = { stage = 5, level = 3 } }
+modify = { give = -35, next = [5, 3] }
 sun = 50
 [[waves]]
 points = 0

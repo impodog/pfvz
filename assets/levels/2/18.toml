@@ -1,8 +1,8 @@
 [config]
 selection = "Any"
 layout = "Night"
-modify = { give = 0, next = { stage = 2, level = 18 } }
-sun = 9950
+modify = { give = 0, next = [2, 19] }
+sun = 75
 [[waves]]
 points = 0
 wait = 30.0
@@ -46,7 +46,7 @@ big = false
 fixed = [[302, 1], [3, 2]]
 avail = [1, 2]
 [[waves]]
-points = 500
+points = 600
 wait = 30.0
 big = false
 fixed = [[305, 1], [306, 1]]

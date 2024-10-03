@@ -33,4 +33,13 @@ macro_rules! when_state {
     (achievements) => {
         bevy::prelude::in_state($crate::info::MenuStates::Achievements)
     };
+    (almanac) => {
+        bevy::prelude::in_state($crate::info::MenuStates::Almanac)
+    };
+    (almanac_menu) => {
+        bevy::prelude::in_state($crate::almanac::AlmanacStates::Menu)
+    };
+    (almanac_creature) => {
+        bevy::prelude::in_state($crate::almanac::AlmanacStates::Creature)
+    };
 }

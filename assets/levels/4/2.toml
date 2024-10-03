@@ -1,7 +1,7 @@
 [config]
 selection = "Any"
 layout = "Fog"
-modify = { give = -27, next = { stage = 4, level = 3 } }
+modify = { give = -27, next = [4, 3] }
 sun = 50
 [[waves]]
 points = 0

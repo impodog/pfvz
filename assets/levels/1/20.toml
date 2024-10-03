@@ -2,7 +2,7 @@
 layout = "Day"
 selection = "Any"
 game = ["NoSun"]
-modify = { give = -301, next = { stage = 2, level = 11 } }
+modify = { give = -301, next = [2, 11] }
 sun = 0x4000
 bgm = "Ub"
 publish = { name = "War of the Day" }

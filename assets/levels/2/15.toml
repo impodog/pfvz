@@ -2,7 +2,7 @@
 selection = "Any"
 layout = "Night"
 game = ["WhackAZombie"]
-modify = { give = 0, next = { stage = 2, level = 16 } }
+modify = { give = 0, next = [2, 16] }
 sun = 0xbadeffec
 bgm = "Lb"
 publish = { name = "Whack a Zombie (Ex)" }

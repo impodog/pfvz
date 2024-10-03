@@ -183,7 +183,7 @@ Damage: In other words, the fungi it wakes may cause damage"""
 name = "Zea mays"
 short = "Lobs kernels, 1 butter, and repeat"
 desc = """Lobs kernels at zombies, 1 butter, and repeat
-Damage: 0.5x(kernel) Regular(butter)"""
+Damage: Low(kernel) Regular(butter)"""
 [desc.garlic]
 name = "Allium sativum"
 short = "Makes zombies go to other lanes when bitten"
@@ -214,3 +214,23 @@ name = "Helianthus annuus var. dihelio"
 short = "Gives you more sun, more than just one"
 desc = """Throws sun that you can pick up, or not, I do not care, seriously
 Damage: It's getting more ridiculus"""
+[desc.basic]
+name = "Basic Zombie"
+short = "A regular garden zombie"
+desc = """The first zombie that ever invades your house"""
+[desc.roadcone]
+name = "Conehead Zombie"
+short = "A zombie with a road cone"
+desc = """A little stronger zombie with a road cone"""
+[desc.bucket]
+name = "Buckethead Zombie"
+short = "A zombie with a metal bucket"
+desc = """A much stronger zombie with a metal bucket"""
+[desc.flag]
+name = "Flag Zombie"
+short = "A fast, weak zombie with a flag"
+desc = """A fast, weak zombie with a flag as a sign of incoming zombies"""
+[desc.all_star]
+name = "All-Star Zombie"
+short = "A powerful and strong zombie"
+desc = """A strong zombie that delivers a powerful punch to your plants"""

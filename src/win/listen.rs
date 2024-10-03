@@ -27,6 +27,10 @@ fn update_save(level: Res<level::Level>, mut save: ResMut<save::Save>) {
             save.slots.0 = modify.slots;
         }
     }
+    for wave in level.waves.iter() {
+        save.encounters.extend(wave.fixed.iter().map(|(id, _)| *id));
+        save.encounters.extend(wave.avail.iter().copied());
+    }
 }
 
 fn listen_mouse(

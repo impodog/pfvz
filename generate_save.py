@@ -38,6 +38,7 @@ with open(args.file, "w") as f:
         "selection": [],
         "money": 0,
         "plants": plants,
+        "encounters": [],
         "adventure": adventure,
         "ach": [],
     }

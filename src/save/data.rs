@@ -18,6 +18,7 @@ pub struct Save {
     pub selection: game::Selection,
     pub money: SaveMoney,
     pub plants: BTreeSet<Id>,
+    pub encounters: BTreeSet<Id>,
     pub adventure: BTreeSet<level::LevelIndex>,
     pub ach: BTreeSet<ach::AchId>,
 }

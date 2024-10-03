@@ -18,6 +18,19 @@ pub struct LevelEvent {
 #[derive(Resource, Debug, Clone, Copy, Deref, DerefMut)]
 pub struct LevelSlots(pub usize);
 
+pub struct LevelRatioCalculator {
+    pub x: usize,
+    pub y: usize,
+}
+impl LevelRatioCalculator {
+    fn into_f32(self) -> f32 {
+        (LOGICAL_WIDTH / self.x as f32).min(LOGICAL_HEIGHT / self.y as f32) * 2.0 / 3.0
+    }
+}
+lazy_static! {
+    pub static ref FIXED_RATIO: f32 = LevelRatioCalculator { x: 9, y: 5 }.into_f32();
+}
+
 fn load_level(
     mut commands: Commands,
     mut e_level: EventReader<LevelEvent>,
@@ -36,10 +49,13 @@ fn load_level(
             Ok(content) => match toml::from_str::<level::Level>(&content) {
                 Ok(level) => {
                     let size = level.config.layout.size();
-                    let ratio = (LOGICAL_WIDTH / size.0 as f32).min(LOGICAL_HEIGHT / size.1 as f32)
-                        * 2.0
-                        / 3.0;
-                    commands.insert_resource(game::Display { ratio });
+                    commands.insert_resource(game::Display {
+                        ratio: LevelRatioCalculator {
+                            x: size.0,
+                            y: size.1,
+                        }
+                        .into_f32(),
+                    });
 
                     level.config.selection.modify(selection.as_mut());
                     let slots = if let level::SelectionArr::All(ref vec) = level.config.selection {

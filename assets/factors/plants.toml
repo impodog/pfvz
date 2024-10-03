@@ -286,7 +286,7 @@ snow = { duration = 4.0, factor = 0.0 }
 butter_every = 3
 times = 1
 health = 300
-kernel_damage = 20
+kernel_damage = 25
 butter_damage = 40
 interval = 3.0
 cooldown = 7.5
