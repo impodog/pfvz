@@ -57,6 +57,7 @@ pub const CRATER: Id = -202;
 pub const ICE: Id = -203;
 
 pub const TWIN_SUNFLOWER: Id = -301;
+pub const HOMING_THISTLE: Id = -302;
 
 pub const BASIC_ZOMBIE: Id = 1;
 pub const ROADCONE_ZOMBIE: Id = 2;
@@ -176,6 +177,7 @@ pub fn id_name(id: Id) -> &'static str {
         CRATER => "crater",
 
         TWIN_SUNFLOWER => "twin_sunflower",
+        HOMING_THISTLE => "homing_thistle",
 
         BASIC_ZOMBIE => "basic",
         ROADCONE_ZOMBIE => "roadcone",

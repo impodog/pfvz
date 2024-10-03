@@ -214,6 +214,11 @@ name = "Helianthus annuus var. dihelio"
 short = "Gives you more sun, more than just one"
 desc = """Throws sun that you can pick up, or not, I do not care, seriously
 Damage: It's getting more ridiculus"""
+[desc.homing_thistle]
+name = "Silybum marianum"
+short = "Shoots seeking pricks towards the closest zombie"
+desc = """Shoots seeking pricks towards the closest zombie
+Damage: Medium high"""
 [desc.basic]
 name = "Basic Zombie"
 short = "A regular garden zombie"

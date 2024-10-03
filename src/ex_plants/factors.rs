@@ -21,9 +21,24 @@ pub struct TwinSunflower {
     pub multiplier: f32,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct HomingThistle {
+    pub velocity: game::VelocityX,
+    pub self_box: game::HitBox,
+    pub prick_box: game::HitBox,
+    pub range: game::PositionRangeSerde,
+    pub times: usize,
+    pub health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+
 #[derive(Resource, Serialize, Deserialize, Debug)]
 pub struct ExPlantFactors {
     pub twin_sunflower: TwinSunflower,
+    pub homing_thistle: HomingThistle,
 }
 
 fn init_factors(mut commands: Commands) {

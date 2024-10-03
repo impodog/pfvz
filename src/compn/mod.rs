@@ -1,3 +1,4 @@
+mod aiming;
 mod anim_do;
 mod bowling;
 mod breaks;
@@ -20,6 +21,7 @@ mod squash;
 mod walker;
 mod water;
 
+pub use aiming::*;
 pub use anim_do::*;
 pub use bowling::*;
 pub use breaks::*;

@@ -5,6 +5,10 @@ pub struct ExPlantsPlugin;
 
 impl Plugin for ExPlantsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((ExPlantsFactorsPlugin, ExPlantsProducerPlugin));
+        app.add_plugins((
+            ExPlantsFactorsPlugin,
+            ExPlantsProducerPlugin,
+            ExPlantsThistlePlugin,
+        ));
     }
 }

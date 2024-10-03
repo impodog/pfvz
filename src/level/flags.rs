@@ -21,6 +21,7 @@ bitflags! {
 
         const TERRESTRIAL_PLANT = 0x8001;
         const AQUATIC_PLANT = 0x8002;
+        const TERRESTRIAL_AQUATIC_PLANT = 0x8003;
 
         const LILY_PAD = 0x0102;
         const FLOWER_POT = 0x0105;

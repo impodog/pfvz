@@ -28,6 +28,7 @@ impl Plugin for CompnPlugin {
             fire::CompnFirePlugin,
             divert::CompnDivertPlugin,
             mirror::CompnMirrorPlugin,
+            aiming::CompnAimingPlugin,
         ));
     }
 }

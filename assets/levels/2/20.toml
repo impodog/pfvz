@@ -2,7 +2,7 @@
 layout = "Night"
 selection = "Any"
 game = ["NoSun"]
-modify = { give = -301, next = [2, 11] }
+modify = { give = -302, next = [3, 11] }
 sun = 0x4000
 bgm = "Ub"
 publish = { name = "Night of Terror" }
