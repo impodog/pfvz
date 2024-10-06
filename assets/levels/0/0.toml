@@ -2,7 +2,7 @@
 layout = "Night"
 selection = { "All" = [] }
 game = ["Intro"]
-modify = { give = -1, next = { stage = 1, level = 1 } }
+modify = { give = -1, next = [1, 1] }
 sun = 0
 [[waves]]
 points = 0

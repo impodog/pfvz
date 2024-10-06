@@ -13,3 +13,44 @@ brick_box = { width = 0.5, height = 0.5 }
 brick_health = 2200
 cooldown = 5.0
 cost = 175
+[giga]
+velocity_running = [-1.7, -1.695]
+velocity = [-0.095, -0.09]
+self_box = { width = 0.7, height = 1.2 }
+helmet_box = { width = 0.4, height = 0.4 }
+slide_distance = 2.8
+self_health = [250, 50]
+helmet_health = 1500
+damage = 60
+interval = 0.8
+tackle_damage = 2000
+cooldown = 7.5
+cost = 250
+[sunedit]
+velocity = [-0.095, -0.09]
+rage_velocity = [-0.365, -0.36]
+self_box = { width = 0.6, height = 1.1 }
+sunedit_box = { width = 0.7, height = 0.8 }
+self_health = [420, 70]
+sunedit_health = 1800
+damage = 60
+interval = 0.6
+rage_interval = 0.15
+cooldown = 7.5
+cost = 250
+[mirror]
+mirror_box = { width = 0.5, height = 1.0 }
+mirror_health = 550
+cooldown = 5.0
+cost = 200
+[foodcan]
+velocity = [-0.155, -0.15]
+self_box = { width = 0.6, height = 1.1 }
+foodcan_box = { width = 0.4, height = 0.4 }
+self_health = [350, 70]
+foodcan_health = [200, 0]
+damage = 60
+foodcan_damage = 150
+interval = 0.6
+cooldown = 4.0
+cost = 175

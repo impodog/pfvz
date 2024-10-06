@@ -27,7 +27,7 @@ game_conf!(breaks TrashcanBreaks);
 game_conf!(walker TrashcanWalker);
 
 #[derive(Component, Debug, Clone)]
-struct TrashcanBind(Entity);
+pub struct TrashcanBind(pub Entity);
 
 fn spawn_trashcan_zombie(
     In(pos): In<game::LogicPosition>,
@@ -77,21 +77,26 @@ fn spawn_trashcan_zombie(
 }
 
 fn trashcan_stop(
-    mut commands: Commands,
+    q_health: Query<&game::Health>,
     mut q_trashcan: Query<(
         Entity,
         &TrashcanBind,
         &mut compn::WalkerImpl,
-        &mut game::Velocity,
+        &mut game::VelocityBase,
     )>,
+    commands: ParallelCommands,
 ) {
     q_trashcan
-        .iter_mut()
-        .for_each(|(entity, bind, mut walker_impl, mut velocity)| {
-            if commands.get_entity(bind.0).is_none() {
-                commands.entity(entity).remove::<TrashcanBind>();
+        .par_iter_mut()
+        .for_each(|(entity, bind, mut walker_impl, mut velocity_base)| {
+            if !q_health.get(bind.0).is_ok_and(|health| !health.is_dying()) {
+                commands.command_scope(|mut commands| {
+                    if let Some(mut commands) = commands.get_entity(entity) {
+                        commands.remove::<TrashcanBind>();
+                    }
+                });
                 walker_impl.target = None;
-                velocity.x = 0.0;
+                velocity_base.get_mut().x = 0.0;
             }
         });
 }
@@ -116,6 +121,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: TRASHCAN_ZOMBIE,
             systems: trashcan_zombie_systems
                 .read()
                 .unwrap()
@@ -131,10 +137,11 @@ fn init_config(
             hitbox: factors.trashcan.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(TRASHCAN_ZOMBIE, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: TRASHCAN,
             systems: trashcan_systems
                 .read()
                 .unwrap()
@@ -150,6 +157,6 @@ fn init_config(
             hitbox: factors.trashcan.trashcan_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(TRASHCAN, creature);
+        map.insert(creature);
     }
 }

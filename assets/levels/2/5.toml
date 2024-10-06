@@ -2,9 +2,10 @@
 selection = { "All" = [-3, -11] }
 layout = "Night"
 game = ["WhackAZombie"]
-modify = { give = -13, next = { stage = 2, level = 6 } }
+modify = { give = -13, next = [2, 6] }
 sun = 0
 bgm = "Lb"
+publish = { name = "Whack a Zombie" }
 [[waves]]
 points = 300
 wait = 20.0

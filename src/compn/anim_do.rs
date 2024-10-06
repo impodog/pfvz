@@ -36,7 +36,7 @@ fn start_animation(
         commands.entity(entity).try_insert(AtdImpl {
             prev: anim.frames(),
         });
-        anim.replace(atd.anim.clone());
+        anim.reset(atd.anim.clone());
     });
 }
 
@@ -50,7 +50,7 @@ fn work_atd(
         .for_each(|(entity, atd, atd_impl, mut anim)| {
             if anim.just_finished() {
                 work.write().unwrap().push((atd.work, entity));
-                anim.replace(atd_impl.prev.clone());
+                anim.reset(atd_impl.prev.clone());
             }
         });
     let work = RwLock::into_inner(work).unwrap();

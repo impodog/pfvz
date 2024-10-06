@@ -1,5 +1,6 @@
 mod columns;
 mod fog;
+mod infi_sun;
 mod intro;
 mod plugin;
 mod quick_shot;

@@ -50,6 +50,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: BOWLING_NUT,
             systems: bowling_nut_systems
                 .read()
                 .unwrap()
@@ -60,6 +61,6 @@ fn init_config(
             hitbox: factors.bowling_nut.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(BOWLING_NUT, creature);
+        map.insert(creature);
     }
 }

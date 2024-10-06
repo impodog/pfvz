@@ -1,0 +1,68 @@
+[config]
+layout = "Night"
+selection = "Any"
+game = ["NoSun"]
+modify = { give = -302, next = [3, 11] }
+sun = 0x4000
+bgm = "Ub"
+publish = { name = "Night of Terror" }
+[[waves]]
+points = 0
+wait = 0.0
+big = false
+fixed = [[1, 1]]
+avail = []
+[[waves]]
+points = 300
+wait = 20.0
+big = true
+fixed = [[301, 1], [305, 1], [303, 1]]
+avail = [1, 2, 3, 6, 7]
+[[waves]]
+points = 400
+wait = 30.0
+big = true
+fixed = [[301, 2], [303, 2], [5, 2]]
+avail = [1, 2, 3, 6, 7]
+[[waves]]
+points = 500
+wait = 30.0
+big = true
+fixed = [[301, 3], [302, 3], [10, 3]]
+avail = [1, 2, 3, 6, 7, 8, 302]
+[[waves]]
+points = 600
+wait = 30.0
+big = true
+fixed = [[301, 4], [303, 2], [10, 2], [15, 2]]
+avail = [1, 2, 3, 6, 7, 8, 302]
+[[waves]]
+points = 700
+wait = 30.0
+big = true
+fixed = [[301, 5], [305, 3], [303, 2], [10, 2]]
+avail = [1, 2, 3, 6, 7, 302]
+[[waves]]
+points = 800
+wait = 30.0
+big = true
+fixed = [[301, 6], [303, 1], [304, 3], [305, 1], [306, 3]]
+avail = [1, 2, 3, 6, 7, 8, 302]
+[[waves]]
+points = 900
+wait = 30.0
+big = true
+fixed = [[301, 7], [302, 2], [303, 3], [10, 1]]
+avail = [1, 2, 3, 6, 7, 302]
+[[waves]]
+points = 1000
+wait = 40.0
+big = true
+fixed = [[301, 8], [302, 2], [10, 2], [15, 1], [305, 2], [304, 4]]
+avail = [1, 2, 3, 6, 7, 8, 302]
+[[waves]]
+points = 1500
+wait = 50.0
+big = true
+fixed = [[301, 9], [302, 2], [303, 10], [305, 10], [306, 2]]
+avail = [1, 2, 3, 6, 7, 8, 302, 304, 305]

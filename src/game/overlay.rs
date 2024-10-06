@@ -25,6 +25,10 @@ impl Overlay {
     pub fn delta(&self) -> Duration {
         self.delta
     }
+
+    pub fn delta_secs(&self) -> f32 {
+        self.delta.as_secs_f32()
+    }
 }
 
 fn add_overlay(mut commands: Commands, q_creature: Query<Entity, Added<game::Creature>>) {

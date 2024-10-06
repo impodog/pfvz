@@ -1,9 +1,10 @@
 [config]
 layout = "Day"
 selection = { "All" = [-2, -3, -101] }
-modify = { give = -5, next = { stage = 1, level = 6 } }
+modify = { give = -5, next = [1, 6] }
 sun = 125
 bgm = "Lb"
+publish = { name = "Bowling" }
 [[waves]]
 points = 0
 wait = 20.0

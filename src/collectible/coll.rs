@@ -9,8 +9,10 @@ impl Plugin for CollectibleCollPlugin {
     }
 }
 
-#[derive(Component, Debug, Clone)]
+#[derive(Component, Debug, Clone, Default)]
 pub enum Collectible {
+    #[default]
+    Nothing,
     /// When collected, get sun value equal to sun_value(from config) * self.0
     Sun(f32),
 }
@@ -45,6 +47,7 @@ fn add_components(
     q_sun
         .iter()
         .for_each(|(entity, collectible)| match collectible {
+            Collectible::Nothing => {}
             Collectible::Sun(sun) => {
                 commands.entity(entity).insert((
                     // The square root makes the size of the box represent the value, rather than

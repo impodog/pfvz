@@ -112,6 +112,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: MELON_PULT,
             systems: melon_systems
                 .read()
                 .unwrap()
@@ -127,6 +128,6 @@ fn init_config(
             hitbox: factors.melon_pult.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(MELON_PULT, creature);
+        map.insert(creature);
     }
 }

@@ -100,6 +100,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: SNORKEL_ZOMBIE,
             systems: snorkel_zombie_systems
                 .read()
                 .unwrap()
@@ -115,6 +116,6 @@ fn init_config(
             hitbox: factors.snorkel.self_box,
             flags: level::CreatureFlags::AQUATIC_ZOMBIE,
         }));
-        map.0.insert(SNORKEL_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

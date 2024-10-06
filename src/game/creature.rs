@@ -13,8 +13,14 @@ impl Plugin for GameCreaturePlugin {
 #[derive(Component, Debug, Clone, Deref, DerefMut)]
 pub struct Creature(pub Arc<CreatureShared>);
 
-#[derive(Resource, Debug, Clone, Default, Deref, DerefMut)]
-pub struct CreatureMap(pub HashMap<Id, Creature>);
+#[derive(Resource, Debug, Clone, Default, Deref)]
+pub struct CreatureMap(HashMap<Id, Creature>);
+
+impl CreatureMap {
+    pub fn insert(&mut self, creature: Creature) {
+        self.0.insert(creature.id, creature);
+    }
+}
 
 #[derive(Debug, Clone, Copy)]
 pub struct CreatureSystems {
@@ -34,6 +40,7 @@ impl Default for CreatureSystems {
 
 #[derive(Debug, Clone, Deref, DerefMut)]
 pub struct CreatureShared {
+    pub id: Id,
     #[deref]
     pub systems: CreatureSystems,
     pub cost: u32,

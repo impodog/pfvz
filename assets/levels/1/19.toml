@@ -1,0 +1,77 @@
+[config]
+layout = "Day"
+selection = "Any"
+modify = { give = 0, next = [1, 20] }
+sun = 75
+[[waves]]
+points = 0
+wait = 30.0
+big = false
+fixed = [[3, 2], [2, 1]]
+avail = []
+[[waves]]
+points = 0
+wait = 30.0
+big = false
+fixed = [[1, 3], [2, 1], [302, 1]]
+avail = []
+[[waves]]
+points = 0
+wait = 40.0
+big = false
+fixed = [[1, 2], [7, 1], [303, 1]]
+avail = []
+[[waves]]
+points = 200
+wait = 50.0
+big = true
+fixed = [[301, 1], [3, 2], [5, 2]]
+avail = [1, 2]
+[[waves]]
+points = 300
+wait = 30.0
+big = false
+fixed = [[303, 1], [302, 1]]
+avail = [1, 3, 7]
+[[waves]]
+points = 400
+wait = 40.0
+big = false
+fixed = [[1, 3], [302, 1], [10, 1]]
+avail = [2, 3]
+[[waves]]
+points = 400
+wait = 30.0
+big = false
+fixed = [[302, 2], [303, 1], [7, 1]]
+avail = [1, 2, 3, 5]
+[[waves]]
+points = 500
+wait = 40.0
+big = true
+fixed = [[301, 2], [303, 2], [302, 3]]
+avail = [1, 2, 3, 7]
+[[waves]]
+points = 500
+wait = 30.0
+big = false
+fixed = [[302, 2], [10, 2]]
+avail = [2, 3, 5, 7]
+[[waves]]
+points = 500
+wait = 40.0
+big = false
+fixed = [[1, 5], [7, 1], [2, 1], [5, 1]]
+avail = [3, 5]
+[[waves]]
+points = 700
+wait = 30.0
+big = false
+fixed = [[303, 1], [302, 2]]
+avail = [1, 2, 3]
+[[waves]]
+points = 1000
+wait = 50.0
+big = true
+fixed = [[301, 3], [302, 3], [303, 2], [10, 2]]
+avail = [2, 3, 5, 7, 302]

@@ -134,6 +134,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: POGO_ZOMBIE,
             systems: pogo_zombie_systems
                 .read()
                 .unwrap()
@@ -149,6 +150,6 @@ fn init_config(
             hitbox: factors.pogo.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(POGO_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

@@ -22,5 +22,6 @@ impl Plugin for ZombiesPlugin {
             gargantuar::ZombiesGargantuarPlugin,
             baseball::ZombiesBaseballPlugin,
         ));
+        app.add_plugins((zomboss::ZombiesZombossPlugin,));
     }
 }

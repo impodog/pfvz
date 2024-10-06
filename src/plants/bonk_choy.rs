@@ -89,6 +89,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: BONK_CHOY,
             systems: bonk_choy_systems
                 .read()
                 .unwrap()
@@ -104,6 +105,6 @@ fn init_config(
             hitbox: factors.bonk_choy.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(BONK_CHOY, creature);
+        map.insert(creature);
     }
 }

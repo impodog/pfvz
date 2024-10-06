@@ -19,11 +19,13 @@ plants -= args.level // 5
 slots = args.stage + 5
 
 adventure = list()
+plants = [i for i in range(-plants, 0)]
 for stage_index in range(1, args.stage + 1):
     if stage_index == args.stage:
         level_max = args.level
     elif args.expansion:
         level_max = 20
+        plants.append(-(stage_index + 300))
     else:
         level_max = 11
 
@@ -35,7 +37,8 @@ with open(args.file, "w") as f:
         "slots": slots,
         "selection": [],
         "money": 0,
-        "plants": [i for i in range(-plants, 0)],
+        "plants": plants,
+        "encounters": [],
         "adventure": adventure,
         "ach": [],
     }

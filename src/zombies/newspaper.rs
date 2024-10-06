@@ -6,7 +6,6 @@ impl Plugin for ZombiesNewspaperPlugin {
     fn build(&self, app: &mut App) {
         initialize(&newspaper_zombie_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (newspaper_rage,));
         *newspaper_zombie_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_newspaper_zombie),
             ..Default::default()
@@ -14,11 +13,9 @@ impl Plugin for ZombiesNewspaperPlugin {
     }
 }
 
-#[derive(Component, Debug, Clone)]
-struct NewspaperRage(Entity);
-
 game_conf!(walker NewspaperZombieWalker);
 game_conf!(walker NewspaperZombieRageWalker);
+game_conf!(dog NewspaperDog);
 game_conf!(breaks NewspaperBreaks);
 game_conf!(systems newspaper_zombie_systems);
 
@@ -30,6 +27,7 @@ fn spawn_newspaper_zombie(
     map: Res<game::CreatureMap>,
     walker: Res<NewspaperZombieWalker>,
     breaks: Res<NewspaperBreaks>,
+    dog: Res<NewspaperDog>,
 ) {
     let creature = map.get(&NEWSPAPER_ZOMBIE).unwrap();
     let entity = commands
@@ -55,45 +53,15 @@ fn spawn_newspaper_zombie(
             game::Armor::new(factors.newspaper.newspaper_health),
             compn::Breaks(breaks.0.clone()),
             compn::UnsnowParent { absolute: false },
-            SpriteBundle {
-                transform: Transform::from_translation(Vec3::new(0.0, 0.0, 0.1)),
-                ..SpriteBundle::default()
-            },
+            game::LayerDisp(0.1),
+            SpriteBundle::default(),
         ))
         .set_parent(entity)
         .id();
-    commands.entity(entity).insert(NewspaperRage(newspaper));
-}
-
-fn newspaper_rage(
-    commands: ParallelCommands,
-    factors: Res<zombies::ZombieFactors>,
-    rage_walker: Res<NewspaperZombieRageWalker>,
-    mut q_rage: Query<(
-        Entity,
-        &NewspaperRage,
-        &mut compn::Walker,
-        &mut game::Velocity,
-        &mut game::VelocityBase,
-    )>,
-) {
-    q_rage.par_iter_mut().for_each(
-        |(entity, rage, mut walker, mut velocity, mut velocity_base)| {
-            let ok = commands.command_scope(|mut commands| {
-                if commands.get_entity(rage.0).is_none() {
-                    commands.entity(entity).remove::<NewspaperRage>();
-                    true
-                } else {
-                    false
-                }
-            });
-            if ok {
-                walker.0.clone_from(&rage_walker.0);
-                *velocity = factors.newspaper.rage_velocity.into();
-                velocity_base.replace(*velocity);
-            }
-        },
-    );
+    commands.entity(entity).try_insert(compn::Dog {
+        shared: dog.0.clone(),
+        owner: newspaper,
+    });
 }
 
 fn init_config(
@@ -106,16 +74,23 @@ fn init_config(
         interval: Duration::from_secs_f32(factors.newspaper.interval),
         damage: factors.newspaper.damage,
     })));
-    commands.insert_resource(NewspaperZombieRageWalker(Arc::new(compn::WalkerShared {
+    let rage_walker = Arc::new(compn::WalkerShared {
         interval: Duration::from_secs_f32(factors.newspaper.rage_interval),
         damage: factors.newspaper.damage,
-    })));
+    });
+    commands.insert_resource(NewspaperZombieRageWalker(rage_walker.clone()));
     commands.insert_resource(NewspaperBreaks(Arc::new(compn::BreaksShared {
         v: vec![zombies.newspaper.clone(), zombies.newspaper_broken.clone()],
         init: factors.newspaper.newspaper_health,
     })));
+    commands.insert_resource(NewspaperDog(Arc::new(compn::DogShared {
+        angry_velocity: factors.newspaper.rage_velocity.into(),
+        angry_walker: Some(rage_walker),
+        ..Default::default()
+    })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: NEWSPAPER_ZOMBIE,
             systems: newspaper_zombie_systems
                 .read()
                 .unwrap()
@@ -131,6 +106,6 @@ fn init_config(
             hitbox: factors.newspaper.self_box,
             flags: level::CreatureFlags::GROUND_ZOMBIE,
         }));
-        map.insert(NEWSPAPER_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

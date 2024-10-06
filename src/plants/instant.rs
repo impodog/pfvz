@@ -36,6 +36,7 @@ fn spawn_ice_shroom(
     commands.spawn((
         game::Plant,
         compn::Mushroom::default(),
+        compn::NeverKillWhenActive,
         creature.clone(),
         pos,
         sprite::Animation::new(plants.ice_shroom.clone()),
@@ -85,6 +86,7 @@ fn spawn_doom_shroom(
     commands.spawn((
         game::Plant,
         compn::Mushroom::default(),
+        compn::NeverKillWhenActive,
         creature.clone(),
         pos,
         sprite::Animation::new(plants.doom_shroom.clone()),
@@ -130,6 +132,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: ICE_SHROOM,
             systems: ice_shroom_systems
                 .read()
                 .unwrap()
@@ -145,10 +148,11 @@ fn init_config(
             hitbox: factors.ice_shroom.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(ICE_SHROOM, creature);
+        map.insert(creature);
     }
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: DOOM_SHROOM,
             systems: doom_shroom_systems
                 .read()
                 .unwrap()
@@ -164,6 +168,6 @@ fn init_config(
             hitbox: factors.doom_shroom.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(DOOM_SHROOM, creature);
+        map.insert(creature);
     }
 }

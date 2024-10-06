@@ -120,6 +120,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: CHERRY_BOMB,
             systems: cherry_bomb_systems
                 .read()
                 .unwrap()
@@ -135,7 +136,7 @@ fn init_config(
             hitbox: factors.cherry_bomb.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(CHERRY_BOMB, creature);
+        map.insert(creature);
     }
     commands.insert_resource(PotatoMineExplode(Arc::new(compn::ExplodeShared {
         anim: plants.spudow.clone(),
@@ -145,6 +146,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: POTATO_MINE,
             systems: potato_mine_systems
                 .read()
                 .unwrap()
@@ -160,7 +162,7 @@ fn init_config(
             hitbox: factors.potato_mine.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(POTATO_MINE, creature);
+        map.insert(creature);
     }
     commands.insert_resource(JalapenoExplode(Arc::new(compn::ExplodeShared {
         anim: plants.boom.clone(),
@@ -170,6 +172,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: JALAPENO,
             systems: jalapeno_systems
                 .read()
                 .unwrap()
@@ -185,6 +188,6 @@ fn init_config(
             hitbox: factors.jalapeno.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(JALAPENO, creature);
+        map.insert(creature);
     }
 }

@@ -14,6 +14,7 @@ mod pogo;
 mod snorkel;
 mod trashcan;
 mod zomboni;
+mod zomboss;
 
 pub use all_star::*;
 pub use balloon::*;
@@ -31,3 +32,4 @@ pub use pogo::*;
 pub use snorkel::*;
 pub use trashcan::*;
 pub use zomboni::*;
+pub use zomboss::*;

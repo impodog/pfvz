@@ -6,17 +6,17 @@ self_health = [100, 70]
 arm_health = 100
 damage = 60
 interval = 0.6
-cooldown = 1.0
+cooldown = 0.5
 cost = 50
 [roadcone]
 roadcone_box = { width = 0.3, height = 0.6 }
 roadcone_health = 370
-cooldown = 1.5
+cooldown = 1.0
 cost = 75
 [bucket]
 bucket_box = { width = 0.5, height = 0.5 }
 bucket_health = 1100
-cooldown = 2.0
+cooldown = 1.5
 cost = 125
 [flag]
 velocity = [-0.185, -0.18]
@@ -174,3 +174,10 @@ interval = 0.6
 baseball_interval = 3.0
 cooldown = 3.0
 cost = 125
+[zomboss]
+head_box = { width = 2.0, height = 2.0 }
+body_box = { width = 3.0, height = 3.0 }
+arm_box = { width = 2.0, height = 3.0 }
+legs_box = { width = 3.0, height = 4.0 }
+cooldown = 99999.0
+cost = 99900

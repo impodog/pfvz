@@ -19,6 +19,7 @@ pub enum AchId {
     FungiParty,
     DarkRules,
     SpeedRun101,
+    WhoCares,
 }
 
 impl AchId {
@@ -29,6 +30,7 @@ impl AchId {
             Self::FungiParty => "fungi_party",
             Self::DarkRules => "dark_rules",
             Self::SpeedRun101 => "speed_run_101",
+            Self::WhoCares => "who_cares",
         }
     }
 }

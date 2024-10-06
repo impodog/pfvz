@@ -17,7 +17,9 @@ fn save_selection(
     level: Res<level::Level>,
 ) {
     if let level::SelectionArr::Any = &level.config.selection {
-        save.selection.0.clone_from(&sel.0);
+        if level.conveyor.is_none() {
+            save.selection.0.clone_from(&sel.0);
+        }
     }
 }
 

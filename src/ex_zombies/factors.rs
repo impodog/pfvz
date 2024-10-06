@@ -30,10 +30,67 @@ pub struct BrickZombie {
     pub cost: u32,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct GigaAllStarZombie {
+    pub velocity_running: game::VelocityXRange,
+    pub velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub helmet_box: game::HitBox,
+    pub slide_distance: f32,
+    pub self_health: (u32, u32),
+    pub helmet_health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub tackle_damage: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SundayEditionZombie {
+    pub velocity: game::VelocityXRange,
+    pub rage_velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub sunedit_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub sunedit_health: u32,
+    pub damage: u32,
+    pub interval: f32,
+    pub rage_interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MirrorZombie {
+    pub mirror_box: game::HitBox,
+    pub mirror_health: u32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FoodcanZombie {
+    pub velocity: game::VelocityXRange,
+    pub self_box: game::HitBox,
+    pub foodcan_box: game::HitBox,
+    pub self_health: (u32, u32),
+    pub foodcan_health: (u32, u32),
+    pub damage: u32,
+    pub foodcan_damage: u32,
+    pub interval: f32,
+    pub cooldown: f32,
+    pub cost: u32,
+}
+
 #[derive(Resource, Serialize, Deserialize, Debug)]
 pub struct ExZombieFactors {
     pub rally: RallyZombie,
     pub brick: BrickZombie,
+    pub giga: GigaAllStarZombie,
+    pub sunedit: SundayEditionZombie,
+    pub mirror: MirrorZombie,
+    pub foodcan: FoodcanZombie,
 }
 
 fn init_factors(mut commands: Commands) {

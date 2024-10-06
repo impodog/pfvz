@@ -1,7 +1,7 @@
 [config]
 selection = "Any"
 layout = "Pool"
-modify = { give = -19, next = { stage = 3, level = 3 } }
+modify = { give = -19, next = [3, 3] }
 sun = 50
 [[waves]]
 points = 0

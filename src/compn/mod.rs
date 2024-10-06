@@ -1,3 +1,4 @@
+mod aiming;
 mod anim_do;
 mod bowling;
 mod breaks;
@@ -9,6 +10,7 @@ mod dying;
 mod explode;
 mod fire;
 mod instant;
+mod mirror;
 mod mushroom;
 mod plugin;
 mod producer;
@@ -19,6 +21,7 @@ mod squash;
 mod walker;
 mod water;
 
+pub use aiming::*;
 pub use anim_do::*;
 pub use bowling::*;
 pub use breaks::*;
@@ -29,6 +32,7 @@ pub use dying::*;
 pub use explode::*;
 pub use fire::*;
 pub use instant::*;
+pub use mirror::*;
 pub use mushroom::*;
 pub use plugin::*;
 pub use producer::*;

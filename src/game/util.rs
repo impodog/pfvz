@@ -26,6 +26,10 @@ macro_rules! game_conf {
         #[derive(Resource, Clone, Deref, DerefMut)]
         pub struct $name(pub Arc<$crate::compn::ExplodeShared>);
     };
+    (dog $name: ident) => {
+        #[derive(Resource, Clone, Deref, DerefMut)]
+        pub struct $name(pub Arc<$crate::compn::DogShared>);
+    };
     (systems $name: ident) => {
         lazy_static! {
             pub static ref $name: RwLock<Option<$crate::game::CreatureSystems>> = RwLock::new(None);

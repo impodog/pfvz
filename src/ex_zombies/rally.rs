@@ -140,6 +140,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: RALLY_ZOMBIE,
             systems: rally_zombie_systems
                 .read()
                 .unwrap()
@@ -150,6 +151,6 @@ fn init_config(
             hitbox: factors.basic.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(RALLY_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

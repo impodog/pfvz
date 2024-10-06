@@ -71,11 +71,23 @@ fn spawn_layout(
             ));
         }
     }
-    for pos in 0..slots.0 {
-        let pos = SlotIndex(pos).into_position(display.ratio);
+    let is_conveyor = level.conveyor.is_some();
+    for index in 0..slots.0 {
+        let pos = SlotIndex(index).into_position(display.ratio);
+        let texture = if is_conveyor {
+            if index == 0 {
+                sp_chunks.conveyor_left.clone()
+            } else if index == slots.0 - 1 {
+                sp_chunks.conveyor_right.clone()
+            } else {
+                sp_chunks.conveyor_mid.clone()
+            }
+        } else {
+            sp_chunks.slot.clone()
+        };
         commands.spawn((
             SpriteBundle {
-                texture: sp_chunks.slot.clone(),
+                texture,
                 transform: Transform {
                     translation: Vec3::new(0.0, 0.0, 14.37),
                     ..Default::default()

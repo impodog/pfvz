@@ -36,6 +36,10 @@ pub struct Exciting {
     pub standard: usize,
     pub sun_standard: u32,
 }
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Pause {
+    pub rotate_speed: f32,
+}
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct ItemFactors {
@@ -44,6 +48,7 @@ pub struct ItemFactors {
     pub fog: Fog,
     pub thunder: Thunder,
     pub exciting: Exciting,
+    pub pause: Pause,
 }
 
 fn init_factors(mut commands: Commands) {

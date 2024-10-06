@@ -137,6 +137,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: KERNEL_PULT,
             systems: kernel_pult_systems
                 .read()
                 .unwrap()
@@ -152,6 +153,6 @@ fn init_config(
             hitbox: factors.kernel_pult.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(KERNEL_PULT, creature);
+        map.insert(creature);
     }
 }

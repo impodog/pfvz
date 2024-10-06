@@ -48,7 +48,14 @@ impl Animation {
         }
     }
 
+    /// Replace to the new frames immediately, may cause time of animation shorter
     pub fn replace(&mut self, frames: Arc<FrameArr>) {
+        self.reset(frames);
+        self.timer.set_elapsed(self.timer.duration());
+    }
+
+    /// Replace to the new frames, then reset the timer, so that the animation is fully played
+    pub fn reset(&mut self, frames: Arc<FrameArr>) {
         self.timer = Timer::new(frames.delta, TimerMode::Repeating);
         self.frames = frames;
         self.cursor = 0;

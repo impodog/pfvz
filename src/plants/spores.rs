@@ -89,7 +89,7 @@ fn modify_scaredy(
     q_scaredy
         .iter_mut()
         .for_each(|(entity, pos, mut scaredy, mut velocity)| {
-            let range = factors.scaredy_shroom.scare_range.clone() + *pos;
+            let range = factors.scaredy_shroom.scare_range + *pos;
             let mut is_scaredy = false;
             for (zombie_pos, zombie_hitbox) in q_zombie.iter() {
                 if range.contains(zombie_pos, zombie_hitbox) {
@@ -139,6 +139,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: PUFF_SHROOM,
             systems: puff_shroom_systems
                 .read()
                 .unwrap()
@@ -154,7 +155,7 @@ fn init_config(
             hitbox: factors.puff_shroom.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(PUFF_SHROOM, creature);
+        map.insert(creature);
     }
     {
         commands.insert_resource(ScaredyShroomShooter(Arc::new(compn::ShooterShared {
@@ -171,6 +172,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: SCAREDY_SHROOM,
             systems: scaredy_shroom_systems
                 .read()
                 .unwrap()
@@ -186,6 +188,6 @@ fn init_config(
             hitbox: factors.scaredy_shroom.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(SCAREDY_SHROOM, creature);
+        map.insert(creature);
     }
 }

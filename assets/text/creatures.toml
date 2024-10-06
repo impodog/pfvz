@@ -183,7 +183,7 @@ Damage: In other words, the fungi it wakes may cause damage"""
 name = "Zea mays"
 short = "Lobs kernels, 1 butter, and repeat"
 desc = """Lobs kernels at zombies, 1 butter, and repeat
-Damage: 0.5x(kernel) Regular(butter)"""
+Damage: Low(kernel) Regular(butter)"""
 [desc.garlic]
 name = "Allium sativum"
 short = "Makes zombies go to other lanes when bitten"
@@ -209,3 +209,132 @@ name = "Chrysogonum virginianum"
 short = "Gives a burst of sun"
 desc = """Gives you a burst of sun when planted
 Damage: This is non-attacking"""
+[desc.twin_sunflower]
+name = "Helianthus annuus var. dihelio"
+short = "Gives you more sun, more than just one"
+desc = """Throws sun that you can pick up, or not, I do not care, seriously
+Damage: It's getting more ridiculus"""
+[desc.homing_thistle]
+name = "Silybum marianum"
+short = "Shoots seeking pricks towards the closest zombie"
+desc = """Shoots seeking pricks towards the closest zombie
+Damage: Medium high"""
+[desc.basic]
+name = "Basic Zombie"
+short = "A regular garden zombie"
+desc = """The first zombie that ever invades your house
+Health: Basic"""
+[desc.roadcone]
+name = "Conehead Zombie"
+short = "A zombie with a road cone"
+desc = """A little stronger zombie with a road cone
+Health: Lv. 1"""
+[desc.bucket]
+name = "Buckethead Zombie"
+short = "A zombie with a metal bucket"
+desc = """A much stronger zombie with a metal bucket
+Health: Lv. 3"""
+[desc.flag]
+name = "Flag Zombie"
+short = "A fast, weak zombie with a flag"
+desc = """A fast, weak zombie with a flag as a sign of incoming zombies
+Health: Lv. 1-"""
+[desc.all_star]
+name = "All-Star Zombie"
+short = "A powerful and strong zombie"
+desc = """A strong zombie that delivers a powerful punch to your plants
+Health: Lv. 2"""
+[desc.newspaper]
+name = "Newspaper Zombie"
+short = "A zombie that gets really angry after the newspaper breaks"
+desc = """A zombie that gets angry after the newspaper breaks, deals massive damage
+Health: Lv. 2-"""
+[desc.screen_door]
+name = "Screen-Door Zombie"
+short = "A zombie with screen-door, protecting it from being slowed down"
+desc = """A strong zombie with a screen-door, protecting it from begin slowed down
+Health: Lv. 3"""
+[desc.trashcan]
+name = "Trashcan Zombie"
+short = "A zombie that pushes a trashcan onto your lawn"
+desc = """A zombie that pushes a trashcan onto your lawn
+Health: Lv. 2-"""
+[desc.snorkel]
+name = "Snorkel Zombie"
+short = "A zombie that hides into the pool, avoiding attacks"
+desc = """A zombie that hides into the pool, avoiding attacks
+Health: Lv. 2"""
+[desc.zomboni]
+name = "Zomboni"
+short = "A fast, strong zombie. Leaves trails."
+desc = """A fast, strong zombie that leaves trails and challenges your defense line
+Health: Lv. 3"""
+[desc.dancing]
+name = "Dancing Zombie"
+short = "A zombie that summons other zombies to support its attack"
+desc = """A zombie that summons other zombies to support its attack
+Health: Lv. 2"""
+[desc.jitb]
+name = "Jack-in-the-box Zombie"
+short = "A zombie that explodes on contact"
+desc = """A very dangerous zombie that explodes on contact, dealing massive damage
+Health: Lv. 1"""
+[desc.balloon]
+name = "Balloon Zombie"
+short = "A zombie that flies over most of your defense, however, can be hit with taller plants"
+desc = """A zombie that can fly over most of your defense, however, can be defended using flower pots can lobbing plants
+Health: Basic"""
+[desc.digger]
+name = "Digger Zombie"
+short = "A zombie that digs through the lawn"
+desc = """A zombie that digs through the lawn, and attacks from the back
+Health: Lv. 1-"""
+[desc.pogo]
+name = "Pogo Zombie"
+short = "A jumping zombie that goes over your plants"
+desc = """A jumping zombie over your plants, but can be blocked using tall plants
+Health: Lv. 1"""
+[desc.gargantuar]
+name = "Gargantuar"
+short = "A huge and strong zombie that can smash your plants"
+desc = """A huge and strong zombie that smashes your plants
+Health: Lv. 6"""
+[desc.baseball]
+name = "Baseball Zombie"
+short = "A zombie that throws baseballs at your most costly plant"
+desc = """A zombie that targets your most costly plant, hitting it with baseballs
+Health: Lv. 1"""
+[desc.rally]
+name = "Rally Zombie"
+short = "A zombie that leads to extreme attacks!"
+desc = """A zombie that speeds up nearing zombies, often leading to an extreme attack
+Health: Lv. 1"""
+[desc.brick]
+name = "Brickhead Zombie"
+short = "A very strong zombie"
+desc = """A very strong zombie with bricks on its head
+Health: Lv. 5"""
+[desc.giga]
+name = "Giga-All-Star Zombie"
+short = "A zombie that delivers unstoppable attacks"
+desc = """A powerful zombie that corrodes into your defense line
+Health: Lv. 4"""
+[desc.sunedit]
+name = "Sunday Edition Zombie"
+short = "A strong zombie that gets really angry after the magazine breaks"
+desc = """A strong zombie that gets angry after the magazine breaks
+Health: Lv. 5"""
+[desc.mirror]
+name = "Mirror Zombie"
+short = "I know this is from Hoot"
+desc = """A zombie that repels projectiles with it mirror
+Health: Lv. 3-"""
+[desc.foodcan]
+name = "Foodcan Zombie"
+short = "A zombie that pushes a foodcan"
+desc = """A zombies that pushes a foodcan, which can absorb projectiles that are not strong enough
+Health: Lv. 1"""
+[desc.hidden]
+name = "Hidden Zombie"
+short = "This is"
+desc = "You win."

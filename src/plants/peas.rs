@@ -158,6 +158,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: PEASHOOTER,
             systems: peashooter_systems
                 .read()
                 .unwrap()
@@ -168,7 +169,7 @@ fn init_config(
             hitbox: factors.peashooter.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(PEASHOOTER, creature);
+        map.insert(creature);
     }
 
     let snow = Arc::new(game::ProjectileShared {
@@ -191,6 +192,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: SNOW_PEA,
             systems: snow_pea_systems
                 .read()
                 .unwrap()
@@ -206,7 +208,7 @@ fn init_config(
             hitbox: factors.snow_pea.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(SNOW_PEA, creature);
+        map.insert(creature);
     }
     {
         commands.insert_resource(RepeaterShooter(Arc::new(compn::ShooterShared {
@@ -222,6 +224,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: REPEATER,
             systems: repeater_systems
                 .read()
                 .unwrap()
@@ -237,7 +240,7 @@ fn init_config(
             hitbox: factors.repeater.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(REPEATER, creature);
+        map.insert(creature);
     }
     {
         commands.insert_resource(ThreepeaterShooter(Arc::new(compn::ShooterShared {
@@ -262,6 +265,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: THREEPEATER,
             systems: threepeater_systems
                 .read()
                 .unwrap()
@@ -277,6 +281,6 @@ fn init_config(
             hitbox: factors.threepeater.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(THREEPEATER, creature);
+        map.insert(creature);
     }
 }

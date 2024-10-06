@@ -6,7 +6,7 @@ impl Plugin for PlantsGoldBloomPlugin {
     fn build(&self, app: &mut App) {
         initialize(&gold_bloom_systems);
         app.add_systems(PostStartup, (init_config,));
-        app.add_systems(Update, (gold_bloom_work,));
+        app.add_systems(Update, (gold_bloom_work,).run_if(when_state!(gaming)));
         *gold_bloom_systems.write().unwrap() = Some(game::CreatureSystems {
             spawn: app.register_system(spawn_gold_bloom),
             ..Default::default()
@@ -53,6 +53,7 @@ fn gold_bloom_work(
     action: EventWriter<game::CreatureAction>,
     mut q_gold_bloom: Query<(Entity, &game::Overlay, &mut GoldBloomTimer, &game::Position)>,
     factors: Res<plants::PlantFactors>,
+    level: Res<level::Level>,
 ) {
     let action = Mutex::new(action);
     q_gold_bloom
@@ -68,7 +69,12 @@ fn gold_bloom_work(
                     ));
                 });
                 timer.count += 1;
-                if timer.count >= factors.gold_bloom.times {
+                let times = if level.config.layout.is_night() {
+                    factors.gold_bloom.night_times
+                } else {
+                    factors.gold_bloom.times
+                };
+                if timer.count >= times {
                     action
                         .lock()
                         .unwrap()
@@ -86,6 +92,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: GOLD_BLOOM,
             systems: gold_bloom_systems
                 .read()
                 .unwrap()
@@ -101,6 +108,6 @@ fn init_config(
             hitbox: factors.gold_bloom.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(GOLD_BLOOM, creature);
+        map.insert(creature);
     }
 }

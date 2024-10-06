@@ -6,6 +6,7 @@ impl Plugin for LevelLoadPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<LevelEvent>();
         app.add_systems(PreUpdate, (load_level,));
+        app.add_systems(OnEnter(info::GlobalStates::Play), (insert_zomboss_config,));
     }
 }
 
@@ -16,6 +17,19 @@ pub struct LevelEvent {
 
 #[derive(Resource, Debug, Clone, Copy, Deref, DerefMut)]
 pub struct LevelSlots(pub usize);
+
+pub struct LevelRatioCalculator {
+    pub x: usize,
+    pub y: usize,
+}
+impl LevelRatioCalculator {
+    fn into_f32(self) -> f32 {
+        (LOGICAL_WIDTH / self.x as f32).min(LOGICAL_HEIGHT / self.y as f32) * 2.0 / 3.0
+    }
+}
+lazy_static! {
+    pub static ref FIXED_RATIO: f32 = LevelRatioCalculator { x: 9, y: 5 }.into_f32();
+}
 
 fn load_level(
     mut commands: Commands,
@@ -35,10 +49,13 @@ fn load_level(
             Ok(content) => match toml::from_str::<level::Level>(&content) {
                 Ok(level) => {
                     let size = level.config.layout.size();
-                    let ratio = (LOGICAL_WIDTH / size.0 as f32).min(LOGICAL_HEIGHT / size.1 as f32)
-                        * 2.0
-                        / 3.0;
-                    commands.insert_resource(game::Display { ratio });
+                    commands.insert_resource(game::Display {
+                        ratio: LevelRatioCalculator {
+                            x: size.0,
+                            y: size.1,
+                        }
+                        .into_f32(),
+                    });
 
                     level.config.selection.modify(selection.as_mut());
                     let slots = if let level::SelectionArr::All(ref vec) = level.config.selection {
@@ -48,8 +65,9 @@ fn load_level(
                     };
                     commands.insert_resource(LevelSlots(slots));
 
-                    let sun_factor =
-                        (level.config.sun as f32 / items.exciting.sun_standard as f32).powf(0.13);
+                    let sun_factor = (level.config.sun as f32 / items.exciting.sun_standard as f32)
+                        .powf(0.13)
+                        .min(2.0);
                     let sum = level
                         .waves
                         .iter()
@@ -93,5 +111,11 @@ fn load_level(
                 error!("Failed to open level: {}", err);
             }
         }
+    }
+}
+
+pub fn insert_zomboss_config(mut commands: Commands, level: Res<level::Level>) {
+    if let Some(ref zomboss) = level.zomboss {
+        commands.insert_resource(zomboss.clone());
     }
 }

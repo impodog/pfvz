@@ -36,7 +36,11 @@ impl Health {
         self.hp += value;
     }
 
-    pub fn is0(&self) -> bool {
+    pub fn true_decr_hp_only(&mut self, value: u32) {
+        self.hp = self.hp.saturating_sub(value)
+    }
+
+    pub fn is_zero(&self) -> bool {
         self.hp == 0 && self.remain == 0
     }
 
@@ -85,21 +89,53 @@ impl Armor {
     }
 }
 
+#[derive(Component, Deref, DerefMut)]
+pub struct HealthDeleteTimer(pub Timer);
+
+impl Default for HealthDeleteTimer {
+    fn default() -> Self {
+        Self(Timer::new(Duration::from_millis(500), TimerMode::Repeating))
+    }
+}
+
 fn health_delete(
-    mut e_action: EventWriter<game::CreatureAction>,
-    q_health: Query<(Entity, &Health), With<game::Creature>>,
+    commands: ParallelCommands,
+    action: EventWriter<game::CreatureAction>,
+    mut q_health: Query<(Entity, &Health, Option<&mut HealthDeleteTimer>), With<game::Creature>>,
+    time: Res<config::FrameTime>,
 ) {
-    q_health.iter().for_each(|(entity, health)| {
-        if health.is0() {
-            e_action.send(game::CreatureAction::Die(entity));
+    let action = Mutex::new(action);
+    q_health.par_iter_mut().for_each(|(entity, health, timer)| {
+        if health.is_zero() {
+            let ok = if let Some(mut timer) = timer {
+                timer.tick(time.delta());
+                timer.just_finished()
+            } else {
+                commands.command_scope(|mut commands| {
+                    if let Some(mut commands) = commands.get_entity(entity) {
+                        commands.try_insert(HealthDeleteTimer::default());
+                    }
+                });
+                true
+            };
+            if ok {
+                action
+                    .lock()
+                    .unwrap()
+                    .send(game::CreatureAction::Die(entity));
+            }
         }
     });
 }
 
-fn armor_delete(mut commands: Commands, q_armor: Query<(Entity, &Armor)>) {
-    q_armor.iter().for_each(|(entity, armor)| {
+fn armor_delete(commands: ParallelCommands, q_armor: Query<(Entity, &Armor)>) {
+    q_armor.par_iter().for_each(|(entity, armor)| {
         if armor.hp == 0 {
-            commands.entity(entity).despawn_recursive();
+            commands.command_scope(|mut commands| {
+                if let Some(commands) = commands.get_entity(entity) {
+                    commands.despawn_recursive();
+                }
+            });
         }
     });
 }
@@ -108,8 +144,9 @@ fn health_decr(
     mut q_health: Query<(Entity, &mut Health)>,
     q_children: Query<&Children>,
     q_armor: Query<&mut Armor>,
+    q_dying: Query<(), With<compn::Dying>>,
 ) {
-    let q_armor = RwLock::new(q_armor);
+    let q_armor = Mutex::new(q_armor);
     q_health.par_iter_mut().for_each(|(entity, mut health)| {
         if !health.stack.is_empty() {
             let mut sum = 0;
@@ -117,7 +154,7 @@ fn health_decr(
                 let mut ok = false;
                 if let Ok(children) = q_children.get(entity) {
                     for entity in children.iter() {
-                        if let Ok(mut armor) = q_armor.write().unwrap().get_mut(*entity) {
+                        if let Ok(mut armor) = q_armor.lock().unwrap().get_mut(*entity) {
                             sum += armor.decr(hp);
                             ok = true;
                             break;
@@ -128,7 +165,11 @@ fn health_decr(
                     sum += hp;
                 }
             }
-            health.true_decr(sum);
+            if q_dying.get(entity).is_ok() {
+                health.true_decr_hp_only(sum);
+            } else {
+                health.true_decr(sum);
+            }
         }
     });
 }

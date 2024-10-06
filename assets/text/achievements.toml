@@ -5,16 +5,20 @@ vis = "NameOnly"
 [impulsive_killer]
 name = "Impulsive Killer"
 desc = "Kill an All-Star Zombie while it is running"
-vis = "NameOnly"
+vis = "Full"
 [fungi_party]
 name = "Fungi Party"
 desc = "Complete a day level using only non-plantae, fungi, and/or coffee beans"
-vis = "NameOnly"
+vis = "Full"
 [dark_rules]
 name = "Dark Rules"
 desc = "Complete level 4-10 without planterns"
-vis = "NameOnly"
+vis = "Full"
 [speed_run_101]
 name = "Speedrun 101"
 desc = "Complete a level under 2/3 of the expected time"
+vis = "Full"
+[who_cares]
+name = "Who Cares"
+desc = "Complete level 2-15 without losing any fungi or sun"
 vis = "Full"

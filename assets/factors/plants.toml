@@ -275,7 +275,7 @@ cost = 100
 self_box = { width = 0.6, height = 0.6 }
 health = 300
 interval = 2.0
-cooldown = 15.0
+cooldown = 7.5
 cost = 75
 [kernel_pult]
 velocity = [2.4, -2.0]
@@ -286,7 +286,7 @@ snow = { duration = 4.0, factor = 0.0 }
 butter_every = 3
 times = 1
 health = 300
-kernel_damage = 20
+kernel_damage = 25
 butter_damage = 40
 interval = 3.0
 cooldown = 7.5
@@ -340,7 +340,8 @@ cost = 100
 velocity = { x = [-0.5, 0.5], y = [-0.5, 0.5], z = 0, r = 3.14 }
 self_box = { width = 0.9, height = 1.0 }
 health = 300
-times = 5
+times = 4
+night_times = 3
 interval = 0.5
 cooldown = 80.0
 cost = 0

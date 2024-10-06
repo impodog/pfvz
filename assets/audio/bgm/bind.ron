@@ -4,7 +4,8 @@
         "Jitb": "audio/zombies/jitb/jitb.ron",
         "Gw1": "audio/bgm/gw/gw1.ron",
         "Gw2": "audio/bgm/gw/gw2.ron",
-        "Mg": "audio/bgm/mg/mg.ron",
+        "Mg1": "audio/bgm/mg/mg1.ron",
+        "Mg2": "audio/bgm/mg/mg2.ron",
         "Wg1": "audio/bgm/wg/wg1.ron",
         "Wg2": "audio/bgm/wg/wg2.ron",
         "Rm1": "audio/bgm/rm/rm1.ron",
@@ -13,6 +14,7 @@
         "Gtr2": "audio/bgm/gtr/gtr2.ron",
         "Lb": "audio/bgm/lb/lb.ron",
         "Ub": "audio/bgm/ub/ub.ron",
+        "Bm": "audio/bgm/bm/bm.ron",
     },
     layout: {
         Day: (
@@ -21,9 +23,10 @@
             begin: 0.0,
         ),
         Night: (
-            normal: "Mg",
-            exciting: "Mg",
+            normal: "Mg1",
+            exciting: "Mg2",
             begin: 0.0,
+            start_over: true,
         ),
         Pool: (
             normal: "Wg1",

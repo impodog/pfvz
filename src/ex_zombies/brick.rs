@@ -74,6 +74,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: BRICK_ZOMBIE,
             systems: brick_systems
                 .read()
                 .unwrap()
@@ -84,6 +85,6 @@ fn init_config(
             hitbox: factors.basic.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(BRICK_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

@@ -20,9 +20,15 @@ game_conf!(pub system system_damage, (Entity, u32));
 
 pub(crate) fn spawn_not(In(_logic): In<game::LogicPosition>) {}
 
-pub(crate) fn die(In(entity): In<Entity>, mut commands: Commands) {
+pub(crate) fn die(
+    In(entity): In<Entity>,
+    mut commands: Commands,
+    q_kill: Query<&game::Overlay, With<compn::NeverKillWhenActive>>,
+) {
     if let Some(commands) = commands.get_entity(entity) {
-        commands.despawn_recursive();
+        if !q_kill.get(entity).is_ok_and(|overlay| !overlay.is_zero()) {
+            commands.despawn_recursive();
+        }
     }
 }
 

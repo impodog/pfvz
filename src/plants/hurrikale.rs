@@ -45,6 +45,7 @@ fn spawn_hurrikale(
         .collect::<Vec<_>>();
     commands.spawn((
         game::Plant,
+        compn::NeverKillWhenActive,
         creature.clone(),
         pos,
         sprite::Animation::new(plants.hurrikale.clone()),
@@ -63,7 +64,7 @@ fn spawn_hurrikale(
 
 fn hurrikale_work(
     mut action: EventWriter<game::CreatureAction>,
-    mut q_hurrikale: Query<(Entity, &game::Overlay, &mut HurrikaleTimer)>,
+    mut q_hurrikale: Query<(Entity, &mut game::Overlay, &mut HurrikaleTimer)>,
     mut q_zombie: Query<&mut game::LogicPosition>,
     time: Res<config::FrameTime>,
     factors: Res<plants::PlantFactors>,
@@ -71,9 +72,10 @@ fn hurrikale_work(
 ) {
     q_hurrikale
         .iter_mut()
-        .for_each(|(entity, overlay, mut timer)| {
+        .for_each(|(entity, mut overlay, mut timer)| {
             timer.tick(overlay.delta());
             if timer.just_finished() {
+                overlay.multiply(0.0);
                 action.send(game::CreatureAction::Die(entity));
             } else {
                 let factor = overlay.factor() * time.diff();
@@ -101,6 +103,7 @@ fn init_config(
 ) {
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: HURRIKALE,
             systems: hurrikale_systems
                 .read()
                 .unwrap()
@@ -116,6 +119,6 @@ fn init_config(
             hitbox: factors.hurrikale.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(HURRIKALE, creature);
+        map.insert(creature);
     }
 }

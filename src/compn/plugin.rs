@@ -27,6 +27,8 @@ impl Plugin for CompnPlugin {
             water::CompnWaterPlugin,
             fire::CompnFirePlugin,
             divert::CompnDivertPlugin,
+            mirror::CompnMirrorPlugin,
+            aiming::CompnAimingPlugin,
         ));
     }
 }

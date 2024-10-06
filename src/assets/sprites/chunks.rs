@@ -23,6 +23,10 @@ pub struct SpriteChunks {
     pub dave: Handle<Image>,
     pub shadow: Handle<Image>,
     pub cross: Handle<Image>,
+    pub conveyor_mid: Handle<Image>,
+    pub conveyor_left: Handle<Image>,
+    pub conveyor_right: Handle<Image>,
+    pub pdog: Handle<Image>,
 }
 
 pub(super) fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
@@ -48,6 +52,10 @@ pub(super) fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         dave: server.load("sprites/chunks/dave.png"),
         shadow: server.load("sprites/chunks/shadow.png"),
         cross: server.load("sprites/chunks/cross.png"),
+        conveyor_mid: server.load("sprites/chunks/conveyor_mid.png"),
+        conveyor_left: server.load("sprites/chunks/conveyor_left.png"),
+        conveyor_right: server.load("sprites/chunks/conveyor_right.png"),
+        pdog: server.load("sprites/chunks/pdog.png"),
     };
     commands.spawn(SpriteBundle {
         sprite: Sprite {

@@ -52,6 +52,7 @@ fn init_config(
     })));
     {
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: BALLOON_ZOMBIE,
             systems: balloon_zombie_systems
                 .read()
                 .unwrap()
@@ -67,6 +68,6 @@ fn init_config(
             hitbox: factors.balloon.self_box,
             flags: level::CreatureFlags::GROUND_AQUATIC_ZOMBIE,
         }));
-        map.insert(BALLOON_ZOMBIE, creature);
+        map.insert(creature);
     }
 }

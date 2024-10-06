@@ -18,16 +18,17 @@ impl Plugin for CompnProjPlugin {
                 .chain()
                 .run_if(when_state!(gaming)),
         );
-        app.init_resource::<DespawnQueue>();
+        app.init_resource::<ProjDespawnQueue>();
     }
 }
 
 #[derive(Resource, Default, Debug, Clone, Deref, DerefMut)]
-struct DespawnQueue(Vec<Entity>);
+pub struct ProjDespawnQueue(BTreeSet<Entity>);
 
-fn despawn(mut commands: Commands, mut queue: ResMut<DespawnQueue>) {
+fn despawn(mut commands: Commands, mut queue: ResMut<ProjDespawnQueue>) {
     if !queue.is_empty() {
-        for entity in queue.drain(..) {
+        let q = std::mem::take(&mut queue.0);
+        for entity in q.into_iter() {
             if let Some(commands) = commands.get_entity(entity) {
                 commands.despawn_recursive();
             }
@@ -37,7 +38,7 @@ fn despawn(mut commands: Commands, mut queue: ResMut<DespawnQueue>) {
 
 fn despawn_by_hit_roof(
     q_proj: Query<(Entity, &game::LogicPosition, &game::Position), With<game::Projectile>>,
-    mut queue: ResMut<DespawnQueue>,
+    mut queue: ResMut<ProjDespawnQueue>,
     level: Res<level::Level>,
 ) {
     q_proj.iter().for_each(|(entity, logic, pos)| {
@@ -46,19 +47,19 @@ fn despawn_by_hit_roof(
             .layout
             .position_3d_to_coordinates(logic.base_raw());
         if pos.z < level.config.layout.get_disp(x) {
-            queue.push(entity);
+            queue.insert(entity);
         }
     });
 }
 
 #[derive(Component, Debug, Clone, Deref, DerefMut)]
-struct ProjectileTimer(Timer);
+pub struct ProjectileTimer(Timer);
 
 fn proj_action(
     commands: ParallelCommands,
     mut e_proj: EventReader<game::ProjectileAction>,
     q_proj: Query<&game::Projectile>,
-    queue: ResMut<DespawnQueue>,
+    queue: ResMut<ProjDespawnQueue>,
 ) {
     let queue = RwLock::new(queue);
     e_proj.par_read().for_each(|action| {
@@ -70,7 +71,7 @@ fn proj_action(
                         if commands
                             .command_scope(|mut commands| commands.get_entity(*entity).is_some())
                         {
-                            queue.write().unwrap().push(*entity);
+                            queue.write().unwrap().insert(*entity);
                             true
                         } else {
                             false

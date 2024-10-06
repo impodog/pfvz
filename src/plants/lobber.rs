@@ -89,6 +89,7 @@ fn init_config(
             ..Default::default()
         })));
         let creature = game::Creature(Arc::new(game::CreatureShared {
+            id: CABBAGE_PULT,
             systems: cabbage_pult_systems
                 .read()
                 .unwrap()
@@ -104,6 +105,6 @@ fn init_config(
             hitbox: factors.cabbage_pult.self_box,
             flags: level::CreatureFlags::TERRESTRIAL_PLANT,
         }));
-        map.insert(CABBAGE_PULT, creature);
+        map.insert(creature);
     }
 }

@@ -6,7 +6,8 @@ use crate::prelude::*;
 // (+/-) 1..100 => adventure creatures
 // (+/-) 101..200 => mini game creatures
 // (+/-) 201..300 => adventure non-player non-individual creatures
-// (+/-) 301..400 => adventure expansion creatures
+// (+/-) 301..400 => expansion creatures
+// (+/-) 401..500 => expansion non-player non-individual creatures
 
 pub const PEASHOOTER: Id = -1;
 pub const SUNFLOWER: Id = -2;
@@ -55,6 +56,9 @@ pub const GRAVE: Id = -201;
 pub const CRATER: Id = -202;
 pub const ICE: Id = -203;
 
+pub const TWIN_SUNFLOWER: Id = -301;
+pub const HOMING_THISTLE: Id = -302;
+
 pub const BASIC_ZOMBIE: Id = 1;
 pub const ROADCONE_ZOMBIE: Id = 2;
 pub const BUCKET_ZOMBIE: Id = 3;
@@ -72,6 +76,7 @@ pub const DIGGER_ZOMBIE: Id = 14;
 pub const POGO_ZOMBIE: Id = 15;
 pub const GARGANTUAR: Id = 16;
 pub const BASEBALL_ZOMBIE: Id = 17;
+pub const ZOMBOSS: Id = 18;
 
 pub const HIDDEN_ZOMBIE: Id = 101;
 
@@ -81,6 +86,12 @@ pub const IMP: Id = 203;
 
 pub const RALLY_ZOMBIE: Id = 301;
 pub const BRICK_ZOMBIE: Id = 302;
+pub const GIGA_ALL_STAR_ZOMBIE: Id = 303;
+pub const SUNDAY_EDITION_ZOMBIE: Id = 304;
+pub const MIRROR_ZOMBIE: Id = 305;
+pub const FOODCAN_ZOMBIE: Id = 306;
+
+pub const FOODCAN: Id = 401;
 
 pub const LOGICAL_WIDTH: f32 = 1920.0;
 pub const LOGICAL_HEIGHT: f32 = 1080.0;
@@ -107,6 +118,8 @@ pub const WATER_PERCENTAGE: f32 = 0.7;
 pub const SHADOW_DISTANCE: f32 = 0.3;
 /// Zoom factor for Egui
 pub const UI_ZOOM_FACTOR: f32 = 1.0;
+/// The "magic number" that makes the sun show as infinity
+pub const SUN_MAGIC: u32 = 0xbadeffec;
 
 pub const ROOF_HIGHEST: usize = 5;
 pub const ROOF_PIVOT: usize = 4;
@@ -163,6 +176,9 @@ pub fn id_name(id: Id) -> &'static str {
         GRAVE => "grave",
         CRATER => "crater",
 
+        TWIN_SUNFLOWER => "twin_sunflower",
+        HOMING_THISTLE => "homing_thistle",
+
         BASIC_ZOMBIE => "basic",
         ROADCONE_ZOMBIE => "roadcone",
         BUCKET_ZOMBIE => "bucket",
@@ -180,6 +196,7 @@ pub fn id_name(id: Id) -> &'static str {
         POGO_ZOMBIE => "pogo",
         GARGANTUAR => "gargantuar",
         BASEBALL_ZOMBIE => "baseball",
+        ZOMBOSS => "zomboss",
 
         HIDDEN_ZOMBIE => "hidden",
 
@@ -189,6 +206,12 @@ pub fn id_name(id: Id) -> &'static str {
 
         RALLY_ZOMBIE => "rally",
         BRICK_ZOMBIE => "brick",
+        GIGA_ALL_STAR_ZOMBIE => "giga",
+        SUNDAY_EDITION_ZOMBIE => "sunedit",
+        MIRROR_ZOMBIE => "mirror",
+        FOODCAN_ZOMBIE => "foodcan",
+
+        FOODCAN => "foodcan_item",
 
         _ => "unknown",
     }

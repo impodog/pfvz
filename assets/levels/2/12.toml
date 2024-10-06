@@ -1,0 +1,53 @@
+[config]
+selection = "Any"
+layout = "Night"
+modify = { give = 0, next = [2, 13] }
+sun = 75
+[[waves]]
+points = 0
+wait = 30.0
+big = false
+fixed = [[1, 3]]
+avail = []
+[[waves]]
+points = 0
+wait = 30.0
+big = false
+fixed = [[2, 2], [3, 1]]
+avail = []
+[[waves]]
+points = 200
+wait = 30.0
+big = false
+fixed = [[302, 1]]
+avail = [1, 2, 3, 6]
+[[waves]]
+points = 300
+wait = 50.0
+big = true
+fixed = [[301, 1], [1, 2], [6, 1]]
+avail = [2, 3]
+[[waves]]
+points = 0
+wait = 30.0
+big = false
+fixed = [[1, 4], [3, 2], [304, 1]]
+avail = []
+[[waves]]
+points = 400
+wait = 40.0
+big = false
+fixed = [[3, 2], [302, 1]]
+avail = [1, 2, 6]
+[[waves]]
+points = 400
+wait = 30.0
+big = false
+fixed = [[2, 1], [302, 1], [304, 1]]
+avail = [1, 3, 6]
+[[waves]]
+points = 400
+wait = 50.0
+big = true
+fixed = [[301, 2], [6, 1], [302, 2], [304, 2]]
+avail = [1, 2, 3]
