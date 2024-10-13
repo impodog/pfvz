@@ -8,7 +8,10 @@ impl Plugin for GameSpawnPlugin {
     }
 }
 
-fn despawn_game_items(mut commands: Commands, q_item: Query<Entity, With<game::Position>>) {
+fn despawn_game_items(
+    mut commands: Commands,
+    q_item: Query<Entity, Or<(With<game::LogicPosition>, With<game::Position>)>>,
+) {
     q_item.iter().for_each(|entity| {
         commands.entity(entity).despawn_recursive();
     });

@@ -253,7 +253,9 @@ fn update_transform(
     q_pos.par_iter_mut().for_each(|(pos, mut transform)| {
         transform.translation.x = pos.x * display.ratio;
         transform.translation.y = (pos.y + pos.z) * display.ratio;
-        transform.rotation = Quat::from_rotation_z(pos.r);
+        let (s, c) = pos.r.sin_cos();
+        transform.rotation.z = s;
+        transform.rotation.w = c;
     });
 }
 

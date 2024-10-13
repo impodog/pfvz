@@ -2,6 +2,8 @@ use crate::prelude::*;
 
 #[derive(Resource)]
 pub struct SpriteChunks {
+    pub white: Handle<Image>,
+    pub transparent: Handle<Image>,
     pub pvfz: Handle<Image>,
     pub background: Handle<Image>,
     pub slot: Handle<Image>,
@@ -11,7 +13,6 @@ pub struct SpriteChunks {
     pub zayb: Handle<Image>,
     pub cooldown: Handle<Image>,
     pub you_win: Handle<Image>,
-    pub white: Handle<Image>,
     pub shovel: Handle<Image>,
     pub start: Handle<Image>,
     pub next: Handle<Image>,
@@ -21,7 +22,7 @@ pub struct SpriteChunks {
     pub note4: Handle<Image>,
     pub note5: Handle<Image>,
     pub dave: Handle<Image>,
-    pub shadow: Handle<Image>,
+    pub shadow: Arc<sprite::FrameArr>,
     pub cross: Handle<Image>,
     pub conveyor_mid: Handle<Image>,
     pub conveyor_left: Handle<Image>,
@@ -31,6 +32,8 @@ pub struct SpriteChunks {
 
 pub(super) fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
     let chunks = SpriteChunks {
+        white: server.load("sprites/chunks/white.png"),
+        transparent: server.load("sprites/chunks/transparent.png"),
         pvfz: server.load("sprites/chunks/pfvz.png"),
         background: server.load("sprites/chunks/background.png"),
         slot: server.load("sprites/chunks/slot.png"),
@@ -40,7 +43,6 @@ pub(super) fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         zayb: server.load("sprites/chunks/zayb.png"),
         cooldown: server.load("sprites/chunks/cooldown.png"),
         you_win: server.load("sprites/chunks/you_win.png"),
-        white: server.load("sprites/chunks/white.png"),
         shovel: server.load("sprites/chunks/shovel.png"),
         start: server.load("sprites/chunks/start.png"),
         next: server.load("sprites/chunks/next.png"),
@@ -50,7 +52,7 @@ pub(super) fn init_chunks(mut commands: Commands, server: Res<AssetServer>) {
         note4: server.load("sprites/chunks/note4.png"),
         note5: server.load("sprites/chunks/note5.png"),
         dave: server.load("sprites/chunks/dave.png"),
-        shadow: server.load("sprites/chunks/shadow.png"),
+        shadow: super::load_animation(&server, "sprites/chunks/shadow", Duration::from_secs(100)),
         cross: server.load("sprites/chunks/cross.png"),
         conveyor_mid: server.load("sprites/chunks/conveyor_mid.png"),
         conveyor_left: server.load("sprites/chunks/conveyor_left.png"),

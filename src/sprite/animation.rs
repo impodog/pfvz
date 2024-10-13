@@ -36,6 +36,7 @@ pub struct Animation {
     frames: Arc<FrameArr>,
     cursor: usize,
     timer: Timer,
+    added: bool,
 }
 
 impl Animation {
@@ -45,6 +46,7 @@ impl Animation {
             frames,
             cursor: 0,
             timer,
+            added: true,
         }
     }
 
@@ -74,11 +76,16 @@ fn update_animation(
     mut q_anim: Query<(Entity, &mut Animation, &mut Handle<Image>)>,
     q_overlay: Query<&game::Overlay>,
     q_parent: Query<&Parent>,
+    chunks: Res<assets::SpriteChunks>,
     time: Res<config::FrameTime>,
 ) {
     q_anim
         .par_iter_mut()
         .for_each(|(entity, mut anim, mut image)| {
+            if anim.is_added() {
+                *image = chunks.transparent.clone();
+                return;
+            }
             let delta = game::query_overlay(
                 |overlay| {
                     if let Some(overlay) = overlay {
@@ -93,8 +100,9 @@ fn update_animation(
             );
             anim.timer.tick(delta);
             // is_added prevents white chunks showing up
-            if anim.is_added() || anim.timer.just_finished() {
+            if anim.added || anim.timer.just_finished() {
                 anim.cursor += 1;
+                anim.added = false;
                 if anim.cursor >= anim.frames.frames.len() {
                     anim.cursor = 0;
                 }

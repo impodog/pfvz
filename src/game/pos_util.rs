@@ -137,8 +137,12 @@ fn spawn_shadow(
             game::HitBox::new(hitbox.width, height),
             logic_pos.shadow(level.config.layout.get_disp(x)),
             game::LayerDisp(-1.0),
+            sprite::Animation::new(chunks.shadow.clone()),
             SpriteBundle {
-                texture: chunks.shadow.clone(),
+                sprite: Sprite {
+                    color: Color::LinearRgba(LinearRgba::new(1.0, 1.0, 1.0, 0.8)),
+                    ..Default::default()
+                },
                 ..Default::default()
             },
         ));
